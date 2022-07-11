@@ -1,3 +1,3 @@
 module github.com/emacsway/qualifying-grade
 
-go 1.17
+go 1.18
