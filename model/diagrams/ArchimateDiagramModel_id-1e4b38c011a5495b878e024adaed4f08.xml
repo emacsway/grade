@@ -1,7 +1,7 @@
 <archimate:ArchimateDiagramModel
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:archimate="http://www.archimatetool.com/archimate"
-    name="ContextMap"
+    name="EventStorming"
     id="id-1e4b38c011a5495b878e024adaed4f08">
   <children
       xsi:type="archimate:DiagramModelArchimateObject"
