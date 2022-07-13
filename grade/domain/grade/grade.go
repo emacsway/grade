@@ -22,7 +22,7 @@ type Member struct {
 }
 
 func (m Member) Recommend(other Member, timeNow time.Time) (Testimonial, error) {
-	if m.grade < other.grade {
+	if m.grade.LT(other.grade) {
 		return Testimonial{}, errors.New("cannot support elders")
 	}
 
