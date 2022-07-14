@@ -120,4 +120,111 @@
         xsi:type="archimate:Grouping"
         href="Grouping_id-13fb315c596f43f4923f5ba90fc904ba.xml#id-13fb315c596f43f4923f5ba90fc904ba"/>
   </children>
+  <children
+      xsi:type="archimate:DiagramModelGroup"
+      id="id-de9d18c916f84b339a5fe76f4e372e6d"
+      name="LEGEND"
+      font="1|Calibri|10.2|1|WINDOWS|1|-17|0|0|0|700|0|0|0|0|3|2|1|34|Calibri"
+      lineColor="#4f4f4f"
+      fillColor="#f9f9f9"
+      borderType="1">
+    <bounds
+        x="300"
+        y="468"
+        width="613"
+        height="217"/>
+    <children
+        xsi:type="archimate:DiagramModelNote"
+        id="id-4f23e4e9f43b4f2d80ec5599fc3ef7f0"
+        font="1|Calibri|10.2|0|WINDOWS|1|-17|0|0|0|400|0|0|0|0|3|2|1|34|Calibri"
+        lineColor="#4f4f4f"
+        textAlignment="1"
+        fillColor="#ffffff"
+        alpha="0"
+        content="Bounded Context"
+        textPosition="1"
+        borderType="2">
+      <features
+          name="lineAlpha"
+          value="0"/>
+      <bounds
+          x="50"
+          y="30"
+          width="141"
+          height="31"/>
+    </children>
+    <children
+        xsi:type="archimate:DiagramModelNote"
+        id="id-de87da4e42db40e682b4d237c17244f1"
+        font="1|Century Gothic|12.0|1|WINDOWS|1|-20|0|0|0|700|0|0|0|0|3|2|1|34|Century Gothic"
+        fontColor="#ffffff"
+        lineColor="#4f4f4f"
+        fillColor="#027180"
+        textPosition="1"
+        borderType="1">
+      <bounds
+          x="10"
+          y="30"
+          width="31"
+          height="31"/>
+    </children>
+    <children
+        xsi:type="archimate:DiagramModelNote"
+        id="id-4508e1b4c93144508883958e748ae1e7"
+        font="1|Century Gothic|10.2|1|WINDOWS|1|-17|0|0|0|700|0|0|0|0|3|2|1|34|Century Gothic"
+        lineColor="#5c5c5c"
+        fillColor="#fcd385"
+        alpha="0"
+        borderType="2">
+      <sourceConnections
+          id="id-0b29e373fbf2436c9f7a42cad11d750c"
+          name="Dependancy from upstream to downstream"
+          font="1|Calibri|10.2|0|WINDOWS|1|-17|0|0|0|400|0|0|0|0|3|2|1|34|Calibri"
+          lineWidth="2"
+          lineColor="#027180"
+          textPosition="2"
+          source="id-4508e1b4c93144508883958e748ae1e7"
+          target="id-9faaf60610e54c0e90d0b0bcc76be2fb"
+          type="64"/>
+      <bounds
+          x="180"
+          y="30"
+          width="15"
+          height="19"/>
+    </children>
+    <children
+        xsi:type="archimate:DiagramModelNote"
+        id="id-9faaf60610e54c0e90d0b0bcc76be2fb"
+        targetConnections="id-0b29e373fbf2436c9f7a42cad11d750c"
+        font="1|Century Gothic|10.2|1|WINDOWS|1|-17|0|0|0|700|0|0|0|0|3|2|1|34|Century Gothic"
+        lineColor="#5c5c5c"
+        fillColor="#fcd385"
+        alpha="0"
+        borderType="2">
+      <bounds
+          x="468"
+          y="30"
+          width="15"
+          height="19"/>
+    </children>
+    <children
+        xsi:type="archimate:DiagramModelNote"
+        id="id-42bc421e2f734173828c2a950e4209a5"
+        font="1|Calibri|10.2|0|WINDOWS|1|-17|0|0|0|400|0|0|0|0|3|2|1|34|Calibri"
+        lineColor="#4f4f4f"
+        textAlignment="1"
+        fillColor="#ffffff"
+        alpha="0"
+        content="In this Context Map, relations can be:&#xD;&#xA;- Conformist: 2 teams in an upstream/downstream relationship. Upstream has no motivation to provide specific or new features for the downstream team. Downstream team doesn't put effort in translation.&#xD;&#xA;- Customer/Supplier: 2 teams in an upstream/downstream relationship. Upstream can succeed interdependently of the downstream team. Downstream priorities factor into upstream planning."
+        borderType="2">
+      <features
+          name="lineAlpha"
+          value="0"/>
+      <bounds
+          x="12"
+          y="72"
+          width="589"
+          height="133"/>
+    </children>
+  </children>
 </archimate:ArchimateDiagramModel>
