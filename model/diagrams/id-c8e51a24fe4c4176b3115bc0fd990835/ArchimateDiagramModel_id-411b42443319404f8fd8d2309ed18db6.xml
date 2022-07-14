@@ -194,7 +194,7 @@
     <bounds
         x="600"
         y="408"
-        width="409"
+        width="445"
         height="133"/>
     <children
         xsi:type="archimate:DiagramModelNote"
@@ -204,7 +204,7 @@
         textAlignment="1"
         fillColor="#ffffff"
         alpha="0"
-        content="Entities from this Application/Bounded Context"
+        content="Aggregates from this Application/Bounded Context"
         textPosition="1"
         borderType="2">
       <features
@@ -213,7 +213,7 @@
       <bounds
           x="48"
           y="30"
-          width="361"
+          width="397"
           height="31"/>
     </children>
     <children
@@ -254,7 +254,7 @@
         textAlignment="1"
         fillColor="#ffffff"
         alpha="0"
-        content="Entities from other Application/Bounded Context"
+        content="Aggregates from other Application/Bounded Context"
         textPosition="1"
         borderType="2">
       <features
@@ -263,7 +263,7 @@
       <bounds
           x="48"
           y="72"
-          width="361"
+          width="397"
           height="37"/>
     </children>
   </children>
