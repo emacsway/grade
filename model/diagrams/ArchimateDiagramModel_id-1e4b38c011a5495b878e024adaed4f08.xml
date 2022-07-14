@@ -1051,7 +1051,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-5e36213e4bf74b6b9f27fffac8f10b7c"
         textAlignment="1"
-        content="id: int&#xA;recommending_id: int&#xA;recommending_grade: int&#xA;recommending_version: int&#xA;&#xA;recommended_id: int&#xA;recommended_grade: int&#xA;recommended_version: int&#xA;&#xA;artifact_id: int&#xA;created_at: datetime">
+        content="id: int&#xA;supporter_id: int&#xA;supporter_grade: int&#xA;supporter_version: int&#xA;&#xA;promoted_id: int&#xA;promoted_grade: int&#xA;promoted_version: int&#xA;&#xA;artifact_id: int&#xA;created_at: datetime">
       <sourceConnections
           id="id-e5591f06b4fd477c8f5e3eaef007ce31"
           source="id-5e36213e4bf74b6b9f27fffac8f10b7c"
