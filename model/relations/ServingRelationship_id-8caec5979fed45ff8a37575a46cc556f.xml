@@ -1,0 +1,12 @@
+<archimate:ServingRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Conformist"
+    id="id-8caec5979fed45ff8a37575a46cc556f">
+  <source
+      xsi:type="archimate:Grouping"
+      href="Grouping_id-247069695a6d404383c412de06c52eff.xml#id-247069695a6d404383c412de06c52eff"/>
+  <target
+      xsi:type="archimate:Grouping"
+      href="Grouping_id-00d9b45e565b47768d65b80f422b3535.xml#id-00d9b45e565b47768d65b80f422b3535"/>
+</archimate:ServingRelationship>
