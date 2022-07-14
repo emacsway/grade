@@ -1,6 +1,8 @@
 package member
 
-import "github.com/emacsway/qualifying-grade/grade/domain/seedwork/interfaces"
+import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+)
 
 func NewMemberId(value int) MemberId {
 	return MemberId{value: value}
