@@ -7,13 +7,13 @@ import (
 )
 
 func TestEndorsedIdEqualsTrue(t *testing.T) {
-	memberId := NewEndorsedId(3)
+	id := NewEndorsedId(3)
 	otherId := NewEndorsedId(3)
-	assert.True(t, memberId.Equals(otherId))
+	assert.True(t, id.Equals(otherId))
 }
 
 func TestEndorsedIdEqualsFalse(t *testing.T) {
-	memberId := NewEndorsedId(3)
+	id := NewEndorsedId(3)
 	otherId := NewEndorsedId(4)
-	assert.False(t, memberId.Equals(otherId))
+	assert.False(t, id.Equals(otherId))
 }
