@@ -1,12 +1,12 @@
 <archimate:AggregationRelationship
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:archimate="http://www.archimatetool.com/archimate"
-    name="promoted (has one)"
+    name="recognizer (has one)"
     id="id-5e82a96795db4cb199458f9bb6b1df2e">
   <source
       xsi:type="archimate:BusinessObject"
       href="BusinessObject_id-1d3984af17e94272b19494a9ce0234d4.xml#id-1d3984af17e94272b19494a9ce0234d4"/>
   <target
       xsi:type="archimate:BusinessObject"
-      href="BusinessObject_id-b36c601e26f64b3e994c7d611a28d2f8.xml#id-b36c601e26f64b3e994c7d611a28d2f8"/>
+      href="BusinessObject_id-5afa83a6b1224b11b8326774aa3a0aae.xml#id-5afa83a6b1224b11b8326774aa3a0aae"/>
 </archimate:AggregationRelationship>
