@@ -5,9 +5,9 @@ import (
 )
 
 func NewRecognizerId(value uint64) RecognizerId {
-	return RecognizerId{seedwork.NewIdentity(value)}
+	return RecognizerId{seedwork.NewIdentity[uint64](value)}
 }
 
 type RecognizerId struct {
-	seedwork.Identity
+	seedwork.Identity[uint64]
 }

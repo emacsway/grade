@@ -5,9 +5,9 @@ import (
 )
 
 func NewEndorsedId(value uint64) EndorsedId {
-	return EndorsedId{seedwork.NewIdentity(value)}
+	return EndorsedId{seedwork.NewIdentity[uint64](value)}
 }
 
 type EndorsedId struct {
-	seedwork.Identity
+	seedwork.Identity[uint64]
 }
