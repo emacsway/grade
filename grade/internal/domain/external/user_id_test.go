@@ -8,6 +8,6 @@ import (
 
 func TestUserIdConstructor(t *testing.T) {
 	var value uint64 = 3
-	id := NewUserId(value)
+	id, _ := NewUserId(value)
 	assert.Equal(t, value, id.GetValue())
 }

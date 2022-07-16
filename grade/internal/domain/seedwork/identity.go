@@ -2,8 +2,8 @@ package seedwork
 
 import "github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 
-func NewIdentity[T comparable](value T) Identity[T, interfaces.Identity[T]] {
-	return Identity[T, interfaces.Identity[T]]{value: value}
+func NewIdentity[T comparable](value T) (Identity[T, interfaces.Identity[T]], error) {
+	return Identity[T, interfaces.Identity[T]]{value: value}, nil
 }
 
 // The way to fix issue of generics:

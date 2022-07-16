@@ -5,8 +5,12 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 )
 
-func NewRecognizerId(value uint64) RecognizerId {
-	return RecognizerId{seedwork.NewIdentity[uint64](value)}
+func NewRecognizerId(value uint64) (RecognizerId, error) {
+	id, err := seedwork.NewIdentity[uint64](value)
+	if err != nil {
+		return RecognizerId{}, err
+	}
+	return RecognizerId{id}, nil
 }
 
 type RecognizerId struct {

@@ -5,8 +5,12 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 )
 
-func NewUserId(value uint64) UserId {
-	return UserId{seedwork.NewIdentity[uint64](value)}
+func NewUserId(value uint64) (UserId, error) {
+	id, err := seedwork.NewIdentity[uint64](value)
+	if err != nil {
+		return UserId{}, err
+	}
+	return UserId{id}, nil
 }
 
 type UserId struct {

@@ -8,6 +8,6 @@ import (
 
 func TestArtifactIdConstructor(t *testing.T) {
 	var value uint64 = 3
-	id := NewArtifactId(value)
+	id, _ := NewArtifactId(value)
 	assert.Equal(t, value, id.GetValue())
 }
