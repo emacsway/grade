@@ -1,19 +1,19 @@
 package endorsement
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
 )
 
 func NewEndorsement(
 	recognizerId recognizer.RecognizerId,
-	recognizerGrade domain.Grade,
+	recognizerGrade shared.Grade,
 	recognizerVersion uint,
 	endorsedId endorsed.EndorsedId,
-	endorsedGrade domain.Grade,
+	endorsedGrade shared.Grade,
 	endorsedVersion uint,
 	artifactId artifact.ArtifactId,
 	createdAt time.Time,
@@ -32,10 +32,10 @@ func NewEndorsement(
 
 type Endorsement struct {
 	RecognizerId      recognizer.RecognizerId
-	RecognizerGrade   domain.Grade
+	RecognizerGrade   shared.Grade
 	RecognizerVersion uint
 	EndorsedId        endorsed.EndorsedId
-	EndorsedGrade     domain.Grade
+	EndorsedGrade     shared.Grade
 	EndorsedVersion   uint
 	ArtifactId        artifact.ArtifactId
 	CreatedAt         time.Time
