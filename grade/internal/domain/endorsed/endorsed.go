@@ -13,8 +13,8 @@ func NewEndorsed(
 	grade shared.Grade,
 	endorsements []endorsement.Endorsement,
 	version uint,
-) (Endorsed, error) {
-	return Endorsed{
+) (*Endorsed, error) {
+	return &Endorsed{
 		Id:                   id,
 		UserId:               userId,
 		Grade:                grade,
