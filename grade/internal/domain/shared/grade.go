@@ -1,13 +1,18 @@
 package shared
 
-import "errors"
+import (
+	"errors"
+	"fmt"
+)
+
+const maxGradeValue = uint8(5)
 
 var (
-	ErrInvalidGrade = errors.New("grade should be between 0 and 5")
+	ErrInvalidGrade = errors.New(fmt.Sprintf("grade should be between 0 and %d", maxGradeValue))
 )
 
 func NewGrade(value uint8) (Grade, error) {
-	if value < 0 || value > 5 {
+	if value > maxGradeValue {
 		return Grade(0), ErrInvalidGrade
 	}
 	return Grade(value), nil
@@ -16,7 +21,7 @@ func NewGrade(value uint8) (Grade, error) {
 type Grade uint8
 
 func (g Grade) HasNext() bool {
-	return g < 5
+	return uint8(g) < maxGradeValue
 }
 
 func (g Grade) Next() (Grade, error) {

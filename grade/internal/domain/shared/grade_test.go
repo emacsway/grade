@@ -11,12 +11,9 @@ func TestGradeConstructor(t *testing.T) {
 		ExpectedError error
 	}{
 		{uint8(0), nil},
-		{uint8(1), nil},
-		{uint8(2), nil},
-		{uint8(3), nil},
-		{uint8(4), nil},
-		{uint8(5), nil},
-		{uint8(6), ErrInvalidGrade},
+		{maxGradeValue / 2, nil},
+		{maxGradeValue, nil},
+		{maxGradeValue + 1, ErrInvalidGrade},
 	}
 	for _, c := range cases {
 		g, err := NewGrade(c.Arg)
@@ -33,11 +30,8 @@ func TestGradeHasNext(t *testing.T) {
 		ExpectedResult bool
 	}{
 		{uint8(0), true},
-		{uint8(1), true},
-		{uint8(2), true},
-		{uint8(3), true},
-		{uint8(4), true},
-		{uint8(5), false},
+		{maxGradeValue / 2, true},
+		{maxGradeValue, false},
 	}
 	for _, c := range cases {
 		g, _ := NewGrade(c.Arg)
@@ -53,11 +47,8 @@ func TestGradeNext(t *testing.T) {
 		ExpectedError error
 	}{
 		{uint8(0), uint8(1), nil},
-		{uint8(1), uint8(2), nil},
-		{uint8(2), uint8(3), nil},
-		{uint8(3), uint8(4), nil},
-		{uint8(4), uint8(5), nil},
-		{uint8(5), uint8(0), ErrInvalidGrade},
+		{maxGradeValue / 2, maxGradeValue/2 + 1, nil},
+		{maxGradeValue, uint8(0), ErrInvalidGrade},
 	}
 	for _, c := range cases {
 		g, _ := NewGrade(c.Arg)
