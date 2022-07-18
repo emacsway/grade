@@ -23,3 +23,9 @@ type VersionedAggregate interface {
 	GetVersion() uint
 	IncreaseVersion()
 }
+
+type Session interface {
+	Begin() (Session, error)
+	Commit() error
+	Rollback() error
+}
