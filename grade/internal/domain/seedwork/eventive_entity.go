@@ -2,6 +2,12 @@ package seedwork
 
 import "github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 
+// There may be an event receiver here in the case of EventSourcing.
+
+func NewEventiveEntity() (EventiveEntity, error) {
+	return EventiveEntity{}, nil
+}
+
 type EventiveEntity struct {
 	pendingDomainEvents []interfaces.DomainEvent
 }
