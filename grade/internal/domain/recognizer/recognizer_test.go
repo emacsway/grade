@@ -15,5 +15,5 @@ func TestRecognizerConstructor(t *testing.T) {
 	grade, _ := shared.NewGrade(0)
 	count, _ := recognizer.NewAvailableEndorsementCount(uint8(20))
 	agg, _ := NewRecognizer(id, userId, grade, count, 1)
-	assert.Equal(t, id, agg.Id)
+	assert.Equal(t, id, agg.GetId())
 }

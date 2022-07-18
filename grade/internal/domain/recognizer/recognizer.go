@@ -23,20 +23,28 @@ func NewRecognizer(
 		return nil, err
 	}
 	return &Recognizer{
-		Id:                        id,
-		UserId:                    userId,
-		Grade:                     grade,
-		AvailableEndorsementCount: availableEndorsementCount,
+		id:                        id,
+		userId:                    userId,
+		grade:                     grade,
+		availableEndorsementCount: availableEndorsementCount,
 		VersionedAggregate:        versioned,
 		EventiveEntity:            eventive,
 	}, nil
 }
 
 type Recognizer struct {
-	Id                        recognizer.RecognizerId
-	UserId                    external.UserId
-	Grade                     shared.Grade
-	AvailableEndorsementCount recognizer.AvailableEndorsementCount
+	id                        recognizer.RecognizerId
+	userId                    external.UserId
+	grade                     shared.Grade
+	availableEndorsementCount recognizer.AvailableEndorsementCount
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
+}
+
+func (r Recognizer) GetId() recognizer.RecognizerId {
+	return r.id
+}
+
+func (r Recognizer) GetGrade() shared.Grade {
+	return r.grade
 }

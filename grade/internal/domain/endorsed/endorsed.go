@@ -24,20 +24,20 @@ func NewEndorsed(
 		return nil, err
 	}
 	return &Endorsed{
-		Id:                   id,
-		UserId:               userId,
-		Grade:                grade,
-		ReceivedEndorsements: endorsements,
+		id:                   id,
+		userId:               userId,
+		grade:                grade,
+		receivedEndorsements: endorsements,
 		VersionedAggregate:   versioned,
 		EventiveEntity:       eventive,
 	}, nil
 }
 
 type Endorsed struct {
-	Id                   endorsed.EndorsedId
-	UserId               external.UserId
-	Grade                shared.Grade
-	ReceivedEndorsements []endorsement.Endorsement
+	id                   endorsed.EndorsedId
+	userId               external.UserId
+	grade                shared.Grade
+	receivedEndorsements []endorsement.Endorsement
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
 }

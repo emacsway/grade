@@ -19,24 +19,32 @@ func NewEndorsement(
 	createdAt time.Time,
 ) (Endorsement, error) {
 	return Endorsement{
-		RecognizerId:      recognizerId,
-		RecognizerGrade:   recognizerGrade,
-		RecognizerVersion: recognizerVersion,
-		EndorsedId:        endorsedId,
-		EndorsedGrade:     endorsedGrade,
-		EndorsedVersion:   endorsedVersion,
-		ArtifactId:        artifactId,
-		CreatedAt:         createdAt,
+		recognizerId:      recognizerId,
+		recognizerGrade:   recognizerGrade,
+		recognizerVersion: recognizerVersion,
+		endorsedId:        endorsedId,
+		endorsedGrade:     endorsedGrade,
+		endorsedVersion:   endorsedVersion,
+		artifactId:        artifactId,
+		createdAt:         createdAt,
 	}, nil
 }
 
 type Endorsement struct {
-	RecognizerId      recognizer.RecognizerId
-	RecognizerGrade   shared.Grade
-	RecognizerVersion uint
-	EndorsedId        endorsed.EndorsedId
-	EndorsedGrade     shared.Grade
-	EndorsedVersion   uint
-	ArtifactId        artifact.ArtifactId
-	CreatedAt         time.Time
+	recognizerId      recognizer.RecognizerId
+	recognizerGrade   shared.Grade
+	recognizerVersion uint
+	endorsedId        endorsed.EndorsedId
+	endorsedGrade     shared.Grade
+	endorsedVersion   uint
+	artifactId        artifact.ArtifactId
+	createdAt         time.Time
+}
+
+func (e Endorsement) GetRecognizerId() recognizer.RecognizerId {
+	return e.recognizerId
+}
+
+func (e Endorsement) GetArtifactId() artifact.ArtifactId {
+	return e.artifactId
 }

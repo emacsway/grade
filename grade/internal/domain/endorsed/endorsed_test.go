@@ -15,5 +15,5 @@ func TestEndorsedConstructor(t *testing.T) {
 	userId, _ := external.NewUserId(uint64(2))
 	grade, _ := shared.NewGrade(0)
 	agg, _ := NewEndorsed(id, userId, grade, []endorsement.Endorsement{}, 1)
-	assert.Equal(t, id, agg.Id)
+	assert.Equal(t, id, agg.id)
 }
