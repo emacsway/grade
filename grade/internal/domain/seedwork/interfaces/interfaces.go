@@ -4,7 +4,7 @@ import "github.com/emacsway/qualifying-grade/grade/pkg/domain/seedwork/interface
 
 type Identity[T comparable] interface {
 	Equals(Identity[T]) bool
-	GetValue() T
+	CreateMemento() T
 }
 
 // Public listeners is a subset of all listeners, not vice versa. Suppose, we have three circles...

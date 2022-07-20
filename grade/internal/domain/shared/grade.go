@@ -31,3 +31,7 @@ func (g Grade) Next() (Grade, error) {
 	}
 	return nextGrade, nil
 }
+
+func (g Grade) CreateMemento() uint8 {
+	return uint8(g)
+}
