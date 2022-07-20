@@ -17,3 +17,14 @@ func TestRecognizerConstructor(t *testing.T) {
 	agg, _ := NewRecognizer(id, userId, grade, count, 1)
 	assert.Equal(t, id, agg.GetId())
 }
+
+func TestRecognizerCreateMemento(t *testing.T) {
+	id, _ := recognizer.NewRecognizerId(1)
+	userId, _ := external.NewUserId(2)
+	grade, _ := shared.NewGrade(0)
+	count, _ := recognizer.NewAvailableEndorsementCount(20)
+	agg, _ := NewRecognizer(id, userId, grade, count, 1)
+	assert.Equal(t, RecognizerMemento{
+		1, 2, 0, 20, 1,
+	}, agg.CreateMemento())
+}
