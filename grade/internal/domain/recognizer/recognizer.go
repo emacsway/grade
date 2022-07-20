@@ -55,6 +55,7 @@ func (r Recognizer) CreateMemento() RecognizerMemento {
 		r.userId.CreateMemento(),
 		r.grade.CreateMemento(),
 		r.availableEndorsementCount.CreateMemento(),
+		r.GetVersion(),
 	}
 }
 
@@ -63,4 +64,5 @@ type RecognizerMemento struct {
 	UserId                    uint64
 	Grade                     uint8
 	AvailableEndorsementCount uint8
+	Version                   uint
 }
