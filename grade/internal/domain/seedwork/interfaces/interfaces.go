@@ -2,9 +2,14 @@ package interfaces
 
 import "github.com/emacsway/qualifying-grade/grade/pkg/domain/seedwork/interfaces"
 
-type Identity[T comparable] interface {
-	Equals(Identity[T]) bool
+type Originator[T any] interface {
 	CreateMemento() T
+	// SetMemento(T)
+}
+
+type Identity[T comparable] interface {
+	Originator[T]
+	Equals(Identity[T]) bool
 }
 
 // Public listeners is a subset of all listeners, not vice versa. Suppose, we have three circles...

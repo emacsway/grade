@@ -35,3 +35,7 @@ func (g Grade) Next() (Grade, error) {
 func (g Grade) CreateMemento() uint8 {
 	return uint8(g)
 }
+
+func (g *Grade) SetMemento(value uint8) {
+	*g = Grade(value)
+}
