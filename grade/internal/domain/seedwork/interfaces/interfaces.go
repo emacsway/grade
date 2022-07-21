@@ -9,9 +9,10 @@ type Exportable[T any] interface {
 type Identity[T comparable] interface {
 	Exportable[T]
 	Equals(Identity[T]) bool
+	ExportTo(Exporter[T])
 }
 
-type PrimitiveExporter[T comparable] interface {
+type Exporter[T comparable] interface {
 	SetState(T)
 }
 

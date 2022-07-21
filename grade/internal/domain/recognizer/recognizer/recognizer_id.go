@@ -14,9 +14,5 @@ func NewRecognizerId(value uint64) (RecognizerId, error) {
 }
 
 type RecognizerId struct {
-	seedwork.Identity[uint64, interfaces.Identity[uint64]]
-}
-
-func (id RecognizerId) ExportTo(ex interfaces.PrimitiveExporter[uint64]) {
-	ex.SetState(id.Export())
+	seedwork.Identity[uint64, interfaces.Identity[uint64], interfaces.Exporter[uint64]]
 }

@@ -14,9 +14,5 @@ func NewUserId(value uint64) (UserId, error) {
 }
 
 type UserId struct {
-	seedwork.Identity[uint64, interfaces.Identity[uint64]]
-}
-
-func (id UserId) ExportTo(ex interfaces.PrimitiveExporter[uint64]) {
-	ex.SetState(id.Export())
+	seedwork.Identity[uint64, interfaces.Identity[uint64], interfaces.Exporter[uint64]]
 }

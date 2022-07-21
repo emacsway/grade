@@ -14,5 +14,5 @@ func NewEndorsedId(value uint64) (EndorsedId, error) {
 }
 
 type EndorsedId struct {
-	seedwork.Identity[uint64, interfaces.Identity[uint64]]
+	seedwork.Identity[uint64, interfaces.Identity[uint64], interfaces.Exporter[uint64]]
 }

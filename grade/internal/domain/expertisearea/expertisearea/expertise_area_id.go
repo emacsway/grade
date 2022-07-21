@@ -14,5 +14,5 @@ func NewExpertiseAreaId(value uint64) (ExpertiseAreaId, error) {
 }
 
 type ExpertiseAreaId struct {
-	seedwork.Identity[uint64, interfaces.Identity[uint64]]
+	seedwork.Identity[uint64, interfaces.Identity[uint64], interfaces.Exporter[uint64]]
 }

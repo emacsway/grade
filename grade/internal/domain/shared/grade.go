@@ -41,6 +41,6 @@ func (g *Grade) Import(value uint8) {
 	*g = Grade(value)
 }
 
-func (g Grade) ExportTo(ex interfaces.PrimitiveExporter[uint8]) {
+func (g Grade) ExportTo(ex interfaces.Exporter[uint8]) {
 	ex.SetState(uint8(g))
 }

@@ -39,6 +39,6 @@ func (c AvailableEndorsementCount) Export() uint8 {
 	return uint8(c)
 }
 
-func (c AvailableEndorsementCount) ExportTo(ex interfaces.PrimitiveExporter[uint8]) {
+func (c AvailableEndorsementCount) ExportTo(ex interfaces.Exporter[uint8]) {
 	ex.SetState(uint8(c))
 }
