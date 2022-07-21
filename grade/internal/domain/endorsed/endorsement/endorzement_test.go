@@ -21,46 +21,61 @@ func TestEndorsementConstructor(t *testing.T) {
 		{1, 0, nil},
 		{0, 1, ErrHigherGradeEndorsed},
 	}
-	recognizerId, _ := recognizer.NewRecognizerId(1)
-	recognizerVersion := uint(3)
-	endorsedId, _ := endorsed.NewEndorsedId(4)
-	endorsedVersion := uint(5)
-	artifactId, _ := artifact.NewArtifactId(6)
-	createdAt := time.Now()
+	f := NewEndorsementTestFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			recognizerGrade, _ := shared.NewGrade(c.RecognizerGrade)
-			endorsedGrade, _ := shared.NewGrade(c.EndorsedGrade)
-			e, err := NewEndorsement(
-				recognizerId, recognizerGrade, recognizerVersion,
-				endorsedId, endorsedGrade, endorsedVersion,
-				artifactId, createdAt,
-			)
+			f.RecognizerGrade = c.RecognizerGrade
+			f.EndorsedGrade = c.EndorsedGrade
+			e, err := f.Create()
+			assert.Equal(t, f.RecognizerGrade, c.RecognizerGrade)
 			assert.Equal(t, c.ExpectedError, err)
 			if err == nil {
-				assert.Equal(t, EndorsementMemento{
-					1, c.RecognizerGrade, 3, 4, c.EndorsedGrade, 5, 6, createdAt,
-				}, e.CreateMemento())
+				assert.Equal(t, f.CreateMemento(), e.CreateMemento())
 			}
 		})
 	}
 }
 
 func TestEndorsementCreateMemento(t *testing.T) {
-	recognizerId, _ := recognizer.NewRecognizerId(1)
-	recognizerGrade, _ := shared.NewGrade(2)
-	recognizerVersion := uint(3)
-	endorsedId, _ := endorsed.NewEndorsedId(4)
-	endorsedGrade, _ := shared.NewGrade(1)
-	endorsedVersion := uint(5)
-	artifactId, _ := artifact.NewArtifactId(6)
-	createdAt := time.Now()
-	e, _ := NewEndorsement(
-		recognizerId, recognizerGrade, recognizerVersion,
-		endorsedId, endorsedGrade, endorsedVersion,
-		artifactId, createdAt,
+	f := NewEndorsementTestFactory()
+	e, _ := f.Create()
+	assert.Equal(t, f.CreateMemento(), e.CreateMemento())
+}
+
+func NewEndorsementTestFactory() *EndorsementTestFactory {
+	return &EndorsementTestFactory{
+		1, 2, 3, 4, 1, 5, 6, time.Now(),
+	}
+}
+
+type EndorsementTestFactory struct {
+	RecognizerId      uint64
+	RecognizerGrade   uint8
+	RecognizerVersion uint
+	EndorsedId        uint64
+	EndorsedGrade     uint8
+	EndorsedVersion   uint
+	ArtifactId        uint64
+	CreatedAt         time.Time
+}
+
+func (f EndorsementTestFactory) Create() (Endorsement, error) {
+	recognizerId, _ := recognizer.NewRecognizerId(f.RecognizerId)
+	recognizerGrade, _ := shared.NewGrade(f.RecognizerGrade)
+	endorsedId, _ := endorsed.NewEndorsedId(f.EndorsedId)
+	endorsedGrade, _ := shared.NewGrade(f.EndorsedGrade)
+	artifactId, _ := artifact.NewArtifactId(f.ArtifactId)
+	return NewEndorsement(
+		recognizerId, recognizerGrade, f.RecognizerVersion,
+		endorsedId, endorsedGrade, f.EndorsedVersion,
+		artifactId, f.CreatedAt,
 	)
-	assert.Equal(t, EndorsementMemento{
-		1, 2, 3, 4, 1, 5, 6, createdAt,
-	}, e.CreateMemento())
+}
+
+func (f EndorsementTestFactory) CreateMemento() EndorsementMemento {
+	return EndorsementMemento{
+		f.RecognizerId, f.RecognizerGrade, f.RecognizerVersion,
+		f.EndorsedId, f.EndorsedGrade, f.EndorsedVersion,
+		f.ArtifactId, f.CreatedAt,
+	}
 }
