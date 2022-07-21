@@ -10,18 +10,18 @@ import (
 )
 
 func TestRecognizerCreateMemento(t *testing.T) {
-	f := NewRecognizerTestFactory()
+	f := NewRecognizerFakeFactory()
 	agg, _ := f.Create()
 	assert.Equal(t, f.CreateMemento(), agg.CreateMemento())
 }
 
-func NewRecognizerTestFactory() *RecognizerTestFactory {
-	return &RecognizerTestFactory{
+func NewRecognizerFakeFactory() *RecognizerFakeFactory {
+	return &RecognizerFakeFactory{
 		1, 2, 0, 20, 1, time.Now(),
 	}
 }
 
-type RecognizerTestFactory struct {
+type RecognizerFakeFactory struct {
 	Id                        uint64
 	UserId                    uint64
 	Grade                     uint8
@@ -30,7 +30,7 @@ type RecognizerTestFactory struct {
 	CreatedAt                 time.Time
 }
 
-func (f RecognizerTestFactory) Create() (*Recognizer, error) {
+func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
 	id, _ := recognizer.NewRecognizerId(f.Id)
 	userId, _ := external.NewUserId(f.UserId)
 	grade, _ := shared.NewGrade(f.Grade)
@@ -38,7 +38,7 @@ func (f RecognizerTestFactory) Create() (*Recognizer, error) {
 	return NewRecognizer(id, userId, grade, count, f.Version, f.CreatedAt)
 }
 
-func (f RecognizerTestFactory) CreateMemento() RecognizerMemento {
+func (f RecognizerFakeFactory) CreateMemento() RecognizerMemento {
 	return RecognizerMemento{
 		f.Id, f.UserId, f.Grade, f.AvailableEndorsementCount, f.Version, f.CreatedAt,
 	}
