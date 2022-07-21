@@ -45,3 +45,27 @@ type Endorsed struct {
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
 }
+
+func (e Endorsed) CreateMemento() EndorsedMemento {
+	var receivedEndorsements []endorsement.EndorsementMemento
+	for i, v := range e.receivedEndorsements {
+		receivedEndorsements[i] = v.CreateMemento()
+	}
+	return EndorsedMemento{
+		e.id.CreateMemento(),
+		e.userId.CreateMemento(),
+		e.grade.CreateMemento(),
+		receivedEndorsements,
+		e.GetVersion(),
+		e.createdAt,
+	}
+}
+
+type EndorsedMemento struct {
+	Id                   uint64
+	UserId               uint64
+	Grade                uint8
+	ReceivedEndorsements []endorsement.EndorsementMemento
+	Version              uint
+	CreatedAt            time.Time
+}

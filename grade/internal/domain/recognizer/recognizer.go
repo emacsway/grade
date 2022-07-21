@@ -29,9 +29,9 @@ func NewRecognizer(
 		userId:                    userId,
 		grade:                     grade,
 		availableEndorsementCount: availableEndorsementCount,
+		createdAt:                 createdAt,
 		VersionedAggregate:        versioned,
 		EventiveEntity:            eventive,
-		CreatedAt:                 createdAt,
 	}, nil
 }
 
@@ -40,7 +40,7 @@ type Recognizer struct {
 	userId                    external.UserId
 	grade                     shared.Grade
 	availableEndorsementCount recognizer.AvailableEndorsementCount
-	CreatedAt                 time.Time
+	createdAt                 time.Time
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
 }
@@ -60,7 +60,7 @@ func (r Recognizer) CreateMemento() RecognizerMemento {
 		r.grade.CreateMemento(),
 		r.availableEndorsementCount.CreateMemento(),
 		r.GetVersion(),
-		r.CreatedAt,
+		r.createdAt,
 	}
 }
 
