@@ -1,25 +1,24 @@
 package recognizer
 
 import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 	"time"
-
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 type RecognizerExporter struct {
-	Id                        seedwork.Uint64Exporter
-	UserId                    seedwork.Uint64Exporter
-	Grade                     seedwork.Uint8Exporter
-	AvailableEndorsementCount seedwork.Uint8Exporter
+	Id                        interfaces.Exporter[uint64]
+	UserId                    interfaces.Exporter[uint64]
+	Grade                     interfaces.Exporter[uint8]
+	AvailableEndorsementCount interfaces.Exporter[uint8]
 	Version                   uint
 	CreatedAt                 time.Time
 }
 
 func (ex *RecognizerExporter) SetState(
-	id seedwork.Uint64Exporter,
-	userId seedwork.Uint64Exporter,
-	grade seedwork.Uint8Exporter,
-	availableEndorsementCount seedwork.Uint8Exporter,
+	id interfaces.Exporter[uint64],
+	userId interfaces.Exporter[uint64],
+	grade interfaces.Exporter[uint8],
+	availableEndorsementCount interfaces.Exporter[uint8],
 	version uint,
 	createdAt time.Time,
 ) {

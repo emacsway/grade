@@ -1,20 +1,19 @@
 package interfaces
 
 import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 	"time"
-
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 type EndorsementExporter interface {
 	SetState(
-		recognizerId seedwork.Uint64Exporter,
-		recognizerGrade seedwork.Uint8Exporter,
+		recognizerId interfaces.Exporter[uint64],
+		recognizerGrade interfaces.Exporter[uint8],
 		recognizerVersion uint,
-		endorsedId seedwork.Uint64Exporter,
-		endorsedGrade seedwork.Uint8Exporter,
+		endorsedId interfaces.Exporter[uint64],
+		endorsedGrade interfaces.Exporter[uint8],
 		endorsedVersion uint,
-		artifactId seedwork.Uint64Exporter,
+		artifactId interfaces.Exporter[uint64],
 		createdAt time.Time,
 	)
 }

@@ -1,29 +1,29 @@
 package endorsement
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 	"time"
 )
 
 type EndorsementExporter struct {
-	RecognizerId      seedwork.Uint64Exporter
-	RecognizerGrade   seedwork.Uint8Exporter
+	RecognizerId      interfaces.Exporter[uint64]
+	RecognizerGrade   interfaces.Exporter[uint8]
 	RecognizerVersion uint
-	EndorsedId        seedwork.Uint64Exporter
-	EndorsedGrade     seedwork.Uint8Exporter
+	EndorsedId        interfaces.Exporter[uint64]
+	EndorsedGrade     interfaces.Exporter[uint8]
 	EndorsedVersion   uint
-	ArtifactId        seedwork.Uint64Exporter
+	ArtifactId        interfaces.Exporter[uint64]
 	CreatedAt         time.Time
 }
 
 func (ex *EndorsementExporter) SetState(
-	recognizerId seedwork.Uint64Exporter,
-	recognizerGrade seedwork.Uint8Exporter,
+	recognizerId interfaces.Exporter[uint64],
+	recognizerGrade interfaces.Exporter[uint8],
 	recognizerVersion uint,
-	endorsedId seedwork.Uint64Exporter,
-	endorsedGrade seedwork.Uint8Exporter,
+	endorsedId interfaces.Exporter[uint64],
+	endorsedGrade interfaces.Exporter[uint8],
 	endorsedVersion uint,
-	artifactId seedwork.Uint64Exporter,
+	artifactId interfaces.Exporter[uint64],
 	createdAt time.Time,
 ) {
 	ex.RecognizerId = recognizerId

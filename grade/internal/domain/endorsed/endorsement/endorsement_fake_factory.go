@@ -58,8 +58,8 @@ func (f EndorsementFakeFactory) ExportTo(ex interfaces.EndorsementExporter) {
 	endorsedGrade.SetState(f.EndorsedGrade)
 	artifactId.SetState(f.ArtifactId)
 	ex.SetState(
-		recognizerId, recognizerGrade, f.RecognizerVersion,
-		endorsedId, endorsedGrade, f.EndorsedVersion,
-		artifactId, f.CreatedAt,
+		&recognizerId, &recognizerGrade, f.RecognizerVersion,
+		&endorsedId, &endorsedGrade, f.EndorsedVersion,
+		&artifactId, f.CreatedAt,
 	)
 }

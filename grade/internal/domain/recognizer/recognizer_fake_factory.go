@@ -47,6 +47,6 @@ func (f RecognizerFakeFactory) ExportTo(ex interfaces.RecognizerExporter) {
 	grade.SetState(f.Grade)
 	availableEndorsementCount.SetState(f.AvailableEndorsementCount)
 	ex.SetState(
-		id, userId, grade, availableEndorsementCount, f.Version, f.CreatedAt,
+		&id, &userId, &grade, &availableEndorsementCount, f.Version, f.CreatedAt,
 	)
 }

@@ -70,7 +70,7 @@ func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
 	r.grade.ExportTo(&grade)
 	r.availableEndorsementCount.ExportTo(&availableEndorsementCount)
 	ex.SetState(
-		id, userId, grade, availableEndorsementCount, r.GetVersion(), r.createdAt,
+		&id, &userId, &grade, &availableEndorsementCount, r.GetVersion(), r.createdAt,
 	)
 }
 

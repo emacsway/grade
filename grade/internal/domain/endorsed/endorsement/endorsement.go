@@ -75,9 +75,9 @@ func (e Endorsement) ExportTo(ex interfaces.EndorsementExporter) {
 	e.endorsedGrade.ExportTo(&endorsedGrade)
 	e.artifactId.ExportTo(&artifactId)
 	ex.SetState(
-		recognizerId, recognizerGrade, e.recognizerVersion,
-		endorsedId, endorsedGrade, e.endorsedVersion,
-		artifactId, e.createdAt,
+		&recognizerId, &recognizerGrade, e.recognizerVersion,
+		&endorsedId, &endorsedGrade, e.endorsedVersion,
+		&artifactId, e.createdAt,
 	)
 }
 
