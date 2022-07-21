@@ -2,6 +2,7 @@ package shared
 
 import (
 	"fmt"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -71,4 +72,11 @@ func TestGradeSetState(t *testing.T) {
 	g, _ := NewGrade(1)
 	g.Import(2)
 	assert.Equal(t, uint8(2), uint8(g))
+}
+
+func TestGradeExportTo(t *testing.T) {
+	var ex seedwork.Uint8Exporter
+	g, _ := NewGrade(1)
+	g.ExportTo(&ex)
+	assert.Equal(t, uint8(ex), g.Export())
 }
