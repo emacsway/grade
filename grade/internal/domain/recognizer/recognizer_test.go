@@ -4,27 +4,40 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
-func TestRecognizerConstructor(t *testing.T) {
-	id, _ := recognizer.NewRecognizerId(uint64(1))
-	userId, _ := external.NewUserId(uint64(2))
-	grade, _ := shared.NewGrade(0)
-	count, _ := recognizer.NewAvailableEndorsementCount(uint8(20))
-	agg, _ := NewRecognizer(id, userId, grade, count, 1)
-	assert.Equal(t, id, agg.GetId())
+func TestRecognizerCreateMemento(t *testing.T) {
+	f := NewRecognizerTestFactory()
+	agg, _ := f.Create()
+	assert.Equal(t, f.CreateMemento(), agg.CreateMemento())
 }
 
-func TestRecognizerCreateMemento(t *testing.T) {
-	id, _ := recognizer.NewRecognizerId(1)
-	userId, _ := external.NewUserId(2)
-	grade, _ := shared.NewGrade(0)
-	count, _ := recognizer.NewAvailableEndorsementCount(20)
-	agg, _ := NewRecognizer(id, userId, grade, count, 1)
-	assert.Equal(t, RecognizerMemento{
+func NewRecognizerTestFactory() *RecognizerTestFactory {
+	return &RecognizerTestFactory{
 		1, 2, 0, 20, 1,
-	}, agg.CreateMemento())
+	}
+}
+
+type RecognizerTestFactory struct {
+	Id                        uint64
+	UserId                    uint64
+	Grade                     uint8
+	AvailableEndorsementCount uint8
+	Version                   uint
+}
+
+func (f RecognizerTestFactory) Create() (*Recognizer, error) {
+	id, _ := recognizer.NewRecognizerId(f.Id)
+	userId, _ := external.NewUserId(f.UserId)
+	grade, _ := shared.NewGrade(f.Grade)
+	count, _ := recognizer.NewAvailableEndorsementCount(f.AvailableEndorsementCount)
+	return NewRecognizer(id, userId, grade, count, f.Version)
+}
+
+func (f RecognizerTestFactory) CreateMemento() RecognizerMemento {
+	return RecognizerMemento{
+		f.Id, f.UserId, f.Grade, f.AvailableEndorsementCount, f.Version,
+	}
 }
