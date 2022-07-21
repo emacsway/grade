@@ -2,6 +2,7 @@ package recognizer
 
 import (
 	"fmt"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -65,4 +66,11 @@ func TestAvailableEndorsementCountNext(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestAvailableEndorsementCountExportTo(t *testing.T) {
+	var ex seedwork.Uint8Exporter
+	c, _ := NewAvailableEndorsementCount(1)
+	c.ExportTo(&ex)
+	assert.Equal(t, uint8(ex), c.Export())
 }
