@@ -3,7 +3,9 @@ package endorsement
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
 )
@@ -44,4 +46,20 @@ func (f EndorsementFakeFactory) Export() EndorsementState {
 		f.EndorsedId, f.EndorsedGrade, f.EndorsedVersion,
 		f.ArtifactId, f.CreatedAt,
 	}
+}
+
+func (f EndorsementFakeFactory) ExportTo(ex interfaces.EndorsementExporter) {
+	var recognizerId, endorsedId, artifactId seedwork.Uint64Exporter
+	var recognizerGrade, endorsedGrade seedwork.Uint8Exporter
+
+	recognizerId.SetState(f.RecognizerId)
+	recognizerGrade.SetState(f.RecognizerGrade)
+	endorsedId.SetState(f.EndorsedId)
+	endorsedGrade.SetState(f.EndorsedGrade)
+	artifactId.SetState(f.ArtifactId)
+	ex.SetState(
+		recognizerId, recognizerGrade, f.RecognizerVersion,
+		endorsedId, endorsedGrade, f.EndorsedVersion,
+		artifactId, f.CreatedAt,
+	)
 }

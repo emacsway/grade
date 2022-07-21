@@ -2,8 +2,9 @@ package endorsement
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestEndorsementConstructor(t *testing.T) {
@@ -35,4 +36,13 @@ func TestEndorsementExport(t *testing.T) {
 	f := NewEndorsementFakeFactory()
 	e, _ := f.Create()
 	assert.Equal(t, f.Export(), e.Export())
+}
+
+func TestRecognizerExportTo(t *testing.T) {
+	var expectedExporter, actualExporter EndorsementExporter
+	f := NewEndorsementFakeFactory()
+	f.ExportTo(&expectedExporter)
+	agg, _ := f.Create()
+	agg.ExportTo(&actualExporter)
+	assert.Equal(t, expectedExporter, actualExporter)
 }

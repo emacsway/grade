@@ -4,7 +4,9 @@ import (
 	"errors"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
 )
@@ -57,15 +59,26 @@ func (e Endorsement) GetArtifactId() artifact.ArtifactId {
 
 func (e Endorsement) Export() EndorsementState {
 	return EndorsementState{
-		e.recognizerId.Export(),
-		e.recognizerGrade.Export(),
-		e.recognizerVersion,
-		e.endorsedId.Export(),
-		e.endorsedGrade.Export(),
-		e.endorsedVersion,
-		e.artifactId.Export(),
-		e.createdAt,
+		e.recognizerId.Export(), e.recognizerGrade.Export(), e.recognizerVersion,
+		e.endorsedId.Export(), e.endorsedGrade.Export(), e.endorsedVersion,
+		e.artifactId.Export(), e.createdAt,
 	}
+}
+
+func (e Endorsement) ExportTo(ex interfaces.EndorsementExporter) {
+	var recognizerId, endorsedId, artifactId seedwork.Uint64Exporter
+	var recognizerGrade, endorsedGrade seedwork.Uint8Exporter
+
+	e.recognizerId.ExportTo(&recognizerId)
+	e.recognizerGrade.ExportTo(&recognizerGrade)
+	e.endorsedId.ExportTo(&endorsedId)
+	e.endorsedGrade.ExportTo(&endorsedGrade)
+	e.artifactId.ExportTo(&artifactId)
+	ex.SetState(
+		recognizerId, recognizerGrade, e.recognizerVersion,
+		endorsedId, endorsedGrade, e.endorsedVersion,
+		artifactId, e.createdAt,
+	)
 }
 
 type EndorsementState struct {

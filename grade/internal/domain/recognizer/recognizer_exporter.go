@@ -1,8 +1,9 @@
 package recognizer
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"time"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 type RecognizerExporter struct {
@@ -14,7 +15,7 @@ type RecognizerExporter struct {
 	CreatedAt                 time.Time
 }
 
-func (ex RecognizerExporter) SetState(
+func (ex *RecognizerExporter) SetState(
 	id seedwork.Uint64Exporter,
 	userId seedwork.Uint64Exporter,
 	grade seedwork.Uint8Exporter,
