@@ -14,9 +14,9 @@ type Identity[T comparable, C interfaces.Identity[T]] struct {
 }
 
 func (id Identity[T, C]) Equals(other C) bool {
-	return id.CreateMemento() == other.CreateMemento()
+	return id.Export() == other.Export()
 }
 
-func (id Identity[T, C]) CreateMemento() T {
+func (id Identity[T, C]) Export() T {
 	return id.value
 }

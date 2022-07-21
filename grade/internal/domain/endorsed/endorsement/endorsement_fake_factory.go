@@ -38,8 +38,8 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	)
 }
 
-func (f EndorsementFakeFactory) CreateMemento() EndorsementMemento {
-	return EndorsementMemento{
+func (f EndorsementFakeFactory) Export() EndorsementState {
+	return EndorsementState{
 		f.RecognizerId, f.RecognizerGrade, f.RecognizerVersion,
 		f.EndorsedId, f.EndorsedGrade, f.EndorsedVersion,
 		f.ArtifactId, f.CreatedAt,

@@ -54,12 +54,12 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 	return NewEndorsed(id, userId, grade, receivedEndorsements, f.Version, f.CreatedAt)
 }
 
-func (f EndorsedFakeFactory) CreateMemento() EndorsedMemento {
-	var receivedEndorsements []endorsement.EndorsementMemento
+func (f EndorsedFakeFactory) Export() EndorsedState {
+	var receivedEndorsements []endorsement.EndorsementState
 	for _, v := range f.ReceivedEndorsements {
-		receivedEndorsements = append(receivedEndorsements, v.CreateMemento())
+		receivedEndorsements = append(receivedEndorsements, v.Export())
 	}
-	return EndorsedMemento{
+	return EndorsedState{
 		f.Id, f.UserId, f.Grade, receivedEndorsements, f.Version, f.CreatedAt,
 	}
 }

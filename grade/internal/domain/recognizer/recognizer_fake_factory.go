@@ -30,8 +30,8 @@ func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
 	return NewRecognizer(id, userId, grade, count, f.Version, f.CreatedAt)
 }
 
-func (f RecognizerFakeFactory) CreateMemento() RecognizerMemento {
-	return RecognizerMemento{
+func (f RecognizerFakeFactory) Export() RecognizerState {
+	return RecognizerState{
 		f.Id, f.UserId, f.Grade, f.AvailableEndorsementCount, f.Version, f.CreatedAt,
 	}
 }

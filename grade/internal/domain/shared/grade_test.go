@@ -67,8 +67,8 @@ func TestGradeNext(t *testing.T) {
 	}
 }
 
-func TestGradeSetMemento(t *testing.T) {
+func TestGradeSetState(t *testing.T) {
 	g, _ := NewGrade(1)
-	g.SetMemento(2)
-	assert.Equal(t, uint8(g), uint8(2))
+	g.Import(2)
+	assert.Equal(t, uint8(2), uint8(g))
 }

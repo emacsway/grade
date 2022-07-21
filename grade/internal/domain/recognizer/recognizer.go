@@ -53,18 +53,18 @@ func (r Recognizer) GetGrade() shared.Grade {
 	return r.grade
 }
 
-func (r Recognizer) CreateMemento() RecognizerMemento {
-	return RecognizerMemento{
-		r.id.CreateMemento(),
-		r.userId.CreateMemento(),
-		r.grade.CreateMemento(),
-		r.availableEndorsementCount.CreateMemento(),
+func (r Recognizer) Export() RecognizerState {
+	return RecognizerState{
+		r.id.Export(),
+		r.userId.Export(),
+		r.grade.Export(),
+		r.availableEndorsementCount.Export(),
 		r.GetVersion(),
 		r.createdAt,
 	}
 }
 
-type RecognizerMemento struct {
+type RecognizerState struct {
 	Id                        uint64
 	UserId                    uint64
 	Grade                     uint8

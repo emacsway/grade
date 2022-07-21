@@ -34,6 +34,6 @@ func (c AvailableEndorsementCount) Decrease() (AvailableEndorsementCount, error)
 	return n, nil
 }
 
-func (c AvailableEndorsementCount) CreateMemento() uint8 {
+func (c AvailableEndorsementCount) Export() uint8 {
 	return uint8(c)
 }

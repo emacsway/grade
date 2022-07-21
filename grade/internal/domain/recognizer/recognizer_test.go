@@ -5,8 +5,8 @@ import (
 	"testing"
 )
 
-func TestRecognizerCreateMemento(t *testing.T) {
+func TestRecognizerExport(t *testing.T) {
 	f := NewRecognizerFakeFactory()
 	agg, _ := f.Create()
-	assert.Equal(t, f.CreateMemento(), agg.CreateMemento())
+	assert.Equal(t, f.Export(), agg.Export())
 }

@@ -46,26 +46,26 @@ type Endorsed struct {
 	seedwork.EventiveEntity
 }
 
-func (e Endorsed) CreateMemento() EndorsedMemento {
-	var receivedEndorsements []endorsement.EndorsementMemento
+func (e Endorsed) Export() EndorsedState {
+	var receivedEndorsements []endorsement.EndorsementState
 	for _, v := range e.receivedEndorsements {
-		receivedEndorsements = append(receivedEndorsements, v.CreateMemento())
+		receivedEndorsements = append(receivedEndorsements, v.Export())
 	}
-	return EndorsedMemento{
-		e.id.CreateMemento(),
-		e.userId.CreateMemento(),
-		e.grade.CreateMemento(),
+	return EndorsedState{
+		e.id.Export(),
+		e.userId.Export(),
+		e.grade.Export(),
 		receivedEndorsements,
 		e.GetVersion(),
 		e.createdAt,
 	}
 }
 
-type EndorsedMemento struct {
+type EndorsedState struct {
 	Id                   uint64
 	UserId               uint64
 	Grade                uint8
-	ReceivedEndorsements []endorsement.EndorsementMemento
+	ReceivedEndorsements []endorsement.EndorsementState
 	Version              uint
 	CreatedAt            time.Time
 }

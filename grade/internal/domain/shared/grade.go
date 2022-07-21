@@ -32,10 +32,10 @@ func (g Grade) Next() (Grade, error) {
 	return nextGrade, nil
 }
 
-func (g Grade) CreateMemento() uint8 {
+func (g Grade) Export() uint8 {
 	return uint8(g)
 }
 
-func (g *Grade) SetMemento(value uint8) {
+func (g *Grade) Import(value uint8) {
 	*g = Grade(value)
 }

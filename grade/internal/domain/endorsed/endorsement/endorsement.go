@@ -55,20 +55,20 @@ func (e Endorsement) GetArtifactId() artifact.ArtifactId {
 	return e.artifactId
 }
 
-func (e Endorsement) CreateMemento() EndorsementMemento {
-	return EndorsementMemento{
-		e.recognizerId.CreateMemento(),
-		e.recognizerGrade.CreateMemento(),
+func (e Endorsement) Export() EndorsementState {
+	return EndorsementState{
+		e.recognizerId.Export(),
+		e.recognizerGrade.Export(),
 		e.recognizerVersion,
-		e.endorsedId.CreateMemento(),
-		e.endorsedGrade.CreateMemento(),
+		e.endorsedId.Export(),
+		e.endorsedGrade.Export(),
 		e.endorsedVersion,
-		e.artifactId.CreateMemento(),
+		e.artifactId.Export(),
 		e.createdAt,
 	}
 }
 
-type EndorsementMemento struct {
+type EndorsementState struct {
 	RecognizerId      uint64
 	RecognizerGrade   uint8
 	RecognizerVersion uint

@@ -25,14 +25,14 @@ func TestEndorsementConstructor(t *testing.T) {
 			assert.Equal(t, f.RecognizerGrade, c.RecognizerGrade)
 			assert.Equal(t, c.ExpectedError, err)
 			if err == nil {
-				assert.Equal(t, f.CreateMemento(), e.CreateMemento())
+				assert.Equal(t, f.Export(), e.Export())
 			}
 		})
 	}
 }
 
-func TestEndorsementCreateMemento(t *testing.T) {
+func TestEndorsementExport(t *testing.T) {
 	f := NewEndorsementFakeFactory()
 	e, _ := f.Create()
-	assert.Equal(t, f.CreateMemento(), e.CreateMemento())
+	assert.Equal(t, f.Export(), e.Export())
 }

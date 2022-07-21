@@ -2,13 +2,12 @@ package interfaces
 
 import "github.com/emacsway/qualifying-grade/grade/pkg/domain/seedwork/interfaces"
 
-type Originator[T any] interface {
-	CreateMemento() T
-	// SetMemento(T)
+type Exportable[T any] interface {
+	Export() T
 }
 
 type Identity[T comparable] interface {
-	Originator[T]
+	Exportable[T]
 	Equals(Identity[T]) bool
 }
 
