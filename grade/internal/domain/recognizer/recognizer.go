@@ -56,12 +56,8 @@ func (r Recognizer) GetGrade() shared.Grade {
 
 func (r Recognizer) Export() RecognizerState {
 	return RecognizerState{
-		r.id.Export(),
-		r.userId.Export(),
-		r.grade.Export(),
-		r.availableEndorsementCount.Export(),
-		r.GetVersion(),
-		r.createdAt,
+		r.id.Export(), r.userId.Export(), r.grade.Export(),
+		r.availableEndorsementCount.Export(), r.GetVersion(), r.createdAt,
 	}
 }
 
@@ -69,17 +65,12 @@ func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
 	var id, userId seedwork.Uint64Exporter
 	var grade, availableEndorsementCount seedwork.Uint8Exporter
 
-	id.SetState(r.id.Export())
-	userId.SetState(r.userId.Export())
-	grade.SetState(r.grade.Export())
-	availableEndorsementCount.SetState(r.availableEndorsementCount.Export())
+	r.id.ExportTo(&id)
+	r.userId.ExportTo(&userId)
+	r.grade.ExportTo(&grade)
+	r.availableEndorsementCount.ExportTo(&availableEndorsementCount)
 	ex.SetState(
-		id,
-		userId,
-		grade,
-		availableEndorsementCount,
-		r.GetVersion(),
-		r.createdAt,
+		id, userId, grade, availableEndorsementCount, r.GetVersion(), r.createdAt,
 	)
 }
 
