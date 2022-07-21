@@ -6,6 +6,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
+	"time"
 )
 
 func NewEndorsed(
@@ -14,6 +15,7 @@ func NewEndorsed(
 	grade shared.Grade,
 	endorsements []endorsement.Endorsement,
 	version uint,
+	createdAt time.Time,
 ) (*Endorsed, error) {
 	versioned, err := seedwork.NewVersionedAggregate(version)
 	if err != nil {
@@ -30,6 +32,7 @@ func NewEndorsed(
 		receivedEndorsements: endorsements,
 		VersionedAggregate:   versioned,
 		EventiveEntity:       eventive,
+		createdAt:            createdAt,
 	}, nil
 }
 
@@ -38,6 +41,7 @@ type Endorsed struct {
 	userId               external.UserId
 	grade                shared.Grade
 	receivedEndorsements []endorsement.Endorsement
+	createdAt            time.Time
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
 }
