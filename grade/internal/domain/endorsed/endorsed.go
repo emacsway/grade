@@ -48,8 +48,8 @@ type Endorsed struct {
 
 func (e Endorsed) CreateMemento() EndorsedMemento {
 	var receivedEndorsements []endorsement.EndorsementMemento
-	for i, v := range e.receivedEndorsements {
-		receivedEndorsements[i] = v.CreateMemento()
+	for _, v := range e.receivedEndorsements {
+		receivedEndorsements = append(receivedEndorsements, v.CreateMemento())
 	}
 	return EndorsedMemento{
 		e.id.CreateMemento(),
