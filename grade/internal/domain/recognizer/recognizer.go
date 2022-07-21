@@ -2,6 +2,7 @@ package recognizer
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
@@ -62,6 +63,24 @@ func (r Recognizer) Export() RecognizerState {
 		r.GetVersion(),
 		r.createdAt,
 	}
+}
+
+func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
+	var id, userId seedwork.Uint64Exporter
+	var grade, availableEndorsementCount seedwork.Uint8Exporter
+
+	id.SetState(r.id.Export())
+	userId.SetState(r.userId.Export())
+	grade.SetState(r.grade.Export())
+	availableEndorsementCount.SetState(r.availableEndorsementCount.Export())
+	ex.SetState(
+		id,
+		userId,
+		grade,
+		availableEndorsementCount,
+		r.GetVersion(),
+		r.createdAt,
+	)
 }
 
 type RecognizerState struct {

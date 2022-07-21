@@ -11,6 +11,10 @@ type Identity[T comparable] interface {
 	Equals(Identity[T]) bool
 }
 
+type PrimitiveExporter[T comparable] interface {
+	SetState(T)
+}
+
 // Public listeners is a subset of all listeners, not vice versa. Suppose, we have three circles...
 
 type DomainEvent interface {

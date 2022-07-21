@@ -3,6 +3,7 @@ package recognizer
 import (
 	"errors"
 	"fmt"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 )
 
 const yearlyEndorsementCount = uint8(20)
@@ -36,4 +37,8 @@ func (c AvailableEndorsementCount) Decrease() (AvailableEndorsementCount, error)
 
 func (c AvailableEndorsementCount) Export() uint8 {
 	return uint8(c)
+}
+
+func (c AvailableEndorsementCount) ExportTo(ex interfaces.PrimitiveExporter[uint8]) {
+	ex.SetState(uint8(c))
 }

@@ -2,7 +2,9 @@ package recognizer
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
 )
@@ -34,4 +36,22 @@ func (f RecognizerFakeFactory) Export() RecognizerState {
 	return RecognizerState{
 		f.Id, f.UserId, f.Grade, f.AvailableEndorsementCount, f.Version, f.CreatedAt,
 	}
+}
+
+func (f RecognizerFakeFactory) ExportTo(ex interfaces.RecognizerExporter) {
+	var id, userId seedwork.Uint64Exporter
+	var grade, availableEndorsementCount seedwork.Uint8Exporter
+
+	id.SetState(f.Id)
+	userId.SetState(f.UserId)
+	grade.SetState(f.Grade)
+	availableEndorsementCount.SetState(f.AvailableEndorsementCount)
+	ex.SetState(
+		id,
+		userId,
+		grade,
+		availableEndorsementCount,
+		f.Version,
+		f.CreatedAt,
+	)
 }

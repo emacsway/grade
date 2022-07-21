@@ -10,3 +10,12 @@ func TestRecognizerExport(t *testing.T) {
 	agg, _ := f.Create()
 	assert.Equal(t, f.Export(), agg.Export())
 }
+
+func TestRecognizerExportTo(t *testing.T) {
+	var expectedExporter, actualExporter RecognizerExporter
+	f := NewRecognizerFakeFactory()
+	f.ExportTo(expectedExporter)
+	agg, _ := f.Create()
+	agg.ExportTo(actualExporter)
+	assert.Equal(t, expectedExporter, actualExporter)
+}
