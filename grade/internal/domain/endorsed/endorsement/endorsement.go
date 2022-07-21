@@ -48,3 +48,27 @@ func (e Endorsement) GetRecognizerId() recognizer.RecognizerId {
 func (e Endorsement) GetArtifactId() artifact.ArtifactId {
 	return e.artifactId
 }
+
+func (e Endorsement) CreateMemento() EndorsementMemento {
+	return EndorsementMemento{
+		e.recognizerId.CreateMemento(),
+		e.recognizerGrade.CreateMemento(),
+		e.recognizerVersion,
+		e.endorsedId.CreateMemento(),
+		e.endorsedGrade.CreateMemento(),
+		e.endorsedVersion,
+		e.artifactId.CreateMemento(),
+		e.createdAt,
+	}
+}
+
+type EndorsementMemento struct {
+	RecognizerId      uint64
+	RecognizerGrade   uint8
+	RecognizerVersion uint
+	EndorsedId        uint64
+	EndorsedGrade     uint8
+	EndorsedVersion   uint
+	ArtifactId        uint64
+	CreatedAt         time.Time
+}
