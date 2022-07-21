@@ -1,12 +1,14 @@
 package endorsed
 
 import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
+	"time"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
-	"time"
 )
 
 func NewEndorsed(
@@ -59,6 +61,25 @@ func (e Endorsed) Export() EndorsedState {
 		e.GetVersion(),
 		e.createdAt,
 	}
+}
+
+func (e Endorsed) ExportTo(ex EndorsedExporter) {
+	var id, userId seedwork.Uint64Exporter
+	var grade seedwork.Uint8Exporter
+	var receivedEndorsements []interfaces.EndorsementExporter
+
+	for _, v := range e.receivedEndorsements {
+		re := &endorsement.EndorsementExporter{}
+		v.ExportTo(re)
+		receivedEndorsements = append(receivedEndorsements, re)
+	}
+
+	e.id.ExportTo(&id)
+	e.userId.ExportTo(&userId)
+	e.grade.ExportTo(&grade)
+	ex.SetState(
+		&id, &userId, &grade, receivedEndorsements, e.GetVersion(), e.createdAt,
+	)
 }
 
 type EndorsedState struct {

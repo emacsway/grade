@@ -3,8 +3,11 @@ package endorsed
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
+	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
 )
@@ -62,4 +65,23 @@ func (f EndorsedFakeFactory) Export() EndorsedState {
 	return EndorsedState{
 		f.Id, f.UserId, f.Grade, receivedEndorsements, f.Version, f.CreatedAt,
 	}
+}
+
+func (f EndorsedFakeFactory) ExportTo(ex interfaces.EndorsedExporter) {
+	var id, userId seedwork.Uint64Exporter
+	var grade seedwork.Uint8Exporter
+	var receivedEndorsements []interfaces2.EndorsementExporter
+
+	for _, v := range f.ReceivedEndorsements {
+		re := &endorsement.EndorsementExporter{}
+		v.ExportTo(re)
+		receivedEndorsements = append(receivedEndorsements, re)
+	}
+
+	id.SetState(f.Id)
+	userId.SetState(f.UserId)
+	grade.SetState(f.Grade)
+	ex.SetState(
+		&id, &userId, &grade, receivedEndorsements, f.Version, f.CreatedAt,
+	)
 }

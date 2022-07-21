@@ -7,10 +7,22 @@ import (
 )
 
 func TestEndorsedExport(t *testing.T) {
-	f := NewEndorsedFakeFactory()
+	ef := NewEndorsedFakeFactory()
 	rf := recognizer.NewRecognizerFakeFactory()
-	f.AddReceivedEndorsement(rf)
-	f.AddReceivedEndorsement(rf)
-	agg, _ := f.Create()
-	assert.Equal(t, f.Export(), agg.Export())
+	ef.AddReceivedEndorsement(rf)
+	ef.AddReceivedEndorsement(rf)
+	agg, _ := ef.Create()
+	assert.Equal(t, ef.Export(), agg.Export())
+}
+
+func TestEndorsedExportTo(t *testing.T) {
+	var expectedExporter, actualExporter EndorsedExporter
+	ef := NewEndorsedFakeFactory()
+	rf := recognizer.NewRecognizerFakeFactory()
+	ef.AddReceivedEndorsement(rf)
+	ef.AddReceivedEndorsement(rf)
+	ef.ExportTo(&expectedExporter)
+	agg, _ := ef.Create()
+	agg.ExportTo(actualExporter)
+	assert.Equal(t, ef.Export(), agg.Export())
 }
