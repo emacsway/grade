@@ -17,3 +17,10 @@ func TestIdentityEqualsFalse(t *testing.T) {
 	otherId, _ := NewIdentity[uint64](4)
 	assert.False(t, id.Equals(otherId))
 }
+
+func TestIdentityExportTo(t *testing.T) {
+	var ex Uint64Exporter
+	id, _ := NewIdentity[uint64](3)
+	id.ExportTo(&ex)
+	assert.Equal(t, uint64(ex), id.Export())
+}
