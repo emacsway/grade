@@ -13,7 +13,7 @@ import (
 
 func NewEndorsed(
 	id endorsed.EndorsedId,
-	userId external.UserId,
+	memberId external.MemberId,
 	grade shared.Grade,
 	endorsements []endorsement.Endorsement,
 	version uint,
@@ -29,7 +29,7 @@ func NewEndorsed(
 	}
 	return &Endorsed{
 		id:                   id,
-		userId:               userId,
+		memberId:             memberId,
 		grade:                grade,
 		receivedEndorsements: endorsements,
 		VersionedAggregate:   versioned,
@@ -40,7 +40,7 @@ func NewEndorsed(
 
 type Endorsed struct {
 	id                   endorsed.EndorsedId
-	userId               external.UserId
+	memberId             external.MemberId
 	grade                shared.Grade
 	receivedEndorsements []endorsement.Endorsement
 	createdAt            time.Time
@@ -55,7 +55,7 @@ func (e Endorsed) Export() EndorsedState {
 	}
 	return EndorsedState{
 		e.id.Export(),
-		e.userId.Export(),
+		e.memberId.Export(),
 		e.grade.Export(),
 		receivedEndorsements,
 		e.GetVersion(),
@@ -64,7 +64,7 @@ func (e Endorsed) Export() EndorsedState {
 }
 
 func (e Endorsed) ExportTo(ex EndorsedExporter) {
-	var id, userId seedwork.Uint64Exporter
+	var id, memberId seedwork.Uint64Exporter
 	var grade seedwork.Uint8Exporter
 	var receivedEndorsements []interfaces.EndorsementExporter
 
@@ -75,16 +75,16 @@ func (e Endorsed) ExportTo(ex EndorsedExporter) {
 	}
 
 	e.id.ExportTo(&id)
-	e.userId.ExportTo(&userId)
+	e.memberId.ExportTo(&memberId)
 	e.grade.ExportTo(&grade)
 	ex.SetState(
-		&id, &userId, &grade, receivedEndorsements, e.GetVersion(), e.createdAt,
+		&id, &memberId, &grade, receivedEndorsements, e.GetVersion(), e.createdAt,
 	)
 }
 
 type EndorsedState struct {
 	Id                   uint64
-	UserId               uint64
+	MemberId             uint64
 	Grade                uint8
 	ReceivedEndorsements []endorsement.EndorsementState
 	Version              uint

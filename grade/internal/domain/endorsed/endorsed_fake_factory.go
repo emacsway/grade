@@ -20,7 +20,7 @@ func NewEndorsedFakeFactory() *EndorsedFakeFactory {
 
 type EndorsedFakeFactory struct {
 	Id                   uint64
-	UserId               uint64
+	MemberId             uint64
 	Grade                uint8
 	ReceivedEndorsements []*endorsement.EndorsementFakeFactory
 	Version              uint
@@ -52,9 +52,9 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 		receivedEndorsements = append(receivedEndorsements, e)
 	}
 	id, _ := endorsed.NewEndorsedId(f.Id)
-	userId, _ := external.NewUserId(f.UserId)
+	memberId, _ := external.NewMemberId(f.MemberId)
 	grade, _ := shared.NewGrade(f.Grade)
-	return NewEndorsed(id, userId, grade, receivedEndorsements, f.Version, f.CreatedAt)
+	return NewEndorsed(id, memberId, grade, receivedEndorsements, f.Version, f.CreatedAt)
 }
 
 func (f EndorsedFakeFactory) Export() EndorsedState {
@@ -63,12 +63,12 @@ func (f EndorsedFakeFactory) Export() EndorsedState {
 		receivedEndorsements = append(receivedEndorsements, v.Export())
 	}
 	return EndorsedState{
-		f.Id, f.UserId, f.Grade, receivedEndorsements, f.Version, f.CreatedAt,
+		f.Id, f.MemberId, f.Grade, receivedEndorsements, f.Version, f.CreatedAt,
 	}
 }
 
 func (f EndorsedFakeFactory) ExportTo(ex interfaces.EndorsedExporter) {
-	var id, userId seedwork.Uint64Exporter
+	var id, memberId seedwork.Uint64Exporter
 	var grade seedwork.Uint8Exporter
 	var receivedEndorsements []interfaces2.EndorsementExporter
 
@@ -79,9 +79,9 @@ func (f EndorsedFakeFactory) ExportTo(ex interfaces.EndorsedExporter) {
 	}
 
 	id.SetState(f.Id)
-	userId.SetState(f.UserId)
+	memberId.SetState(f.MemberId)
 	grade.SetState(f.Grade)
 	ex.SetState(
-		&id, &userId, &grade, receivedEndorsements, f.Version, f.CreatedAt,
+		&id, &memberId, &grade, receivedEndorsements, f.Version, f.CreatedAt,
 	)
 }

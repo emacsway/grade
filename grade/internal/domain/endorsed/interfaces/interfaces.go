@@ -9,7 +9,7 @@ import (
 type EndorsedExporter interface {
 	SetState(
 		id interfaces.Exporter[uint64],
-		userId interfaces.Exporter[uint64],
+		memberId interfaces.Exporter[uint64],
 		grade interfaces.Exporter[uint8],
 		receivedEndorsements []interfaces2.EndorsementExporter,
 		version uint,

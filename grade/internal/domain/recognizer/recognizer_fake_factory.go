@@ -17,7 +17,7 @@ func NewRecognizerFakeFactory() *RecognizerFakeFactory {
 
 type RecognizerFakeFactory struct {
 	Id                        uint64
-	UserId                    uint64
+	MemberId                  uint64
 	Grade                     uint8
 	AvailableEndorsementCount uint8
 	Version                   uint
@@ -26,27 +26,27 @@ type RecognizerFakeFactory struct {
 
 func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
 	id, _ := recognizer.NewRecognizerId(f.Id)
-	userId, _ := external.NewUserId(f.UserId)
+	memberId, _ := external.NewMemberId(f.MemberId)
 	grade, _ := shared.NewGrade(f.Grade)
 	count, _ := recognizer.NewAvailableEndorsementCount(f.AvailableEndorsementCount)
-	return NewRecognizer(id, userId, grade, count, f.Version, f.CreatedAt)
+	return NewRecognizer(id, memberId, grade, count, f.Version, f.CreatedAt)
 }
 
 func (f RecognizerFakeFactory) Export() RecognizerState {
 	return RecognizerState{
-		f.Id, f.UserId, f.Grade, f.AvailableEndorsementCount, f.Version, f.CreatedAt,
+		f.Id, f.MemberId, f.Grade, f.AvailableEndorsementCount, f.Version, f.CreatedAt,
 	}
 }
 
 func (f RecognizerFakeFactory) ExportTo(ex interfaces.RecognizerExporter) {
-	var id, userId seedwork.Uint64Exporter
+	var id, memberId seedwork.Uint64Exporter
 	var grade, availableEndorsementCount seedwork.Uint8Exporter
 
 	id.SetState(f.Id)
-	userId.SetState(f.UserId)
+	memberId.SetState(f.MemberId)
 	grade.SetState(f.Grade)
 	availableEndorsementCount.SetState(f.AvailableEndorsementCount)
 	ex.SetState(
-		&id, &userId, &grade, &availableEndorsementCount, f.Version, f.CreatedAt,
+		&id, &memberId, &grade, &availableEndorsementCount, f.Version, f.CreatedAt,
 	)
 }

@@ -11,7 +11,7 @@ import (
 
 func NewRecognizer(
 	id recognizer.RecognizerId,
-	userId external.UserId,
+	memberId external.MemberId,
 	grade shared.Grade,
 	availableEndorsementCount recognizer.AvailableEndorsementCount,
 	version uint,
@@ -27,7 +27,7 @@ func NewRecognizer(
 	}
 	return &Recognizer{
 		id:                        id,
-		userId:                    userId,
+		memberId:                  memberId,
 		grade:                     grade,
 		availableEndorsementCount: availableEndorsementCount,
 		createdAt:                 createdAt,
@@ -38,7 +38,7 @@ func NewRecognizer(
 
 type Recognizer struct {
 	id                        recognizer.RecognizerId
-	userId                    external.UserId
+	memberId                  external.MemberId
 	grade                     shared.Grade
 	availableEndorsementCount recognizer.AvailableEndorsementCount
 	createdAt                 time.Time
@@ -56,27 +56,27 @@ func (r Recognizer) GetGrade() shared.Grade {
 
 func (r Recognizer) Export() RecognizerState {
 	return RecognizerState{
-		r.id.Export(), r.userId.Export(), r.grade.Export(),
+		r.id.Export(), r.memberId.Export(), r.grade.Export(),
 		r.availableEndorsementCount.Export(), r.GetVersion(), r.createdAt,
 	}
 }
 
 func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
-	var id, userId seedwork.Uint64Exporter
+	var id, memberId seedwork.Uint64Exporter
 	var grade, availableEndorsementCount seedwork.Uint8Exporter
 
 	r.id.ExportTo(&id)
-	r.userId.ExportTo(&userId)
+	r.memberId.ExportTo(&memberId)
 	r.grade.ExportTo(&grade)
 	r.availableEndorsementCount.ExportTo(&availableEndorsementCount)
 	ex.SetState(
-		&id, &userId, &grade, &availableEndorsementCount, r.GetVersion(), r.createdAt,
+		&id, &memberId, &grade, &availableEndorsementCount, r.GetVersion(), r.createdAt,
 	)
 }
 
 type RecognizerState struct {
 	Id                        uint64
-	UserId                    uint64
+	MemberId                  uint64
 	Grade                     uint8
 	AvailableEndorsementCount uint8
 	Version                   uint

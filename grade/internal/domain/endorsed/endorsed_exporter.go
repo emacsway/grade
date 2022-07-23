@@ -8,7 +8,7 @@ import (
 
 type EndorsedExporter struct {
 	Id                   interfaces.Exporter[uint64]
-	UserId               interfaces.Exporter[uint64]
+	MemberId             interfaces.Exporter[uint64]
 	Grade                interfaces.Exporter[uint8]
 	ReceivedEndorsements []interfaces2.EndorsementExporter
 	Version              uint
@@ -17,14 +17,14 @@ type EndorsedExporter struct {
 
 func (ex *EndorsedExporter) SetState(
 	id interfaces.Exporter[uint64],
-	userId interfaces.Exporter[uint64],
+	memberId interfaces.Exporter[uint64],
 	grade interfaces.Exporter[uint8],
 	receivedEndorsements []interfaces2.EndorsementExporter,
 	version uint,
 	createdAt time.Time,
 ) {
 	ex.Id = id
-	ex.UserId = userId
+	ex.MemberId = memberId
 	ex.Grade = grade
 	ex.ReceivedEndorsements = receivedEndorsements
 	ex.Version = version

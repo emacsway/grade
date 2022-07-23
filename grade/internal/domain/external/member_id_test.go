@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestUserIdConstructor(t *testing.T) {
+func TestMemberIdConstructor(t *testing.T) {
 	var value uint64 = 3
-	id, _ := NewUserId(value)
+	id, _ := NewMemberId(value)
 	assert.Equal(t, value, id.Export())
 }
