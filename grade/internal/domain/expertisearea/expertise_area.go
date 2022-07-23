@@ -7,5 +7,6 @@ import (
 
 type ExpertiseArea struct {
 	id        endorsed.ExpertiseAreaId
+	name      endorsed.Name
 	createdAt time.Time
 }

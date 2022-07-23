@@ -9,6 +9,10 @@ import (
 
 type Artifact struct {
 	id               artifact.ArtifactId
+	status           artifact.Status
+	name             artifact.Name
+	description      artifact.Description
+	url              artifact.Url
 	expertiseAreaIds []expertisearea.ExpertiseAreaId
 	authors          []endorsed.EndorsedId
 	createdAt        time.Time
