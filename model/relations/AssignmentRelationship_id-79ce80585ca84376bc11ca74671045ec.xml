@@ -1,0 +1,12 @@
+<archimate:AssignmentRelationship
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Anti-Corruption Layer"
+    id="id-79ce80585ca84376bc11ca74671045ec">
+  <source
+      xsi:type="archimate:Grouping"
+      href="Grouping_id-8e51916a0e994cd0955e9e95794611c7.xml#id-8e51916a0e994cd0955e9e95794611c7"/>
+  <target
+      xsi:type="archimate:Grouping"
+      href="Grouping_id-d5ed378587ee4b2ab8bcce74498c1a12.xml#id-d5ed378587ee4b2ab8bcce74498c1a12"/>
+</archimate:AssignmentRelationship>

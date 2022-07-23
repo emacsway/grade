@@ -6,6 +6,7 @@
   <children
       xsi:type="archimate:DiagramModelArchimateObject"
       id="id-95192084ddeb41568075de5a35944066"
+      targetConnections="id-995cb8d36ff04697b1e713f2bfdcf648"
       font="1|Sans|12.0|1|GTK|1|"
       fontColor="#ffffff"
       fillColor="#027180"
@@ -226,5 +227,31 @@
           width="589"
           height="133"/>
     </children>
+  </children>
+  <children
+      xsi:type="archimate:DiagramModelArchimateObject"
+      id="id-3dc815d178c34b1a95c92ae0b4f02a81"
+      font="1|Sans|12.0|1|GTK|1|"
+      fontColor="#ffffff"
+      fillColor="#027180"
+      textPosition="1"
+      type="1">
+    <sourceConnections
+        xsi:type="archimate:DiagramModelArchimateConnection"
+        id="id-995cb8d36ff04697b1e713f2bfdcf648"
+        source="id-3dc815d178c34b1a95c92ae0b4f02a81"
+        target="id-95192084ddeb41568075de5a35944066">
+      <archimateRelationship
+          xsi:type="archimate:AssignmentRelationship"
+          href="AssignmentRelationship_id-79ce80585ca84376bc11ca74671045ec.xml#id-79ce80585ca84376bc11ca74671045ec"/>
+    </sourceConnections>
+    <bounds
+        x="-132"
+        y="36"
+        width="133"
+        height="97"/>
+    <archimateElement
+        xsi:type="archimate:Grouping"
+        href="Grouping_id-8e51916a0e994cd0955e9e95794611c7.xml#id-8e51916a0e994cd0955e9e95794611c7"/>
   </children>
 </archimate:ArchimateDiagramModel>
