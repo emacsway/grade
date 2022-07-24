@@ -3,6 +3,6 @@ package artifact
 type Status uint8
 
 const (
-	Pending  = Status(0)
-	Approved = Status(1)
+	Proposed = Status(0)
+	Accepted = Status(1)
 )

@@ -10,6 +10,7 @@ type RecognizerExporter struct {
 	MemberId                  interfaces.Exporter[uint64]
 	Grade                     interfaces.Exporter[uint8]
 	AvailableEndorsementCount interfaces.Exporter[uint8]
+	PendingEndorsementCount   interfaces.Exporter[uint8]
 	Version                   uint
 	CreatedAt                 time.Time
 }
@@ -19,6 +20,7 @@ func (ex *RecognizerExporter) SetState(
 	memberId interfaces.Exporter[uint64],
 	grade interfaces.Exporter[uint8],
 	availableEndorsementCount interfaces.Exporter[uint8],
+	pendingEndorsementCount interfaces.Exporter[uint8],
 	version uint,
 	createdAt time.Time,
 ) {
@@ -26,6 +28,7 @@ func (ex *RecognizerExporter) SetState(
 	ex.MemberId = memberId
 	ex.Grade = grade
 	ex.AvailableEndorsementCount = availableEndorsementCount
+	ex.PendingEndorsementCount = pendingEndorsementCount
 	ex.Version = version
 	ex.CreatedAt = createdAt
 }

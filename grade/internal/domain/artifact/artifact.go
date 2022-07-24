@@ -14,6 +14,6 @@ type Artifact struct {
 	description      artifact.Description
 	url              artifact.Url
 	expertiseAreaIds []expertisearea.ExpertiseAreaId
-	authors          []endorsed.EndorsedId
+	authorIds        []endorsed.EndorsedId
 	createdAt        time.Time
 }

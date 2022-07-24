@@ -11,6 +11,7 @@ type RecognizerExporter interface {
 		memberId interfaces.Exporter[uint64],
 		grade interfaces.Exporter[uint8],
 		availableEndorsementCount interfaces.Exporter[uint8],
+		pendingEndorsementCount interfaces.Exporter[uint8],
 		version uint,
 		createdAt time.Time,
 	)
