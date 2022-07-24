@@ -14,6 +14,7 @@ func NewRecognizer(
 	memberId external.MemberId,
 	grade shared.Grade,
 	availableEndorsementCount recognizer.EndorsementCount,
+	pendingEndorsementCount recognizer.EndorsementCount,
 	version uint,
 	createdAt time.Time,
 ) (*Recognizer, error) {
@@ -30,6 +31,7 @@ func NewRecognizer(
 		memberId:                  memberId,
 		grade:                     grade,
 		availableEndorsementCount: availableEndorsementCount,
+		pendingEndorsementCount:   pendingEndorsementCount,
 		createdAt:                 createdAt,
 		VersionedAggregate:        versioned,
 		EventiveEntity:            eventive,
@@ -41,6 +43,7 @@ type Recognizer struct {
 	memberId                  external.MemberId
 	grade                     shared.Grade
 	availableEndorsementCount recognizer.EndorsementCount
+	pendingEndorsementCount   recognizer.EndorsementCount
 	createdAt                 time.Time
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
@@ -57,20 +60,22 @@ func (r Recognizer) GetGrade() shared.Grade {
 func (r Recognizer) Export() RecognizerState {
 	return RecognizerState{
 		r.id.Export(), r.memberId.Export(), r.grade.Export(),
-		r.availableEndorsementCount.Export(), r.GetVersion(), r.createdAt,
+		r.availableEndorsementCount.Export(),
+		r.pendingEndorsementCount.Export(), r.GetVersion(), r.createdAt,
 	}
 }
 
 func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
 	var id, memberId seedwork.Uint64Exporter
-	var grade, availableEndorsementCount seedwork.Uint8Exporter
+	var grade, availableEndorsementCount, pendingEndorsementCount seedwork.Uint8Exporter
 
 	r.id.ExportTo(&id)
 	r.memberId.ExportTo(&memberId)
 	r.grade.ExportTo(&grade)
 	r.availableEndorsementCount.ExportTo(&availableEndorsementCount)
+	r.pendingEndorsementCount.ExportTo(&pendingEndorsementCount)
 	ex.SetState(
-		&id, &memberId, &grade, &availableEndorsementCount, r.GetVersion(), r.createdAt,
+		&id, &memberId, &grade, &availableEndorsementCount, &pendingEndorsementCount, r.GetVersion(), r.createdAt,
 	)
 }
 
@@ -79,6 +84,7 @@ type RecognizerState struct {
 	MemberId                  uint64
 	Grade                     uint8
 	AvailableEndorsementCount uint8
+	PendingEndorsementCount   uint8
 	Version                   uint
 	CreatedAt                 time.Time
 }
