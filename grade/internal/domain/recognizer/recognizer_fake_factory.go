@@ -28,7 +28,7 @@ func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
 	id, _ := recognizer.NewRecognizerId(f.Id)
 	memberId, _ := external.NewMemberId(f.MemberId)
 	grade, _ := shared.NewGrade(f.Grade)
-	count, _ := recognizer.NewAvailableEndorsementCount(f.AvailableEndorsementCount)
+	count, _ := recognizer.NewEndorsementCount(f.AvailableEndorsementCount)
 	return NewRecognizer(id, memberId, grade, count, f.Version, f.CreatedAt)
 }
 

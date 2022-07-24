@@ -13,7 +13,7 @@ func NewRecognizer(
 	id recognizer.RecognizerId,
 	memberId external.MemberId,
 	grade shared.Grade,
-	availableEndorsementCount recognizer.AvailableEndorsementCount,
+	availableEndorsementCount recognizer.EndorsementCount,
 	version uint,
 	createdAt time.Time,
 ) (*Recognizer, error) {
@@ -40,7 +40,7 @@ type Recognizer struct {
 	id                        recognizer.RecognizerId
 	memberId                  external.MemberId
 	grade                     shared.Grade
-	availableEndorsementCount recognizer.AvailableEndorsementCount
+	availableEndorsementCount recognizer.EndorsementCount
 	createdAt                 time.Time
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
