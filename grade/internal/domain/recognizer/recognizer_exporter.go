@@ -32,3 +32,13 @@ func (ex *RecognizerExporter) SetState(
 	ex.Version = version
 	ex.CreatedAt = createdAt
 }
+
+type RecognizerState struct {
+	Id                        uint64
+	MemberId                  uint64
+	Grade                     uint8
+	AvailableEndorsementCount uint8
+	PendingEndorsementCount   uint8
+	Version                   uint
+	CreatedAt                 time.Time
+}

@@ -1,7 +1,10 @@
 package endorsed
 
 import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
+	interfaces3 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 	"time"
 )
@@ -11,6 +14,7 @@ type EndorsedExporter struct {
 	MemberId             interfaces.Exporter[uint64]
 	Grade                interfaces.Exporter[uint8]
 	ReceivedEndorsements []interfaces2.EndorsementExporter
+	GradeLogEntries      []interfaces3.GradeLogEntryExporter
 	Version              uint
 	CreatedAt            time.Time
 }
@@ -20,6 +24,7 @@ func (ex *EndorsedExporter) SetState(
 	memberId interfaces.Exporter[uint64],
 	grade interfaces.Exporter[uint8],
 	receivedEndorsements []interfaces2.EndorsementExporter,
+	gradeLogEntries []interfaces3.GradeLogEntryExporter,
 	version uint,
 	createdAt time.Time,
 ) {
@@ -27,6 +32,17 @@ func (ex *EndorsedExporter) SetState(
 	ex.MemberId = memberId
 	ex.Grade = grade
 	ex.ReceivedEndorsements = receivedEndorsements
+	ex.GradeLogEntries = gradeLogEntries
 	ex.Version = version
 	ex.CreatedAt = createdAt
+}
+
+type EndorsedState struct {
+	Id                   uint64
+	MemberId             uint64
+	Grade                uint8
+	ReceivedEndorsements []endorsement.EndorsementState
+	GradeLogEntries      []gradelogentry.GradeLogEntryState
+	Version              uint
+	CreatedAt            time.Time
 }

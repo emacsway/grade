@@ -1,12 +1,21 @@
 package recognizer
 
 import (
+	"errors"
+	"time"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
-	"time"
+)
+
+var (
+	ErrNoEndorsementAvailable     = errors.New("no endorsement is available")
+	ErrNoEndorsementCanBeReserved = errors.New("no endorsement can be reserved")
+	ErrNoEndorsementReservation   = errors.New("there is no endorsement reservation")
+	ErrRecognizerUnableToComplete = errors.New("recognizer is not able to complete endorsement")
 )
 
 func NewRecognizer(
@@ -57,12 +66,43 @@ func (r Recognizer) GetGrade() shared.Grade {
 	return r.grade
 }
 
-func (r Recognizer) Export() RecognizerState {
-	return RecognizerState{
-		r.id.Export(), r.memberId.Export(), r.grade.Export(),
-		r.availableEndorsementCount.Export(),
-		r.pendingEndorsementCount.Export(), r.GetVersion(), r.createdAt,
+func (r Recognizer) canReserveEndorsement() error {
+	if !(r.availableEndorsementCount > r.pendingEndorsementCount) {
+		return ErrNoEndorsementCanBeReserved
 	}
+	return nil
+}
+
+func (r Recognizer) CanCompleteEndorsement() error {
+	if !(r.pendingEndorsementCount > 0 && r.availableEndorsementCount >= r.pendingEndorsementCount) {
+		return ErrRecognizerUnableToComplete
+	}
+	return nil
+}
+
+func (r *Recognizer) ReserveEndorsement() error {
+	err := r.canReserveEndorsement()
+	if err != nil {
+		return err
+	}
+	r.pendingEndorsementCount += 1
+	return nil
+}
+
+func (r *Recognizer) ReleaseEndorsementReservation() {
+	r.pendingEndorsementCount -= 1
+}
+
+func (r *Recognizer) CompleteEndorsement() error {
+	if r.availableEndorsementCount == 0 {
+		return ErrNoEndorsementAvailable
+	}
+	if r.pendingEndorsementCount == 0 {
+		return ErrNoEndorsementReservation
+	}
+	r.availableEndorsementCount -= 1
+	r.pendingEndorsementCount -= 1
+	return nil
 }
 
 func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
@@ -79,12 +119,10 @@ func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
 	)
 }
 
-type RecognizerState struct {
-	Id                        uint64
-	MemberId                  uint64
-	Grade                     uint8
-	AvailableEndorsementCount uint8
-	PendingEndorsementCount   uint8
-	Version                   uint
-	CreatedAt                 time.Time
+func (r Recognizer) Export() RecognizerState {
+	return RecognizerState{
+		r.id.Export(), r.memberId.Export(), r.grade.Export(),
+		r.availableEndorsementCount.Export(),
+		r.pendingEndorsementCount.Export(), r.GetVersion(), r.createdAt,
+	}
 }

@@ -1,9 +1,10 @@
 package endorsed
 
 import (
+	"testing"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestEndorsedExport(t *testing.T) {

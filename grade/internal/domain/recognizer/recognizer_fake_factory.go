@@ -11,7 +11,7 @@ import (
 
 func NewRecognizerFakeFactory() *RecognizerFakeFactory {
 	return &RecognizerFakeFactory{
-		1, 2, 1, 20, 0, 1, time.Now(),
+		2, 2, 1, 20, 0, 1, time.Now(),
 	}
 }
 

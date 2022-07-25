@@ -35,3 +35,14 @@ func (ex *EndorsementExporter) SetState(
 	ex.ArtifactId = artifactId
 	ex.CreatedAt = createdAt
 }
+
+type EndorsementState struct {
+	RecognizerId      uint64
+	RecognizerGrade   uint8
+	RecognizerVersion uint
+	EndorsedId        uint64
+	EndorsedGrade     uint8
+	EndorsedVersion   uint
+	ArtifactId        uint64
+	CreatedAt         time.Time
+}

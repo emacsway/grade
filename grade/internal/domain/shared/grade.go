@@ -12,6 +12,15 @@ var (
 	ErrInvalidGrade = errors.New(fmt.Sprintf("grade should be between 0 and %d", maxGradeValue))
 )
 
+const (
+	Expert       = Grade(5)
+	Candidate    = Grade(4)
+	Grade1       = Grade(3)
+	Grade2       = Grade(2)
+	Grade3       = Grade(1)
+	WithoutGrade = Grade(0)
+)
+
 func NewGrade(value uint8) (Grade, error) {
 	if value > maxGradeValue {
 		return Grade(0), ErrInvalidGrade

@@ -15,7 +15,7 @@ func TestEndorsementConstructor(t *testing.T) {
 	}{
 		{0, 0, nil},
 		{1, 0, nil},
-		{0, 1, ErrHigherGradeEndorsed},
+		{0, 1, ErrLowerGradeEndorses},
 	}
 	f := NewEndorsementFakeFactory()
 	for i, c := range cases {
@@ -24,7 +24,7 @@ func TestEndorsementConstructor(t *testing.T) {
 			f.EndorsedGrade = c.EndorsedGrade
 			e, err := f.Create()
 			assert.Equal(t, f.RecognizerGrade, c.RecognizerGrade)
-			assert.Equal(t, c.ExpectedError, err)
+			assert.ErrorIs(t, err, c.ExpectedError)
 			if err == nil {
 				assert.Equal(t, f.Export(), e.Export())
 			}

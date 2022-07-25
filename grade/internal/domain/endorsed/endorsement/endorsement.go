@@ -2,16 +2,51 @@ package endorsement
 
 import (
 	"errors"
+	"github.com/hashicorp/go-multierror"
+	"time"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
-	"time"
 )
 
-var ErrHigherGradeEndorsed = errors.New("it is allowed to endorse only members with equal or lower grade")
+type Weight uint8
+
+const (
+	LowerWeight  = 0
+	PeerWeight   = 1
+	HigherWeight = 2
+)
+
+var (
+	ErrLowerGradeEndorses = errors.New(
+		"it is allowed to receive endorsements only from members with equal or higher grade",
+	)
+	ErrEndorsementOneself = errors.New(
+		"recognizer can't endorse himself",
+	)
+)
+
+func CanEndorse(
+	recognizerId recognizer.RecognizerId,
+	recognizerGrade shared.Grade,
+	endorsedId endorsed.EndorsedId,
+	endorsedGrade shared.Grade,
+) error {
+	var err error
+
+	if recognizerGrade < endorsedGrade {
+		err = multierror.Append(err, ErrLowerGradeEndorses)
+	}
+
+	if recognizerId.Equals(endorsedId) {
+		err = multierror.Append(err, ErrEndorsementOneself)
+	}
+	return err
+}
 
 func NewEndorsement(
 	recognizerId recognizer.RecognizerId,
@@ -23,8 +58,9 @@ func NewEndorsement(
 	artifactId artifact.ArtifactId,
 	createdAt time.Time,
 ) (Endorsement, error) {
-	if recognizerGrade < endorsedGrade {
-		return Endorsement{}, ErrHigherGradeEndorsed
+	err := CanEndorse(recognizerId, recognizerGrade, endorsedId, endorsedGrade)
+	if err != nil {
+		return Endorsement{}, err
 	}
 	return Endorsement{
 		recognizerId:      recognizerId,
@@ -49,20 +85,21 @@ type Endorsement struct {
 	createdAt         time.Time
 }
 
-func (e Endorsement) GetRecognizerId() recognizer.RecognizerId {
-	return e.recognizerId
+func (e Endorsement) IsEndorsedBy(rId recognizer.RecognizerId, aId artifact.ArtifactId) bool {
+	return e.recognizerId == rId && e.artifactId == aId
 }
 
-func (e Endorsement) GetArtifactId() artifact.ArtifactId {
-	return e.artifactId
+func (e Endorsement) GetEndorsedGrade() shared.Grade {
+	return e.endorsedGrade
 }
 
-func (e Endorsement) Export() EndorsementState {
-	return EndorsementState{
-		e.recognizerId.Export(), e.recognizerGrade.Export(), e.recognizerVersion,
-		e.endorsedId.Export(), e.endorsedGrade.Export(), e.endorsedVersion,
-		e.artifactId.Export(), e.createdAt,
+func (e Endorsement) GetWeight() Weight {
+	if e.recognizerGrade == e.endorsedGrade {
+		return PeerWeight
+	} else if e.recognizerGrade > e.endorsedGrade {
+		return HigherWeight
 	}
+	return LowerWeight
 }
 
 func (e Endorsement) ExportTo(ex interfaces.EndorsementExporter) {
@@ -81,13 +118,10 @@ func (e Endorsement) ExportTo(ex interfaces.EndorsementExporter) {
 	)
 }
 
-type EndorsementState struct {
-	RecognizerId      uint64
-	RecognizerGrade   uint8
-	RecognizerVersion uint
-	EndorsedId        uint64
-	EndorsedGrade     uint8
-	EndorsedVersion   uint
-	ArtifactId        uint64
-	CreatedAt         time.Time
+func (e Endorsement) Export() EndorsementState {
+	return EndorsementState{
+		e.recognizerId.Export(), e.recognizerGrade.Export(), e.recognizerVersion,
+		e.endorsedId.Export(), e.endorsedGrade.Export(), e.endorsedVersion,
+		e.artifactId.Export(), e.createdAt,
+	}
 }
