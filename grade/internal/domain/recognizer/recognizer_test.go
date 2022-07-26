@@ -82,7 +82,6 @@ func TestRecognizerExport(t *testing.T) {
 	}
 	assert.Equal(t, RecognizerState{
 		Id:                        f.Id,
-		MemberId:                  f.MemberId,
 		Grade:                     f.Grade,
 		AvailableEndorsementCount: recognizer.YearlyEndorsementCount,
 		PendingEndorsementCount:   0,
@@ -106,7 +105,6 @@ func TestRecognizerExportTo(t *testing.T) {
 	agg.ExportTo(&actualExporter)
 	assert.Equal(t, RecognizerExporter{
 		Id:                        seedwork.NewUint64Exporter(f.Id),
-		MemberId:                  seedwork.NewUint64Exporter(f.MemberId),
 		Grade:                     seedwork.NewUint8Exporter(f.Grade),
 		AvailableEndorsementCount: seedwork.NewUint8Exporter(recognizer.YearlyEndorsementCount),
 		PendingEndorsementCount:   seedwork.NewUint8Exporter(0),

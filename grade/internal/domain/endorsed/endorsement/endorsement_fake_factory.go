@@ -1,11 +1,10 @@
 package endorsement
 
 import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
@@ -34,9 +33,9 @@ type EndorsementFakeFactory struct {
 }
 
 func (f EndorsementFakeFactory) Create() (Endorsement, error) {
-	recognizerId, _ := recognizer.NewRecognizerId(f.RecognizerId)
+	recognizerId, _ := external.NewMemberId(f.RecognizerId)
 	recognizerGrade, _ := shared.NewGrade(f.RecognizerGrade)
-	endorsedId, _ := endorsed.NewEndorsedId(f.EndorsedId)
+	endorsedId, _ := external.NewMemberId(f.EndorsedId)
 	endorsedGrade, _ := shared.NewGrade(f.EndorsedGrade)
 	artifactId, _ := artifact.NewArtifactId(f.ArtifactId)
 	return NewEndorsement(

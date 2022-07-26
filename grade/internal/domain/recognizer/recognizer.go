@@ -18,8 +18,7 @@ var (
 )
 
 func NewRecognizer(
-	id recognizer.RecognizerId,
-	memberId external.MemberId,
+	id external.MemberId,
 	grade shared.Grade,
 	createdAt time.Time,
 ) (*Recognizer, error) {
@@ -41,7 +40,6 @@ func NewRecognizer(
 	}
 	return &Recognizer{
 		id:                        id,
-		memberId:                  memberId,
 		grade:                     grade,
 		availableEndorsementCount: availableCount,
 		pendingEndorsementCount:   pendingCount,
@@ -52,8 +50,7 @@ func NewRecognizer(
 }
 
 type Recognizer struct {
-	id                        recognizer.RecognizerId
-	memberId                  external.MemberId
+	id                        external.MemberId
 	grade                     shared.Grade
 	availableEndorsementCount recognizer.EndorsementCount
 	pendingEndorsementCount   recognizer.EndorsementCount
@@ -62,7 +59,7 @@ type Recognizer struct {
 	seedwork.EventiveEntity
 }
 
-func (r Recognizer) GetId() recognizer.RecognizerId {
+func (r Recognizer) GetId() external.MemberId {
 	return r.id
 }
 
@@ -127,23 +124,21 @@ func (r *Recognizer) CompleteEndorsement() error {
 }
 
 func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
-	var id, memberId seedwork.Uint64Exporter
+	var id seedwork.Uint64Exporter
 	var grade, availableEndorsementCount, pendingEndorsementCount seedwork.Uint8Exporter
 
 	r.id.ExportTo(&id)
-	r.memberId.ExportTo(&memberId)
 	r.grade.ExportTo(&grade)
 	r.availableEndorsementCount.ExportTo(&availableEndorsementCount)
 	r.pendingEndorsementCount.ExportTo(&pendingEndorsementCount)
 	ex.SetState(
-		&id, &memberId, &grade, &availableEndorsementCount, &pendingEndorsementCount, r.GetVersion(), r.createdAt,
+		&id, &grade, &availableEndorsementCount, &pendingEndorsementCount, r.GetVersion(), r.createdAt,
 	)
 }
 
 func (r Recognizer) Export() RecognizerState {
 	return RecognizerState{
-		r.id.Export(), r.memberId.Export(), r.grade.Export(),
-		r.availableEndorsementCount.Export(),
+		r.id.Export(), r.grade.Export(), r.availableEndorsementCount.Export(),
 		r.pendingEndorsementCount.Export(), r.GetVersion(), r.createdAt,
 	}
 }

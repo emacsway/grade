@@ -1,10 +1,11 @@
 package artifact
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea/expertisearea"
 	"time"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea/expertisearea"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 )
 
 type Artifact struct {
@@ -14,6 +15,6 @@ type Artifact struct {
 	description      artifact.Description
 	url              artifact.Url
 	expertiseAreaIds []expertisearea.ExpertiseAreaId
-	authorIds        []endorsed.EndorsedId
+	authorIds        []external.MemberId
 	createdAt        time.Time
 }

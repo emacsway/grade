@@ -36,9 +36,8 @@ func TestEndorsedExport(t *testing.T) {
 		t.FailNow()
 	}
 	assert.Equal(t, EndorsedState{
-		Id:       ef.Id,
-		MemberId: ef.MemberId,
-		Grade:    ef.Grade + 1,
+		Id:    ef.Id,
+		Grade: ef.Grade + 1,
 		ReceivedEndorsements: []endorsement.EndorsementState{
 			{
 				RecognizerId:      rf.Id,
@@ -120,9 +119,8 @@ func TestEndorsedExportTo(t *testing.T) {
 	}
 	agg.ExportTo(&actualExporter)
 	assert.Equal(t, EndorsedExporter{
-		Id:       seedwork.NewUint64Exporter(ef.Id),
-		MemberId: seedwork.NewUint64Exporter(ef.MemberId),
-		Grade:    seedwork.NewUint8Exporter(ef.Grade + 1),
+		Id:    seedwork.NewUint64Exporter(ef.Id),
+		Grade: seedwork.NewUint8Exporter(ef.Grade + 1),
 		ReceivedEndorsements: []interfaces2.EndorsementExporter{
 			&endorsement.EndorsementExporter{
 				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),

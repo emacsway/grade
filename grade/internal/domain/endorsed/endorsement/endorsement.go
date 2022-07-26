@@ -2,13 +2,12 @@ package endorsement
 
 import (
 	"errors"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 	"github.com/hashicorp/go-multierror"
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
@@ -31,9 +30,9 @@ var (
 )
 
 func CanEndorse(
-	recognizerId recognizer.RecognizerId,
+	recognizerId external.MemberId,
 	recognizerGrade shared.Grade,
-	endorsedId endorsed.EndorsedId,
+	endorsedId external.MemberId,
 	endorsedGrade shared.Grade,
 ) error {
 	var err error
@@ -49,10 +48,10 @@ func CanEndorse(
 }
 
 func NewEndorsement(
-	recognizerId recognizer.RecognizerId,
+	recognizerId external.MemberId,
 	recognizerGrade shared.Grade,
 	recognizerVersion uint,
-	endorsedId endorsed.EndorsedId,
+	endorsedId external.MemberId,
 	endorsedGrade shared.Grade,
 	endorsedVersion uint,
 	artifactId artifact.ArtifactId,
@@ -75,17 +74,17 @@ func NewEndorsement(
 }
 
 type Endorsement struct {
-	recognizerId      recognizer.RecognizerId
+	recognizerId      external.MemberId
 	recognizerGrade   shared.Grade
 	recognizerVersion uint
-	endorsedId        endorsed.EndorsedId
+	endorsedId        external.MemberId
 	endorsedGrade     shared.Grade
 	endorsedVersion   uint
 	artifactId        artifact.ArtifactId
 	createdAt         time.Time
 }
 
-func (e Endorsement) IsEndorsedBy(rId recognizer.RecognizerId, aId artifact.ArtifactId) bool {
+func (e Endorsement) IsEndorsedBy(rId external.MemberId, aId artifact.ArtifactId) bool {
 	return e.recognizerId == rId && e.artifactId == aId
 }
 

@@ -8,7 +8,6 @@ import (
 type RecognizerExporter interface {
 	SetState(
 		id interfaces.Exporter[uint64],
-		memberId interfaces.Exporter[uint64],
 		grade interfaces.Exporter[uint8],
 		availableEndorsementCount interfaces.Exporter[uint8],
 		pendingEndorsementCount interfaces.Exporter[uint8],

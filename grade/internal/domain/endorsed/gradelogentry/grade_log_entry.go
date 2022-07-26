@@ -1,16 +1,16 @@
 package gradelogentry
 
 import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
 	"time"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
 	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 func NewGradeLogEntry(
-	endorsedId endorsed.EndorsedId,
+	endorsedId external.MemberId,
 	endorsedVersion uint,
 	assignedGrade shared.Grade,
 	createdAt time.Time,
@@ -21,10 +21,11 @@ func NewGradeLogEntry(
 }
 
 type GradeLogEntry struct {
-	endorsedId      endorsed.EndorsedId
+	endorsedId      external.MemberId
 	endorsedVersion uint
 	assignedGrade   shared.Grade
-	createdAt       time.Time
+	// Add a reason (for grade decreasing)
+	createdAt time.Time
 }
 
 func (gle GradeLogEntry) ExportTo(ex interfaces2.GradeLogEntryExporter) {

@@ -7,7 +7,6 @@ import (
 
 type RecognizerExporter struct {
 	Id                        interfaces.Exporter[uint64]
-	MemberId                  interfaces.Exporter[uint64]
 	Grade                     interfaces.Exporter[uint8]
 	AvailableEndorsementCount interfaces.Exporter[uint8]
 	PendingEndorsementCount   interfaces.Exporter[uint8]
@@ -17,7 +16,6 @@ type RecognizerExporter struct {
 
 func (ex *RecognizerExporter) SetState(
 	id interfaces.Exporter[uint64],
-	memberId interfaces.Exporter[uint64],
 	grade interfaces.Exporter[uint8],
 	availableEndorsementCount interfaces.Exporter[uint8],
 	pendingEndorsementCount interfaces.Exporter[uint8],
@@ -25,7 +23,6 @@ func (ex *RecognizerExporter) SetState(
 	createdAt time.Time,
 ) {
 	ex.Id = id
-	ex.MemberId = memberId
 	ex.Grade = grade
 	ex.AvailableEndorsementCount = availableEndorsementCount
 	ex.PendingEndorsementCount = pendingEndorsementCount
@@ -35,7 +32,6 @@ func (ex *RecognizerExporter) SetState(
 
 type RecognizerState struct {
 	Id                        uint64
-	MemberId                  uint64
 	Grade                     uint8
 	AvailableEndorsementCount uint8
 	PendingEndorsementCount   uint8

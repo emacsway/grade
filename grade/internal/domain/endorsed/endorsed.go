@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
@@ -24,8 +23,7 @@ var (
 )
 
 func NewEndorsed(
-	id endorsed.EndorsedId,
-	memberId external.MemberId,
+	id external.MemberId,
 	createdAt time.Time,
 ) (*Endorsed, error) {
 	versioned, err := seedwork.NewVersionedAggregate(0)
@@ -38,7 +36,6 @@ func NewEndorsed(
 	}
 	return &Endorsed{
 		id:                 id,
-		memberId:           memberId,
 		grade:              shared.WithoutGrade,
 		VersionedAggregate: versioned,
 		EventiveEntity:     eventive,
@@ -47,8 +44,7 @@ func NewEndorsed(
 }
 
 type Endorsed struct {
-	id                   endorsed.EndorsedId
-	memberId             external.MemberId
+	id                   external.MemberId
 	grade                shared.Grade
 	receivedEndorsements []endorsement.Endorsement
 	gradeLogEntries      []gradelogentry.GradeLogEntry
@@ -124,7 +120,7 @@ func (e *Endorsed) increaseGrade(t time.Time) error {
 }
 
 func (e Endorsed) ExportTo(ex interfaces3.EndorsedExporter) {
-	var id, memberId seedwork.Uint64Exporter
+	var id seedwork.Uint64Exporter
 	var grade seedwork.Uint8Exporter
 	var receivedEndorsements []interfaces.EndorsementExporter
 	var gradeLogEntries []interfaces2.GradeLogEntryExporter
@@ -142,10 +138,9 @@ func (e Endorsed) ExportTo(ex interfaces3.EndorsedExporter) {
 	}
 
 	e.id.ExportTo(&id)
-	e.memberId.ExportTo(&memberId)
 	e.grade.ExportTo(&grade)
 	ex.SetState(
-		&id, &memberId, &grade, receivedEndorsements, gradeLogEntries, e.GetVersion(), e.createdAt,
+		&id, &grade, receivedEndorsements, gradeLogEntries, e.GetVersion(), e.createdAt,
 	)
 }
 
@@ -160,7 +155,6 @@ func (e Endorsed) Export() EndorsedState {
 	}
 	return EndorsedState{
 		Id:                   e.id.Export(),
-		MemberId:             e.memberId.Export(),
 		Grade:                e.grade.Export(),
 		ReceivedEndorsements: receivedEndorsements,
 		GradeLogEntries:      gradeLogEntries,
