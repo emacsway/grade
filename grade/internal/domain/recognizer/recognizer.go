@@ -22,12 +22,17 @@ func NewRecognizer(
 	id recognizer.RecognizerId,
 	memberId external.MemberId,
 	grade shared.Grade,
-	availableEndorsementCount recognizer.EndorsementCount,
-	pendingEndorsementCount recognizer.EndorsementCount,
-	version uint,
 	createdAt time.Time,
 ) (*Recognizer, error) {
-	versioned, err := seedwork.NewVersionedAggregate(version)
+	availableCount, err := recognizer.NewEndorsementCount(recognizer.YearlyEndorsementCount)
+	if err != nil {
+		return nil, err
+	}
+	pendingCount, err := recognizer.NewEndorsementCount(0)
+	if err != nil {
+		return nil, err
+	}
+	versioned, err := seedwork.NewVersionedAggregate(0)
 	if err != nil {
 		return nil, err
 	}
@@ -39,8 +44,8 @@ func NewRecognizer(
 		id:                        id,
 		memberId:                  memberId,
 		grade:                     grade,
-		availableEndorsementCount: availableEndorsementCount,
-		pendingEndorsementCount:   pendingEndorsementCount,
+		availableEndorsementCount: availableCount,
+		pendingEndorsementCount:   pendingCount,
 		createdAt:                 createdAt,
 		VersionedAggregate:        versioned,
 		EventiveEntity:            eventive,

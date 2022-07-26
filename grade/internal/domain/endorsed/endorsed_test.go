@@ -31,7 +31,7 @@ func TestEndorsedExport(t *testing.T) {
 			{
 				RecognizerId:      rf.Id,
 				RecognizerGrade:   rf.Grade,
-				RecognizerVersion: rf.Version,
+				RecognizerVersion: 0,
 				EndorsedId:        ef.Id,
 				EndorsedGrade:     ef.Grade,
 				EndorsedVersion:   0,
@@ -41,7 +41,7 @@ func TestEndorsedExport(t *testing.T) {
 			{
 				RecognizerId:      rf.Id,
 				RecognizerGrade:   rf.Grade,
-				RecognizerVersion: rf.Version,
+				RecognizerVersion: 0,
 				EndorsedId:        ef.Id,
 				EndorsedGrade:     ef.Grade,
 				EndorsedVersion:   1,
@@ -51,7 +51,7 @@ func TestEndorsedExport(t *testing.T) {
 			{
 				RecognizerId:      rf.Id,
 				RecognizerGrade:   rf.Grade,
-				RecognizerVersion: rf.Version,
+				RecognizerVersion: 0,
 				EndorsedId:        ef.Id,
 				EndorsedGrade:     ef.Grade,
 				EndorsedVersion:   2,
@@ -61,7 +61,7 @@ func TestEndorsedExport(t *testing.T) {
 			{
 				RecognizerId:      rf.Id,
 				RecognizerGrade:   rf.Grade,
-				RecognizerVersion: rf.Version,
+				RecognizerVersion: 0,
 				EndorsedId:        ef.Id,
 				EndorsedGrade:     ef.Grade + 1,
 				EndorsedVersion:   3,
@@ -77,7 +77,7 @@ func TestEndorsedExport(t *testing.T) {
 				CreatedAt:       ef.ReceivedEndorsements[2].CreatedAt,
 			},
 		},
-		Version:   ef.Version + 3,
+		Version:   4,
 		CreatedAt: ef.CreatedAt,
 	}, agg.Export())
 }
@@ -103,7 +103,7 @@ func TestEndorsedExportTo(t *testing.T) {
 			&endorsement.EndorsementExporter{
 				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
-				RecognizerVersion: rf.Version,
+				RecognizerVersion: 0,
 				EndorsedId:        seedwork.NewUint64Exporter(ef.Id),
 				EndorsedGrade:     seedwork.NewUint8Exporter(ef.Grade),
 				EndorsedVersion:   0,
@@ -113,7 +113,7 @@ func TestEndorsedExportTo(t *testing.T) {
 			&endorsement.EndorsementExporter{
 				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
-				RecognizerVersion: rf.Version,
+				RecognizerVersion: 0,
 				EndorsedId:        seedwork.NewUint64Exporter(ef.Id),
 				EndorsedGrade:     seedwork.NewUint8Exporter(ef.Grade),
 				EndorsedVersion:   1,
@@ -123,7 +123,7 @@ func TestEndorsedExportTo(t *testing.T) {
 			&endorsement.EndorsementExporter{
 				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
-				RecognizerVersion: rf.Version,
+				RecognizerVersion: 0,
 				EndorsedId:        seedwork.NewUint64Exporter(ef.Id),
 				EndorsedGrade:     seedwork.NewUint8Exporter(ef.Grade),
 				EndorsedVersion:   2,
@@ -133,7 +133,7 @@ func TestEndorsedExportTo(t *testing.T) {
 			&endorsement.EndorsementExporter{
 				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
-				RecognizerVersion: rf.Version,
+				RecognizerVersion: 0,
 				EndorsedId:        seedwork.NewUint64Exporter(ef.Id),
 				EndorsedGrade:     seedwork.NewUint8Exporter(ef.Grade + 1),
 				EndorsedVersion:   3,
@@ -149,7 +149,7 @@ func TestEndorsedExportTo(t *testing.T) {
 				CreatedAt:       ef.ReceivedEndorsements[2].CreatedAt,
 			},
 		},
-		Version:   ef.Version + 3,
+		Version:   4,
 		CreatedAt: ef.CreatedAt,
 	}, actualExporter)
 }

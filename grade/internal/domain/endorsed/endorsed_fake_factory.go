@@ -15,7 +15,6 @@ func NewEndorsedFakeFactory() *EndorsedFakeFactory {
 		Id:                1,
 		MemberId:          2,
 		Grade:             0,
-		Version:           1,
 		CreatedAt:         time.Now(),
 		CurrentArtifactId: 5,
 	}
@@ -26,7 +25,6 @@ type EndorsedFakeFactory struct {
 	MemberId             uint64
 	Grade                uint8
 	ReceivedEndorsements []*EndorsementFakeFactory
-	Version              uint
 	CreatedAt            time.Time
 	CurrentArtifactId    uint64
 }

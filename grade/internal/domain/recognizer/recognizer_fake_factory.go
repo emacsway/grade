@@ -2,61 +2,39 @@ package recognizer
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
 )
 
 func NewRecognizerFakeFactory() *RecognizerFakeFactory {
 	return &RecognizerFakeFactory{
-		Id:                        2,
-		MemberId:                  2,
-		Grade:                     1,
-		AvailableEndorsementCount: 20,
-		PendingEndorsementCount:   0,
-		Version:                   1,
-		CreatedAt:                 time.Now(),
+		Id:        2,
+		MemberId:  2,
+		Grade:     1,
+		CreatedAt: time.Now(),
 	}
 }
 
 type RecognizerFakeFactory struct {
-	Id                        uint64
-	MemberId                  uint64
-	Grade                     uint8
-	AvailableEndorsementCount uint8
-	PendingEndorsementCount   uint8
-	Version                   uint
-	CreatedAt                 time.Time
+	Id        uint64
+	MemberId  uint64
+	Grade     uint8
+	CreatedAt time.Time
 }
 
 func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
-	id, _ := recognizer.NewRecognizerId(f.Id)
-	memberId, _ := external.NewMemberId(f.MemberId)
-	grade, _ := shared.NewGrade(f.Grade)
-	availableCount, _ := recognizer.NewEndorsementCount(f.AvailableEndorsementCount)
-	pendingCount, _ := recognizer.NewEndorsementCount(f.PendingEndorsementCount)
-	return NewRecognizer(id, memberId, grade, availableCount, pendingCount, f.Version, f.CreatedAt)
-}
-
-func (f RecognizerFakeFactory) Export() RecognizerState {
-	return RecognizerState{
-		f.Id, f.MemberId, f.Grade, f.AvailableEndorsementCount,
-		f.PendingEndorsementCount, f.Version, f.CreatedAt,
+	id, err := recognizer.NewRecognizerId(f.Id)
+	if err != nil {
+		return nil, err
 	}
-}
-
-func (f RecognizerFakeFactory) ExportTo(ex interfaces.RecognizerExporter) {
-	var id, memberId seedwork.Uint64Exporter
-	var grade, availableEndorsementCount, pendingEndorsementCount seedwork.Uint8Exporter
-
-	id.SetState(f.Id)
-	memberId.SetState(f.MemberId)
-	grade.SetState(f.Grade)
-	availableEndorsementCount.SetState(f.AvailableEndorsementCount)
-	pendingEndorsementCount.SetState(f.PendingEndorsementCount)
-	ex.SetState(
-		&id, &memberId, &grade, &availableEndorsementCount, &pendingEndorsementCount, f.Version, f.CreatedAt,
-	)
+	memberId, err := external.NewMemberId(f.MemberId)
+	if err != nil {
+		return nil, err
+	}
+	grade, err := shared.NewGrade(f.Grade)
+	if err != nil {
+		return nil, err
+	}
+	return NewRecognizer(id, memberId, grade, f.CreatedAt)
 }
