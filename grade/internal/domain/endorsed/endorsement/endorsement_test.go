@@ -2,11 +2,14 @@ package endorsement
 
 import (
 	"fmt"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 func TestEndorsementConstructor(t *testing.T) {
@@ -32,6 +35,43 @@ func TestEndorsementConstructor(t *testing.T) {
 			_, err := f.Create()
 			assert.Equal(t, f.RecognizerGrade, c.RecognizerGrade)
 			assert.ErrorIs(t, err, c.ExpectedError)
+		})
+	}
+}
+
+func TestEndorsementIsEndorsedBy(t *testing.T) {
+	cases := []struct {
+		RecogniserId     uint64
+		ArtifactId       uint64
+		TestRecogniserId uint64
+		TestArtifactId   uint64
+		ExpectedResult   bool
+	}{
+		{1, 2, 1, 2, true},
+		{1, 2, 2, 2, false},
+		{1, 2, 1, 1, false},
+	}
+	f := NewEndorsementFakeFactory()
+	for i, c := range cases {
+		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			f.RecognizerId = c.RecogniserId
+			rId, err := recognizer.NewRecognizerId(c.TestRecogniserId)
+			if err != nil {
+				t.Error(err)
+				t.FailNow()
+			}
+			f.ArtifactId = c.ArtifactId
+			aId, err := artifact.NewArtifactId(c.TestArtifactId)
+			if err != nil {
+				t.Error(err)
+				t.FailNow()
+			}
+			ent, err := f.Create()
+			if err != nil {
+				t.Error(err)
+				t.FailNow()
+			}
+			assert.Equal(t, c.ExpectedResult, ent.IsEndorsedBy(rId, aId))
 		})
 	}
 }
