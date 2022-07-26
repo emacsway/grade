@@ -11,7 +11,13 @@ import (
 
 func NewRecognizerFakeFactory() *RecognizerFakeFactory {
 	return &RecognizerFakeFactory{
-		2, 2, 1, 20, 0, 1, time.Now(),
+		Id:                        2,
+		MemberId:                  2,
+		Grade:                     1,
+		AvailableEndorsementCount: 20,
+		PendingEndorsementCount:   0,
+		Version:                   1,
+		CreatedAt:                 time.Now(),
 	}
 }
 
