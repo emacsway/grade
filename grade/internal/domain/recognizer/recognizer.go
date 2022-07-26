@@ -16,6 +16,7 @@ var (
 	ErrNoEndorsementCanBeReserved = errors.New("no endorsement can be reserved")
 	ErrNoEndorsementReservation   = errors.New("there is no endorsement reservation")
 	ErrRecognizerUnableToComplete = errors.New("recognizer is not able to complete endorsement")
+	ErrRecognizerUnableToRelease  = errors.New("recognizer is not able to release endorsement")
 )
 
 func NewRecognizer(
@@ -94,8 +95,12 @@ func (r *Recognizer) ReserveEndorsement() error {
 	return nil
 }
 
-func (r *Recognizer) ReleaseEndorsementReservation() {
+func (r *Recognizer) ReleaseEndorsementReservation() error {
+	if r.pendingEndorsementCount == 0 {
+		return ErrRecognizerUnableToRelease
+	}
 	r.pendingEndorsementCount -= 1
+	return nil
 }
 
 func (r *Recognizer) CompleteEndorsement() error {
