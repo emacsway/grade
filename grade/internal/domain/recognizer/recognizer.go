@@ -13,7 +13,7 @@ import (
 
 var (
 	ErrNoEndorsementAvailable         = errors.New("no endorsement is available")
-	ErrNoEndorsementReservation       = errors.New("there is no endorsement reservation")
+	ErrNoEndorsementReservation       = errors.New("no endorsement is reserved")
 	ErrEndorsementReservationExceeded = errors.New("endorsement reservation exceeded")
 )
 
