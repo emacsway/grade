@@ -7,13 +7,13 @@ import (
 	"time"
 )
 
-func NewRecognizerFakeFactory() *RecognizerFakeFactory {
+func NewRecognizerFakeFactory() (*RecognizerFakeFactory, error) {
 	return &RecognizerFakeFactory{
-		Id:        2,
-		MemberId:  2,
+		Id:        1,
+		MemberId:  1,
 		Grade:     1,
 		CreatedAt: time.Now(),
-	}
+	}, nil
 }
 
 type RecognizerFakeFactory struct {

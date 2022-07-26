@@ -13,10 +13,22 @@ import (
 )
 
 func TestEndorsedExport(t *testing.T) {
-	ef := NewEndorsedFakeFactory()
-	rf := recognizer.NewRecognizerFakeFactory()
+	ef, err := NewEndorsedFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+	rf, err := recognizer.NewRecognizerFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	for i := 0; i < 4; i++ {
-		ef.ReceiveEndorsement(rf)
+		err := ef.ReceiveEndorsement(rf)
+		if err != nil {
+			t.Error(err)
+			t.FailNow()
+		}
 	}
 	agg, err := ef.Create()
 	if err != nil {
@@ -84,10 +96,22 @@ func TestEndorsedExport(t *testing.T) {
 
 func TestEndorsedExportTo(t *testing.T) {
 	var actualExporter EndorsedExporter
-	ef := NewEndorsedFakeFactory()
-	rf := recognizer.NewRecognizerFakeFactory()
+	ef, err := NewEndorsedFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+	rf, err := recognizer.NewRecognizerFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	for i := 0; i < 4; i++ {
-		ef.ReceiveEndorsement(rf)
+		err := ef.ReceiveEndorsement(rf)
+		if err != nil {
+			t.Error(err)
+			t.FailNow()
+		}
 	}
 	agg, err := ef.Create()
 	if err != nil {

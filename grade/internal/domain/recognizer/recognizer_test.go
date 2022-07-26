@@ -46,7 +46,11 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, ErrNoEndorsementReservation},
 	}
-	f := NewRecognizerFakeFactory()
+	f, err := NewRecognizerFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			r, err := f.Create()
@@ -66,7 +70,11 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 }
 
 func TestRecognizerExport(t *testing.T) {
-	f := NewRecognizerFakeFactory()
+	f, err := NewRecognizerFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	agg, err := f.Create()
 	if err != nil {
 		t.Error(err)
@@ -85,7 +93,11 @@ func TestRecognizerExport(t *testing.T) {
 
 func TestRecognizerExportTo(t *testing.T) {
 	var actualExporter RecognizerExporter
-	f := NewRecognizerFakeFactory()
+	f, err := NewRecognizerFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	agg, err := f.Create()
 	if err != nil {
 		t.Error(err)

@@ -25,7 +25,11 @@ func TestEndorsementConstructor(t *testing.T) {
 		{1, 0, 2, 1, ErrLowerGradeEndorses},
 		{1, 0, 1, 0, ErrEndorsementOneself},
 	}
-	f := NewEndorsementFakeFactory()
+	f, err := NewEndorsementFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			f.RecognizerId = c.RecogniserId
@@ -51,7 +55,11 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 		{1, 2, 2, 2, false},
 		{1, 2, 1, 1, false},
 	}
-	f := NewEndorsementFakeFactory()
+	f, err := NewEndorsementFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			f.RecognizerId = c.RecogniserId
@@ -77,7 +85,11 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 }
 
 func TestEndorsementWeight(t *testing.T) {
-	f := NewEndorsementFakeFactory()
+	f, err := NewEndorsementFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	for i := uint8(0); i <= shared.MaxGradeValue; i++ {
 		for j := i; j <= shared.MaxGradeValue; j++ {
 			t.Run(fmt.Sprintf("Case i=%d j=%d", i, j), func(t *testing.T) {
@@ -99,7 +111,11 @@ func TestEndorsementWeight(t *testing.T) {
 }
 
 func TestEndorsementExport(t *testing.T) {
-	f := NewEndorsementFakeFactory()
+	f, err := NewEndorsementFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	e, _ := f.Create()
 	assert.Equal(t, EndorsementState{
 		RecognizerId:      f.RecognizerId,
@@ -115,7 +131,11 @@ func TestEndorsementExport(t *testing.T) {
 
 func TestRecognizerExportTo(t *testing.T) {
 	var actualExporter EndorsementExporter
-	f := NewEndorsementFakeFactory()
+	f, err := NewEndorsementFakeFactory()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	agg, _ := f.Create()
 	agg.ExportTo(&actualExporter)
 	assert.Equal(t, EndorsementExporter{

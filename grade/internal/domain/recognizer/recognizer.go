@@ -70,6 +70,15 @@ func (r Recognizer) GetGrade() shared.Grade {
 	return r.grade
 }
 
+func (r Recognizer) IncreaseGrade() error {
+	g, err := r.grade.Next()
+	if err != nil {
+		return err
+	}
+	r.grade = g
+	return nil
+}
+
 func (r Recognizer) canReserveEndorsement() error {
 	if !(r.availableEndorsementCount > r.pendingEndorsementCount) {
 		return ErrEndorsementReservationExceeded

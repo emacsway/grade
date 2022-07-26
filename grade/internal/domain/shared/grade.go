@@ -30,6 +30,21 @@ func NewGrade(value uint8) (Grade, error) {
 
 type Grade uint8
 
+func (g Grade) NextGradeAchieved(endorsementCount uint) bool {
+	if g == Candidate {
+		return endorsementCount >= 40
+	} else if g == Grade3 {
+		return endorsementCount >= 20
+	} else if g == Grade2 {
+		return endorsementCount >= 14
+	} else if g == Grade1 {
+		return endorsementCount >= 10
+	} else if g == WithoutGrade {
+		return endorsementCount >= 6
+	}
+	return false
+}
+
 func (g Grade) HasNext() bool {
 	return uint8(g) < MaxGradeValue
 }
@@ -37,7 +52,7 @@ func (g Grade) HasNext() bool {
 func (g Grade) Next() (Grade, error) {
 	nextGrade, err := NewGrade(uint8(g) + 1)
 	if err != nil {
-		return Grade(0), err
+		return g, err
 	}
 	return nextGrade, nil
 }

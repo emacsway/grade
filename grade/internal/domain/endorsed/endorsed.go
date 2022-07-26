@@ -26,7 +26,6 @@ var (
 func NewEndorsed(
 	id endorsed.EndorsedId,
 	memberId external.MemberId,
-	grade shared.Grade,
 	createdAt time.Time,
 ) (*Endorsed, error) {
 	versioned, err := seedwork.NewVersionedAggregate(0)
@@ -40,7 +39,7 @@ func NewEndorsed(
 	return &Endorsed{
 		id:                 id,
 		memberId:           memberId,
-		grade:              grade,
+		grade:              shared.WithoutGrade,
 		VersionedAggregate: versioned,
 		EventiveEntity:     eventive,
 		createdAt:          createdAt,
@@ -93,19 +92,10 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.Ar
 }
 
 func (e *Endorsed) actualizeGrade(t time.Time) error {
-	var err error
-	if e.grade == shared.WithoutGrade && e.getReceivedEndorsementCount() >= 6 {
-		err = e.setGrade(shared.Grade3, t)
-	} else if e.grade == shared.Grade3 && e.getReceivedEndorsementCount() >= 10 {
-		err = e.setGrade(shared.Grade2, t)
-	} else if e.grade == shared.Grade2 && e.getReceivedEndorsementCount() >= 14 {
-		err = e.setGrade(shared.Grade1, t)
-	} else if e.grade == shared.Grade1 && e.getReceivedEndorsementCount() >= 20 {
-		err = e.setGrade(shared.Candidate, t)
-	} else if e.grade == shared.Candidate && e.getReceivedEndorsementCount() >= 10 {
-		err = e.setGrade(shared.Expert, t)
+	if e.grade.NextGradeAchieved(e.getReceivedEndorsementCount()) {
+		return e.increaseGrade(t)
 	}
-	return err
+	return nil
 }
 func (e Endorsed) getReceivedEndorsementCount() uint {
 	var counter uint
@@ -117,7 +107,11 @@ func (e Endorsed) getReceivedEndorsementCount() uint {
 	return counter
 }
 
-func (e *Endorsed) setGrade(g shared.Grade, t time.Time) error {
+func (e *Endorsed) increaseGrade(t time.Time) error {
+	g, err := e.grade.Next()
+	if err != nil {
+		return err
+	}
 	gle, err := gradelogentry.NewGradeLogEntry(
 		e.id, e.GetVersion(), g, t,
 	)

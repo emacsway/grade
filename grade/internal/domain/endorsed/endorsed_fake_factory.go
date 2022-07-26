@@ -10,14 +10,14 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
-func NewEndorsedFakeFactory() *EndorsedFakeFactory {
+func NewEndorsedFakeFactory() (*EndorsedFakeFactory, error) {
 	return &EndorsedFakeFactory{
-		Id:                1,
+		Id:                2,
 		MemberId:          2,
 		Grade:             0,
 		CreatedAt:         time.Now(),
-		CurrentArtifactId: 5,
-	}
+		CurrentArtifactId: 1000,
+	}, nil
 }
 
 type EndorsedFakeFactory struct {
@@ -29,7 +29,43 @@ type EndorsedFakeFactory struct {
 	CurrentArtifactId    uint64
 }
 
-func (f *EndorsedFakeFactory) ReceiveEndorsement(r *recognizer.RecognizerFakeFactory) {
+func (f *EndorsedFakeFactory) achieveGrade() error {
+	currentGrade := shared.WithoutGrade
+	targetGrade, err := shared.NewGrade(f.Grade)
+	if err != nil {
+		return err
+	}
+	for currentGrade < targetGrade {
+		r, err := recognizer.NewRecognizerFakeFactory()
+		if err != nil {
+			return err
+		}
+		r.Id = 1000
+		recognizerGrade, _ := currentGrade.Next()
+		r.Grade = recognizerGrade.Export()
+		var endorsementCount uint = 0
+		for !currentGrade.NextGradeAchieved(endorsementCount) {
+			f.receiveEndorsement(r)
+			endorsementCount += 2
+		}
+		currentGrade, err = currentGrade.Next()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (f *EndorsedFakeFactory) ReceiveEndorsement(r *recognizer.RecognizerFakeFactory) error {
+	err := f.achieveGrade()
+	if err != nil {
+		return err
+	}
+	f.receiveEndorsement(r)
+	return nil
+}
+
+func (f *EndorsedFakeFactory) receiveEndorsement(r *recognizer.RecognizerFakeFactory) {
 	e := NewEndorsementFakeFactory(r)
 	e.ArtifactId = f.CurrentArtifactId
 	f.CurrentArtifactId += 1
@@ -38,6 +74,10 @@ func (f *EndorsedFakeFactory) ReceiveEndorsement(r *recognizer.RecognizerFakeFac
 }
 
 func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
+	err := f.achieveGrade()
+	if err != nil {
+		return nil, err
+	}
 	id, err := endorsed.NewEndorsedId(f.Id)
 	if err != nil {
 		return nil, err
@@ -46,11 +86,7 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 	if err != nil {
 		return nil, err
 	}
-	grade, err := shared.NewGrade(f.Grade)
-	if err != nil {
-		return nil, err
-	}
-	e, err := NewEndorsed(id, memberId, grade, f.CreatedAt)
+	e, err := NewEndorsed(id, memberId, f.CreatedAt)
 	if err != nil {
 		return nil, err
 	}

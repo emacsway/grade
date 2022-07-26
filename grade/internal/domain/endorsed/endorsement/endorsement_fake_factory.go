@@ -9,7 +9,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
-func NewEndorsementFakeFactory() *EndorsementFakeFactory {
+func NewEndorsementFakeFactory() (*EndorsementFakeFactory, error) {
 	return &EndorsementFakeFactory{
 		RecognizerId:      1,
 		RecognizerGrade:   2,
@@ -19,7 +19,7 @@ func NewEndorsementFakeFactory() *EndorsementFakeFactory {
 		EndorsedVersion:   5,
 		ArtifactId:        6,
 		CreatedAt:         time.Now(),
-	}
+	}, nil
 }
 
 type EndorsementFakeFactory struct {

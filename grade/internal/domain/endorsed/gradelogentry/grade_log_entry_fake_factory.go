@@ -7,13 +7,13 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
-func NewGradeLogEntryFakeFactory() *GradeLogEntryFakeFactory {
+func NewGradeLogEntryFakeFactory() (*GradeLogEntryFakeFactory, error) {
 	return &GradeLogEntryFakeFactory{
 		EndorsedId:      1,
 		EndorsedVersion: 2,
 		AssignedGrade:   1,
 		CreatedAt:       time.Now(),
-	}
+	}, nil
 }
 
 type GradeLogEntryFakeFactory struct {
