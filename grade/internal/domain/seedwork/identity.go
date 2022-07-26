@@ -1,6 +1,8 @@
 package seedwork
 
-import "github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+)
 
 func NewIdentity[T comparable](value T) (Identity[T, interfaces.Identity[T], interfaces.Exporter[T]], error) {
 	return Identity[T, interfaces.Identity[T], interfaces.Exporter[T]]{value: value}, nil

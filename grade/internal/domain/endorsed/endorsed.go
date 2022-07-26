@@ -3,6 +3,7 @@ package endorsed
 import (
 	"errors"
 	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/interfaces"
+	interfaces3 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/interfaces"
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
@@ -26,12 +27,9 @@ func NewEndorsed(
 	id endorsed.EndorsedId,
 	memberId external.MemberId,
 	grade shared.Grade,
-	endorsements []endorsement.Endorsement,
-	gradeLogEntries []gradelogentry.GradeLogEntry,
-	version uint,
 	createdAt time.Time,
 ) (*Endorsed, error) {
-	versioned, err := seedwork.NewVersionedAggregate(version)
+	versioned, err := seedwork.NewVersionedAggregate(0)
 	if err != nil {
 		return nil, err
 	}
@@ -40,14 +38,12 @@ func NewEndorsed(
 		return nil, err
 	}
 	return &Endorsed{
-		id:                   id,
-		memberId:             memberId,
-		grade:                grade,
-		receivedEndorsements: endorsements,
-		gradeLogEntries:      gradeLogEntries,
-		VersionedAggregate:   versioned,
-		EventiveEntity:       eventive,
-		createdAt:            createdAt,
+		id:                 id,
+		memberId:           memberId,
+		grade:              grade,
+		VersionedAggregate: versioned,
+		EventiveEntity:     eventive,
+		createdAt:          createdAt,
 	}, nil
 }
 
@@ -133,7 +129,7 @@ func (e *Endorsed) setGrade(g shared.Grade, t time.Time) error {
 	return nil
 }
 
-func (e Endorsed) ExportTo(ex EndorsedExporter) {
+func (e Endorsed) ExportTo(ex interfaces3.EndorsedExporter) {
 	var id, memberId seedwork.Uint64Exporter
 	var grade seedwork.Uint8Exporter
 	var receivedEndorsements []interfaces.EndorsementExporter
@@ -169,8 +165,12 @@ func (e Endorsed) Export() EndorsedState {
 		gradeLogEntries = append(gradeLogEntries, v.Export())
 	}
 	return EndorsedState{
-		e.id.Export(), e.memberId.Export(), e.grade.Export(),
-		receivedEndorsements, gradeLogEntries,
-		e.GetVersion(), e.createdAt,
+		Id:                   e.id.Export(),
+		MemberId:             e.memberId.Export(),
+		Grade:                e.grade.Export(),
+		ReceivedEndorsements: receivedEndorsements,
+		GradeLogEntries:      gradeLogEntries,
+		Version:              e.GetVersion(),
+		CreatedAt:            e.createdAt,
 	}
 }
