@@ -2,7 +2,7 @@ package endorsement
 
 import (
 	"errors"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/hashicorp/go-multierror"
 	"time"
 
@@ -30,9 +30,9 @@ var (
 )
 
 func CanEndorse(
-	recognizerId external.MemberId,
+	recognizerId member.MemberId,
 	recognizerGrade shared.Grade,
-	endorsedId external.MemberId,
+	endorsedId member.MemberId,
 	endorsedGrade shared.Grade,
 ) error {
 	var err error
@@ -48,10 +48,10 @@ func CanEndorse(
 }
 
 func NewEndorsement(
-	recognizerId external.MemberId,
+	recognizerId member.MemberId,
 	recognizerGrade shared.Grade,
 	recognizerVersion uint,
-	endorsedId external.MemberId,
+	endorsedId member.MemberId,
 	endorsedGrade shared.Grade,
 	endorsedVersion uint,
 	artifactId artifact.ArtifactId,
@@ -74,17 +74,17 @@ func NewEndorsement(
 }
 
 type Endorsement struct {
-	recognizerId      external.MemberId
+	recognizerId      member.MemberId
 	recognizerGrade   shared.Grade
 	recognizerVersion uint
-	endorsedId        external.MemberId
+	endorsedId        member.MemberId
 	endorsedGrade     shared.Grade
 	endorsedVersion   uint
 	artifactId        artifact.ArtifactId
 	createdAt         time.Time
 }
 
-func (e Endorsement) IsEndorsedBy(rId external.MemberId, aId artifact.ArtifactId) bool {
+func (e Endorsement) IsEndorsedBy(rId member.MemberId, aId artifact.ArtifactId) bool {
 	return e.recognizerId == rId && e.artifactId == aId
 }
 

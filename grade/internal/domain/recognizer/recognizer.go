@@ -4,7 +4,7 @@ import (
 	"errors"
 	"time"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
@@ -18,7 +18,7 @@ var (
 )
 
 func NewRecognizer(
-	id external.MemberId,
+	id member.MemberId,
 	grade shared.Grade,
 	createdAt time.Time,
 ) (*Recognizer, error) {
@@ -50,7 +50,7 @@ func NewRecognizer(
 }
 
 type Recognizer struct {
-	id                        external.MemberId
+	id                        member.MemberId
 	grade                     shared.Grade
 	availableEndorsementCount recognizer.EndorsementCount
 	pendingEndorsementCount   recognizer.EndorsementCount
@@ -59,7 +59,7 @@ type Recognizer struct {
 	seedwork.EventiveEntity
 }
 
-func (r Recognizer) GetId() external.MemberId {
+func (r Recognizer) GetId() member.MemberId {
 	return r.id
 }
 

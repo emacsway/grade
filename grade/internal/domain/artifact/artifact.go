@@ -5,7 +5,7 @@ import (
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea/expertisearea"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
 type Artifact struct {
@@ -15,6 +15,6 @@ type Artifact struct {
 	description      artifact.Description
 	url              artifact.Url
 	expertiseAreaIds []expertisearea.ExpertiseAreaId
-	authorIds        []external.MemberId
+	authorIds        []member.MemberId
 	createdAt        time.Time
 }

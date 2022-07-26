@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
@@ -77,7 +77,7 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 	if err != nil {
 		return nil, err
 	}
-	id, err := external.NewMemberId(f.Id)
+	id, err := member.NewMemberId(f.Id)
 	if err != nil {
 		return nil, err
 	}

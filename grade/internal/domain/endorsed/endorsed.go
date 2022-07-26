@@ -10,7 +10,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
@@ -23,7 +23,7 @@ var (
 )
 
 func NewEndorsed(
-	id external.MemberId,
+	id member.MemberId,
 	createdAt time.Time,
 ) (*Endorsed, error) {
 	versioned, err := seedwork.NewVersionedAggregate(0)
@@ -44,7 +44,7 @@ func NewEndorsed(
 }
 
 type Endorsed struct {
-	id                   external.MemberId
+	id                   member.MemberId
 	grade                shared.Grade
 	receivedEndorsements []endorsement.Endorsement
 	gradeLogEntries      []gradelogentry.GradeLogEntry

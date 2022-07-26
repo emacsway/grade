@@ -1,7 +1,7 @@
 package gradelogentry
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
@@ -24,7 +24,7 @@ type GradeLogEntryFakeFactory struct {
 }
 
 func (f GradeLogEntryFakeFactory) Create() (GradeLogEntry, error) {
-	endorsedId, _ := external.NewMemberId(f.EndorsedId)
+	endorsedId, _ := member.NewMemberId(f.EndorsedId)
 	assignedGrade, _ := shared.NewGrade(f.AssignedGrade)
 	return NewGradeLogEntry(endorsedId, f.EndorsedVersion, assignedGrade, f.CreatedAt)
 }

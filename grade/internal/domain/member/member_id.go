@@ -1,4 +1,4 @@
-package external
+package member
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"

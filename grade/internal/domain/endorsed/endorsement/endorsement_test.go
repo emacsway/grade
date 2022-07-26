@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
@@ -63,7 +63,7 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			f.RecognizerId = c.RecogniserId
-			rId, err := external.NewMemberId(c.TestRecogniserId)
+			rId, err := member.NewMemberId(c.TestRecogniserId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()

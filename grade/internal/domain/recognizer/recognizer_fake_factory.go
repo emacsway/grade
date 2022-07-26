@@ -1,7 +1,7 @@
 package recognizer
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
 )
@@ -21,7 +21,7 @@ type RecognizerFakeFactory struct {
 }
 
 func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
-	id, err := external.NewMemberId(f.Id)
+	id, err := member.NewMemberId(f.Id)
 	if err != nil {
 		return nil, err
 	}
