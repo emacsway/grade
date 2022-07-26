@@ -57,6 +57,18 @@ func (g Grade) Next() (Grade, error) {
 	return nextGrade, nil
 }
 
+func (g Grade) HasPrevious() bool {
+	return uint8(g) > 0
+}
+
+func (g Grade) Previous() (Grade, error) {
+	previousGrade, err := NewGrade(uint8(g) - 1)
+	if err != nil {
+		return g, err
+	}
+	return previousGrade, nil
+}
+
 func (g Grade) Export() uint8 {
 	return uint8(g)
 }

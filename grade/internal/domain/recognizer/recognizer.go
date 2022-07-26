@@ -19,7 +19,6 @@ var (
 
 func NewRecognizer(
 	id member.MemberId,
-	grade shared.Grade,
 	createdAt time.Time,
 ) (*Recognizer, error) {
 	availableCount, err := recognizer.NewEndorsementCount(recognizer.YearlyEndorsementCount)
@@ -40,7 +39,7 @@ func NewRecognizer(
 	}
 	return &Recognizer{
 		id:                        id,
-		grade:                     grade,
+		grade:                     shared.WithoutGrade,
 		availableEndorsementCount: availableCount,
 		pendingEndorsementCount:   pendingCount,
 		createdAt:                 createdAt,
@@ -67,11 +66,7 @@ func (r Recognizer) GetGrade() shared.Grade {
 	return r.grade
 }
 
-func (r Recognizer) IncreaseGrade() error {
-	g, err := r.grade.Next()
-	if err != nil {
-		return err
-	}
+func (r *Recognizer) SetGrade(g shared.Grade) error {
 	r.grade = g
 	return nil
 }

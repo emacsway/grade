@@ -89,7 +89,11 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.Ar
 
 func (e *Endorsed) actualizeGrade(t time.Time) error {
 	if e.grade.NextGradeAchieved(e.getReceivedEndorsementCount()) {
-		return e.increaseGrade(t)
+		nextGrade, err := e.grade.Next()
+		if err != nil {
+			return err
+		}
+		return e.setGrade(nextGrade, t)
 	}
 	return nil
 }
@@ -103,11 +107,7 @@ func (e Endorsed) getReceivedEndorsementCount() uint {
 	return counter
 }
 
-func (e *Endorsed) increaseGrade(t time.Time) error {
-	g, err := e.grade.Next()
-	if err != nil {
-		return err
-	}
+func (e *Endorsed) setGrade(g shared.Grade, t time.Time) error {
 	gle, err := gradelogentry.NewGradeLogEntry(
 		e.id, e.GetVersion(), g, t,
 	)
@@ -117,6 +117,14 @@ func (e *Endorsed) increaseGrade(t time.Time) error {
 	e.gradeLogEntries = append(e.gradeLogEntries, gle)
 	e.grade = g
 	return nil
+}
+
+func (e *Endorsed) DecreaseGrade(t time.Time) error {
+	previousGrade, err := e.grade.Next()
+	if err != nil {
+		return err
+	}
+	return e.setGrade(previousGrade, t)
 }
 
 func (e Endorsed) ExportTo(ex interfaces3.EndorsedExporter) {

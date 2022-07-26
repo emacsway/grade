@@ -68,6 +68,46 @@ func TestGradeNext(t *testing.T) {
 	}
 }
 
+func TestGradeHasPrevious(t *testing.T) {
+	cases := []struct {
+		Arg            uint8
+		ExpectedResult bool
+	}{
+		{uint8(0), false},
+		{MaxGradeValue / 2, true},
+		{MaxGradeValue, true},
+	}
+	for i, c := range cases {
+		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			g, _ := NewGrade(c.Arg)
+			r := g.HasPrevious()
+			assert.Equal(t, c.ExpectedResult, r)
+		})
+	}
+}
+
+func TestGradePrevious(t *testing.T) {
+	cases := []struct {
+		Arg           uint8
+		ExpectedValue uint8
+		ExpectedError error
+	}{
+		{uint8(0), uint8(0), ErrInvalidGrade},
+		{MaxGradeValue / 2, MaxGradeValue/2 - 1, nil},
+		{MaxGradeValue, MaxGradeValue - 1, nil},
+	}
+	for i, c := range cases {
+		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			g, _ := NewGrade(c.Arg)
+			n, err := g.Previous()
+			assert.Equal(t, c.ExpectedError, err)
+			if err == nil {
+				assert.Equal(t, c.ExpectedValue, uint8(n))
+			}
+		})
+	}
+}
+
 func TestGradeSetState(t *testing.T) {
 	g, _ := NewGrade(1)
 	g.Import(2)

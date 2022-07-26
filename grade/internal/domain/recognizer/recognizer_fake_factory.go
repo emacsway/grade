@@ -25,9 +25,17 @@ func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
 	if err != nil {
 		return nil, err
 	}
+	r, err := NewRecognizer(id, f.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
 	grade, err := shared.NewGrade(f.Grade)
 	if err != nil {
 		return nil, err
 	}
-	return NewRecognizer(id, grade, f.CreatedAt)
+	err = r.SetGrade(grade)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
 }
