@@ -9,7 +9,10 @@ import (
 
 func NewGradeLogEntryFakeFactory() *GradeLogEntryFakeFactory {
 	return &GradeLogEntryFakeFactory{
-		1, 2, 1, time.Now(),
+		EndorsedId:      1,
+		EndorsedVersion: 2,
+		AssignedGrade:   1,
+		CreatedAt:       time.Now(),
 	}
 }
 
