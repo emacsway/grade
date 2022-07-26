@@ -13,19 +13,24 @@ import (
 
 func TestEndorsedReceiveEndorsement(t *testing.T) {
 	cases := []struct {
+		RecogniserId    uint64
 		RecognizerGrade uint8
+		EndorsedId      uint64
 		EndorsedGrade   uint8
 		ExpectedError   error
 	}{
-		{0, 0, nil},
-		{1, 0, nil},
-		{0, 1, endorsement.ErrLowerGradeEndorses},
+		{1, 0, 2, 0, nil},
+		{1, 1, 2, 0, nil},
+		{1, 0, 2, 1, endorsement.ErrLowerGradeEndorses},
+		{1, 0, 1, 0, endorsement.ErrEndorsementOneself},
 	}
 	ef := NewEndorsedFakeFactory()
 	rf := recognizer.NewRecognizerFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			ef.Id = c.EndorsedId
 			ef.Grade = c.EndorsedGrade
+			rf.Id = c.RecogniserId
 			rf.Grade = c.RecognizerGrade
 			e, err := ef.Create()
 			if err != nil {

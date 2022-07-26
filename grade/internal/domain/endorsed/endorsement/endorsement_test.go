@@ -10,18 +10,23 @@ import (
 
 func TestEndorsementConstructor(t *testing.T) {
 	cases := []struct {
+		RecogniserId    uint64
 		RecognizerGrade uint8
+		EndorsedId      uint64
 		EndorsedGrade   uint8
 		ExpectedError   error
 	}{
-		{0, 0, nil},
-		{1, 0, nil},
-		{0, 1, ErrLowerGradeEndorses},
+		{1, 0, 2, 0, nil},
+		{1, 1, 2, 0, nil},
+		{1, 0, 2, 1, ErrLowerGradeEndorses},
+		{1, 0, 1, 0, ErrEndorsementOneself},
 	}
 	f := NewEndorsementFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			f.RecognizerId = c.RecogniserId
 			f.RecognizerGrade = c.RecognizerGrade
+			f.EndorsedId = c.EndorsedId
 			f.EndorsedGrade = c.EndorsedGrade
 			_, err := f.Create()
 			assert.Equal(t, f.RecognizerGrade, c.RecognizerGrade)
