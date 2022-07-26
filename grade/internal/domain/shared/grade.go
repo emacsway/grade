@@ -6,10 +6,10 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 )
 
-const maxGradeValue = uint8(5)
+const MaxGradeValue = uint8(5)
 
 var (
-	ErrInvalidGrade = errors.New(fmt.Sprintf("grade should be between 0 and %d", maxGradeValue))
+	ErrInvalidGrade = errors.New(fmt.Sprintf("grade should be between 0 and %d", MaxGradeValue))
 )
 
 const (
@@ -22,7 +22,7 @@ const (
 )
 
 func NewGrade(value uint8) (Grade, error) {
-	if value > maxGradeValue {
+	if value > MaxGradeValue {
 		return Grade(0), ErrInvalidGrade
 	}
 	return Grade(value), nil
@@ -31,7 +31,7 @@ func NewGrade(value uint8) (Grade, error) {
 type Grade uint8
 
 func (g Grade) HasNext() bool {
-	return uint8(g) < maxGradeValue
+	return uint8(g) < MaxGradeValue
 }
 
 func (g Grade) Next() (Grade, error) {

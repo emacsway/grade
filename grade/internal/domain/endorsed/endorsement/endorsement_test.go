@@ -3,6 +3,7 @@ package endorsement
 import (
 	"fmt"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -32,6 +33,28 @@ func TestEndorsementConstructor(t *testing.T) {
 			assert.Equal(t, f.RecognizerGrade, c.RecognizerGrade)
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
+	}
+}
+
+func TestEndorsementWeight(t *testing.T) {
+	f := NewEndorsementFakeFactory()
+	for i := uint8(0); i <= shared.MaxGradeValue; i++ {
+		for j := i; j <= shared.MaxGradeValue; j++ {
+			t.Run(fmt.Sprintf("Case i=%d j=%d", i, j), func(t *testing.T) {
+				var expectedWeight Weight = 1
+				f.RecognizerGrade = j
+				f.EndorsedGrade = i
+				ent, err := f.Create()
+				if err != nil {
+					t.Error(err)
+					t.FailNow()
+				}
+				if j > i {
+					expectedWeight = 2
+				}
+				assert.Equal(t, expectedWeight, ent.GetWeight())
+			})
+		}
 	}
 }
 

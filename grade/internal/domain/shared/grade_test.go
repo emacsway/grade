@@ -13,9 +13,9 @@ func TestGradeConstructor(t *testing.T) {
 		ExpectedError error
 	}{
 		{uint8(0), nil},
-		{maxGradeValue / 2, nil},
-		{maxGradeValue, nil},
-		{maxGradeValue + 1, ErrInvalidGrade},
+		{MaxGradeValue / 2, nil},
+		{MaxGradeValue, nil},
+		{MaxGradeValue + 1, ErrInvalidGrade},
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
@@ -34,8 +34,8 @@ func TestGradeHasNext(t *testing.T) {
 		ExpectedResult bool
 	}{
 		{uint8(0), true},
-		{maxGradeValue / 2, true},
-		{maxGradeValue, false},
+		{MaxGradeValue / 2, true},
+		{MaxGradeValue, false},
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
@@ -53,8 +53,8 @@ func TestGradeNext(t *testing.T) {
 		ExpectedError error
 	}{
 		{uint8(0), uint8(1), nil},
-		{maxGradeValue / 2, maxGradeValue/2 + 1, nil},
-		{maxGradeValue, uint8(0), ErrInvalidGrade},
+		{MaxGradeValue / 2, MaxGradeValue/2 + 1, nil},
+		{MaxGradeValue, uint8(0), ErrInvalidGrade},
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
