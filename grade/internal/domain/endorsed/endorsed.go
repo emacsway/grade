@@ -79,12 +79,24 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.Ar
 	if err != nil {
 		return err
 	}
+	return e.canBeEndorsed(r, aId)
+}
+
+func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId) error {
 	for _, ent := range e.receivedEndorsements {
 		if ent.IsEndorsedBy(r.GetId(), aId) {
 			return ErrAlreadyEndorsed
 		}
 	}
-	return nil
+	return endorsement.CanEndorse(r.GetId(), r.GetGrade(), e.id, e.grade)
+}
+
+func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, aId artifact.ArtifactId) error {
+	err := r.CanReserveEndorsement()
+	if err != nil {
+		return err
+	}
+	return e.canBeEndorsed(r, aId)
 }
 
 func (e *Endorsed) actualizeGrade(t time.Time) error {

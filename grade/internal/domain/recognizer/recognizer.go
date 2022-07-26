@@ -71,7 +71,7 @@ func (r *Recognizer) SetGrade(g shared.Grade) error {
 	return nil
 }
 
-func (r Recognizer) canReserveEndorsement() error {
+func (r Recognizer) CanReserveEndorsement() error {
 	if !(r.availableEndorsementCount > r.pendingEndorsementCount) {
 		return ErrEndorsementReservationExceeded
 	}
@@ -92,7 +92,7 @@ func (r Recognizer) CanCompleteEndorsement() error {
 }
 
 func (r *Recognizer) ReserveEndorsement() error {
-	err := r.canReserveEndorsement()
+	err := r.CanReserveEndorsement()
 	if err != nil {
 		return err
 	}
