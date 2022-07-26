@@ -20,7 +20,7 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 		}, nil},
 		{func(r *Recognizer) error {
 			return nil
-		}, ErrRecognizerUnableToComplete},
+		}, ErrNoEndorsementReservation},
 		{func(r *Recognizer) error {
 			for i := uint8(0); i < recognizer.YearlyEndorsementCount; i++ {
 				err := r.ReserveEndorsement()
@@ -33,7 +33,7 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 				}
 			}
 			return nil
-		}, ErrRecognizerUnableToComplete},
+		}, ErrNoEndorsementReservation},
 		{func(r *Recognizer) error {
 			err := r.ReserveEndorsement()
 			if err != nil {
@@ -44,7 +44,7 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 				return err
 			}
 			return nil
-		}, ErrRecognizerUnableToComplete},
+		}, ErrNoEndorsementReservation},
 	}
 	f := NewRecognizerFakeFactory()
 	for i, c := range cases {

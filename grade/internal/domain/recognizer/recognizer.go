@@ -12,11 +12,9 @@ import (
 )
 
 var (
-	ErrNoEndorsementAvailable     = errors.New("no endorsement is available")
-	ErrNoEndorsementCanBeReserved = errors.New("no endorsement can be reserved")
-	ErrNoEndorsementReservation   = errors.New("there is no endorsement reservation")
-	ErrRecognizerUnableToComplete = errors.New("recognizer is not able to complete endorsement")
-	ErrRecognizerUnableToRelease  = errors.New("recognizer is not able to release endorsement")
+	ErrNoEndorsementAvailable         = errors.New("no endorsement is available")
+	ErrNoEndorsementReservation       = errors.New("there is no endorsement reservation")
+	ErrEndorsementReservationExceeded = errors.New("endorsement reservation exceeded")
 )
 
 func NewRecognizer(
@@ -74,14 +72,20 @@ func (r Recognizer) GetGrade() shared.Grade {
 
 func (r Recognizer) canReserveEndorsement() error {
 	if !(r.availableEndorsementCount > r.pendingEndorsementCount) {
-		return ErrNoEndorsementCanBeReserved
+		return ErrEndorsementReservationExceeded
 	}
 	return nil
 }
 
 func (r Recognizer) CanCompleteEndorsement() error {
-	if !(r.pendingEndorsementCount > 0 && r.availableEndorsementCount >= r.pendingEndorsementCount) {
-		return ErrRecognizerUnableToComplete
+	if r.pendingEndorsementCount == 0 {
+		return ErrNoEndorsementReservation
+	}
+	if r.availableEndorsementCount == 0 {
+		return ErrNoEndorsementAvailable
+	}
+	if r.availableEndorsementCount < r.pendingEndorsementCount {
+		return ErrEndorsementReservationExceeded
 	}
 	return nil
 }
@@ -97,18 +101,16 @@ func (r *Recognizer) ReserveEndorsement() error {
 
 func (r *Recognizer) ReleaseEndorsementReservation() error {
 	if r.pendingEndorsementCount == 0 {
-		return ErrRecognizerUnableToRelease
+		return ErrNoEndorsementReservation
 	}
 	r.pendingEndorsementCount -= 1
 	return nil
 }
 
 func (r *Recognizer) CompleteEndorsement() error {
-	if r.availableEndorsementCount == 0 {
-		return ErrNoEndorsementAvailable
-	}
-	if r.pendingEndorsementCount == 0 {
-		return ErrNoEndorsementReservation
+	err := r.CanCompleteEndorsement()
+	if err != nil {
+		return err
 	}
 	r.availableEndorsementCount -= 1
 	r.pendingEndorsementCount -= 1
