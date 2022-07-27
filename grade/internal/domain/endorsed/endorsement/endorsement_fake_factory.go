@@ -33,11 +33,26 @@ type EndorsementFakeFactory struct {
 }
 
 func (f EndorsementFakeFactory) Create() (Endorsement, error) {
-	recognizerId, _ := member.NewMemberId(f.RecognizerId)
-	recognizerGrade, _ := shared.NewGrade(f.RecognizerGrade)
-	endorsedId, _ := member.NewMemberId(f.EndorsedId)
-	endorsedGrade, _ := shared.NewGrade(f.EndorsedGrade)
-	artifactId, _ := artifact.NewArtifactId(f.ArtifactId)
+	recognizerId, err := member.NewMemberId(f.RecognizerId)
+	if err != nil {
+		return Endorsement{}, err
+	}
+	recognizerGrade, err := shared.NewGrade(f.RecognizerGrade)
+	if err != nil {
+		return Endorsement{}, err
+	}
+	endorsedId, err := member.NewMemberId(f.EndorsedId)
+	if err != nil {
+		return Endorsement{}, err
+	}
+	endorsedGrade, err := shared.NewGrade(f.EndorsedGrade)
+	if err != nil {
+		return Endorsement{}, err
+	}
+	artifactId, err := artifact.NewArtifactId(f.ArtifactId)
+	if err != nil {
+		return Endorsement{}, err
+	}
 	return NewEndorsement(
 		recognizerId, recognizerGrade, f.RecognizerVersion,
 		endorsedId, endorsedGrade, f.EndorsedVersion,
