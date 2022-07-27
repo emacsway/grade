@@ -1,12 +1,15 @@
 package expertisearea
 
 import (
-	endorsed "github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea/expertisearea"
 	"time"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea/expertisearea"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
 type ExpertiseArea struct {
-	id        endorsed.ExpertiseAreaId
-	name      endorsed.Name
+	id        expertisearea.ExpertiseAreaId
+	name      expertisearea.Name
+	createdBy member.MemberId
 	createdAt time.Time
 }

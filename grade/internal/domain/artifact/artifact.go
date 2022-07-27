@@ -8,6 +8,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
+// Artifact is a good candidate for EventSourcing
 type Artifact struct {
 	id               artifact.ArtifactId
 	status           artifact.Status
@@ -16,5 +17,6 @@ type Artifact struct {
 	url              artifact.Url
 	expertiseAreaIds []expertisearea.ExpertiseAreaId
 	authorIds        []member.MemberId
+	createdBy        member.MemberId
 	createdAt        time.Time
 }
