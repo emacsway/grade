@@ -11,6 +11,7 @@ type GradeLogEntryExporter interface {
 		endorsedId interfaces.Exporter[uint64],
 		endorsedVersion uint,
 		assignedGrade interfaces.Exporter[uint8],
+		reason interfaces.Exporter[string],
 		createdAt time.Time,
 	)
 }

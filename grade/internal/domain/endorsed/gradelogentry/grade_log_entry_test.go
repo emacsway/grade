@@ -18,6 +18,7 @@ func TestGradeLogEntryExport(t *testing.T) {
 		EndorsedId:      f.EndorsedId,
 		EndorsedVersion: f.EndorsedVersion,
 		AssignedGrade:   f.AssignedGrade,
+		Reason:          f.Reason,
 		CreatedAt:       f.CreatedAt,
 	}, e.Export())
 }
@@ -35,6 +36,7 @@ func TestRecognizerExportTo(t *testing.T) {
 		EndorsedId:      seedwork.NewUint64Exporter(f.EndorsedId),
 		EndorsedVersion: f.EndorsedVersion,
 		AssignedGrade:   seedwork.NewUint8Exporter(f.AssignedGrade),
+		Reason:          seedwork.NewStringExporter(f.Reason),
 		CreatedAt:       f.CreatedAt,
 	}, actualExporter)
 }

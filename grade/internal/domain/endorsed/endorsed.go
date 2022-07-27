@@ -2,6 +2,7 @@ package endorsed
 
 import (
 	"errors"
+	gradelogentry2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/gradelogentry"
 	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/interfaces"
 	interfaces3 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/interfaces"
 	"time"
@@ -105,7 +106,11 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		return e.setGrade(nextGrade, t)
+		reason, err := gradelogentry2.NewReason("Endorsement count is achieved")
+		if err != nil {
+			return err
+		}
+		return e.setGrade(nextGrade, reason, t)
 	}
 	return nil
 }
@@ -119,9 +124,9 @@ func (e Endorsed) getReceivedEndorsementCount() uint {
 	return counter
 }
 
-func (e *Endorsed) setGrade(g shared.Grade, t time.Time) error {
+func (e *Endorsed) setGrade(g shared.Grade, reason gradelogentry2.Reason, t time.Time) error {
 	gle, err := gradelogentry.NewGradeLogEntry(
-		e.id, e.GetVersion(), g, t,
+		e.id, e.GetVersion(), g, reason, t,
 	)
 	if err != nil {
 		return err
@@ -131,12 +136,12 @@ func (e *Endorsed) setGrade(g shared.Grade, t time.Time) error {
 	return nil
 }
 
-func (e *Endorsed) DecreaseGrade(t time.Time) error {
+func (e *Endorsed) DecreaseGrade(reason gradelogentry2.Reason, t time.Time) error {
 	previousGrade, err := e.grade.Next()
 	if err != nil {
 		return err
 	}
-	return e.setGrade(previousGrade, t)
+	return e.setGrade(previousGrade, reason, t)
 }
 
 func (e Endorsed) ExportTo(ex interfaces3.EndorsedExporter) {
