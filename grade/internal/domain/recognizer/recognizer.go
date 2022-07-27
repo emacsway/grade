@@ -133,7 +133,11 @@ func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
 
 func (r Recognizer) Export() RecognizerState {
 	return RecognizerState{
-		r.id.Export(), r.grade.Export(), r.availableEndorsementCount.Export(),
-		r.pendingEndorsementCount.Export(), r.GetVersion(), r.createdAt,
+		Id:                        r.id.Export(),
+		Grade:                     r.grade.Export(),
+		AvailableEndorsementCount: r.availableEndorsementCount.Export(),
+		PendingEndorsementCount:   r.pendingEndorsementCount.Export(),
+		Version:                   r.GetVersion(),
+		CreatedAt:                 r.createdAt,
 	}
 }

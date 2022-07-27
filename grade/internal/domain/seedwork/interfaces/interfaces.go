@@ -4,7 +4,7 @@ type Exporter[T any] interface {
 	SetState(T)
 }
 
-type Exporting[T any] interface {
+type ExportableTo[T any] interface {
 	ExportTo(Exporter[T])
 }
 
@@ -16,8 +16,14 @@ type Exportable[T any] interface {
 
 type Identity[T comparable] interface {
 	Exportable[T]
-	Exporting[T]
+	ExportableTo[T]
 	Equals(Identity[T]) bool
+}
+
+type CompositeIdentity[C any, D any] interface {
+	Equals(CompositeIdentity[C, D]) bool
+	Export() C
+	ExportTo(D)
 }
 
 type DomainEvent interface {
