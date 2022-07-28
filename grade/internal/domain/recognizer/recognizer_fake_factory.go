@@ -7,21 +7,26 @@ import (
 )
 
 func NewRecognizerFakeFactory() (*RecognizerFakeFactory, error) {
+	idFactory, err := member.NewTenantMemberIdFakeFactory()
+	if err != nil {
+		return nil, err
+	}
+	idFactory.MemberId = 1
 	return &RecognizerFakeFactory{
-		Id:        1,
+		Id:        idFactory,
 		Grade:     1,
 		CreatedAt: time.Now(),
 	}, nil
 }
 
 type RecognizerFakeFactory struct {
-	Id        uint64
+	Id        *member.TenantMemberIdFakeFactory
 	Grade     uint8
 	CreatedAt time.Time
 }
 
 func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
-	id, err := member.NewMemberId(f.Id)
+	id, err := member.NewTenantMemberId(f.Id.TenantId, f.Id.MemberId)
 	if err != nil {
 		return nil, err
 	}

@@ -38,9 +38,9 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			ef.Id = c.EndorsedId
+			ef.Id.MemberId = c.EndorsedId
 			ef.Grade = c.EndorsedGrade
-			rf.Id = c.RecogniserId
+			rf.Id.MemberId = c.RecogniserId
 			rf.Grade = c.RecognizerGrade
 			e, err := ef.Create()
 			if err != nil {

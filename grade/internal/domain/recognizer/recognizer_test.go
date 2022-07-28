@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
@@ -81,7 +82,10 @@ func TestRecognizerExport(t *testing.T) {
 		t.FailNow()
 	}
 	assert.Equal(t, RecognizerState{
-		Id:                        f.Id,
+		Id: member.TenantMemberIdState{
+			TenantId: f.Id.TenantId,
+			MemberId: f.Id.MemberId,
+		},
 		Grade:                     f.Grade,
 		AvailableEndorsementCount: recognizer.YearlyEndorsementCount,
 		PendingEndorsementCount:   0,
@@ -104,7 +108,7 @@ func TestRecognizerExportTo(t *testing.T) {
 	}
 	agg.ExportTo(&actualExporter)
 	assert.Equal(t, RecognizerExporter{
-		Id:                        seedwork.NewUint64Exporter(f.Id),
+		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Grade:                     seedwork.NewUint8Exporter(f.Grade),
 		AvailableEndorsementCount: seedwork.NewUint8Exporter(recognizer.YearlyEndorsementCount),
 		PendingEndorsementCount:   seedwork.NewUint8Exporter(0),

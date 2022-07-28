@@ -32,9 +32,9 @@ func TestEndorsementConstructor(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			f.RecognizerId = c.RecogniserId
+			f.RecognizerId.MemberId = c.RecogniserId
 			f.RecognizerGrade = c.RecognizerGrade
-			f.EndorsedId = c.EndorsedId
+			f.EndorsedId.MemberId = c.EndorsedId
 			f.EndorsedGrade = c.EndorsedGrade
 			_, err := f.Create()
 			assert.Equal(t, f.RecognizerGrade, c.RecognizerGrade)
@@ -62,8 +62,8 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			f.RecognizerId = c.RecogniserId
-			rId, err := member.NewMemberId(c.TestRecogniserId)
+			f.RecognizerId.MemberId = c.RecogniserId
+			rId, err := member.NewTenantMemberId(f.RecognizerId.TenantId, c.TestRecogniserId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -118,14 +118,20 @@ func TestEndorsementExport(t *testing.T) {
 	}
 	e, _ := f.Create()
 	assert.Equal(t, EndorsementState{
-		RecognizerId:      f.RecognizerId,
+		RecognizerId: member.TenantMemberIdState{
+			TenantId: f.RecognizerId.TenantId,
+			MemberId: f.RecognizerId.MemberId,
+		},
 		RecognizerGrade:   f.RecognizerGrade,
 		RecognizerVersion: f.RecognizerVersion,
-		EndorsedId:        f.EndorsedId,
-		EndorsedGrade:     f.EndorsedGrade,
-		EndorsedVersion:   f.EndorsedVersion,
-		ArtifactId:        f.ArtifactId,
-		CreatedAt:         f.CreatedAt,
+		EndorsedId: member.TenantMemberIdState{
+			TenantId: f.EndorsedId.TenantId,
+			MemberId: f.EndorsedId.MemberId,
+		},
+		EndorsedGrade:   f.EndorsedGrade,
+		EndorsedVersion: f.EndorsedVersion,
+		ArtifactId:      f.ArtifactId,
+		CreatedAt:       f.CreatedAt,
 	}, e.Export())
 }
 
@@ -139,10 +145,10 @@ func TestRecognizerExportTo(t *testing.T) {
 	agg, _ := f.Create()
 	agg.ExportTo(&actualExporter)
 	assert.Equal(t, EndorsementExporter{
-		RecognizerId:      seedwork.NewUint64Exporter(f.RecognizerId),
+		RecognizerId:      member.NewTenantMemberIdExporter(f.RecognizerId.TenantId, f.RecognizerId.MemberId),
 		RecognizerGrade:   seedwork.NewUint8Exporter(f.RecognizerGrade),
 		RecognizerVersion: f.RecognizerVersion,
-		EndorsedId:        seedwork.NewUint64Exporter(f.EndorsedId),
+		EndorsedId:        member.NewTenantMemberIdExporter(f.EndorsedId.TenantId, f.EndorsedId.MemberId),
 		EndorsedGrade:     seedwork.NewUint8Exporter(f.EndorsedGrade),
 		EndorsedVersion:   f.EndorsedVersion,
 		ArtifactId:        seedwork.NewUint64Exporter(f.ArtifactId),

@@ -24,7 +24,7 @@ var (
 )
 
 func NewEndorsed(
-	id member.MemberId,
+	id member.TenantMemberId,
 	createdAt time.Time,
 ) (*Endorsed, error) {
 	versioned, err := seedwork.NewVersionedAggregate(0)
@@ -45,7 +45,7 @@ func NewEndorsed(
 }
 
 type Endorsed struct {
-	id                   member.MemberId
+	id                   member.TenantMemberId
 	grade                shared.Grade
 	receivedEndorsements []endorsement.Endorsement
 	gradeLogEntries      []gradelogentry.GradeLogEntry
@@ -145,7 +145,7 @@ func (e *Endorsed) DecreaseGrade(reason gradelogentry2.Reason, t time.Time) erro
 }
 
 func (e Endorsed) ExportTo(ex interfaces3.EndorsedExporter) {
-	var id seedwork.Uint64Exporter
+	var id member.TenantMemberIdExporter
 	var grade seedwork.Uint8Exporter
 	var receivedEndorsements []interfaces.EndorsementExporter
 	var gradeLogEntries []interfaces2.GradeLogEntryExporter

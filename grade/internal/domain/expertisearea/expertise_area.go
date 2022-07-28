@@ -10,6 +10,6 @@ import (
 type ExpertiseArea struct {
 	id        expertisearea.ExpertiseAreaId
 	name      expertisearea.Name
-	createdBy member.MemberId
+	createdBy member.TenantMemberId
 	createdAt time.Time
 }

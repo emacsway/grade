@@ -1,6 +1,7 @@
 package gradelogentry
 
 import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"testing"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
@@ -15,7 +16,10 @@ func TestGradeLogEntryExport(t *testing.T) {
 	}
 	e, _ := f.Create()
 	assert.Equal(t, GradeLogEntryState{
-		EndorsedId:      f.EndorsedId,
+		EndorsedId: member.TenantMemberIdState{
+			TenantId: f.EndorsedId.TenantId,
+			MemberId: f.EndorsedId.MemberId,
+		},
 		EndorsedVersion: f.EndorsedVersion,
 		AssignedGrade:   f.AssignedGrade,
 		Reason:          f.Reason,
@@ -33,7 +37,7 @@ func TestRecognizerExportTo(t *testing.T) {
 	agg, _ := f.Create()
 	agg.ExportTo(&actualExporter)
 	assert.Equal(t, GradeLogEntryExporter{
-		EndorsedId:      seedwork.NewUint64Exporter(f.EndorsedId),
+		EndorsedId:      member.NewTenantMemberIdExporter(f.EndorsedId.TenantId, f.EndorsedId.MemberId),
 		EndorsedVersion: f.EndorsedVersion,
 		AssignedGrade:   seedwork.NewUint8Exporter(f.AssignedGrade),
 		Reason:          seedwork.NewStringExporter(f.Reason),

@@ -1,13 +1,14 @@
 package gradelogentry
 
 import (
-	"time"
-
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
+	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/member/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+	"time"
 )
 
 type GradeLogEntryExporter struct {
-	EndorsedId      interfaces.Exporter[uint64]
+	EndorsedId      interfaces2.TenantMemberIdExporter
 	EndorsedVersion uint
 	AssignedGrade   interfaces.Exporter[uint8]
 	Reason          interfaces.Exporter[string]
@@ -15,7 +16,7 @@ type GradeLogEntryExporter struct {
 }
 
 func (ex *GradeLogEntryExporter) SetState(
-	endorsedId interfaces.Exporter[uint64],
+	endorsedId interfaces2.TenantMemberIdExporter,
 	endorsedVersion uint,
 	assignedGrade interfaces.Exporter[uint8],
 	reason interfaces.Exporter[string],
@@ -29,7 +30,7 @@ func (ex *GradeLogEntryExporter) SetState(
 }
 
 type GradeLogEntryState struct {
-	EndorsedId      uint64
+	EndorsedId      member.TenantMemberIdState
 	EndorsedVersion uint
 	AssignedGrade   uint8
 	Reason          string

@@ -30,9 +30,9 @@ var (
 )
 
 func CanEndorse(
-	recognizerId member.MemberId,
+	recognizerId member.TenantMemberId,
 	recognizerGrade shared.Grade,
-	endorsedId member.MemberId,
+	endorsedId member.TenantMemberId,
 	endorsedGrade shared.Grade,
 ) error {
 	var err error
@@ -48,10 +48,10 @@ func CanEndorse(
 }
 
 func NewEndorsement(
-	recognizerId member.MemberId,
+	recognizerId member.TenantMemberId,
 	recognizerGrade shared.Grade,
 	recognizerVersion uint,
-	endorsedId member.MemberId,
+	endorsedId member.TenantMemberId,
 	endorsedGrade shared.Grade,
 	endorsedVersion uint,
 	artifactId artifact.ArtifactId,
@@ -74,17 +74,17 @@ func NewEndorsement(
 }
 
 type Endorsement struct {
-	recognizerId      member.MemberId
+	recognizerId      member.TenantMemberId
 	recognizerGrade   shared.Grade
 	recognizerVersion uint
-	endorsedId        member.MemberId
+	endorsedId        member.TenantMemberId
 	endorsedGrade     shared.Grade
 	endorsedVersion   uint
 	artifactId        artifact.ArtifactId
 	createdAt         time.Time
 }
 
-func (e Endorsement) IsEndorsedBy(rId member.MemberId, aId artifact.ArtifactId) bool {
+func (e Endorsement) IsEndorsedBy(rId member.TenantMemberId, aId artifact.ArtifactId) bool {
 	return e.recognizerId == rId && e.artifactId == aId
 }
 
@@ -102,7 +102,8 @@ func (e Endorsement) GetWeight() Weight {
 }
 
 func (e Endorsement) ExportTo(ex interfaces.EndorsementExporter) {
-	var recognizerId, endorsedId, artifactId seedwork.Uint64Exporter
+	var recognizerId, endorsedId member.TenantMemberIdExporter
+	var artifactId seedwork.Uint64Exporter
 	var recognizerGrade, endorsedGrade seedwork.Uint8Exporter
 
 	e.recognizerId.ExportTo(&recognizerId)

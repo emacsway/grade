@@ -11,7 +11,7 @@ import (
 )
 
 func NewGradeLogEntry(
-	endorsedId member.MemberId,
+	endorsedId member.TenantMemberId,
 	endorsedVersion uint,
 	assignedGrade shared.Grade,
 	reason gradelogentry.Reason,
@@ -27,7 +27,7 @@ func NewGradeLogEntry(
 }
 
 type GradeLogEntry struct {
-	endorsedId      member.MemberId
+	endorsedId      member.TenantMemberId
 	endorsedVersion uint
 	assignedGrade   shared.Grade
 	reason          gradelogentry.Reason
@@ -35,7 +35,7 @@ type GradeLogEntry struct {
 }
 
 func (gle GradeLogEntry) ExportTo(ex interfaces2.GradeLogEntryExporter) {
-	var endorsedId seedwork.Uint64Exporter
+	var endorsedId member.TenantMemberIdExporter
 	var assignedGrade seedwork.Uint8Exporter
 	var reason seedwork.StringExporter
 

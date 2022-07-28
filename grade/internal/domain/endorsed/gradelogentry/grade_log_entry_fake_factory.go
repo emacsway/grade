@@ -9,8 +9,13 @@ import (
 )
 
 func NewGradeLogEntryFakeFactory() (*GradeLogEntryFakeFactory, error) {
+	idFactory, err := member.NewTenantMemberIdFakeFactory()
+	if err != nil {
+		return nil, err
+	}
+	idFactory.MemberId = 2
 	return &GradeLogEntryFakeFactory{
-		EndorsedId:      1,
+		EndorsedId:      idFactory,
 		EndorsedVersion: 2,
 		AssignedGrade:   1,
 		Reason:          "Any",
@@ -19,7 +24,7 @@ func NewGradeLogEntryFakeFactory() (*GradeLogEntryFakeFactory, error) {
 }
 
 type GradeLogEntryFakeFactory struct {
-	EndorsedId      uint64
+	EndorsedId      *member.TenantMemberIdFakeFactory
 	EndorsedVersion uint
 	AssignedGrade   uint8
 	Reason          string
@@ -27,7 +32,7 @@ type GradeLogEntryFakeFactory struct {
 }
 
 func (f GradeLogEntryFakeFactory) Create() (GradeLogEntry, error) {
-	endorsedId, err := member.NewMemberId(f.EndorsedId)
+	endorsedId, err := member.NewTenantMemberId(f.EndorsedId.TenantId, f.EndorsedId.MemberId)
 	if err != nil {
 		return GradeLogEntry{}, err
 	}

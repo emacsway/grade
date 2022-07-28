@@ -18,7 +18,7 @@ var (
 )
 
 func NewRecognizer(
-	id member.MemberId,
+	id member.TenantMemberId,
 	createdAt time.Time,
 ) (*Recognizer, error) {
 	availableCount, err := recognizer.NewEndorsementCount(recognizer.YearlyEndorsementCount)
@@ -49,7 +49,7 @@ func NewRecognizer(
 }
 
 type Recognizer struct {
-	id                        member.MemberId
+	id                        member.TenantMemberId
 	grade                     shared.Grade
 	availableEndorsementCount recognizer.EndorsementCount
 	pendingEndorsementCount   recognizer.EndorsementCount
@@ -58,7 +58,7 @@ type Recognizer struct {
 	seedwork.EventiveEntity
 }
 
-func (r Recognizer) GetId() member.MemberId {
+func (r Recognizer) GetId() member.TenantMemberId {
 	return r.id
 }
 
@@ -119,7 +119,7 @@ func (r *Recognizer) CompleteEndorsement() error {
 }
 
 func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
-	var id seedwork.Uint64Exporter
+	var id member.TenantMemberIdExporter
 	var grade, availableEndorsementCount, pendingEndorsementCount seedwork.Uint8Exporter
 
 	r.id.ExportTo(&id)

@@ -9,11 +9,21 @@ import (
 )
 
 func NewEndorsementFakeFactory() (*EndorsementFakeFactory, error) {
+	recognizerIdFactory, err := member.NewTenantMemberIdFakeFactory()
+	if err != nil {
+		return nil, err
+	}
+	recognizerIdFactory.MemberId = 1
+	endorsedIdFactory, err := member.NewTenantMemberIdFakeFactory()
+	if err != nil {
+		return nil, err
+	}
+	endorsedIdFactory.MemberId = 2
 	return &EndorsementFakeFactory{
-		RecognizerId:      1,
+		RecognizerId:      recognizerIdFactory,
 		RecognizerGrade:   2,
 		RecognizerVersion: 3,
-		EndorsedId:        4,
+		EndorsedId:        endorsedIdFactory,
 		EndorsedGrade:     1,
 		EndorsedVersion:   5,
 		ArtifactId:        6,
@@ -22,10 +32,10 @@ func NewEndorsementFakeFactory() (*EndorsementFakeFactory, error) {
 }
 
 type EndorsementFakeFactory struct {
-	RecognizerId      uint64
+	RecognizerId      *member.TenantMemberIdFakeFactory
 	RecognizerGrade   uint8
 	RecognizerVersion uint
-	EndorsedId        uint64
+	EndorsedId        *member.TenantMemberIdFakeFactory
 	EndorsedGrade     uint8
 	EndorsedVersion   uint
 	ArtifactId        uint64
@@ -33,7 +43,7 @@ type EndorsementFakeFactory struct {
 }
 
 func (f EndorsementFakeFactory) Create() (Endorsement, error) {
-	recognizerId, err := member.NewMemberId(f.RecognizerId)
+	recognizerId, err := member.NewTenantMemberId(f.RecognizerId.TenantId, f.RecognizerId.MemberId)
 	if err != nil {
 		return Endorsement{}, err
 	}
@@ -41,7 +51,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	endorsedId, err := member.NewMemberId(f.EndorsedId)
+	endorsedId, err := member.NewTenantMemberId(f.EndorsedId.TenantId, f.EndorsedId.MemberId)
 	if err != nil {
 		return Endorsement{}, err
 	}

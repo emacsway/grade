@@ -10,9 +10,13 @@ import (
 )
 
 func NewEndorsedFakeFactory() (*EndorsedFakeFactory, error) {
+	idFactory, err := member.NewTenantMemberIdFakeFactory()
+	if err != nil {
+		return nil, err
+	}
+	idFactory.MemberId = 2
 	return &EndorsedFakeFactory{
-		Id:                2,
-		MemberId:          2,
+		Id:                idFactory,
 		Grade:             0,
 		CreatedAt:         time.Now(),
 		CurrentArtifactId: 1000,
@@ -20,8 +24,7 @@ func NewEndorsedFakeFactory() (*EndorsedFakeFactory, error) {
 }
 
 type EndorsedFakeFactory struct {
-	Id                   uint64
-	MemberId             uint64
+	Id                   *member.TenantMemberIdFakeFactory
 	Grade                uint8
 	ReceivedEndorsements []*EndorsementFakeFactory
 	CreatedAt            time.Time
@@ -39,7 +42,12 @@ func (f *EndorsedFakeFactory) achieveGrade() error {
 		if err != nil {
 			return err
 		}
-		r.Id = 1000
+		rId, err := member.NewTenantMemberIdFakeFactory()
+		if err != nil {
+			return err
+		}
+		rId.MemberId = 1000
+		r.Id = rId
 		recognizerGrade, _ := currentGrade.Next()
 		r.Grade = recognizerGrade.Export()
 		var endorsementCount uint = 0
@@ -77,7 +85,7 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 	if err != nil {
 		return nil, err
 	}
-	id, err := member.NewMemberId(f.Id)
+	id, err := member.NewTenantMemberId(f.Id.TenantId, f.Id.MemberId)
 	if err != nil {
 		return nil, err
 	}

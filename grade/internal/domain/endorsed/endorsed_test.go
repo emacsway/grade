@@ -5,6 +5,7 @@ import (
 	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"testing"
 
@@ -36,53 +37,83 @@ func TestEndorsedExport(t *testing.T) {
 		t.FailNow()
 	}
 	assert.Equal(t, EndorsedState{
-		Id:    ef.Id,
+		Id: member.TenantMemberIdState{
+			TenantId: ef.Id.TenantId,
+			MemberId: ef.Id.MemberId,
+		},
 		Grade: ef.Grade + 1,
 		ReceivedEndorsements: []endorsement.EndorsementState{
 			{
-				RecognizerId:      rf.Id,
+				RecognizerId: member.TenantMemberIdState{
+					TenantId: rf.Id.TenantId,
+					MemberId: rf.Id.MemberId,
+				},
 				RecognizerGrade:   rf.Grade,
 				RecognizerVersion: 0,
-				EndorsedId:        ef.Id,
-				EndorsedGrade:     ef.Grade,
-				EndorsedVersion:   0,
-				ArtifactId:        ef.ReceivedEndorsements[0].ArtifactId,
-				CreatedAt:         ef.ReceivedEndorsements[0].CreatedAt,
+				EndorsedId: member.TenantMemberIdState{
+					TenantId: ef.Id.TenantId,
+					MemberId: ef.Id.MemberId,
+				},
+				EndorsedGrade:   ef.Grade,
+				EndorsedVersion: 0,
+				ArtifactId:      ef.ReceivedEndorsements[0].ArtifactId,
+				CreatedAt:       ef.ReceivedEndorsements[0].CreatedAt,
 			},
 			{
-				RecognizerId:      rf.Id,
+				RecognizerId: member.TenantMemberIdState{
+					TenantId: rf.Id.TenantId,
+					MemberId: rf.Id.MemberId,
+				},
 				RecognizerGrade:   rf.Grade,
 				RecognizerVersion: 0,
-				EndorsedId:        ef.Id,
-				EndorsedGrade:     ef.Grade,
-				EndorsedVersion:   1,
-				ArtifactId:        ef.ReceivedEndorsements[1].ArtifactId,
-				CreatedAt:         ef.ReceivedEndorsements[1].CreatedAt,
+				EndorsedId: member.TenantMemberIdState{
+					TenantId: ef.Id.TenantId,
+					MemberId: ef.Id.MemberId,
+				},
+				EndorsedGrade:   ef.Grade,
+				EndorsedVersion: 1,
+				ArtifactId:      ef.ReceivedEndorsements[1].ArtifactId,
+				CreatedAt:       ef.ReceivedEndorsements[1].CreatedAt,
 			},
 			{
-				RecognizerId:      rf.Id,
+				RecognizerId: member.TenantMemberIdState{
+					TenantId: rf.Id.TenantId,
+					MemberId: rf.Id.MemberId,
+				},
 				RecognizerGrade:   rf.Grade,
 				RecognizerVersion: 0,
-				EndorsedId:        ef.Id,
-				EndorsedGrade:     ef.Grade,
-				EndorsedVersion:   2,
-				ArtifactId:        ef.ReceivedEndorsements[2].ArtifactId,
-				CreatedAt:         ef.ReceivedEndorsements[2].CreatedAt,
+				EndorsedId: member.TenantMemberIdState{
+					TenantId: ef.Id.TenantId,
+					MemberId: ef.Id.MemberId,
+				},
+				EndorsedGrade:   ef.Grade,
+				EndorsedVersion: 2,
+				ArtifactId:      ef.ReceivedEndorsements[2].ArtifactId,
+				CreatedAt:       ef.ReceivedEndorsements[2].CreatedAt,
 			},
 			{
-				RecognizerId:      rf.Id,
+				RecognizerId: member.TenantMemberIdState{
+					TenantId: rf.Id.TenantId,
+					MemberId: rf.Id.MemberId,
+				},
 				RecognizerGrade:   rf.Grade,
 				RecognizerVersion: 0,
-				EndorsedId:        ef.Id,
-				EndorsedGrade:     ef.Grade + 1,
-				EndorsedVersion:   3,
-				ArtifactId:        ef.ReceivedEndorsements[3].ArtifactId,
-				CreatedAt:         ef.ReceivedEndorsements[3].CreatedAt,
+				EndorsedId: member.TenantMemberIdState{
+					TenantId: ef.Id.TenantId,
+					MemberId: ef.Id.MemberId,
+				},
+				EndorsedGrade:   ef.Grade + 1,
+				EndorsedVersion: 3,
+				ArtifactId:      ef.ReceivedEndorsements[3].ArtifactId,
+				CreatedAt:       ef.ReceivedEndorsements[3].CreatedAt,
 			},
 		},
 		GradeLogEntries: []gradelogentry.GradeLogEntryState{
 			{
-				EndorsedId:      ef.Id,
+				EndorsedId: member.TenantMemberIdState{
+					TenantId: ef.Id.TenantId,
+					MemberId: ef.Id.MemberId,
+				},
 				EndorsedVersion: 2,
 				AssignedGrade:   ef.Grade + 1,
 				Reason:          "Endorsement count is achieved",
@@ -120,44 +151,44 @@ func TestEndorsedExportTo(t *testing.T) {
 	}
 	agg.ExportTo(&actualExporter)
 	assert.Equal(t, EndorsedExporter{
-		Id:    seedwork.NewUint64Exporter(ef.Id),
+		Id:    member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 		Grade: seedwork.NewUint8Exporter(ef.Grade + 1),
 		ReceivedEndorsements: []interfaces2.EndorsementExporter{
 			&endorsement.EndorsementExporter{
-				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),
+				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
-				EndorsedId:        seedwork.NewUint64Exporter(ef.Id),
+				EndorsedId:        member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedGrade:     seedwork.NewUint8Exporter(ef.Grade),
 				EndorsedVersion:   0,
 				ArtifactId:        seedwork.NewUint64Exporter(ef.ReceivedEndorsements[0].ArtifactId),
 				CreatedAt:         ef.ReceivedEndorsements[0].CreatedAt,
 			},
 			&endorsement.EndorsementExporter{
-				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),
+				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
-				EndorsedId:        seedwork.NewUint64Exporter(ef.Id),
+				EndorsedId:        member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedGrade:     seedwork.NewUint8Exporter(ef.Grade),
 				EndorsedVersion:   1,
 				ArtifactId:        seedwork.NewUint64Exporter(ef.ReceivedEndorsements[1].ArtifactId),
 				CreatedAt:         ef.ReceivedEndorsements[1].CreatedAt,
 			},
 			&endorsement.EndorsementExporter{
-				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),
+				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
-				EndorsedId:        seedwork.NewUint64Exporter(ef.Id),
+				EndorsedId:        member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedGrade:     seedwork.NewUint8Exporter(ef.Grade),
 				EndorsedVersion:   2,
 				ArtifactId:        seedwork.NewUint64Exporter(ef.ReceivedEndorsements[2].ArtifactId),
 				CreatedAt:         ef.ReceivedEndorsements[2].CreatedAt,
 			},
 			&endorsement.EndorsementExporter{
-				RecognizerId:      seedwork.NewUint64Exporter(rf.Id),
+				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
-				EndorsedId:        seedwork.NewUint64Exporter(ef.Id),
+				EndorsedId:        member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedGrade:     seedwork.NewUint8Exporter(ef.Grade + 1),
 				EndorsedVersion:   3,
 				ArtifactId:        seedwork.NewUint64Exporter(ef.ReceivedEndorsements[3].ArtifactId),
@@ -166,7 +197,7 @@ func TestEndorsedExportTo(t *testing.T) {
 		},
 		GradeLogEntries: []interfaces.GradeLogEntryExporter{
 			&gradelogentry.GradeLogEntryExporter{
-				EndorsedId:      seedwork.NewUint64Exporter(ef.Id),
+				EndorsedId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedVersion: 2,
 				AssignedGrade:   seedwork.NewUint8Exporter(ef.Grade + 1),
 				Reason:          seedwork.NewStringExporter("Endorsement count is achieved"),
