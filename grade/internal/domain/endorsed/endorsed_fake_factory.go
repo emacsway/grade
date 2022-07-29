@@ -26,7 +26,7 @@ func NewEndorsedFakeFactory() (*EndorsedFakeFactory, error) {
 type EndorsedFakeFactory struct {
 	Id                   *member.TenantMemberIdFakeFactory
 	Grade                uint8
-	ReceivedEndorsements []*EndorsementFakeFactory
+	ReceivedEndorsements []*ReceivedEndorsementFakeFactory
 	CreatedAt            time.Time
 	CurrentArtifactId    uint64
 }
@@ -73,7 +73,7 @@ func (f *EndorsedFakeFactory) ReceiveEndorsement(r *recognizer.RecognizerFakeFac
 }
 
 func (f *EndorsedFakeFactory) receiveEndorsement(r *recognizer.RecognizerFakeFactory) {
-	e := NewEndorsementFakeFactory(r)
+	e := NewReceivedEndorsementFakeFactory(r)
 	e.ArtifactId = f.CurrentArtifactId
 	f.CurrentArtifactId += 1
 	e.CreatedAt = time.Now()
@@ -115,15 +115,15 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 	return e, nil
 }
 
-func NewEndorsementFakeFactory(r *recognizer.RecognizerFakeFactory) *EndorsementFakeFactory {
-	return &EndorsementFakeFactory{
+func NewReceivedEndorsementFakeFactory(r *recognizer.RecognizerFakeFactory) *ReceivedEndorsementFakeFactory {
+	return &ReceivedEndorsementFakeFactory{
 		Recognizer: r,
 		ArtifactId: 6,
 		CreatedAt:  time.Now(),
 	}
 }
 
-type EndorsementFakeFactory struct {
+type ReceivedEndorsementFakeFactory struct {
 	Recognizer *recognizer.RecognizerFakeFactory
 	ArtifactId uint64
 	CreatedAt  time.Time
