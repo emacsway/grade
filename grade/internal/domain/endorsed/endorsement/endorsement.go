@@ -2,12 +2,11 @@ package endorsement
 
 import (
 	"errors"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/hashicorp/go-multierror"
 	"time"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
@@ -101,7 +100,7 @@ func (e Endorsement) GetWeight() Weight {
 	return LowerWeight
 }
 
-func (e Endorsement) ExportTo(ex interfaces.EndorsementExporter) {
+func (e Endorsement) ExportTo(ex EndorsementExporterSetter) {
 	var recognizerId, endorsedId member.TenantMemberIdExporter
 	var artifactId seedwork.Uint64Exporter
 	var recognizerGrade, endorsedGrade seedwork.Uint8Exporter
@@ -129,4 +128,17 @@ func (e Endorsement) Export() EndorsementState {
 		ArtifactId:        e.artifactId.Export(),
 		CreatedAt:         e.createdAt,
 	}
+}
+
+type EndorsementExporterSetter interface {
+	SetState(
+		recognizerId member.TenantMemberIdExporterSetter,
+		recognizerGrade seedwork.ExporterSetter[uint8],
+		recognizerVersion uint,
+		endorsedId member.TenantMemberIdExporterSetter,
+		endorsedGrade seedwork.ExporterSetter[uint8],
+		endorsedVersion uint,
+		artifactId seedwork.ExporterSetter[uint64],
+		createdAt time.Time,
+	)
 }

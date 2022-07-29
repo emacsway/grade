@@ -1,7 +1,7 @@
-package interfaces
+package infrastructure
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 type Result interface {
@@ -17,7 +17,7 @@ type Rows interface {
 }
 
 type PgxSession interface {
-	interfaces.Session
+	seedwork.Session
 
 	Exec(query string, args ...any) (Result, error)
 	Fetch(query string, args ...any) (Rows, error)

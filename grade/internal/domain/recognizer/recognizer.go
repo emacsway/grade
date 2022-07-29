@@ -5,8 +5,6 @@ import (
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/interfaces"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
@@ -21,11 +19,11 @@ func NewRecognizer(
 	id member.TenantMemberId,
 	createdAt time.Time,
 ) (*Recognizer, error) {
-	availableCount, err := recognizer.NewEndorsementCount(recognizer.YearlyEndorsementCount)
+	availableCount, err := NewEndorsementCount(YearlyEndorsementCount)
 	if err != nil {
 		return nil, err
 	}
-	pendingCount, err := recognizer.NewEndorsementCount(0)
+	pendingCount, err := NewEndorsementCount(0)
 	if err != nil {
 		return nil, err
 	}
@@ -51,8 +49,8 @@ func NewRecognizer(
 type Recognizer struct {
 	id                        member.TenantMemberId
 	grade                     shared.Grade
-	availableEndorsementCount recognizer.EndorsementCount
-	pendingEndorsementCount   recognizer.EndorsementCount
+	availableEndorsementCount EndorsementCount
+	pendingEndorsementCount   EndorsementCount
 	createdAt                 time.Time
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
@@ -118,7 +116,7 @@ func (r *Recognizer) CompleteEndorsement() error {
 	return nil
 }
 
-func (r Recognizer) ExportTo(ex interfaces.RecognizerExporter) {
+func (r Recognizer) ExportTo(ex RecognizerExporterSetter) {
 	var id member.TenantMemberIdExporter
 	var grade, availableEndorsementCount, pendingEndorsementCount seedwork.Uint8Exporter
 
@@ -140,4 +138,15 @@ func (r Recognizer) Export() RecognizerState {
 		Version:                   r.GetVersion(),
 		CreatedAt:                 r.createdAt,
 	}
+}
+
+type RecognizerExporterSetter interface {
+	SetState(
+		id member.TenantMemberIdExporterSetter,
+		grade seedwork.ExporterSetter[uint8],
+		availableEndorsementCount seedwork.ExporterSetter[uint8],
+		pendingEndorsementCount seedwork.ExporterSetter[uint8],
+		version uint,
+		createdAt time.Time,
+	)
 }

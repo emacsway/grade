@@ -2,25 +2,24 @@ package recognizer
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/member/interfaces"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"time"
 )
 
 type RecognizerExporter struct {
-	Id                        interfaces2.TenantMemberIdExporter
-	Grade                     interfaces.Exporter[uint8]
-	AvailableEndorsementCount interfaces.Exporter[uint8]
-	PendingEndorsementCount   interfaces.Exporter[uint8]
+	Id                        member.TenantMemberIdExporterSetter
+	Grade                     seedwork.ExporterSetter[uint8]
+	AvailableEndorsementCount seedwork.ExporterSetter[uint8]
+	PendingEndorsementCount   seedwork.ExporterSetter[uint8]
 	Version                   uint
 	CreatedAt                 time.Time
 }
 
 func (ex *RecognizerExporter) SetState(
-	id interfaces2.TenantMemberIdExporter,
-	grade interfaces.Exporter[uint8],
-	availableEndorsementCount interfaces.Exporter[uint8],
-	pendingEndorsementCount interfaces.Exporter[uint8],
+	id member.TenantMemberIdExporterSetter,
+	grade seedwork.ExporterSetter[uint8],
+	availableEndorsementCount seedwork.ExporterSetter[uint8],
+	pendingEndorsementCount seedwork.ExporterSetter[uint8],
 	version uint,
 	createdAt time.Time,
 ) {

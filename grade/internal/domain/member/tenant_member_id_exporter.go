@@ -2,7 +2,6 @@ package member
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 )
 
 func NewTenantMemberIdExporter(tenantId uint64, memberId uint64) *TenantMemberIdExporter {
@@ -13,13 +12,13 @@ func NewTenantMemberIdExporter(tenantId uint64, memberId uint64) *TenantMemberId
 }
 
 type TenantMemberIdExporter struct {
-	TenantId interfaces.Exporter[uint64]
-	MemberId interfaces.Exporter[uint64]
+	TenantId seedwork.ExporterSetter[uint64]
+	MemberId seedwork.ExporterSetter[uint64]
 }
 
 func (ex *TenantMemberIdExporter) SetState(
-	tenantId interfaces.Exporter[uint64],
-	memberId interfaces.Exporter[uint64],
+	tenantId seedwork.ExporterSetter[uint64],
+	memberId seedwork.ExporterSetter[uint64],
 ) {
 	ex.TenantId = tenantId
 	ex.MemberId = memberId

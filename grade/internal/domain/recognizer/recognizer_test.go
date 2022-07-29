@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
@@ -23,7 +22,7 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, ErrNoEndorsementReservation},
 		{func(r *Recognizer) error {
-			for i := uint8(0); i < recognizer.YearlyEndorsementCount; i++ {
+			for i := uint8(0); i < YearlyEndorsementCount; i++ {
 				err := r.ReserveEndorsement()
 				if err != nil {
 					return err
@@ -87,7 +86,7 @@ func TestRecognizerExport(t *testing.T) {
 			MemberId: f.Id.MemberId,
 		},
 		Grade:                     f.Grade,
-		AvailableEndorsementCount: recognizer.YearlyEndorsementCount,
+		AvailableEndorsementCount: YearlyEndorsementCount,
 		PendingEndorsementCount:   0,
 		Version:                   0,
 		CreatedAt:                 f.CreatedAt,
@@ -110,7 +109,7 @@ func TestRecognizerExportTo(t *testing.T) {
 	assert.Equal(t, RecognizerExporter{
 		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Grade:                     seedwork.NewUint8Exporter(f.Grade),
-		AvailableEndorsementCount: seedwork.NewUint8Exporter(recognizer.YearlyEndorsementCount),
+		AvailableEndorsementCount: seedwork.NewUint8Exporter(YearlyEndorsementCount),
 		PendingEndorsementCount:   seedwork.NewUint8Exporter(0),
 		Version:                   0,
 		CreatedAt:                 f.CreatedAt,

@@ -1,7 +1,6 @@
 package member
 
 import (
-	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/member/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/tenant"
 )
@@ -38,7 +37,7 @@ func (cid TenantMemberId) Equals(other TenantMemberId) bool {
 	return cid.tenantId.Equals(other.TenantId()) && cid.memberId.Equals(other.MemberId())
 }
 
-func (cid TenantMemberId) ExportTo(ex interfaces2.TenantMemberIdExporter) {
+func (cid TenantMemberId) ExportTo(ex TenantMemberIdExporterSetter) {
 	var tenantId, memberId seedwork.Uint64Exporter
 
 	cid.tenantId.ExportTo(&tenantId)
@@ -51,4 +50,11 @@ func (cid TenantMemberId) Export() TenantMemberIdState {
 		TenantId: cid.tenantId.Export(),
 		MemberId: cid.memberId.Export(),
 	}
+}
+
+type TenantMemberIdExporterSetter interface {
+	SetState(
+		tenantId seedwork.ExporterSetter[uint64],
+		memberId seedwork.ExporterSetter[uint64],
+	)
 }

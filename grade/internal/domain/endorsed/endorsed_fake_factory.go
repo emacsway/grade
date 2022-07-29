@@ -1,9 +1,9 @@
 package endorsed
 
 import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"time"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"

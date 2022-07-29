@@ -2,7 +2,6 @@ package artifact
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
 )
 
 func NewArtifactId(value uint64) (ArtifactId, error) {
@@ -14,5 +13,5 @@ func NewArtifactId(value uint64) (ArtifactId, error) {
 }
 
 type ArtifactId struct {
-	seedwork.Identity[uint64, interfaces.Identity[uint64], interfaces.Exporter[uint64]]
+	seedwork.Identity[uint64, seedwork.Identifier[uint64], seedwork.ExporterSetter[uint64]]
 }

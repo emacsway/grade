@@ -2,24 +2,23 @@ package gradelogentry
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/member/interfaces"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"time"
 )
 
 type GradeLogEntryExporter struct {
-	EndorsedId      interfaces2.TenantMemberIdExporter
+	EndorsedId      member.TenantMemberIdExporterSetter
 	EndorsedVersion uint
-	AssignedGrade   interfaces.Exporter[uint8]
-	Reason          interfaces.Exporter[string]
+	AssignedGrade   seedwork.ExporterSetter[uint8]
+	Reason          seedwork.ExporterSetter[string]
 	CreatedAt       time.Time
 }
 
 func (ex *GradeLogEntryExporter) SetState(
-	endorsedId interfaces2.TenantMemberIdExporter,
+	endorsedId member.TenantMemberIdExporterSetter,
 	endorsedVersion uint,
-	assignedGrade interfaces.Exporter[uint8],
-	reason interfaces.Exporter[string],
+	assignedGrade seedwork.ExporterSetter[uint8],
+	reason seedwork.ExporterSetter[string],
 	createdAt time.Time,
 ) {
 	ex.EndorsedId = endorsedId

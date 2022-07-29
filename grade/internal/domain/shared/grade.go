@@ -3,7 +3,7 @@ package shared
 import (
 	"errors"
 	"fmt"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 const MaxGradeValue = uint8(5)
@@ -77,6 +77,6 @@ func (g *Grade) Import(value uint8) {
 	*g = Grade(value)
 }
 
-func (g Grade) ExportTo(ex interfaces.Exporter[uint8]) {
+func (g Grade) ExportTo(ex seedwork.ExporterSetter[uint8]) {
 	ex.SetState(uint8(g))
 }

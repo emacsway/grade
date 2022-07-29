@@ -3,7 +3,7 @@ package recognizer
 import (
 	"errors"
 	"fmt"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 const YearlyEndorsementCount = uint8(20)
@@ -39,6 +39,6 @@ func (c EndorsementCount) Export() uint8 {
 	return uint8(c)
 }
 
-func (c EndorsementCount) ExportTo(ex interfaces.Exporter[uint8]) {
+func (c EndorsementCount) ExportTo(ex seedwork.ExporterSetter[uint8]) {
 	ex.SetState(uint8(c))
 }

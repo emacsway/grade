@@ -1,6 +1,8 @@
 package gradelogentry
 
-import "github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
+import (
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+)
 
 func NewReason(reason string) (Reason, error) {
 	return Reason(reason), nil
@@ -12,6 +14,6 @@ func (r Reason) Export() string {
 	return string(r)
 }
 
-func (r Reason) ExportTo(ex interfaces.Exporter[string]) {
+func (r Reason) ExportTo(ex seedwork.ExporterSetter[string]) {
 	ex.SetState(string(r))
 }

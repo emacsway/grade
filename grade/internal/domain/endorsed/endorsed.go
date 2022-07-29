@@ -2,14 +2,10 @@ package endorsed
 
 import (
 	"errors"
-	gradelogentry2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/gradelogentry"
-	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/interfaces"
-	interfaces3 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/interfaces"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"time"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
@@ -106,7 +102,7 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		reason, err := gradelogentry2.NewReason("Endorsement count is achieved")
+		reason, err := gradelogentry.NewReason("Endorsement count is achieved")
 		if err != nil {
 			return err
 		}
@@ -124,7 +120,7 @@ func (e Endorsed) getReceivedEndorsementCount() uint {
 	return counter
 }
 
-func (e *Endorsed) setGrade(g shared.Grade, reason gradelogentry2.Reason, t time.Time) error {
+func (e *Endorsed) setGrade(g shared.Grade, reason gradelogentry.Reason, t time.Time) error {
 	gle, err := gradelogentry.NewGradeLogEntry(
 		e.id, e.GetVersion(), g, reason, t,
 	)
@@ -136,7 +132,7 @@ func (e *Endorsed) setGrade(g shared.Grade, reason gradelogentry2.Reason, t time
 	return nil
 }
 
-func (e *Endorsed) DecreaseGrade(reason gradelogentry2.Reason, t time.Time) error {
+func (e *Endorsed) DecreaseGrade(reason gradelogentry.Reason, t time.Time) error {
 	previousGrade, err := e.grade.Next()
 	if err != nil {
 		return err
@@ -144,11 +140,11 @@ func (e *Endorsed) DecreaseGrade(reason gradelogentry2.Reason, t time.Time) erro
 	return e.setGrade(previousGrade, reason, t)
 }
 
-func (e Endorsed) ExportTo(ex interfaces3.EndorsedExporter) {
+func (e Endorsed) ExportTo(ex EndorsedExporterSetter) {
 	var id member.TenantMemberIdExporter
 	var grade seedwork.Uint8Exporter
-	var receivedEndorsements []interfaces.EndorsementExporter
-	var gradeLogEntries []interfaces2.GradeLogEntryExporter
+	var receivedEndorsements []endorsement.EndorsementExporterSetter
+	var gradeLogEntries []gradelogentry.GradeLogEntryExporterSetter
 
 	for _, v := range e.receivedEndorsements {
 		re := &endorsement.EndorsementExporter{}
@@ -186,4 +182,15 @@ func (e Endorsed) Export() EndorsedState {
 		Version:              e.GetVersion(),
 		CreatedAt:            e.createdAt,
 	}
+}
+
+type EndorsedExporterSetter interface {
+	SetState(
+		id member.TenantMemberIdExporterSetter,
+		grade seedwork.ExporterSetter[uint8],
+		receivedEndorsements []endorsement.EndorsementExporterSetter,
+		gradeLogEntries []gradelogentry.GradeLogEntryExporterSetter,
+		version uint,
+		createdAt time.Time,
+	)
 }

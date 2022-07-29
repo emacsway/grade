@@ -1,11 +1,9 @@
 package gradelogentry
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"time"
 
-	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
@@ -14,7 +12,7 @@ func NewGradeLogEntry(
 	endorsedId member.TenantMemberId,
 	endorsedVersion uint,
 	assignedGrade shared.Grade,
-	reason gradelogentry.Reason,
+	reason Reason,
 	createdAt time.Time,
 ) (GradeLogEntry, error) {
 	return GradeLogEntry{
@@ -30,11 +28,11 @@ type GradeLogEntry struct {
 	endorsedId      member.TenantMemberId
 	endorsedVersion uint
 	assignedGrade   shared.Grade
-	reason          gradelogentry.Reason
+	reason          Reason
 	createdAt       time.Time
 }
 
-func (gle GradeLogEntry) ExportTo(ex interfaces2.GradeLogEntryExporter) {
+func (gle GradeLogEntry) ExportTo(ex GradeLogEntryExporterSetter) {
 	var endorsedId member.TenantMemberIdExporter
 	var assignedGrade seedwork.Uint8Exporter
 	var reason seedwork.StringExporter
@@ -52,4 +50,14 @@ func (gle GradeLogEntry) Export() GradeLogEntryState {
 		gle.endorsedId.Export(), gle.endorsedVersion,
 		gle.assignedGrade.Export(), gle.reason.Export(), gle.createdAt,
 	}
+}
+
+type GradeLogEntryExporterSetter interface {
+	SetState(
+		endorsedId member.TenantMemberIdExporterSetter,
+		endorsedVersion uint,
+		assignedGrade seedwork.ExporterSetter[uint8],
+		reason seedwork.ExporterSetter[string],
+		createdAt time.Time,
+	)
 }

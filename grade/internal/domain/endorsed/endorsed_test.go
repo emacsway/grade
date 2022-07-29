@@ -2,9 +2,7 @@ package endorsed
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
-	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry/interfaces"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"testing"
@@ -153,7 +151,7 @@ func TestEndorsedExportTo(t *testing.T) {
 	assert.Equal(t, EndorsedExporter{
 		Id:    member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 		Grade: seedwork.NewUint8Exporter(ef.Grade + 1),
-		ReceivedEndorsements: []interfaces2.EndorsementExporter{
+		ReceivedEndorsements: []endorsement.EndorsementExporterSetter{
 			&endorsement.EndorsementExporter{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
@@ -195,7 +193,7 @@ func TestEndorsedExportTo(t *testing.T) {
 				CreatedAt:         ef.ReceivedEndorsements[3].CreatedAt,
 			},
 		},
-		GradeLogEntries: []interfaces.GradeLogEntryExporter{
+		GradeLogEntries: []gradelogentry.GradeLogEntryExporterSetter{
 			&gradelogentry.GradeLogEntryExporter{
 				EndorsedId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedVersion: 2,

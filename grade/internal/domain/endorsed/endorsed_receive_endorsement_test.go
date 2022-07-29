@@ -2,13 +2,12 @@ package endorsed
 
 import (
 	"fmt"
-	recognizer2 "github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 )
@@ -80,7 +79,7 @@ func TestEndorsedCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, recognizer.ErrNoEndorsementReservation},
 		{func(r *recognizer.Recognizer) error {
-			for i := uint8(0); i < recognizer2.YearlyEndorsementCount; i++ {
+			for i := uint8(0); i < recognizer.YearlyEndorsementCount; i++ {
 				err := r.ReserveEndorsement()
 				if err != nil {
 					return err
