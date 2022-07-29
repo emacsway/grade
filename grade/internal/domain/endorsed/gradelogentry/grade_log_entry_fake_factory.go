@@ -7,11 +7,8 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
-func NewGradeLogEntryFakeFactory() (*GradeLogEntryFakeFactory, error) {
-	idFactory, err := member.NewTenantMemberIdFakeFactory()
-	if err != nil {
-		return nil, err
-	}
+func NewGradeLogEntryFakeFactory() *GradeLogEntryFakeFactory {
+	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 2
 	return &GradeLogEntryFakeFactory{
 		EndorsedId:      idFactory,
@@ -19,7 +16,7 @@ func NewGradeLogEntryFakeFactory() (*GradeLogEntryFakeFactory, error) {
 		AssignedGrade:   1,
 		Reason:          "Any",
 		CreatedAt:       time.Now(),
-	}, nil
+	}
 }
 
 type GradeLogEntryFakeFactory struct {

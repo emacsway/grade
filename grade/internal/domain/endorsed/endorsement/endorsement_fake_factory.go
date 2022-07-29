@@ -8,16 +8,10 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
-func NewEndorsementFakeFactory() (*EndorsementFakeFactory, error) {
-	recognizerIdFactory, err := member.NewTenantMemberIdFakeFactory()
-	if err != nil {
-		return nil, err
-	}
+func NewEndorsementFakeFactory() *EndorsementFakeFactory {
+	recognizerIdFactory := member.NewTenantMemberIdFakeFactory()
 	recognizerIdFactory.MemberId = 1
-	endorsedIdFactory, err := member.NewTenantMemberIdFakeFactory()
-	if err != nil {
-		return nil, err
-	}
+	endorsedIdFactory := member.NewTenantMemberIdFakeFactory()
 	endorsedIdFactory.MemberId = 2
 	return &EndorsementFakeFactory{
 		RecognizerId:      recognizerIdFactory,
@@ -28,7 +22,7 @@ func NewEndorsementFakeFactory() (*EndorsementFakeFactory, error) {
 		EndorsedVersion:   5,
 		ArtifactId:        6,
 		CreatedAt:         time.Now(),
-	}, nil
+	}
 }
 
 type EndorsementFakeFactory struct {

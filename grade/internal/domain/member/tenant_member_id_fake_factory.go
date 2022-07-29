@@ -1,10 +1,10 @@
 package member
 
-func NewTenantMemberIdFakeFactory() (*TenantMemberIdFakeFactory, error) {
+func NewTenantMemberIdFakeFactory() *TenantMemberIdFakeFactory {
 	return &TenantMemberIdFakeFactory{
 		TenantId: 10,
 		MemberId: 1,
-	}, nil
+	}
 }
 
 type TenantMemberIdFakeFactory struct {

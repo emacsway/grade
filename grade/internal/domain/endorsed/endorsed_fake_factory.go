@@ -2,25 +2,21 @@ package endorsed
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
-	"time"
-
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
+	"time"
 )
 
-func NewEndorsedFakeFactory() (*EndorsedFakeFactory, error) {
-	idFactory, err := member.NewTenantMemberIdFakeFactory()
-	if err != nil {
-		return nil, err
-	}
+func NewEndorsedFakeFactory() *EndorsedFakeFactory {
+	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 2
 	return &EndorsedFakeFactory{
 		Id:                idFactory,
 		Grade:             0,
 		CreatedAt:         time.Now(),
 		CurrentArtifactId: 1000,
-	}, nil
+	}
 }
 
 type EndorsedFakeFactory struct {
@@ -38,14 +34,8 @@ func (f *EndorsedFakeFactory) achieveGrade() error {
 		return err
 	}
 	for currentGrade < targetGrade {
-		r, err := recognizer.NewRecognizerFakeFactory()
-		if err != nil {
-			return err
-		}
-		rId, err := member.NewTenantMemberIdFakeFactory()
-		if err != nil {
-			return err
-		}
+		r := recognizer.NewRecognizerFakeFactory()
+		rId := member.NewTenantMemberIdFakeFactory()
 		rId.MemberId = 1000
 		r.Id = rId
 		recognizerGrade, _ := currentGrade.Next()

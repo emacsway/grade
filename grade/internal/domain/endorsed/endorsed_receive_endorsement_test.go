@@ -25,16 +25,8 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 		{1, 0, 2, 1, endorsement.ErrLowerGradeEndorses},
 		{3, 0, 3, 0, endorsement.ErrEndorsementOneself},
 	}
-	ef, err := NewEndorsedFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
-	rf, err := recognizer.NewRecognizerFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
+	ef := NewEndorsedFakeFactory()
+	rf := recognizer.NewRecognizerFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			ef.Id.MemberId = c.EndorsedId
@@ -103,16 +95,8 @@ func TestEndorsedCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, recognizer.ErrNoEndorsementReservation},
 	}
-	ef, err := NewEndorsedFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
-	rf, err := recognizer.NewRecognizerFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
+	ef := NewEndorsedFakeFactory()
+	rf := recognizer.NewRecognizerFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			e, err := ef.Create()

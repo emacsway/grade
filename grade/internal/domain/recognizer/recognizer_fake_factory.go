@@ -6,17 +6,14 @@ import (
 	"time"
 )
 
-func NewRecognizerFakeFactory() (*RecognizerFakeFactory, error) {
-	idFactory, err := member.NewTenantMemberIdFakeFactory()
-	if err != nil {
-		return nil, err
-	}
+func NewRecognizerFakeFactory() *RecognizerFakeFactory {
+	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 1
 	return &RecognizerFakeFactory{
 		Id:        idFactory,
 		Grade:     1,
 		CreatedAt: time.Now(),
-	}, nil
+	}
 }
 
 type RecognizerFakeFactory struct {

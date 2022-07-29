@@ -9,11 +9,7 @@ import (
 )
 
 func TestGradeLogEntryExport(t *testing.T) {
-	f, err := NewGradeLogEntryFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
+	f := NewGradeLogEntryFakeFactory()
 	e, _ := f.Create()
 	assert.Equal(t, GradeLogEntryState{
 		EndorsedId: member.TenantMemberIdState{
@@ -29,11 +25,7 @@ func TestGradeLogEntryExport(t *testing.T) {
 
 func TestRecognizerExportTo(t *testing.T) {
 	var actualExporter GradeLogEntryExporter
-	f, err := NewGradeLogEntryFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
+	f := NewGradeLogEntryFakeFactory()
 	agg, _ := f.Create()
 	agg.ExportTo(&actualExporter)
 	assert.Equal(t, GradeLogEntryExporter{

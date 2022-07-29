@@ -4,24 +4,15 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"testing"
-
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestEndorsedExport(t *testing.T) {
-	ef, err := NewEndorsedFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
-	rf, err := recognizer.NewRecognizerFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
+	ef := NewEndorsedFakeFactory()
+	rf := recognizer.NewRecognizerFakeFactory()
 	for i := 0; i < 4; i++ {
 		err := ef.ReceiveEndorsement(rf)
 		if err != nil {
@@ -125,16 +116,8 @@ func TestEndorsedExport(t *testing.T) {
 
 func TestEndorsedExportTo(t *testing.T) {
 	var actualExporter EndorsedExporter
-	ef, err := NewEndorsedFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
-	rf, err := recognizer.NewRecognizerFakeFactory()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
+	ef := NewEndorsedFakeFactory()
+	rf := recognizer.NewRecognizerFakeFactory()
 	for i := 0; i < 4; i++ {
 		err := ef.ReceiveEndorsement(rf)
 		if err != nil {
