@@ -13,5 +13,5 @@ func NewTenantId(value uint64) (TenantId, error) {
 }
 
 type TenantId struct {
-	seedwork.Identity[uint64, seedwork.Identifier[uint64], seedwork.ExporterSetter[uint64]]
+	seedwork.Identity[uint64, seedwork.ExporterSetter[uint64]]
 }

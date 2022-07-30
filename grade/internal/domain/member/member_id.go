@@ -13,5 +13,5 @@ func NewMemberId(value uint64) (MemberId, error) {
 }
 
 type MemberId struct {
-	seedwork.Identity[uint64, seedwork.Identifier[uint64], seedwork.ExporterSetter[uint64]]
+	seedwork.Identity[uint64, seedwork.ExporterSetter[uint64]]
 }
