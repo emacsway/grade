@@ -28,29 +28,10 @@ cover: $(COVER_FILE) ## Output coverage in human readable form in html
 
 .PHONY: lint
 lint: tools ## Check the project with lint
-	staticcheck ./...
-
-.PHONY: vet
-vet: ## Check the project with vet
-	go vet ./...
-
-.PHONY: fmt
-fmt: ## Run go fmt for the whole project
-	test -z $$(for d in $$(go list -f {{.Dir}} ./...); do gofmt -e -l -w $$d/*.go; done)
-
-.PHONY: imports
-imports: $(GOIMPORTS) ## Check and fix import section by import rules
-	test -z $$(for d in $$(go list -f {{.Dir}} ./...); do goimports -e -l -local $$(go list) -w $$d/*.go; done)
-
-.PHONY: cyclomatic
-cyclomatic: tools ## Check the project with gocyclo for cyclomatic complexity
-	gocyclo -over 10 `find . -type f -iname '*.go' ! -iname "*_test.go" -not -path '*/\.*'`
-
-.PHONY: static_check
-static_check: fmt imports vet lint cyclomatic ## Run static checks (fmt, lint, imports, vet, ...) all over the project
+	golangci-lint run --fix
 
 .PHONY: check
-check: static_check test ## Check project with static checks and unit tests
+check: lint test ## Check project with static checks and unit tests
 
 .PHONY: dependencies
 dependencies: ## Manage go mod dependencies, beautify go.mod and go.sum files
