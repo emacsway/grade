@@ -12,7 +12,6 @@ tools: ## Install all needed tools, e.g. for static checks
 	@echo Installing tools from req-tools.txt
 	@grep '@' req-tools.txt | xargs -tI % go install %
 
-
 # Main targets
 .PHONY: test
 test: ## Run unit (short) tests
@@ -26,7 +25,6 @@ $(COVER_FILE):
 cover: $(COVER_FILE) ## Output coverage in human readable form in html
 	go tool cover -html=$(COVER_FILE)
 	rm -f $(COVER_FILE)
-
 
 .PHONY: lint
 lint: tools ## Check the project with lint
