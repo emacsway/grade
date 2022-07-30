@@ -1,9 +1,9 @@
 package gradelogentry
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )

@@ -1,11 +1,12 @@
 package gradelogentry
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"testing"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 func TestGradeLogEntryExport(t *testing.T) {
