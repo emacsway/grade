@@ -32,7 +32,7 @@ func (f GradeLogEntryFakeFactory) Create() (GradeLogEntry, error) {
 	if err != nil {
 		return GradeLogEntry{}, err
 	}
-	assignedGrade, err := shared.NewGrade(f.AssignedGrade)
+	assignedGrade, err := shared.DefaultConstructor(f.AssignedGrade)
 	if err != nil {
 		return GradeLogEntry{}, err
 	}

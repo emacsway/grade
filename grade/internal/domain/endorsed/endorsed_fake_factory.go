@@ -29,12 +29,12 @@ type EndorsedFakeFactory struct {
 }
 
 func (f *EndorsedFakeFactory) achieveGrade() error {
-	currentGrade := shared.WithoutGrade
-	targetGrade, err := shared.NewGrade(f.Grade)
+	currentGrade, _ := shared.DefaultConstructor(0)
+	targetGrade, err := shared.DefaultConstructor(f.Grade)
 	if err != nil {
 		return err
 	}
-	for currentGrade < targetGrade {
+	for currentGrade.LessThan(targetGrade) {
 		r := recognizer.NewRecognizerFakeFactory()
 		rId := member.NewTenantMemberIdFakeFactory()
 		rId.MemberId = 1000

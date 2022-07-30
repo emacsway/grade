@@ -37,7 +37,7 @@ func CanEndorse(
 ) error {
 	var err error
 
-	if recognizerGrade < endorsedGrade {
+	if recognizerGrade.LessThan(endorsedGrade) {
 		err = multierror.Append(err, ErrLowerGradeEndorses)
 	}
 
@@ -93,9 +93,9 @@ func (e Endorsement) GetEndorsedGrade() shared.Grade {
 }
 
 func (e Endorsement) GetWeight() Weight {
-	if e.recognizerGrade == e.endorsedGrade {
+	if e.recognizerGrade.Equal(e.endorsedGrade) {
 		return PeerWeight
-	} else if e.recognizerGrade > e.endorsedGrade {
+	} else if e.recognizerGrade.GreaterThan(e.endorsedGrade) {
 		return HigherWeight
 	}
 	return LowerWeight

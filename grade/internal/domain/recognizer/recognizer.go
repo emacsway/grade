@@ -15,6 +15,7 @@ var (
 	ErrEndorsementReservationExceeded = errors.New("endorsement reservation exceeded")
 )
 
+// FIXME: Move this constructor to tenant aggregate
 func NewRecognizer(
 	id member.TenantMemberId,
 	createdAt time.Time,
@@ -35,9 +36,10 @@ func NewRecognizer(
 	if err != nil {
 		return nil, err
 	}
+	zeroGrade, _ := shared.NewGradeFactory(shared.MaxGradeValue, shared.GradeMatrix)(0)
 	return &Recognizer{
 		id:                        id,
-		grade:                     shared.WithoutGrade,
+		grade:                     zeroGrade,
 		availableEndorsementCount: availableCount,
 		pendingEndorsementCount:   pendingCount,
 		createdAt:                 createdAt,

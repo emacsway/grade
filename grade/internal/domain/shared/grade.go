@@ -13,71 +13,78 @@ var (
 	ErrInvalidGrade = errors.New(fmt.Sprintf("grade should be between 0 and %d", MaxGradeValue))
 )
 
-const (
-	Expert       = Grade(5)
-	Candidate    = Grade(4)
-	Grade1       = Grade(3)
-	Grade2       = Grade(2)
-	Grade3       = Grade(1)
-	WithoutGrade = Grade(0)
-)
+var DefaultConstructor = NewGradeFactory(MaxGradeValue, GradeMatrix)
 
-func NewGrade(value uint8) (Grade, error) {
-	if value > MaxGradeValue {
-		return Grade(0), ErrInvalidGrade
-	}
-	return Grade(value), nil
+var GradeMatrix = map[uint8]uint{
+	0: 6,
+	1: 10,
+	2: 14,
+	3: 20,
+	4: 40,
 }
 
-type Grade uint8
+type GradeConstructor func(uint8) (Grade, error)
+
+type Grade struct {
+	value                     uint8
+	nextGradeEndorsementCount uint
+	constructor               func(uint8) (Grade, error)
+}
+
+func NewGradeFactory(maxGradeValue uint8, matrix map[uint8]uint) GradeConstructor {
+	var constructor GradeConstructor
+	constructor = func(value uint8) (Grade, error) {
+		if value > maxGradeValue {
+			return Grade{value: 0}, ErrInvalidGrade
+		}
+		g := Grade{
+			value:                     value,
+			nextGradeEndorsementCount: matrix[value],
+		}
+		g.constructor = constructor
+		return g, nil
+
+	}
+
+	return constructor
+}
 
 func (g Grade) NextGradeAchieved(endorsementCount uint) bool {
-	if g == Candidate {
-		return endorsementCount >= 40
-	} else if g == Grade3 {
-		return endorsementCount >= 20
-	} else if g == Grade2 {
-		return endorsementCount >= 14
-	} else if g == Grade1 {
-		return endorsementCount >= 10
-	} else if g == WithoutGrade {
-		return endorsementCount >= 6
-	}
-	return false
-}
-
-func (g Grade) HasNext() bool {
-	return uint8(g) < MaxGradeValue
+	return endorsementCount >= g.nextGradeEndorsementCount
 }
 
 func (g Grade) Next() (Grade, error) {
-	nextGrade, err := NewGrade(uint8(g) + 1)
+	nextGrade, err := g.constructor(g.value + 1)
 	if err != nil {
 		return g, err
 	}
 	return nextGrade, nil
 }
 
-func (g Grade) HasPrevious() bool {
-	return uint8(g) > 0
-}
-
 func (g Grade) Previous() (Grade, error) {
-	previousGrade, err := NewGrade(uint8(g) - 1)
+	previousGrade, err := g.constructor(g.value - 1)
 	if err != nil {
 		return g, err
 	}
 	return previousGrade, nil
 }
 
-func (g Grade) Export() uint8 {
-	return uint8(g)
+func (g Grade) LessThan(other Grade) bool {
+	return g.value < other.value
 }
 
-func (g *Grade) Import(value uint8) {
-	*g = Grade(value)
+func (g Grade) GreaterThan(other Grade) bool {
+	return g.value > other.value
+}
+
+func (g Grade) Equal(other Grade) bool {
+	return g.value == other.value
+}
+
+func (g Grade) Export() uint8 {
+	return g.value
 }
 
 func (g Grade) ExportTo(ex seedwork.ExporterSetter[uint8]) {
-	ex.SetState(uint8(g))
+	ex.SetState(g.value)
 }

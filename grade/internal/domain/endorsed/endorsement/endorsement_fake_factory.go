@@ -41,7 +41,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	recognizerGrade, err := shared.NewGrade(f.RecognizerGrade)
+	recognizerGrade, err := shared.DefaultConstructor(f.RecognizerGrade)
 	if err != nil {
 		return Endorsement{}, err
 	}
@@ -49,7 +49,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	endorsedGrade, err := shared.NewGrade(f.EndorsedGrade)
+	endorsedGrade, err := shared.DefaultConstructor(f.EndorsedGrade)
 	if err != nil {
 		return Endorsement{}, err
 	}

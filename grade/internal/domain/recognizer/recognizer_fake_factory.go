@@ -32,7 +32,7 @@ func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
 	if err != nil {
 		return nil, err
 	}
-	grade, err := shared.NewGrade(f.Grade)
+	grade, err := shared.DefaultConstructor(f.Grade)
 	if err != nil {
 		return nil, err
 	}

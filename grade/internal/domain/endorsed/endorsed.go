@@ -19,6 +19,7 @@ var (
 	)
 )
 
+// FIXME: Move this constructor to tenant aggregate
 func NewEndorsed(
 	id member.TenantMemberId,
 	createdAt time.Time,
@@ -31,9 +32,10 @@ func NewEndorsed(
 	if err != nil {
 		return nil, err
 	}
+	zeroGrade, _ := shared.DefaultConstructor(0)
 	return &Endorsed{
 		id:                 id,
-		grade:              shared.WithoutGrade,
+		grade:              zeroGrade,
 		VersionedAggregate: versioned,
 		EventiveEntity:     eventive,
 		createdAt:          createdAt,
@@ -113,7 +115,7 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 func (e Endorsed) getReceivedEndorsementCount() uint {
 	var counter uint
 	for _, v := range e.receivedEndorsements {
-		if v.GetEndorsedGrade() == e.grade {
+		if v.GetEndorsedGrade().Equal(e.grade) {
 			counter += uint(v.GetWeight())
 		}
 	}
