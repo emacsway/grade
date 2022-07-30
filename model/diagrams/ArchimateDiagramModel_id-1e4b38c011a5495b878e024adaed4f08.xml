@@ -1043,7 +1043,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-5e36213e4bf74b6b9f27fffac8f10b7c"
         textAlignment="1"
-        content="id: int&#xA;recognizerId: int&#xA;recognizerGrade: int&#xA;recognizerVersion: int&#xA;&#xA;endorsedId: int&#xA;endorsedGrade: int&#xA;endorsedVersion: int&#xA;&#xA;artifactId: int&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;&#xA;recognizerId: int&#xA;recognizerGrade: int&#xA;recognizerVersion: int&#xA;&#xA;endorsedId: int&#xA;endorsedGrade: int&#xA;endorsedVersion: int&#xA;&#xA;artifactId: int&#xA;createdAt: datetime">
       <sourceConnections
           id="id-e5591f06b4fd477c8f5e3eaef007ce31"
           source="id-5e36213e4bf74b6b9f27fffac8f10b7c"
@@ -1052,13 +1052,13 @@
           x="2406"
           y="516"
           width="157"
-          height="172"/>
+          height="192"/>
     </children>
     <children
         xsi:type="archimate:DiagramModelNote"
         id="id-194f4cbb71cb43c49361c4691999b9bd"
         textAlignment="1"
-        content="id: int&#xA;status: []str{'proposed', 'accepted'}&#xA;name: str&#xA;description: str&#xA;url: str&#xA;expertiseAreaIds: []int&#xA;authorIds: []int&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;id: int&#xA;status: []str{'proposed', 'accepted'}&#xA;name: str&#xA;description: str&#xA;url: str&#xA;expertiseAreaIds: []int&#xA;authorIds: []int&#xA;createdAt: datetime">
       <sourceConnections
           id="id-c9432583c7c048d68b361e74f90a16a3"
           source="id-194f4cbb71cb43c49361c4691999b9bd"
@@ -1123,7 +1123,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-45a0d5bacbaf4b53ab4057eb91df32da"
         textAlignment="1"
-        content="id: int&#xA;memberId: int&#xA;grade: int&#xA;receivedEndorsements: []Endorsement&#xA;version: int&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;memberId: int&#xA;grade: int&#xA;receivedEndorsements: []Endorsement&#xA;version: int&#xA;createdAt: datetime">
       <sourceConnections
           id="id-373909218d664ca985f50406d50f625e"
           source="id-45a0d5bacbaf4b53ab4057eb91df32da"
@@ -1138,7 +1138,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-2f4f888262844813b8a64d2eca584ff7"
         textAlignment="1"
-        content="id: int&#xA;endorsedId: int&#xA;endorsedVersion: int&#xA;grade: int&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;endorsedId: int&#xA;endorsedVersion: int&#xA;grade: int&#xA;createdAt: datetime">
       <sourceConnections
           id="id-2e3736315fbc4bfe8c66c120baa0b951"
           source="id-2f4f888262844813b8a64d2eca584ff7"
@@ -1197,7 +1197,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-2121655c7e374fdda56be4d0673d567f"
         textAlignment="1"
-        content="id: int&#xA;name: string&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;id: int&#xA;name: string&#xA;createdAt: datetime">
       <sourceConnections
           id="id-751de8ed7fe44140a7ec63e0bad302b0"
           source="id-2121655c7e374fdda56be4d0673d567f"
@@ -1234,7 +1234,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-20e247d335f840ac9b411c7122ef1ebc"
         textAlignment="1"
-        content="id: int&#xA;memberId: int&#xA;grade: int&#xA;availableEndorsementCount: int&#xA;pendingEndorsementCount: int&#xA;version: int&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;memberId: int&#xA;grade: int&#xA;availableEndorsementCount: int&#xA;pendingEndorsementCount: int&#xA;version: int&#xA;createdAt: datetime">
       <sourceConnections
           id="id-a1eb505cb6374d0488354b0d7d9a3ea7"
           source="id-20e247d335f840ac9b411c7122ef1ebc"
