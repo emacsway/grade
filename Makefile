@@ -9,7 +9,7 @@ COVER_FILE ?= coverage.out
 # Tools
 .PHONY: tools
 tools: ## Install all needed tools, e.g. for static checks
-	@echo Installing tools from tools.go
+	@echo Installing tools from req-tools.txt
 	@grep '@' req-tools.txt | xargs -tI % go install %
 
 
