@@ -1,26 +1,35 @@
 package endorsement
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer/recognizer"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"time"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 func NewEndorsementFakeFactory() *EndorsementFakeFactory {
+	recognizerIdFactory := member.NewTenantMemberIdFakeFactory()
+	recognizerIdFactory.MemberId = 1
+	endorsedIdFactory := member.NewTenantMemberIdFakeFactory()
+	endorsedIdFactory.MemberId = 2
 	return &EndorsementFakeFactory{
-		1, 2, 3, 4, 1, 5, 6, time.Now(),
+		RecognizerId:      recognizerIdFactory,
+		RecognizerGrade:   2,
+		RecognizerVersion: 3,
+		EndorsedId:        endorsedIdFactory,
+		EndorsedGrade:     1,
+		EndorsedVersion:   5,
+		ArtifactId:        6,
+		CreatedAt:         time.Now(),
 	}
 }
 
 type EndorsementFakeFactory struct {
-	RecognizerId      uint64
+	RecognizerId      *member.TenantMemberIdFakeFactory
 	RecognizerGrade   uint8
 	RecognizerVersion uint
-	EndorsedId        uint64
+	EndorsedId        *member.TenantMemberIdFakeFactory
 	EndorsedGrade     uint8
 	EndorsedVersion   uint
 	ArtifactId        uint64
@@ -28,38 +37,29 @@ type EndorsementFakeFactory struct {
 }
 
 func (f EndorsementFakeFactory) Create() (Endorsement, error) {
-	recognizerId, _ := recognizer.NewRecognizerId(f.RecognizerId)
-	recognizerGrade, _ := shared.NewGrade(f.RecognizerGrade)
-	endorsedId, _ := endorsed.NewEndorsedId(f.EndorsedId)
-	endorsedGrade, _ := shared.NewGrade(f.EndorsedGrade)
-	artifactId, _ := artifact.NewArtifactId(f.ArtifactId)
+	recognizerId, err := member.NewTenantMemberId(f.RecognizerId.TenantId, f.RecognizerId.MemberId)
+	if err != nil {
+		return Endorsement{}, err
+	}
+	recognizerGrade, err := shared.NewGrade(f.RecognizerGrade)
+	if err != nil {
+		return Endorsement{}, err
+	}
+	endorsedId, err := member.NewTenantMemberId(f.EndorsedId.TenantId, f.EndorsedId.MemberId)
+	if err != nil {
+		return Endorsement{}, err
+	}
+	endorsedGrade, err := shared.NewGrade(f.EndorsedGrade)
+	if err != nil {
+		return Endorsement{}, err
+	}
+	artifactId, err := artifact.NewArtifactId(f.ArtifactId)
+	if err != nil {
+		return Endorsement{}, err
+	}
 	return NewEndorsement(
 		recognizerId, recognizerGrade, f.RecognizerVersion,
 		endorsedId, endorsedGrade, f.EndorsedVersion,
 		artifactId, f.CreatedAt,
-	)
-}
-
-func (f EndorsementFakeFactory) Export() EndorsementState {
-	return EndorsementState{
-		f.RecognizerId, f.RecognizerGrade, f.RecognizerVersion,
-		f.EndorsedId, f.EndorsedGrade, f.EndorsedVersion,
-		f.ArtifactId, f.CreatedAt,
-	}
-}
-
-func (f EndorsementFakeFactory) ExportTo(ex interfaces.EndorsementExporter) {
-	var recognizerId, endorsedId, artifactId seedwork.Uint64Exporter
-	var recognizerGrade, endorsedGrade seedwork.Uint8Exporter
-
-	recognizerId.SetState(f.RecognizerId)
-	recognizerGrade.SetState(f.RecognizerGrade)
-	endorsedId.SetState(f.EndorsedId)
-	endorsedGrade.SetState(f.EndorsedGrade)
-	artifactId.SetState(f.ArtifactId)
-	ex.SetState(
-		&recognizerId, &recognizerGrade, f.RecognizerVersion,
-		&endorsedId, &endorsedGrade, f.EndorsedVersion,
-		&artifactId, f.CreatedAt,
 	)
 }

@@ -1,5 +1,10 @@
 package seedwork
 
+type AggregateVersionable interface {
+	GetVersion() uint
+	IncreaseVersion()
+}
+
 func NewVersionedAggregate(version uint) (VersionedAggregate, error) {
 	return VersionedAggregate{version: version}, nil
 }

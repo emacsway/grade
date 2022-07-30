@@ -1,21 +1,105 @@
 package recognizer
 
 import (
-	"github.com/stretchr/testify/assert"
+	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
+
+func TestRecognizerCanCompleteEndorsement(t *testing.T) {
+	cases := []struct {
+		Prepare       func(*Recognizer) error
+		ExpectedError error
+	}{
+		{func(r *Recognizer) error {
+			return r.ReserveEndorsement()
+		}, nil},
+		{func(r *Recognizer) error {
+			return nil
+		}, ErrNoEndorsementReservation},
+		{func(r *Recognizer) error {
+			for i := uint8(0); i < YearlyEndorsementCount; i++ {
+				err := r.ReserveEndorsement()
+				if err != nil {
+					return err
+				}
+				err = r.CompleteEndorsement()
+				if err != nil {
+					return err
+				}
+			}
+			return nil
+		}, ErrNoEndorsementReservation},
+		{func(r *Recognizer) error {
+			err := r.ReserveEndorsement()
+			if err != nil {
+				return err
+			}
+			err = r.ReleaseEndorsementReservation()
+			if err != nil {
+				return err
+			}
+			return nil
+		}, ErrNoEndorsementReservation},
+	}
+	f := NewRecognizerFakeFactory()
+	for i, c := range cases {
+		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			r, err := f.Create()
+			if err != nil {
+				t.Error(err)
+				t.FailNow()
+			}
+			err = c.Prepare(r)
+			if err != nil {
+				t.Error(err)
+				t.FailNow()
+			}
+			err = r.CanCompleteEndorsement()
+			assert.ErrorIs(t, err, c.ExpectedError)
+		})
+	}
+}
 
 func TestRecognizerExport(t *testing.T) {
 	f := NewRecognizerFakeFactory()
-	agg, _ := f.Create()
-	assert.Equal(t, f.Export(), agg.Export())
+	agg, err := f.Create()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+	assert.Equal(t, RecognizerState{
+		Id: member.TenantMemberIdState{
+			TenantId: f.Id.TenantId,
+			MemberId: f.Id.MemberId,
+		},
+		Grade:                     f.Grade,
+		AvailableEndorsementCount: YearlyEndorsementCount,
+		PendingEndorsementCount:   0,
+		Version:                   0,
+		CreatedAt:                 f.CreatedAt,
+	}, agg.Export())
 }
 
 func TestRecognizerExportTo(t *testing.T) {
-	var expectedExporter, actualExporter RecognizerExporter
+	var actualExporter RecognizerExporter
 	f := NewRecognizerFakeFactory()
-	f.ExportTo(&expectedExporter)
-	agg, _ := f.Create()
+	agg, err := f.Create()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
 	agg.ExportTo(&actualExporter)
-	assert.Equal(t, expectedExporter, actualExporter)
+	assert.Equal(t, RecognizerExporter{
+		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
+		Grade:                     seedwork.NewUint8Exporter(f.Grade),
+		AvailableEndorsementCount: seedwork.NewUint8Exporter(YearlyEndorsementCount),
+		PendingEndorsementCount:   seedwork.NewUint8Exporter(0),
+		Version:                   0,
+		CreatedAt:                 f.CreatedAt,
+	}, actualExporter)
 }

@@ -1,87 +1,120 @@
 package endorsed
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsed"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
-	interfaces2 "github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement/interfaces"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/interfaces"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/external"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
 )
 
 func NewEndorsedFakeFactory() *EndorsedFakeFactory {
+	idFactory := member.NewTenantMemberIdFakeFactory()
+	idFactory.MemberId = 2
 	return &EndorsedFakeFactory{
-		1, 2, 0, []*endorsement.EndorsementFakeFactory{}, 1, time.Now(), 5,
+		Id:                idFactory,
+		Grade:             0,
+		CreatedAt:         time.Now(),
+		CurrentArtifactId: 1000,
 	}
 }
 
 type EndorsedFakeFactory struct {
-	Id                   uint64
-	MemberId             uint64
+	Id                   *member.TenantMemberIdFakeFactory
 	Grade                uint8
-	ReceivedEndorsements []*endorsement.EndorsementFakeFactory
-	Version              uint
+	ReceivedEndorsements []*ReceivedEndorsementFakeFactory
 	CreatedAt            time.Time
 	CurrentArtifactId    uint64
 }
 
-func (f *EndorsedFakeFactory) AddReceivedEndorsement(r *recognizer.RecognizerFakeFactory) {
-	e := endorsement.NewEndorsementFakeFactory()
-	e.EndorsedId = f.Id
-	e.EndorsedGrade = f.Grade
-	e.EndorsedVersion = f.Version
-	e.RecognizerId = r.Id
-	e.RecognizerGrade = r.Grade
-	e.RecognizerVersion = r.Version
+func (f *EndorsedFakeFactory) achieveGrade() error {
+	currentGrade := shared.WithoutGrade
+	targetGrade, err := shared.NewGrade(f.Grade)
+	if err != nil {
+		return err
+	}
+	for currentGrade < targetGrade {
+		r := recognizer.NewRecognizerFakeFactory()
+		rId := member.NewTenantMemberIdFakeFactory()
+		rId.MemberId = 1000
+		r.Id = rId
+		recognizerGrade, _ := currentGrade.Next()
+		r.Grade = recognizerGrade.Export()
+		var endorsementCount uint = 0
+		for !currentGrade.NextGradeAchieved(endorsementCount) {
+			f.receiveEndorsement(r)
+			endorsementCount += 2
+		}
+		currentGrade, err = currentGrade.Next()
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (f *EndorsedFakeFactory) ReceiveEndorsement(r *recognizer.RecognizerFakeFactory) error {
+	err := f.achieveGrade()
+	if err != nil {
+		return err
+	}
+	f.receiveEndorsement(r)
+	return nil
+}
+
+func (f *EndorsedFakeFactory) receiveEndorsement(r *recognizer.RecognizerFakeFactory) {
+	e := NewReceivedEndorsementFakeFactory(r)
 	e.ArtifactId = f.CurrentArtifactId
-	e.CreatedAt = time.Now()
 	f.CurrentArtifactId += 1
+	e.CreatedAt = time.Now()
 	f.ReceivedEndorsements = append(f.ReceivedEndorsements, e)
 }
 
 func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
-	var receivedEndorsements []endorsement.Endorsement
-	for _, v := range f.ReceivedEndorsements {
-		e, err := v.Create()
+	err := f.achieveGrade()
+	if err != nil {
+		return nil, err
+	}
+	id, err := member.NewTenantMemberId(f.Id.TenantId, f.Id.MemberId)
+	if err != nil {
+		return nil, err
+	}
+	e, err := NewEndorsed(id, f.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	for _, entf := range f.ReceivedEndorsements {
+		r, err := entf.Recognizer.Create()
 		if err != nil {
 			return nil, err
 		}
-		receivedEndorsements = append(receivedEndorsements, e)
+		artifactId, err := artifact.NewArtifactId(entf.ArtifactId)
+		if err != nil {
+			return nil, err
+		}
+		err = r.ReserveEndorsement()
+		if err != nil {
+			return nil, err
+		}
+		err = e.ReceiveEndorsement(*r, artifactId, entf.CreatedAt)
+		if err != nil {
+			return nil, err
+		}
+		e.IncreaseVersion()
 	}
-	id, _ := endorsed.NewEndorsedId(f.Id)
-	memberId, _ := external.NewMemberId(f.MemberId)
-	grade, _ := shared.NewGrade(f.Grade)
-	return NewEndorsed(id, memberId, grade, receivedEndorsements, f.Version, f.CreatedAt)
+	return e, nil
 }
 
-func (f EndorsedFakeFactory) Export() EndorsedState {
-	var receivedEndorsements []endorsement.EndorsementState
-	for _, v := range f.ReceivedEndorsements {
-		receivedEndorsements = append(receivedEndorsements, v.Export())
-	}
-	return EndorsedState{
-		f.Id, f.MemberId, f.Grade, receivedEndorsements, f.Version, f.CreatedAt,
+func NewReceivedEndorsementFakeFactory(r *recognizer.RecognizerFakeFactory) *ReceivedEndorsementFakeFactory {
+	return &ReceivedEndorsementFakeFactory{
+		Recognizer: r,
+		ArtifactId: 6,
+		CreatedAt:  time.Now(),
 	}
 }
 
-func (f EndorsedFakeFactory) ExportTo(ex interfaces.EndorsedExporter) {
-	var id, memberId seedwork.Uint64Exporter
-	var grade seedwork.Uint8Exporter
-	var receivedEndorsements []interfaces2.EndorsementExporter
-
-	for _, v := range f.ReceivedEndorsements {
-		re := &endorsement.EndorsementExporter{}
-		v.ExportTo(re)
-		receivedEndorsements = append(receivedEndorsements, re)
-	}
-
-	id.SetState(f.Id)
-	memberId.SetState(f.MemberId)
-	grade.SetState(f.Grade)
-	ex.SetState(
-		&id, &memberId, &grade, receivedEndorsements, f.Version, f.CreatedAt,
-	)
+type ReceivedEndorsementFakeFactory struct {
+	Recognizer *recognizer.RecognizerFakeFactory
+	ArtifactId uint64
+	CreatedAt  time.Time
 }

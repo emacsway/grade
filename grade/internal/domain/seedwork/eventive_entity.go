@@ -1,25 +1,29 @@
 package seedwork
 
-import "github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork/interfaces"
-
 // There may be an event receiver here in the case of EventSourcing.
+
+type EntityEventable interface {
+	AddDomainEvent(...DomainEvent)
+	GetPendingDomainEvents() []DomainEvent
+	ClearPendingDomainEvents()
+}
 
 func NewEventiveEntity() (EventiveEntity, error) {
 	return EventiveEntity{}, nil
 }
 
 type EventiveEntity struct {
-	pendingDomainEvents []interfaces.DomainEvent
+	pendingDomainEvents []DomainEvent
 }
 
-func (e EventiveEntity) AddDomainEvent(domainEvents ...interfaces.DomainEvent) {
+func (e EventiveEntity) AddDomainEvent(domainEvents ...DomainEvent) {
 	e.pendingDomainEvents = append(e.pendingDomainEvents, domainEvents...)
 }
 
-func (e EventiveEntity) GetPendingDomainEvents() []interfaces.DomainEvent {
+func (e EventiveEntity) GetPendingDomainEvents() []DomainEvent {
 	return e.pendingDomainEvents
 }
 
 func (e EventiveEntity) ClearPendingDomainEvents() {
-	e.pendingDomainEvents = []interfaces.DomainEvent{}
+	e.pendingDomainEvents = []DomainEvent{}
 }

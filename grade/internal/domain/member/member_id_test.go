@@ -1,4 +1,4 @@
-package endorsed
+package member
 
 import (
 	"testing"
@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestEndorsedIdConstructor(t *testing.T) {
+func TestMemberIdConstructor(t *testing.T) {
 	var value uint64 = 3
-	id, _ := NewEndorsedId(value)
+	id, _ := NewMemberId(value)
 	assert.Equal(t, value, id.Export())
 }

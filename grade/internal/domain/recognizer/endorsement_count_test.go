@@ -13,9 +13,9 @@ func TestEndorsementCountConstructor(t *testing.T) {
 		ExpectedError error
 	}{
 		{uint8(0), nil},
-		{yearlyEndorsementCount / 2, nil},
-		{yearlyEndorsementCount, nil},
-		{yearlyEndorsementCount + 1, ErrInvalidEndorsementCount},
+		{YearlyEndorsementCount / 2, nil},
+		{YearlyEndorsementCount, nil},
+		{YearlyEndorsementCount + 1, ErrInvalidEndorsementCount},
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
@@ -34,8 +34,8 @@ func TestEndorsementCountHasAvailable(t *testing.T) {
 		ExpectedResult bool
 	}{
 		{uint8(0), false},
-		{yearlyEndorsementCount / 2, true},
-		{yearlyEndorsementCount, true},
+		{YearlyEndorsementCount / 2, true},
+		{YearlyEndorsementCount, true},
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
@@ -53,8 +53,8 @@ func TestEndorsementCountNext(t *testing.T) {
 		ExpectedError error
 	}{
 		{uint8(0), uint8(0), ErrInvalidEndorsementCount},
-		{yearlyEndorsementCount / 2, yearlyEndorsementCount/2 - 1, nil},
-		{yearlyEndorsementCount, yearlyEndorsementCount - 1, nil},
+		{YearlyEndorsementCount / 2, YearlyEndorsementCount/2 - 1, nil},
+		{YearlyEndorsementCount, YearlyEndorsementCount - 1, nil},
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
