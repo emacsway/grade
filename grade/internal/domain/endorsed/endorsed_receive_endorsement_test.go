@@ -2,12 +2,12 @@ package endorsed
 
 import (
 	"fmt"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 )

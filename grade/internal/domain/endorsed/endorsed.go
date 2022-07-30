@@ -2,9 +2,9 @@ package endorsed
 
 import (
 	"errors"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"

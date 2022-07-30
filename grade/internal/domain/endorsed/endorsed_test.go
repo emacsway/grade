@@ -1,13 +1,15 @@
 package endorsed
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/assert"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestEndorsedExport(t *testing.T) {

@@ -2,11 +2,11 @@ package endorsement
 
 import (
 	"fmt"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"

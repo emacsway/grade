@@ -3,6 +3,7 @@ package shared
 import (
 	"errors"
 	"fmt"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 func TestTenantMemberIdEquals(t *testing.T) {

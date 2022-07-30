@@ -1,9 +1,10 @@
 package recognizer
 
 import (
+	"time"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
-	"time"
 )
 
 func NewRecognizerFakeFactory() *RecognizerFakeFactory {

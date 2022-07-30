@@ -1,9 +1,10 @@
 package gradelogentry
 
 import (
+	"time"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"time"
 )
 
 type GradeLogEntryExporter struct {
