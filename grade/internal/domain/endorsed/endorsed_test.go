@@ -31,7 +31,7 @@ func TestEndorsedExport(t *testing.T) {
 	agg.Export(&actualExporter)
 	assert.Equal(t, EndorsedExporter{
 		Id:    member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-		Grade: seedwork.NewUint8Exporter(ef.Grade + 1),
+		Grade: seedwork.Uint8Exporter(ef.Grade + 1),
 		ReceivedEndorsements: []endorsement.EndorsementExporter{
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),

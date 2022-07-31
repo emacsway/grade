@@ -143,13 +143,10 @@ func (e *Endorsed) DecreaseGrade(reason gradelogentry.Reason, t time.Time) error
 }
 
 func (e Endorsed) Export(ex EndorsedExporterSetter) {
-	var grade seedwork.Uint8Exporter
-
-	e.grade.Export(&grade)
-	ex.SetState(
-		&grade, e.GetVersion(), e.createdAt,
-	)
 	ex.SetId(e.id)
+	ex.SetGrade(e.grade)
+	ex.SetVersion(e.GetVersion())
+	ex.SetCreatedAt(e.createdAt)
 
 	for i := range e.receivedEndorsements {
 		ex.AddEndorsement(e.receivedEndorsements[i])
@@ -160,12 +157,10 @@ func (e Endorsed) Export(ex EndorsedExporterSetter) {
 }
 
 type EndorsedExporterSetter interface {
-	SetState(
-		grade seedwork.ExporterSetter[uint8],
-		version uint,
-		createdAt time.Time,
-	)
 	SetId(member.TenantMemberId)
+	SetGrade(grade shared.Grade)
 	AddEndorsement(endorsement.Endorsement)
 	AddGradeLogEntry(gradelogentry.GradeLogEntry)
+	SetVersion(uint)
+	SetCreatedAt(time.Time)
 }
