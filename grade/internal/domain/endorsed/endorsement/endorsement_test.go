@@ -105,12 +105,12 @@ func TestEndorsementExport(t *testing.T) {
 	agg.Export(&actualExporter)
 	assert.Equal(t, EndorsementExporter{
 		RecognizerId:      member.NewTenantMemberIdExporter(f.RecognizerId.TenantId, f.RecognizerId.MemberId),
-		RecognizerGrade:   seedwork.NewUint8Exporter(f.RecognizerGrade),
+		RecognizerGrade:   seedwork.Uint8Exporter(f.RecognizerGrade),
 		RecognizerVersion: f.RecognizerVersion,
 		EndorsedId:        member.NewTenantMemberIdExporter(f.EndorsedId.TenantId, f.EndorsedId.MemberId),
-		EndorsedGrade:     seedwork.NewUint8Exporter(f.EndorsedGrade),
+		EndorsedGrade:     seedwork.Uint8Exporter(f.EndorsedGrade),
 		EndorsedVersion:   f.EndorsedVersion,
-		ArtifactId:        seedwork.NewUint64Exporter(f.ArtifactId),
+		ArtifactId:        seedwork.Uint64Exporter(f.ArtifactId),
 		CreatedAt:         f.CreatedAt,
 	}, actualExporter)
 }

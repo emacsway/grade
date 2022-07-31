@@ -8,7 +8,6 @@ import (
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
@@ -102,30 +101,23 @@ func (e Endorsement) GetWeight() Weight {
 }
 
 func (e Endorsement) Export(ex EndorsementExporterSetter) {
-	var artifactId seedwork.Uint64Exporter
-	var recognizerGrade, endorsedGrade seedwork.Uint8Exporter
-
-	e.recognizerGrade.Export(&recognizerGrade)
-	e.endorsedGrade.Export(&endorsedGrade)
-	e.artifactId.Export(&artifactId)
-	ex.SetState(
-		&recognizerGrade, e.recognizerVersion,
-		&endorsedGrade, e.endorsedVersion,
-		&artifactId, e.createdAt,
-	)
 	ex.SetRecognizerId(e.recognizerId)
+	ex.SetRecognizerGrade(e.recognizerGrade)
+	ex.SetRecognizerVersion(e.recognizerVersion)
 	ex.SetEndorsedId(e.endorsedId)
+	ex.SetEndorsedGrade(e.endorsedGrade)
+	ex.SetEndorsedVersion(e.endorsedVersion)
+	ex.SetArtifactId(e.artifactId)
+	ex.SetCreatedAt(e.createdAt)
 }
 
 type EndorsementExporterSetter interface {
-	SetState(
-		recognizerGrade seedwork.ExporterSetter[uint8],
-		recognizerVersion uint,
-		endorsedGrade seedwork.ExporterSetter[uint8],
-		endorsedVersion uint,
-		artifactId seedwork.ExporterSetter[uint64],
-		createdAt time.Time,
-	)
 	SetRecognizerId(member.TenantMemberId)
+	SetRecognizerGrade(shared.Grade)
+	SetRecognizerVersion(uint)
 	SetEndorsedId(member.TenantMemberId)
+	SetEndorsedGrade(shared.Grade)
+	SetEndorsedVersion(uint)
+	SetArtifactId(id artifact.ArtifactId)
+	SetCreatedAt(time.Time)
 }
