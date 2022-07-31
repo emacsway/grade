@@ -5,11 +5,12 @@ import (
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 type RecognizerExporter struct {
 	Id                        member.TenantMemberIdExporter
-	Grade                     seedwork.ExporterSetter[uint8]
+	Grade                     seedwork.Uint8Exporter
 	AvailableEndorsementCount seedwork.ExporterSetter[uint8]
 	PendingEndorsementCount   seedwork.ExporterSetter[uint8]
 	Version                   uint
@@ -17,13 +18,11 @@ type RecognizerExporter struct {
 }
 
 func (ex *RecognizerExporter) SetState(
-	grade seedwork.ExporterSetter[uint8],
 	availableEndorsementCount seedwork.ExporterSetter[uint8],
 	pendingEndorsementCount seedwork.ExporterSetter[uint8],
 	version uint,
 	createdAt time.Time,
 ) {
-	ex.Grade = grade
 	ex.AvailableEndorsementCount = availableEndorsementCount
 	ex.PendingEndorsementCount = pendingEndorsementCount
 	ex.Version = version
@@ -32,4 +31,8 @@ func (ex *RecognizerExporter) SetState(
 
 func (ex *RecognizerExporter) SetId(id member.TenantMemberId) {
 	id.Export(&ex.Id)
+}
+
+func (ex *RecognizerExporter) SetGrade(g shared.Grade) {
+	g.Export(&ex.Grade)
 }
