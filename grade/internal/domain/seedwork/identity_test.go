@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIdentityEquals(t *testing.T) {
+func TestIdentityEqual(t *testing.T) {
 	cases := []struct {
 		Left           uint64
 		Right          uint64
@@ -25,7 +25,7 @@ func TestIdentityEquals(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			result := left.Equals(right)
+			result := left.Equal(right)
 			assert.Equal(t, c.ExpectedResult, result)
 		})
 	}

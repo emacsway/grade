@@ -15,7 +15,7 @@ type Accessable[T any] interface {
 }
 
 type Equaler interface {
-	Equals(Equaler) bool
+	Equal(Equaler) bool
 }
 
 func NewUint64Identity(value uint64) (Uint64Identity, error) {
@@ -26,7 +26,7 @@ type Uint64Identity struct {
 	value uint64
 }
 
-func (id Uint64Identity) Equals(other Equaler) bool {
+func (id Uint64Identity) Equal(other Equaler) bool {
 	if id.value == 0 {
 		return false // Aggregate is not saved.
 	}

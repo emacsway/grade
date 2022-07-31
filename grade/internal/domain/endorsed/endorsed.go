@@ -88,10 +88,10 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.Ar
 
 func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId) error {
 	var errs error
-	if !r.GetId().TenantId().Equals(e.id.TenantId()) {
+	if !r.GetId().TenantId().Equal(e.id.TenantId()) {
 		errs = multierror.Append(errs, ErrCrossTenantEndorsement)
 	}
-	if r.GetId().Equals(e.id) {
+	if r.GetId().Equal(e.id) {
 		errs = multierror.Append(errs, ErrEndorsementOneself)
 	}
 	if r.GetGrade().LessThan(e.grade) {

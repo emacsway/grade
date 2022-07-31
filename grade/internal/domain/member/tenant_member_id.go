@@ -32,8 +32,8 @@ func (cid TenantMemberId) MemberId() MemberId {
 	return cid.memberId
 }
 
-func (cid TenantMemberId) Equals(other TenantMemberId) bool {
-	return cid.tenantId.Equals(other.TenantId()) && cid.memberId.Equals(other.MemberId())
+func (cid TenantMemberId) Equal(other TenantMemberId) bool {
+	return cid.tenantId.Equal(other.TenantId()) && cid.memberId.Equal(other.MemberId())
 }
 
 func (cid TenantMemberId) Export(ex TenantMemberIdExporterSetter) {

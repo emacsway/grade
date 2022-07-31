@@ -9,7 +9,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func TestTenantMemberIdEquals(t *testing.T) {
+func TestTenantMemberIdEqual(t *testing.T) {
 	cases := []struct {
 		TenantId       uint64
 		MemberId       uint64
@@ -35,7 +35,7 @@ func TestTenantMemberIdEquals(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			r := id.Equals(otherId)
+			r := id.Equal(otherId)
 			assert.Equal(t, c.ExpectedResult, r)
 		})
 	}
