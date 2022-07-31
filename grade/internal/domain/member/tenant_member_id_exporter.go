@@ -4,8 +4,8 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func NewTenantMemberIdExporter(tenantId uint64, memberId uint64) *TenantMemberIdExporter {
-	return &TenantMemberIdExporter{
+func NewTenantMemberIdExporter(tenantId uint64, memberId uint64) TenantMemberIdExporter {
+	return TenantMemberIdExporter{
 		TenantId: seedwork.NewUint64Exporter(tenantId),
 		MemberId: seedwork.NewUint64Exporter(memberId),
 	}

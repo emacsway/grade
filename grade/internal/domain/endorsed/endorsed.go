@@ -141,28 +141,20 @@ func (e *Endorsed) DecreaseGrade(reason gradelogentry.Reason, t time.Time) error
 }
 
 func (e Endorsed) ExportTo(ex EndorsedExporterSetter) {
-	var id member.TenantMemberIdExporter
 	var grade seedwork.Uint8Exporter
-	var receivedEndorsements []endorsement.EndorsementExporterSetter
-	var gradeLogEntries []gradelogentry.GradeLogEntryExporterSetter
 
-	for _, v := range e.receivedEndorsements {
-		re := &endorsement.EndorsementExporter{}
-		v.ExportTo(re)
-		receivedEndorsements = append(receivedEndorsements, re)
-	}
-
-	for _, v := range e.gradeLogEntries {
-		gle := &gradelogentry.GradeLogEntryExporter{}
-		v.ExportTo(gle)
-		gradeLogEntries = append(gradeLogEntries, gle)
-	}
-
-	e.id.ExportTo(&id)
 	e.grade.ExportTo(&grade)
 	ex.SetState(
-		&id, &grade, receivedEndorsements, gradeLogEntries, e.GetVersion(), e.createdAt,
+		&grade, e.GetVersion(), e.createdAt,
 	)
+	ex.SetId(e.id)
+
+	for i := range e.receivedEndorsements {
+		ex.AddEndorsement(e.receivedEndorsements[i])
+	}
+	for i := range e.gradeLogEntries {
+		ex.AddGradeLogEntry(e.gradeLogEntries[i])
+	}
 }
 
 func (e Endorsed) Export() EndorsedState {
@@ -186,11 +178,11 @@ func (e Endorsed) Export() EndorsedState {
 
 type EndorsedExporterSetter interface {
 	SetState(
-		id member.TenantMemberIdExporterSetter,
 		grade seedwork.ExporterSetter[uint8],
-		receivedEndorsements []endorsement.EndorsementExporterSetter,
-		gradeLogEntries []gradelogentry.GradeLogEntryExporterSetter,
 		version uint,
 		createdAt time.Time,
 	)
+	SetId(member.TenantMemberId)
+	AddEndorsement(endorsement.Endorsement)
+	AddGradeLogEntry(gradelogentry.GradeLogEntry)
 }

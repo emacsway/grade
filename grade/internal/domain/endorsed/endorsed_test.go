@@ -136,8 +136,8 @@ func TestEndorsedExportTo(t *testing.T) {
 	assert.Equal(t, EndorsedExporter{
 		Id:    member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 		Grade: seedwork.NewUint8Exporter(ef.Grade + 1),
-		ReceivedEndorsements: []endorsement.EndorsementExporterSetter{
-			&endorsement.EndorsementExporter{
+		ReceivedEndorsements: []endorsement.EndorsementExporter{
+			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
@@ -147,7 +147,7 @@ func TestEndorsedExportTo(t *testing.T) {
 				ArtifactId:        seedwork.NewUint64Exporter(ef.ReceivedEndorsements[0].ArtifactId),
 				CreatedAt:         ef.ReceivedEndorsements[0].CreatedAt,
 			},
-			&endorsement.EndorsementExporter{
+			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
@@ -157,7 +157,7 @@ func TestEndorsedExportTo(t *testing.T) {
 				ArtifactId:        seedwork.NewUint64Exporter(ef.ReceivedEndorsements[1].ArtifactId),
 				CreatedAt:         ef.ReceivedEndorsements[1].CreatedAt,
 			},
-			&endorsement.EndorsementExporter{
+			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
@@ -167,7 +167,7 @@ func TestEndorsedExportTo(t *testing.T) {
 				ArtifactId:        seedwork.NewUint64Exporter(ef.ReceivedEndorsements[2].ArtifactId),
 				CreatedAt:         ef.ReceivedEndorsements[2].CreatedAt,
 			},
-			&endorsement.EndorsementExporter{
+			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.NewUint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
@@ -178,8 +178,8 @@ func TestEndorsedExportTo(t *testing.T) {
 				CreatedAt:         ef.ReceivedEndorsements[3].CreatedAt,
 			},
 		},
-		GradeLogEntries: []gradelogentry.GradeLogEntryExporterSetter{
-			&gradelogentry.GradeLogEntryExporter{
+		GradeLogEntries: []gradelogentry.GradeLogEntryExporter{
+			{
 				EndorsedId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedVersion: 2,
 				AssignedGrade:   seedwork.NewUint8Exporter(ef.Grade + 1),

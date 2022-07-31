@@ -33,16 +33,15 @@ type GradeLogEntry struct {
 }
 
 func (gle GradeLogEntry) ExportTo(ex GradeLogEntryExporterSetter) {
-	var endorsedId member.TenantMemberIdExporter
 	var assignedGrade seedwork.Uint8Exporter
 	var reason seedwork.StringExporter
 
-	gle.endorsedId.ExportTo(&endorsedId)
 	gle.assignedGrade.ExportTo(&assignedGrade)
 	gle.reason.ExportTo(&reason)
 	ex.SetState(
-		&endorsedId, gle.endorsedVersion, &assignedGrade, &reason, gle.createdAt,
+		gle.endorsedVersion, &assignedGrade, &reason, gle.createdAt,
 	)
+	ex.SetEndorsedId(gle.endorsedId)
 }
 
 func (gle GradeLogEntry) Export() GradeLogEntryState {
@@ -54,10 +53,10 @@ func (gle GradeLogEntry) Export() GradeLogEntryState {
 
 type GradeLogEntryExporterSetter interface {
 	SetState(
-		endorsedId member.TenantMemberIdExporterSetter,
 		endorsedVersion uint,
 		assignedGrade seedwork.ExporterSetter[uint8],
 		reason seedwork.ExporterSetter[string],
 		createdAt time.Time,
 	)
+	SetEndorsedId(member.TenantMemberId)
 }

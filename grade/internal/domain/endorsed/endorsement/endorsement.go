@@ -102,20 +102,19 @@ func (e Endorsement) GetWeight() Weight {
 }
 
 func (e Endorsement) ExportTo(ex EndorsementExporterSetter) {
-	var recognizerId, endorsedId member.TenantMemberIdExporter
 	var artifactId seedwork.Uint64Exporter
 	var recognizerGrade, endorsedGrade seedwork.Uint8Exporter
 
-	e.recognizerId.ExportTo(&recognizerId)
 	e.recognizerGrade.ExportTo(&recognizerGrade)
-	e.endorsedId.ExportTo(&endorsedId)
 	e.endorsedGrade.ExportTo(&endorsedGrade)
 	e.artifactId.ExportTo(&artifactId)
 	ex.SetState(
-		&recognizerId, &recognizerGrade, e.recognizerVersion,
-		&endorsedId, &endorsedGrade, e.endorsedVersion,
+		&recognizerGrade, e.recognizerVersion,
+		&endorsedGrade, e.endorsedVersion,
 		&artifactId, e.createdAt,
 	)
+	ex.SetRecognizerId(e.recognizerId)
+	ex.SetEndorsedId(e.endorsedId)
 }
 
 func (e Endorsement) Export() EndorsementState {
@@ -133,13 +132,13 @@ func (e Endorsement) Export() EndorsementState {
 
 type EndorsementExporterSetter interface {
 	SetState(
-		recognizerId member.TenantMemberIdExporterSetter,
 		recognizerGrade seedwork.ExporterSetter[uint8],
 		recognizerVersion uint,
-		endorsedId member.TenantMemberIdExporterSetter,
 		endorsedGrade seedwork.ExporterSetter[uint8],
 		endorsedVersion uint,
 		artifactId seedwork.ExporterSetter[uint64],
 		createdAt time.Time,
 	)
+	SetRecognizerId(member.TenantMemberId)
+	SetEndorsedId(member.TenantMemberId)
 }

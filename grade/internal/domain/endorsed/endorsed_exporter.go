@@ -10,28 +10,38 @@ import (
 )
 
 type EndorsedExporter struct {
-	Id                   member.TenantMemberIdExporterSetter
+	Id                   member.TenantMemberIdExporter
 	Grade                seedwork.ExporterSetter[uint8]
-	ReceivedEndorsements []endorsement.EndorsementExporterSetter
-	GradeLogEntries      []gradelogentry.GradeLogEntryExporterSetter
+	ReceivedEndorsements []endorsement.EndorsementExporter
+	GradeLogEntries      []gradelogentry.GradeLogEntryExporter
 	Version              uint
 	CreatedAt            time.Time
 }
 
 func (ex *EndorsedExporter) SetState(
-	id member.TenantMemberIdExporterSetter,
 	grade seedwork.ExporterSetter[uint8],
-	receivedEndorsements []endorsement.EndorsementExporterSetter,
-	gradeLogEntries []gradelogentry.GradeLogEntryExporterSetter,
 	version uint,
 	createdAt time.Time,
 ) {
-	ex.Id = id
 	ex.Grade = grade
-	ex.ReceivedEndorsements = receivedEndorsements
-	ex.GradeLogEntries = gradeLogEntries
 	ex.Version = version
 	ex.CreatedAt = createdAt
+}
+
+func (ex *EndorsedExporter) SetId(id member.TenantMemberId) {
+	id.ExportTo(&ex.Id)
+}
+
+func (ex *EndorsedExporter) AddEndorsement(ent endorsement.Endorsement) {
+	var endorsementExporter endorsement.EndorsementExporter
+	ent.ExportTo(&endorsementExporter)
+	ex.ReceivedEndorsements = append(ex.ReceivedEndorsements, endorsementExporter)
+}
+
+func (ex *EndorsedExporter) AddGradeLogEntry(gle gradelogentry.GradeLogEntry) {
+	var gradeLogEntryExporter gradelogentry.GradeLogEntryExporter
+	gle.ExportTo(&gradeLogEntryExporter)
+	ex.GradeLogEntries = append(ex.GradeLogEntries, gradeLogEntryExporter)
 }
 
 type EndorsedState struct {

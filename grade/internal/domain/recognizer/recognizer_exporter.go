@@ -8,7 +8,7 @@ import (
 )
 
 type RecognizerExporter struct {
-	Id                        member.TenantMemberIdExporterSetter
+	Id                        member.TenantMemberIdExporter
 	Grade                     seedwork.ExporterSetter[uint8]
 	AvailableEndorsementCount seedwork.ExporterSetter[uint8]
 	PendingEndorsementCount   seedwork.ExporterSetter[uint8]
@@ -17,19 +17,21 @@ type RecognizerExporter struct {
 }
 
 func (ex *RecognizerExporter) SetState(
-	id member.TenantMemberIdExporterSetter,
 	grade seedwork.ExporterSetter[uint8],
 	availableEndorsementCount seedwork.ExporterSetter[uint8],
 	pendingEndorsementCount seedwork.ExporterSetter[uint8],
 	version uint,
 	createdAt time.Time,
 ) {
-	ex.Id = id
 	ex.Grade = grade
 	ex.AvailableEndorsementCount = availableEndorsementCount
 	ex.PendingEndorsementCount = pendingEndorsementCount
 	ex.Version = version
 	ex.CreatedAt = createdAt
+}
+
+func (ex *RecognizerExporter) SetId(id member.TenantMemberId) {
+	id.ExportTo(&ex.Id)
 }
 
 type RecognizerState struct {

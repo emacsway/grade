@@ -8,7 +8,7 @@ import (
 )
 
 type GradeLogEntryExporter struct {
-	EndorsedId      member.TenantMemberIdExporterSetter
+	EndorsedId      member.TenantMemberIdExporter
 	EndorsedVersion uint
 	AssignedGrade   seedwork.ExporterSetter[uint8]
 	Reason          seedwork.ExporterSetter[string]
@@ -16,17 +16,19 @@ type GradeLogEntryExporter struct {
 }
 
 func (ex *GradeLogEntryExporter) SetState(
-	endorsedId member.TenantMemberIdExporterSetter,
 	endorsedVersion uint,
 	assignedGrade seedwork.ExporterSetter[uint8],
 	reason seedwork.ExporterSetter[string],
 	createdAt time.Time,
 ) {
-	ex.EndorsedId = endorsedId
 	ex.EndorsedVersion = endorsedVersion
 	ex.AssignedGrade = assignedGrade
 	ex.Reason = reason
 	ex.CreatedAt = createdAt
+}
+
+func (ex *GradeLogEntryExporter) SetEndorsedId(endorsedId member.TenantMemberId) {
+	endorsedId.ExportTo(&ex.EndorsedId)
 }
 
 type GradeLogEntryState struct {

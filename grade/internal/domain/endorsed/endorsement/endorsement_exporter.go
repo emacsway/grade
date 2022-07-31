@@ -8,10 +8,10 @@ import (
 )
 
 type EndorsementExporter struct {
-	RecognizerId      member.TenantMemberIdExporterSetter
+	RecognizerId      member.TenantMemberIdExporter
 	RecognizerGrade   seedwork.ExporterSetter[uint8]
 	RecognizerVersion uint
-	EndorsedId        member.TenantMemberIdExporterSetter
+	EndorsedId        member.TenantMemberIdExporter
 	EndorsedGrade     seedwork.ExporterSetter[uint8]
 	EndorsedVersion   uint
 	ArtifactId        seedwork.ExporterSetter[uint64]
@@ -19,23 +19,27 @@ type EndorsementExporter struct {
 }
 
 func (ex *EndorsementExporter) SetState(
-	recognizerId member.TenantMemberIdExporterSetter,
 	recognizerGrade seedwork.ExporterSetter[uint8],
 	recognizerVersion uint,
-	endorsedId member.TenantMemberIdExporterSetter,
 	endorsedGrade seedwork.ExporterSetter[uint8],
 	endorsedVersion uint,
 	artifactId seedwork.ExporterSetter[uint64],
 	createdAt time.Time,
 ) {
-	ex.RecognizerId = recognizerId
 	ex.RecognizerGrade = recognizerGrade
 	ex.RecognizerVersion = recognizerVersion
-	ex.EndorsedId = endorsedId
 	ex.EndorsedGrade = endorsedGrade
 	ex.EndorsedVersion = endorsedVersion
 	ex.ArtifactId = artifactId
 	ex.CreatedAt = createdAt
+}
+
+func (ex *EndorsementExporter) SetRecognizerId(recognizerId member.TenantMemberId) {
+	recognizerId.ExportTo(&ex.RecognizerId)
+}
+
+func (ex *EndorsementExporter) SetEndorsedId(endorsedId member.TenantMemberId) {
+	endorsedId.ExportTo(&ex.EndorsedId)
 }
 
 type EndorsementState struct {
