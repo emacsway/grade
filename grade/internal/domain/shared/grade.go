@@ -81,10 +81,6 @@ func (g Grade) Equal(other Grade) bool {
 	return g.value == other.value
 }
 
-func (g Grade) Export() uint8 {
-	return g.value
-}
-
-func (g Grade) ExportTo(ex seedwork.ExporterSetter[uint8]) {
+func (g Grade) Export(ex seedwork.ExporterSetter[uint8]) {
 	ex.SetState(g.value)
 }

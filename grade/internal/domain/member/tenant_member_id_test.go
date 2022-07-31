@@ -41,26 +41,14 @@ func TestTenantMemberIdEquals(t *testing.T) {
 	}
 }
 
-func TestTenantMemberIdExport(t *testing.T) {
-	cid, err := NewTenantMemberId(1, 2)
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
-	assert.Equal(t, TenantMemberIdState{
-		TenantId: 1,
-		MemberId: 2,
-	}, cid.Export())
-}
-
-func TestRecognizerExportTo(t *testing.T) {
+func TestRecognizerExport(t *testing.T) {
 	var actualExporter TenantMemberIdExporter
 	cid, err := NewTenantMemberId(1, 2)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
 	}
-	cid.ExportTo(&actualExporter)
+	cid.Export(&actualExporter)
 	assert.Equal(t, TenantMemberIdExporter{
 		TenantId: seedwork.NewUint64Exporter(1),
 		MemberId: seedwork.NewUint64Exporter(2),

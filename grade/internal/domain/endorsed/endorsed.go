@@ -142,10 +142,10 @@ func (e *Endorsed) DecreaseGrade(reason gradelogentry.Reason, t time.Time) error
 	return e.setGrade(previousGrade, reason, t)
 }
 
-func (e Endorsed) ExportTo(ex EndorsedExporterSetter) {
+func (e Endorsed) Export(ex EndorsedExporterSetter) {
 	var grade seedwork.Uint8Exporter
 
-	e.grade.ExportTo(&grade)
+	e.grade.Export(&grade)
 	ex.SetState(
 		&grade, e.GetVersion(), e.createdAt,
 	)

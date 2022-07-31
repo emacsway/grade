@@ -35,9 +35,9 @@ func (ex *EndorsementExporter) SetState(
 }
 
 func (ex *EndorsementExporter) SetRecognizerId(recognizerId member.TenantMemberId) {
-	recognizerId.ExportTo(&ex.RecognizerId)
+	recognizerId.Export(&ex.RecognizerId)
 }
 
 func (ex *EndorsementExporter) SetEndorsedId(endorsedId member.TenantMemberId) {
-	endorsedId.ExportTo(&ex.EndorsedId)
+	endorsedId.Export(&ex.EndorsedId)
 }

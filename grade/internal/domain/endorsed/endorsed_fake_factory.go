@@ -6,6 +6,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
@@ -40,7 +41,9 @@ func (f *EndorsedFakeFactory) achieveGrade() error {
 		rId.MemberId = 1000
 		r.Id = rId
 		recognizerGrade, _ := currentGrade.Next()
-		r.Grade = recognizerGrade.Export()
+		gradeExporter := seedwork.Uint8Exporter(0)
+		recognizerGrade.Export(&gradeExporter)
+		r.Grade = uint8(gradeExporter)
 		var endorsementCount uint = 0
 		for !currentGrade.NextGradeAchieved(endorsementCount) {
 			f.receiveEndorsement(r)

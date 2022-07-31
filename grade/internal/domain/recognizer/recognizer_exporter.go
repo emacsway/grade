@@ -31,5 +31,5 @@ func (ex *RecognizerExporter) SetState(
 }
 
 func (ex *RecognizerExporter) SetId(id member.TenantMemberId) {
-	id.ExportTo(&ex.Id)
+	id.Export(&ex.Id)
 }

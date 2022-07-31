@@ -29,17 +29,17 @@ func (ex *EndorsedExporter) SetState(
 }
 
 func (ex *EndorsedExporter) SetId(id member.TenantMemberId) {
-	id.ExportTo(&ex.Id)
+	id.Export(&ex.Id)
 }
 
 func (ex *EndorsedExporter) AddEndorsement(ent endorsement.Endorsement) {
 	var endorsementExporter endorsement.EndorsementExporter
-	ent.ExportTo(&endorsementExporter)
+	ent.Export(&endorsementExporter)
 	ex.ReceivedEndorsements = append(ex.ReceivedEndorsements, endorsementExporter)
 }
 
 func (ex *EndorsedExporter) AddGradeLogEntry(gle gradelogentry.GradeLogEntry) {
 	var gradeLogEntryExporter gradelogentry.GradeLogEntryExporter
-	gle.ExportTo(&gradeLogEntryExporter)
+	gle.Export(&gradeLogEntryExporter)
 	ex.GradeLogEntries = append(ex.GradeLogEntries, gradeLogEntryExporter)
 }

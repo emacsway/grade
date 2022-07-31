@@ -28,5 +28,5 @@ func (ex *GradeLogEntryExporter) SetState(
 }
 
 func (ex *GradeLogEntryExporter) SetEndorsedId(endorsedId member.TenantMemberId) {
-	endorsedId.ExportTo(&ex.EndorsedId)
+	endorsedId.Export(&ex.EndorsedId)
 }

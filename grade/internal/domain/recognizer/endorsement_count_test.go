@@ -70,9 +70,9 @@ func TestEndorsementCountNext(t *testing.T) {
 	}
 }
 
-func TestEndorsementCountExportTo(t *testing.T) {
+func TestEndorsementCountExport(t *testing.T) {
 	var ex seedwork.Uint8Exporter
 	c, _ := NewEndorsementCount(1)
-	c.ExportTo(&ex)
-	assert.Equal(t, uint8(ex), c.Export())
+	c.Export(&ex)
+	assert.Equal(t, uint8(c), uint8(ex))
 }

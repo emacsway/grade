@@ -23,8 +23,3 @@ func (ex *TenantMemberIdExporter) SetState(
 	ex.TenantId = tenantId
 	ex.MemberId = memberId
 }
-
-type TenantMemberIdState struct {
-	TenantId uint64
-	MemberId uint64
-}

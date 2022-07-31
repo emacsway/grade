@@ -9,11 +9,11 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func TestRecognizerExportTo(t *testing.T) {
+func TestRecognizerExport(t *testing.T) {
 	var actualExporter GradeLogEntryExporter
 	f := NewGradeLogEntryFakeFactory()
 	agg, _ := f.Create()
-	agg.ExportTo(&actualExporter)
+	agg.Export(&actualExporter)
 	assert.Equal(t, GradeLogEntryExporter{
 		EndorsedId:      member.NewTenantMemberIdExporter(f.EndorsedId.TenantId, f.EndorsedId.MemberId),
 		EndorsedVersion: f.EndorsedVersion,

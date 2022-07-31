@@ -101,13 +101,13 @@ func (e Endorsement) GetWeight() Weight {
 	return LowerWeight
 }
 
-func (e Endorsement) ExportTo(ex EndorsementExporterSetter) {
+func (e Endorsement) Export(ex EndorsementExporterSetter) {
 	var artifactId seedwork.Uint64Exporter
 	var recognizerGrade, endorsedGrade seedwork.Uint8Exporter
 
-	e.recognizerGrade.ExportTo(&recognizerGrade)
-	e.endorsedGrade.ExportTo(&endorsedGrade)
-	e.artifactId.ExportTo(&artifactId)
+	e.recognizerGrade.Export(&recognizerGrade)
+	e.endorsedGrade.Export(&endorsedGrade)
+	e.artifactId.Export(&artifactId)
 	ex.SetState(
 		&recognizerGrade, e.recognizerVersion,
 		&endorsedGrade, e.endorsedVersion,

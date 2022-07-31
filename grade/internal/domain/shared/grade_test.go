@@ -74,9 +74,9 @@ func TestGradePrevious(t *testing.T) {
 	}
 }
 
-func TestGradeExportTo(t *testing.T) {
+func TestGradeExport(t *testing.T) {
 	var ex seedwork.Uint8Exporter
 	g, _ := DefaultConstructor(1)
-	g.ExportTo(&ex)
-	assert.Equal(t, uint8(ex), g.Export())
+	g.Export(&ex)
+	assert.Equal(t, g.value, uint8(ex))
 }

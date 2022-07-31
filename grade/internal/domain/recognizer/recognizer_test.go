@@ -65,7 +65,7 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 	}
 }
 
-func TestRecognizerExportTo(t *testing.T) {
+func TestRecognizerExport(t *testing.T) {
 	var actualExporter RecognizerExporter
 	f := NewRecognizerFakeFactory()
 	agg, err := f.Create()
@@ -73,7 +73,7 @@ func TestRecognizerExportTo(t *testing.T) {
 		t.Error(err)
 		t.FailNow()
 	}
-	agg.ExportTo(&actualExporter)
+	agg.Export(&actualExporter)
 	assert.Equal(t, RecognizerExporter{
 		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Grade:                     seedwork.NewUint8Exporter(f.Grade),

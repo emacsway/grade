@@ -32,12 +32,12 @@ type GradeLogEntry struct {
 	createdAt       time.Time
 }
 
-func (gle GradeLogEntry) ExportTo(ex GradeLogEntryExporterSetter) {
+func (gle GradeLogEntry) Export(ex GradeLogEntryExporterSetter) {
 	var assignedGrade seedwork.Uint8Exporter
 	var reason seedwork.StringExporter
 
-	gle.assignedGrade.ExportTo(&assignedGrade)
-	gle.reason.ExportTo(&reason)
+	gle.assignedGrade.Export(&assignedGrade)
+	gle.reason.Export(&reason)
 	ex.SetState(
 		gle.endorsedVersion, &assignedGrade, &reason, gle.createdAt,
 	)

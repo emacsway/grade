@@ -118,12 +118,12 @@ func (r *Recognizer) CompleteEndorsement() error {
 	return nil
 }
 
-func (r Recognizer) ExportTo(ex RecognizerExporterSetter) {
+func (r Recognizer) Export(ex RecognizerExporterSetter) {
 	var grade, availableEndorsementCount, pendingEndorsementCount seedwork.Uint8Exporter
 
-	r.grade.ExportTo(&grade)
-	r.availableEndorsementCount.ExportTo(&availableEndorsementCount)
-	r.pendingEndorsementCount.ExportTo(&pendingEndorsementCount)
+	r.grade.Export(&grade)
+	r.availableEndorsementCount.Export(&availableEndorsementCount)
+	r.pendingEndorsementCount.Export(&pendingEndorsementCount)
 	ex.SetState(
 		&grade, &availableEndorsementCount, &pendingEndorsementCount, r.GetVersion(), r.createdAt,
 	)

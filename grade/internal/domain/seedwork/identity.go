@@ -5,13 +5,13 @@ type ExporterSetter[T any] interface {
 }
 
 type ExportableTo[T any] interface {
-	ExportTo(ExporterSetter[T])
+	Export(ExporterSetter[T])
 }
 
 // alternative approach:
 
-type Exportable[T any] interface {
-	Export() T
+type Accessable[T any] interface {
+	Value() T
 }
 
 type Equaler interface {
@@ -30,14 +30,14 @@ type Identity[T comparable, C ExporterSetter[T]] struct {
 }
 
 func (id Identity[T, C]) Equals(other Equaler) bool {
-	typedOther := other.(Exportable[T])
-	return id.value == typedOther.Export()
+	exportableOther := other.(Accessable[T])
+	return id.value == exportableOther.Value()
 }
 
-func (id Identity[T, C]) Export() T {
+func (id Identity[T, C]) Value() T {
 	return id.value
 }
 
-func (id Identity[T, C]) ExportTo(ex C) {
+func (id Identity[T, C]) Export(ex C) {
 	ex.SetState(id.value)
 }

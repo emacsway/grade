@@ -12,7 +12,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func TestEndorsedExportTo(t *testing.T) {
+func TestEndorsedExport(t *testing.T) {
 	var actualExporter EndorsedExporter
 	ef := NewEndorsedFakeFactory()
 	rf := recognizer.NewRecognizerFakeFactory()
@@ -28,7 +28,7 @@ func TestEndorsedExportTo(t *testing.T) {
 		t.Error(err)
 		t.FailNow()
 	}
-	agg.ExportTo(&actualExporter)
+	agg.Export(&actualExporter)
 	assert.Equal(t, EndorsedExporter{
 		Id:    member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 		Grade: seedwork.NewUint8Exporter(ef.Grade + 1),

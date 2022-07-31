@@ -36,10 +36,6 @@ func (c EndorsementCount) Decrease() (EndorsementCount, error) {
 	return n, nil
 }
 
-func (c EndorsementCount) Export() uint8 {
-	return uint8(c)
-}
-
-func (c EndorsementCount) ExportTo(ex seedwork.ExporterSetter[uint8]) {
+func (c EndorsementCount) Export(ex seedwork.ExporterSetter[uint8]) {
 	ex.SetState(uint8(c))
 }

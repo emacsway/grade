@@ -98,11 +98,11 @@ func TestEndorsementWeight(t *testing.T) {
 	}
 }
 
-func TestEndorsementExportTo(t *testing.T) {
+func TestEndorsementExport(t *testing.T) {
 	var actualExporter EndorsementExporter
 	f := NewEndorsementFakeFactory()
 	agg, _ := f.Create()
-	agg.ExportTo(&actualExporter)
+	agg.Export(&actualExporter)
 	assert.Equal(t, EndorsementExporter{
 		RecognizerId:      member.NewTenantMemberIdExporter(f.RecognizerId.TenantId, f.RecognizerId.MemberId),
 		RecognizerGrade:   seedwork.NewUint8Exporter(f.RecognizerGrade),

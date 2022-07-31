@@ -37,19 +37,12 @@ func (cid TenantMemberId) Equals(other TenantMemberId) bool {
 	return cid.tenantId.Equals(other.TenantId()) && cid.memberId.Equals(other.MemberId())
 }
 
-func (cid TenantMemberId) ExportTo(ex TenantMemberIdExporterSetter) {
+func (cid TenantMemberId) Export(ex TenantMemberIdExporterSetter) {
 	var tenantId, memberId seedwork.Uint64Exporter
 
-	cid.tenantId.ExportTo(&tenantId)
-	cid.memberId.ExportTo(&memberId)
+	cid.tenantId.Export(&tenantId)
+	cid.memberId.Export(&memberId)
 	ex.SetState(&tenantId, &memberId)
-}
-
-func (cid TenantMemberId) Export() TenantMemberIdState {
-	return TenantMemberIdState{
-		TenantId: cid.tenantId.Export(),
-		MemberId: cid.memberId.Export(),
-	}
 }
 
 type TenantMemberIdExporterSetter interface {
