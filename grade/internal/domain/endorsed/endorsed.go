@@ -159,25 +159,6 @@ func (e Endorsed) ExportTo(ex EndorsedExporterSetter) {
 	}
 }
 
-func (e Endorsed) Export() EndorsedState {
-	var receivedEndorsements []endorsement.EndorsementState
-	var gradeLogEntries []gradelogentry.GradeLogEntryState
-	for _, v := range e.receivedEndorsements {
-		receivedEndorsements = append(receivedEndorsements, v.Export())
-	}
-	for _, v := range e.gradeLogEntries {
-		gradeLogEntries = append(gradeLogEntries, v.Export())
-	}
-	return EndorsedState{
-		Id:                   e.id.Export(),
-		Grade:                e.grade.Export(),
-		ReceivedEndorsements: receivedEndorsements,
-		GradeLogEntries:      gradeLogEntries,
-		Version:              e.GetVersion(),
-		CreatedAt:            e.createdAt,
-	}
-}
-
 type EndorsedExporterSetter interface {
 	SetState(
 		grade seedwork.ExporterSetter[uint8],

@@ -33,12 +33,3 @@ func (ex *RecognizerExporter) SetState(
 func (ex *RecognizerExporter) SetId(id member.TenantMemberId) {
 	id.ExportTo(&ex.Id)
 }
-
-type RecognizerState struct {
-	Id                        member.TenantMemberIdState
-	Grade                     uint8
-	AvailableEndorsementCount uint8
-	PendingEndorsementCount   uint8
-	Version                   uint
-	CreatedAt                 time.Time
-}

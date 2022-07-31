@@ -130,17 +130,6 @@ func (r Recognizer) ExportTo(ex RecognizerExporterSetter) {
 	ex.SetId(r.id)
 }
 
-func (r Recognizer) Export() RecognizerState {
-	return RecognizerState{
-		Id:                        r.id.Export(),
-		Grade:                     r.grade.Export(),
-		AvailableEndorsementCount: r.availableEndorsementCount.Export(),
-		PendingEndorsementCount:   r.pendingEndorsementCount.Export(),
-		Version:                   r.GetVersion(),
-		CreatedAt:                 r.createdAt,
-	}
-}
-
 type RecognizerExporterSetter interface {
 	SetState(
 		grade seedwork.ExporterSetter[uint8],

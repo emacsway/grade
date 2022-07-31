@@ -44,13 +44,6 @@ func (gle GradeLogEntry) ExportTo(ex GradeLogEntryExporterSetter) {
 	ex.SetEndorsedId(gle.endorsedId)
 }
 
-func (gle GradeLogEntry) Export() GradeLogEntryState {
-	return GradeLogEntryState{
-		gle.endorsedId.Export(), gle.endorsedVersion,
-		gle.assignedGrade.Export(), gle.reason.Export(), gle.createdAt,
-	}
-}
-
 type GradeLogEntryExporterSetter interface {
 	SetState(
 		endorsedVersion uint,

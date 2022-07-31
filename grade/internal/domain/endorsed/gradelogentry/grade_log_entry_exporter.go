@@ -30,11 +30,3 @@ func (ex *GradeLogEntryExporter) SetState(
 func (ex *GradeLogEntryExporter) SetEndorsedId(endorsedId member.TenantMemberId) {
 	endorsedId.ExportTo(&ex.EndorsedId)
 }
-
-type GradeLogEntryState struct {
-	EndorsedId      member.TenantMemberIdState
-	EndorsedVersion uint
-	AssignedGrade   uint8
-	Reason          string
-	CreatedAt       time.Time
-}

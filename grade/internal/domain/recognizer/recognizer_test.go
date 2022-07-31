@@ -65,26 +65,6 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 	}
 }
 
-func TestRecognizerExport(t *testing.T) {
-	f := NewRecognizerFakeFactory()
-	agg, err := f.Create()
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
-	assert.Equal(t, RecognizerState{
-		Id: member.TenantMemberIdState{
-			TenantId: f.Id.TenantId,
-			MemberId: f.Id.MemberId,
-		},
-		Grade:                     f.Grade,
-		AvailableEndorsementCount: YearlyEndorsementCount,
-		PendingEndorsementCount:   0,
-		Version:                   0,
-		CreatedAt:                 f.CreatedAt,
-	}, agg.Export())
-}
-
 func TestRecognizerExportTo(t *testing.T) {
 	var actualExporter RecognizerExporter
 	f := NewRecognizerFakeFactory()

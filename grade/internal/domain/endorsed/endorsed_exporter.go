@@ -43,12 +43,3 @@ func (ex *EndorsedExporter) AddGradeLogEntry(gle gradelogentry.GradeLogEntry) {
 	gle.ExportTo(&gradeLogEntryExporter)
 	ex.GradeLogEntries = append(ex.GradeLogEntries, gradeLogEntryExporter)
 }
-
-type EndorsedState struct {
-	Id                   member.TenantMemberIdState
-	Grade                uint8
-	ReceivedEndorsements []endorsement.EndorsementState
-	GradeLogEntries      []gradelogentry.GradeLogEntryState
-	Version              uint
-	CreatedAt            time.Time
-}

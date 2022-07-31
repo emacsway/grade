@@ -41,14 +41,3 @@ func (ex *EndorsementExporter) SetRecognizerId(recognizerId member.TenantMemberI
 func (ex *EndorsementExporter) SetEndorsedId(endorsedId member.TenantMemberId) {
 	endorsedId.ExportTo(&ex.EndorsedId)
 }
-
-type EndorsementState struct {
-	RecognizerId      member.TenantMemberIdState
-	RecognizerGrade   uint8
-	RecognizerVersion uint
-	EndorsedId        member.TenantMemberIdState
-	EndorsedGrade     uint8
-	EndorsedVersion   uint
-	ArtifactId        uint64
-	CreatedAt         time.Time
-}

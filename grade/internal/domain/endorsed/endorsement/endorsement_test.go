@@ -98,27 +98,6 @@ func TestEndorsementWeight(t *testing.T) {
 	}
 }
 
-func TestEndorsementExport(t *testing.T) {
-	f := NewEndorsementFakeFactory()
-	e, _ := f.Create()
-	assert.Equal(t, EndorsementState{
-		RecognizerId: member.TenantMemberIdState{
-			TenantId: f.RecognizerId.TenantId,
-			MemberId: f.RecognizerId.MemberId,
-		},
-		RecognizerGrade:   f.RecognizerGrade,
-		RecognizerVersion: f.RecognizerVersion,
-		EndorsedId: member.TenantMemberIdState{
-			TenantId: f.EndorsedId.TenantId,
-			MemberId: f.EndorsedId.MemberId,
-		},
-		EndorsedGrade:   f.EndorsedGrade,
-		EndorsedVersion: f.EndorsedVersion,
-		ArtifactId:      f.ArtifactId,
-		CreatedAt:       f.CreatedAt,
-	}, e.Export())
-}
-
 func TestEndorsementExportTo(t *testing.T) {
 	var actualExporter EndorsementExporter
 	f := NewEndorsementFakeFactory()

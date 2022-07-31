@@ -117,19 +117,6 @@ func (e Endorsement) ExportTo(ex EndorsementExporterSetter) {
 	ex.SetEndorsedId(e.endorsedId)
 }
 
-func (e Endorsement) Export() EndorsementState {
-	return EndorsementState{
-		RecognizerId:      e.recognizerId.Export(),
-		RecognizerGrade:   e.recognizerGrade.Export(),
-		RecognizerVersion: e.recognizerVersion,
-		EndorsedId:        e.endorsedId.Export(),
-		EndorsedGrade:     e.endorsedGrade.Export(),
-		EndorsedVersion:   e.endorsedVersion,
-		ArtifactId:        e.artifactId.Export(),
-		CreatedAt:         e.createdAt,
-	}
-}
-
 type EndorsementExporterSetter interface {
 	SetState(
 		recognizerGrade seedwork.ExporterSetter[uint8],
