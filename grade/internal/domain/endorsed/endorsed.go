@@ -26,7 +26,7 @@ var (
 		"it is allowed to receive endorsements only from members with equal or higher grade",
 	)
 	ErrAlreadyEndorsed = errors.New(
-		"this artifact has already been endorsed by the recogniser",
+		"this artifact has already been endorsed by the recognizer",
 	)
 )
 
@@ -120,7 +120,7 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		reason, err := gradelogentry.NewReason("Endorsement count is achieved")
+		reason, err := gradelogentry.NewReason("Achieved")
 		if err != nil {
 			return err
 		}

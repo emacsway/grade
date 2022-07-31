@@ -79,7 +79,7 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedVersion: 2,
 				AssignedGrade:   seedwork.Uint8Exporter(ef.Grade + 1),
-				Reason:          seedwork.StringExporter("Endorsement count is achieved"),
+				Reason:          seedwork.StringExporter("Achieved"),
 				CreatedAt:       ef.ReceivedEndorsements[2].CreatedAt,
 			},
 		},
