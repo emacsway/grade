@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 var (
@@ -36,7 +36,7 @@ func NewRecognizer(
 	if err != nil {
 		return nil, err
 	}
-	zeroGrade, _ := shared.NewGradeFactory(shared.MaxGradeValue, shared.GradeMatrix)(0)
+	zeroGrade, _ := grade.NewGradeFactory(grade.MaxGradeValue, grade.GradeMatrix)(0)
 	return &Recognizer{
 		id:                        id,
 		grade:                     zeroGrade,
@@ -50,7 +50,7 @@ func NewRecognizer(
 
 type Recognizer struct {
 	id                        member.TenantMemberId
-	grade                     shared.Grade
+	grade                     grade.Grade
 	availableEndorsementCount EndorsementCount
 	pendingEndorsementCount   EndorsementCount
 	createdAt                 time.Time
@@ -62,12 +62,12 @@ func (r Recognizer) GetId() member.TenantMemberId {
 	return r.id
 }
 
-func (r Recognizer) GetGrade() shared.Grade {
+func (r Recognizer) GetGrade() grade.Grade {
 	return r.grade
 }
 
-func (r *Recognizer) SetGrade(g shared.Grade) error {
-	r.grade = g
+func (r *Recognizer) SetGrade(val grade.Grade) error {
+	r.grade = val
 	return nil
 }
 
@@ -129,7 +129,7 @@ func (r Recognizer) Export(ex RecognizerExporterSetter) {
 
 type RecognizerExporterSetter interface {
 	SetId(member.TenantMemberId)
-	SetGrade(shared.Grade)
+	SetGrade(grade.Grade)
 	SetAvailableEndorsementCount(EndorsementCount)
 	SetPendingEndorsementCount(EndorsementCount)
 	SetVersion(uint)

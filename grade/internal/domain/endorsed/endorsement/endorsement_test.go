@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 func TestEndorsementConstructor(t *testing.T) {
@@ -78,8 +78,8 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 
 func TestEndorsementWeight(t *testing.T) {
 	f := NewEndorsementFakeFactory()
-	for i := uint8(0); i <= shared.MaxGradeValue; i++ {
-		for j := i; j <= shared.MaxGradeValue; j++ {
+	for i := uint8(0); i <= grade.MaxGradeValue; i++ {
+		for j := i; j <= grade.MaxGradeValue; j++ {
 			t.Run(fmt.Sprintf("Case i=%d j=%d", i, j), func(t *testing.T) {
 				var expectedWeight Weight = 1
 				f.RecognizerGrade = j

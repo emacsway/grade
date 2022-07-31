@@ -3,9 +3,9 @@ package gradelogentry
 import (
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 type GradeLogEntryExporter struct {
@@ -24,7 +24,7 @@ func (ex *GradeLogEntryExporter) SetEndorsedVersion(val uint) {
 	ex.EndorsedVersion = val
 }
 
-func (ex *GradeLogEntryExporter) SetAssignedGrade(val shared.Grade) {
+func (ex *GradeLogEntryExporter) SetAssignedGrade(val grade.Grade) {
 	val.Export(&ex.AssignedGrade)
 }
 

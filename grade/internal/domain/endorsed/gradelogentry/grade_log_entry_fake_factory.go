@@ -3,8 +3,8 @@ package gradelogentry
 import (
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 func NewGradeLogEntryFakeFactory() *GradeLogEntryFakeFactory {
@@ -32,7 +32,7 @@ func (f GradeLogEntryFakeFactory) Create() (GradeLogEntry, error) {
 	if err != nil {
 		return GradeLogEntry{}, err
 	}
-	assignedGrade, err := shared.DefaultConstructor(f.AssignedGrade)
+	assignedGrade, err := grade.DefaultConstructor(f.AssignedGrade)
 	if err != nil {
 		return GradeLogEntry{}, err
 	}

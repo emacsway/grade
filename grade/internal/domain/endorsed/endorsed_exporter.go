@@ -5,9 +5,9 @@ import (
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 type EndorsedExporter struct {
@@ -23,7 +23,7 @@ func (ex *EndorsedExporter) SetId(val member.TenantMemberId) {
 	val.Export(&ex.Id)
 }
 
-func (ex *EndorsedExporter) SetGrade(val shared.Grade) {
+func (ex *EndorsedExporter) SetGrade(val grade.Grade) {
 	val.Export(&ex.Grade)
 }
 

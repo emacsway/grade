@@ -1,4 +1,4 @@
-package shared
+package grade
 
 import (
 	"errors"

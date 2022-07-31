@@ -7,8 +7,8 @@ import (
 	"github.com/hashicorp/go-multierror"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 type Weight uint8
@@ -30,9 +30,9 @@ var (
 
 func CanEndorse(
 	recognizerId member.TenantMemberId,
-	recognizerGrade shared.Grade,
+	recognizerGrade grade.Grade,
 	endorsedId member.TenantMemberId,
-	endorsedGrade shared.Grade,
+	endorsedGrade grade.Grade,
 ) error {
 	var err error
 
@@ -48,10 +48,10 @@ func CanEndorse(
 
 func NewEndorsement(
 	recognizerId member.TenantMemberId,
-	recognizerGrade shared.Grade,
+	recognizerGrade grade.Grade,
 	recognizerVersion uint,
 	endorsedId member.TenantMemberId,
-	endorsedGrade shared.Grade,
+	endorsedGrade grade.Grade,
 	endorsedVersion uint,
 	artifactId artifact.ArtifactId,
 	createdAt time.Time,
@@ -74,10 +74,10 @@ func NewEndorsement(
 
 type Endorsement struct {
 	recognizerId      member.TenantMemberId
-	recognizerGrade   shared.Grade
+	recognizerGrade   grade.Grade
 	recognizerVersion uint
 	endorsedId        member.TenantMemberId
-	endorsedGrade     shared.Grade
+	endorsedGrade     grade.Grade
 	endorsedVersion   uint
 	artifactId        artifact.ArtifactId
 	createdAt         time.Time
@@ -87,7 +87,7 @@ func (e Endorsement) IsEndorsedBy(rId member.TenantMemberId, aId artifact.Artifa
 	return e.recognizerId == rId && e.artifactId == aId
 }
 
-func (e Endorsement) GetEndorsedGrade() shared.Grade {
+func (e Endorsement) GetEndorsedGrade() grade.Grade {
 	return e.endorsedGrade
 }
 
@@ -113,10 +113,10 @@ func (e Endorsement) Export(ex EndorsementExporterSetter) {
 
 type EndorsementExporterSetter interface {
 	SetRecognizerId(member.TenantMemberId)
-	SetRecognizerGrade(shared.Grade)
+	SetRecognizerGrade(grade.Grade)
 	SetRecognizerVersion(uint)
 	SetEndorsedId(member.TenantMemberId)
-	SetEndorsedGrade(shared.Grade)
+	SetEndorsedGrade(grade.Grade)
 	SetEndorsedVersion(uint)
 	SetArtifactId(id artifact.ArtifactId)
 	SetCreatedAt(time.Time)

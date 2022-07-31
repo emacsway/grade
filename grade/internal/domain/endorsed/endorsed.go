@@ -7,10 +7,10 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 var (
@@ -32,7 +32,7 @@ func NewEndorsed(
 	if err != nil {
 		return nil, err
 	}
-	zeroGrade, _ := shared.DefaultConstructor(0)
+	zeroGrade, _ := grade.DefaultConstructor(0)
 	return &Endorsed{
 		id:                 id,
 		grade:              zeroGrade,
@@ -44,7 +44,7 @@ func NewEndorsed(
 
 type Endorsed struct {
 	id                   member.TenantMemberId
-	grade                shared.Grade
+	grade                grade.Grade
 	receivedEndorsements []endorsement.Endorsement
 	gradeLogEntries      []gradelogentry.GradeLogEntry
 	createdAt            time.Time
@@ -122,7 +122,7 @@ func (e Endorsed) getReceivedEndorsementCount() uint {
 	return counter
 }
 
-func (e *Endorsed) setGrade(g shared.Grade, reason gradelogentry.Reason, t time.Time) error {
+func (e *Endorsed) setGrade(g grade.Grade, reason gradelogentry.Reason, t time.Time) error {
 	gle, err := gradelogentry.NewGradeLogEntry(
 		e.id, e.GetVersion(), g, reason, t,
 	)
@@ -158,7 +158,7 @@ func (e Endorsed) Export(ex EndorsedExporterSetter) {
 
 type EndorsedExporterSetter interface {
 	SetId(member.TenantMemberId)
-	SetGrade(grade shared.Grade)
+	SetGrade(grade.Grade)
 	AddEndorsement(endorsement.Endorsement)
 	AddGradeLogEntry(gradelogentry.GradeLogEntry)
 	SetVersion(uint)

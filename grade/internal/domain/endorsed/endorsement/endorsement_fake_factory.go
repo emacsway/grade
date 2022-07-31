@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 func NewEndorsementFakeFactory() *EndorsementFakeFactory {
@@ -41,7 +41,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	recognizerGrade, err := shared.DefaultConstructor(f.RecognizerGrade)
+	recognizerGrade, err := grade.DefaultConstructor(f.RecognizerGrade)
 	if err != nil {
 		return Endorsement{}, err
 	}
@@ -49,7 +49,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	endorsedGrade, err := shared.DefaultConstructor(f.EndorsedGrade)
+	endorsedGrade, err := grade.DefaultConstructor(f.EndorsedGrade)
 	if err != nil {
 		return Endorsement{}, err
 	}

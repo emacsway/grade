@@ -3,14 +3,14 @@ package gradelogentry
 import (
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 func NewGradeLogEntry(
 	endorsedId member.TenantMemberId,
 	endorsedVersion uint,
-	assignedGrade shared.Grade,
+	assignedGrade grade.Grade,
 	reason Reason,
 	createdAt time.Time,
 ) (GradeLogEntry, error) {
@@ -26,7 +26,7 @@ func NewGradeLogEntry(
 type GradeLogEntry struct {
 	endorsedId      member.TenantMemberId
 	endorsedVersion uint
-	assignedGrade   shared.Grade
+	assignedGrade   grade.Grade
 	reason          Reason
 	createdAt       time.Time
 }
@@ -42,7 +42,7 @@ func (gle GradeLogEntry) Export(ex GradeLogEntryExporterSetter) {
 type GradeLogEntryExporterSetter interface {
 	SetEndorsedId(member.TenantMemberId)
 	SetEndorsedVersion(uint)
-	SetAssignedGrade(shared.Grade)
+	SetAssignedGrade(grade.Grade)
 	SetReason(Reason)
 	SetCreatedAt(time.Time)
 }

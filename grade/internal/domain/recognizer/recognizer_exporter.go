@@ -3,9 +3,9 @@ package recognizer
 import (
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 type RecognizerExporter struct {
@@ -21,7 +21,7 @@ func (ex *RecognizerExporter) SetId(val member.TenantMemberId) {
 	val.Export(&ex.Id)
 }
 
-func (ex *RecognizerExporter) SetGrade(val shared.Grade) {
+func (ex *RecognizerExporter) SetGrade(val grade.Grade) {
 	val.Export(&ex.Grade)
 }
 

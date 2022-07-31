@@ -4,10 +4,10 @@ import (
 	"time"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 func NewEndorsedFakeFactory() *EndorsedFakeFactory {
@@ -30,8 +30,8 @@ type EndorsedFakeFactory struct {
 }
 
 func (f *EndorsedFakeFactory) achieveGrade() error {
-	currentGrade, _ := shared.DefaultConstructor(0)
-	targetGrade, err := shared.DefaultConstructor(f.Grade)
+	currentGrade, _ := grade.DefaultConstructor(0)
+	targetGrade, err := grade.DefaultConstructor(f.Grade)
 	if err != nil {
 		return err
 	}
