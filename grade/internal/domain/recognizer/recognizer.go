@@ -29,10 +29,7 @@ func NewRecognizer(
 		return nil, err
 	}
 	versioned := seedwork.NewVersionedAggregate(0)
-	eventive, err := seedwork.NewEventiveEntity()
-	if err != nil {
-		return nil, err
-	}
+	eventive := seedwork.NewEventiveEntity()
 	zeroGrade, _ := grade.NewGradeFactory(grade.MaxGradeValue, grade.GradeMatrix)(0)
 	return &Recognizer{
 		id:                        id,

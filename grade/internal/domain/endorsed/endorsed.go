@@ -25,10 +25,7 @@ func NewEndorsed(
 	createdAt time.Time,
 ) (*Endorsed, error) {
 	versioned := seedwork.NewVersionedAggregate(0)
-	eventive, err := seedwork.NewEventiveEntity()
-	if err != nil {
-		return nil, err
-	}
+	eventive := seedwork.NewEventiveEntity()
 	zeroGrade, _ := grade.DefaultConstructor(0)
 	return &Endorsed{
 		id:                 id,
