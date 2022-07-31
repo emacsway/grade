@@ -38,6 +38,7 @@ func (f *EndorsedFakeFactory) achieveGrade() error {
 	for currentGrade.LessThan(targetGrade) {
 		r := recognizer.NewRecognizerFakeFactory()
 		rId := member.NewTenantMemberIdFakeFactory()
+		rId.TenantId = f.Id.TenantId
 		rId.MemberId = 1000
 		r.Id = rId
 		recognizerGrade, _ := currentGrade.Next()

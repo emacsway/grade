@@ -16,11 +16,14 @@ import (
 )
 
 var (
-	ErrLowerGradeEndorses = errors.New(
-		"it is allowed to receive endorsements only from members with equal or higher grade",
+	ErrCrossTenantEndorsement = errors.New(
+		"recognizer can't endorse cross-tenant members",
 	)
 	ErrEndorsementOneself = errors.New(
 		"recognizer can't endorse himself",
+	)
+	ErrLowerGradeEndorses = errors.New(
+		"it is allowed to receive endorsements only from members with equal or higher grade",
 	)
 	ErrAlreadyEndorsed = errors.New(
 		"this artifact has already been endorsed by the recogniser",
@@ -85,6 +88,9 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.Ar
 
 func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId) error {
 	var errs error
+	if !r.GetId().TenantId().Equals(e.id.TenantId()) {
+		errs = multierror.Append(errs, ErrCrossTenantEndorsement)
+	}
 	if r.GetId().Equals(e.id) {
 		errs = multierror.Append(errs, ErrEndorsementOneself)
 	}
@@ -94,6 +100,7 @@ func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId
 	for _, ent := range e.receivedEndorsements {
 		if ent.IsEndorsedBy(r.GetId(), aId) {
 			errs = multierror.Append(errs, ErrAlreadyEndorsed)
+			break
 		}
 	}
 	return errs
