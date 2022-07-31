@@ -17,8 +17,8 @@ func TestRecognizerExport(t *testing.T) {
 	assert.Equal(t, GradeLogEntryExporter{
 		EndorsedId:      member.NewTenantMemberIdExporter(f.EndorsedId.TenantId, f.EndorsedId.MemberId),
 		EndorsedVersion: f.EndorsedVersion,
-		AssignedGrade:   seedwork.NewUint8Exporter(f.AssignedGrade),
-		Reason:          seedwork.NewStringExporter(f.Reason),
+		AssignedGrade:   seedwork.Uint8Exporter(f.AssignedGrade),
+		Reason:          seedwork.StringExporter(f.Reason),
 		CreatedAt:       f.CreatedAt,
 	}, actualExporter)
 }

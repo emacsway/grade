@@ -50,7 +50,7 @@ func TestRecognizerExport(t *testing.T) {
 	}
 	cid.Export(&actualExporter)
 	assert.Equal(t, TenantMemberIdExporter{
-		TenantId: seedwork.NewUint64Exporter(1),
-		MemberId: seedwork.NewUint64Exporter(2),
+		TenantId: seedwork.Uint64Exporter(1),
+		MemberId: seedwork.Uint64Exporter(2),
 	}, actualExporter)
 }
