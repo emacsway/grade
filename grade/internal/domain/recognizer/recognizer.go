@@ -28,10 +28,7 @@ func NewRecognizer(
 	if err != nil {
 		return nil, err
 	}
-	versioned, err := seedwork.NewVersionedAggregate(0)
-	if err != nil {
-		return nil, err
-	}
+	versioned := seedwork.NewVersionedAggregate(0)
 	eventive, err := seedwork.NewEventiveEntity()
 	if err != nil {
 		return nil, err
