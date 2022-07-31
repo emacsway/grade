@@ -8,7 +8,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 )
 
@@ -22,7 +21,7 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 	}{
 		{1, 0, 2, 0, nil},
 		{1, 1, 2, 0, nil},
-		{1, 0, 2, 1, endorsement.ErrLowerGradeEndorses},
+		{1, 0, 2, 1, ErrLowerGradeEndorses},
 		{3, 0, 3, 0, ErrEndorsementOneself},
 	}
 	ef := NewEndorsedFakeFactory()

@@ -1,10 +1,7 @@
 package endorsement
 
 import (
-	"errors"
 	"time"
-
-	"github.com/hashicorp/go-multierror"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
@@ -19,26 +16,6 @@ const (
 	HigherWeight = 2
 )
 
-var (
-	ErrLowerGradeEndorses = errors.New(
-		"it is allowed to receive endorsements only from members with equal or higher grade",
-	)
-)
-
-func CanEndorse(
-	recognizerId member.TenantMemberId,
-	recognizerGrade grade.Grade,
-	endorsedId member.TenantMemberId,
-	endorsedGrade grade.Grade,
-) error {
-	var err error
-
-	if recognizerGrade.LessThan(endorsedGrade) {
-		err = multierror.Append(err, ErrLowerGradeEndorses)
-	}
-	return err
-}
-
 func NewEndorsement(
 	recognizerId member.TenantMemberId,
 	recognizerGrade grade.Grade,
@@ -49,10 +26,6 @@ func NewEndorsement(
 	artifactId artifact.ArtifactId,
 	createdAt time.Time,
 ) (Endorsement, error) {
-	err := CanEndorse(recognizerId, recognizerGrade, endorsedId, endorsedGrade)
-	if err != nil {
-		return Endorsement{}, err
-	}
 	return Endorsement{
 		recognizerId:      recognizerId,
 		recognizerGrade:   recognizerGrade,

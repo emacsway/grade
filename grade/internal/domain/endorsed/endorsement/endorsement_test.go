@@ -12,32 +12,6 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func TestEndorsementConstructor(t *testing.T) {
-	cases := []struct {
-		RecogniserId    uint64
-		RecognizerGrade uint8
-		EndorsedId      uint64
-		EndorsedGrade   uint8
-		ExpectedError   error
-	}{
-		{1, 0, 2, 0, nil},
-		{1, 1, 2, 0, nil},
-		{1, 0, 2, 1, ErrLowerGradeEndorses},
-	}
-	f := NewEndorsementFakeFactory()
-	for i, c := range cases {
-		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			f.RecognizerId.MemberId = c.RecogniserId
-			f.RecognizerGrade = c.RecognizerGrade
-			f.EndorsedId.MemberId = c.EndorsedId
-			f.EndorsedGrade = c.EndorsedGrade
-			_, err := f.Create()
-			assert.Equal(t, f.RecognizerGrade, c.RecognizerGrade)
-			assert.ErrorIs(t, err, c.ExpectedError)
-		})
-	}
-}
-
 func TestEndorsementIsEndorsedBy(t *testing.T) {
 	cases := []struct {
 		RecogniserId     uint64

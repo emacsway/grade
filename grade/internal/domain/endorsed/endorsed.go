@@ -16,6 +16,9 @@ import (
 )
 
 var (
+	ErrLowerGradeEndorses = errors.New(
+		"it is allowed to receive endorsements only from members with equal or higher grade",
+	)
 	ErrEndorsementOneself = errors.New(
 		"recognizer can't endorse himself",
 	)
@@ -85,13 +88,13 @@ func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId
 	if r.GetId().Equals(e.id) {
 		errs = multierror.Append(errs, ErrEndorsementOneself)
 	}
+	if r.GetGrade().LessThan(e.grade) {
+		errs = multierror.Append(errs, ErrLowerGradeEndorses)
+	}
 	for _, ent := range e.receivedEndorsements {
 		if ent.IsEndorsedBy(r.GetId(), aId) {
 			errs = multierror.Append(errs, ErrAlreadyEndorsed)
 		}
-	}
-	if err := endorsement.CanEndorse(r.GetId(), r.GetGrade(), e.id, e.grade); err != nil {
-		errs = multierror.Append(errs, err)
 	}
 	return errs
 }
