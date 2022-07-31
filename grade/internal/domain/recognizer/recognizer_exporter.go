@@ -11,28 +11,32 @@ import (
 type RecognizerExporter struct {
 	Id                        member.TenantMemberIdExporter
 	Grade                     seedwork.Uint8Exporter
-	AvailableEndorsementCount seedwork.ExporterSetter[uint8]
-	PendingEndorsementCount   seedwork.ExporterSetter[uint8]
+	AvailableEndorsementCount seedwork.UintExporter
+	PendingEndorsementCount   seedwork.UintExporter
 	Version                   uint
 	CreatedAt                 time.Time
 }
 
-func (ex *RecognizerExporter) SetState(
-	availableEndorsementCount seedwork.ExporterSetter[uint8],
-	pendingEndorsementCount seedwork.ExporterSetter[uint8],
-	version uint,
-	createdAt time.Time,
-) {
-	ex.AvailableEndorsementCount = availableEndorsementCount
-	ex.PendingEndorsementCount = pendingEndorsementCount
-	ex.Version = version
-	ex.CreatedAt = createdAt
+func (ex *RecognizerExporter) SetId(val member.TenantMemberId) {
+	val.Export(&ex.Id)
 }
 
-func (ex *RecognizerExporter) SetId(id member.TenantMemberId) {
-	id.Export(&ex.Id)
+func (ex *RecognizerExporter) SetGrade(val shared.Grade) {
+	val.Export(&ex.Grade)
 }
 
-func (ex *RecognizerExporter) SetGrade(g shared.Grade) {
-	g.Export(&ex.Grade)
+func (ex *RecognizerExporter) SetAvailableEndorsementCount(val EndorsementCount) {
+	val.Export(&ex.AvailableEndorsementCount)
+}
+
+func (ex *RecognizerExporter) SetPendingEndorsementCount(val EndorsementCount) {
+	val.Export(&ex.PendingEndorsementCount)
+}
+
+func (ex *RecognizerExporter) SetVersion(val uint) {
+	ex.Version = val
+}
+
+func (ex *RecognizerExporter) SetCreatedAt(val time.Time) {
+	ex.CreatedAt = val
 }

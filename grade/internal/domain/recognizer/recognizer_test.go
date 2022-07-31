@@ -22,7 +22,7 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, ErrNoEndorsementReservation},
 		{func(r *Recognizer) error {
-			for i := uint8(0); i < YearlyEndorsementCount; i++ {
+			for i := uint(0); i < YearlyEndorsementCount; i++ {
 				err := r.ReserveEndorsement()
 				if err != nil {
 					return err
@@ -77,8 +77,8 @@ func TestRecognizerExport(t *testing.T) {
 	assert.Equal(t, RecognizerExporter{
 		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Grade:                     seedwork.Uint8Exporter(f.Grade),
-		AvailableEndorsementCount: seedwork.NewUint8Exporter(YearlyEndorsementCount),
-		PendingEndorsementCount:   seedwork.NewUint8Exporter(0),
+		AvailableEndorsementCount: seedwork.UintExporter(YearlyEndorsementCount),
+		PendingEndorsementCount:   seedwork.UintExporter(0),
 		Version:                   0,
 		CreatedAt:                 f.CreatedAt,
 	}, actualExporter)

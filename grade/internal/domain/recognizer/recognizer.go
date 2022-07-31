@@ -119,24 +119,19 @@ func (r *Recognizer) CompleteEndorsement() error {
 }
 
 func (r Recognizer) Export(ex RecognizerExporterSetter) {
-	var availableEndorsementCount, pendingEndorsementCount seedwork.Uint8Exporter
-
-	r.availableEndorsementCount.Export(&availableEndorsementCount)
-	r.pendingEndorsementCount.Export(&pendingEndorsementCount)
-	ex.SetState(
-		&availableEndorsementCount, &pendingEndorsementCount, r.GetVersion(), r.createdAt,
-	)
 	ex.SetId(r.id)
 	ex.SetGrade(r.grade)
+	ex.SetAvailableEndorsementCount(r.availableEndorsementCount)
+	ex.SetPendingEndorsementCount(r.pendingEndorsementCount)
+	ex.SetVersion(r.GetVersion())
+	ex.SetCreatedAt(r.createdAt)
 }
 
 type RecognizerExporterSetter interface {
-	SetState(
-		availableEndorsementCount seedwork.ExporterSetter[uint8],
-		pendingEndorsementCount seedwork.ExporterSetter[uint8],
-		version uint,
-		createdAt time.Time,
-	)
 	SetId(member.TenantMemberId)
 	SetGrade(shared.Grade)
+	SetAvailableEndorsementCount(EndorsementCount)
+	SetPendingEndorsementCount(EndorsementCount)
+	SetVersion(uint)
+	SetCreatedAt(time.Time)
 }

@@ -19,30 +19,30 @@ type EndorsedExporter struct {
 	CreatedAt            time.Time
 }
 
-func (ex *EndorsedExporter) SetId(id member.TenantMemberId) {
-	id.Export(&ex.Id)
+func (ex *EndorsedExporter) SetId(val member.TenantMemberId) {
+	val.Export(&ex.Id)
 }
 
-func (ex *EndorsedExporter) SetGrade(g shared.Grade) {
-	g.Export(&ex.Grade)
+func (ex *EndorsedExporter) SetGrade(val shared.Grade) {
+	val.Export(&ex.Grade)
 }
 
-func (ex *EndorsedExporter) AddEndorsement(ent endorsement.Endorsement) {
+func (ex *EndorsedExporter) AddEndorsement(val endorsement.Endorsement) {
 	var endorsementExporter endorsement.EndorsementExporter
-	ent.Export(&endorsementExporter)
+	val.Export(&endorsementExporter)
 	ex.ReceivedEndorsements = append(ex.ReceivedEndorsements, endorsementExporter)
 }
 
-func (ex *EndorsedExporter) AddGradeLogEntry(gle gradelogentry.GradeLogEntry) {
+func (ex *EndorsedExporter) AddGradeLogEntry(val gradelogentry.GradeLogEntry) {
 	var gradeLogEntryExporter gradelogentry.GradeLogEntryExporter
-	gle.Export(&gradeLogEntryExporter)
+	val.Export(&gradeLogEntryExporter)
 	ex.GradeLogEntries = append(ex.GradeLogEntries, gradeLogEntryExporter)
 }
 
-func (ex *EndorsedExporter) SetVersion(version uint) {
-	ex.Version = version
+func (ex *EndorsedExporter) SetVersion(val uint) {
+	ex.Version = val
 }
 
-func (ex *EndorsedExporter) SetCreatedAt(createdAt time.Time) {
-	ex.CreatedAt = createdAt
+func (ex *EndorsedExporter) SetCreatedAt(val time.Time) {
+	ex.CreatedAt = val
 }
