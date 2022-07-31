@@ -23,7 +23,7 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 		{1, 0, 2, 0, nil},
 		{1, 1, 2, 0, nil},
 		{1, 0, 2, 1, endorsement.ErrLowerGradeEndorses},
-		{3, 0, 3, 0, endorsement.ErrEndorsementOneself},
+		{3, 0, 3, 0, ErrEndorsementOneself},
 	}
 	ef := NewEndorsedFakeFactory()
 	rf := recognizer.NewRecognizerFakeFactory()

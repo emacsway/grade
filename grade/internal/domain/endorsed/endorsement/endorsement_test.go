@@ -23,7 +23,6 @@ func TestEndorsementConstructor(t *testing.T) {
 		{1, 0, 2, 0, nil},
 		{1, 1, 2, 0, nil},
 		{1, 0, 2, 1, ErrLowerGradeEndorses},
-		{1, 0, 1, 0, ErrEndorsementOneself},
 	}
 	f := NewEndorsementFakeFactory()
 	for i, c := range cases {

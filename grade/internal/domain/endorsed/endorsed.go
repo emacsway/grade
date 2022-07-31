@@ -4,6 +4,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/hashicorp/go-multierror"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
@@ -14,6 +16,9 @@ import (
 )
 
 var (
+	ErrEndorsementOneself = errors.New(
+		"recognizer can't endorse himself",
+	)
 	ErrAlreadyEndorsed = errors.New(
 		"this artifact has already been endorsed by the recogniser",
 	)
@@ -76,12 +81,19 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.Ar
 }
 
 func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId) error {
+	var errs error
+	if r.GetId().Equals(e.id) {
+		errs = multierror.Append(errs, ErrEndorsementOneself)
+	}
 	for _, ent := range e.receivedEndorsements {
 		if ent.IsEndorsedBy(r.GetId(), aId) {
-			return ErrAlreadyEndorsed
+			errs = multierror.Append(errs, ErrAlreadyEndorsed)
 		}
 	}
-	return endorsement.CanEndorse(r.GetId(), r.GetGrade(), e.id, e.grade)
+	if err := endorsement.CanEndorse(r.GetId(), r.GetGrade(), e.id, e.grade); err != nil {
+		errs = multierror.Append(errs, err)
+	}
+	return errs
 }
 
 func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, aId artifact.ArtifactId) error {

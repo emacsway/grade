@@ -23,9 +23,6 @@ var (
 	ErrLowerGradeEndorses = errors.New(
 		"it is allowed to receive endorsements only from members with equal or higher grade",
 	)
-	ErrEndorsementOneself = errors.New(
-		"recognizer can't endorse himself",
-	)
 )
 
 func CanEndorse(
@@ -38,10 +35,6 @@ func CanEndorse(
 
 	if recognizerGrade.LessThan(endorsedGrade) {
 		err = multierror.Append(err, ErrLowerGradeEndorses)
-	}
-
-	if recognizerId.Equals(endorsedId) {
-		err = multierror.Append(err, ErrEndorsementOneself)
 	}
 	return err
 }
