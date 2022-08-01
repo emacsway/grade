@@ -7,10 +7,10 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
-func NewRecognizerFakeFactory() *RecognizerFakeFactory {
+func NewRecognizerFakeFactory() RecognizerFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 1
-	return &RecognizerFakeFactory{
+	return RecognizerFakeFactory{
 		Id:        idFactory,
 		Grade:     1,
 		CreatedAt: time.Now(),
@@ -18,7 +18,7 @@ func NewRecognizerFakeFactory() *RecognizerFakeFactory {
 }
 
 type RecognizerFakeFactory struct {
-	Id        *member.TenantMemberIdFakeFactory
+	Id        member.TenantMemberIdFakeFactory
 	Grade     uint8
 	CreatedAt time.Time
 }

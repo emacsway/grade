@@ -10,10 +10,10 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func NewEndorsedFakeFactory() *EndorsedFakeFactory {
+func NewEndorsedFakeFactory() EndorsedFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 2
-	return &EndorsedFakeFactory{
+	return EndorsedFakeFactory{
 		Id:                idFactory,
 		Grade:             0,
 		CreatedAt:         time.Now(),
@@ -22,9 +22,9 @@ func NewEndorsedFakeFactory() *EndorsedFakeFactory {
 }
 
 type EndorsedFakeFactory struct {
-	Id                   *member.TenantMemberIdFakeFactory
+	Id                   member.TenantMemberIdFakeFactory
 	Grade                uint8
-	ReceivedEndorsements []*ReceivedEndorsementFakeFactory
+	ReceivedEndorsements []ReceivedEndorsementFakeFactory
 	CreatedAt            time.Time
 	CurrentArtifactId    uint64
 }
@@ -58,7 +58,7 @@ func (f *EndorsedFakeFactory) achieveGrade() error {
 	return nil
 }
 
-func (f *EndorsedFakeFactory) ReceiveEndorsement(r *recognizer.RecognizerFakeFactory) error {
+func (f *EndorsedFakeFactory) ReceiveEndorsement(r recognizer.RecognizerFakeFactory) error {
 	err := f.achieveGrade()
 	if err != nil {
 		return err
@@ -67,7 +67,7 @@ func (f *EndorsedFakeFactory) ReceiveEndorsement(r *recognizer.RecognizerFakeFac
 	return nil
 }
 
-func (f *EndorsedFakeFactory) receiveEndorsement(r *recognizer.RecognizerFakeFactory) {
+func (f *EndorsedFakeFactory) receiveEndorsement(r recognizer.RecognizerFakeFactory) {
 	e := NewReceivedEndorsementFakeFactory(r)
 	e.ArtifactId.ArtifactId = f.CurrentArtifactId
 	f.CurrentArtifactId += 1
@@ -110,10 +110,10 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 	return e, nil
 }
 
-func NewReceivedEndorsementFakeFactory(r *recognizer.RecognizerFakeFactory) *ReceivedEndorsementFakeFactory {
+func NewReceivedEndorsementFakeFactory(r recognizer.RecognizerFakeFactory) ReceivedEndorsementFakeFactory {
 	artifactIdFactory := artifact.NewTenantArtifactIdFakeFactory()
 	artifactIdFactory.ArtifactId = 6
-	return &ReceivedEndorsementFakeFactory{
+	return ReceivedEndorsementFakeFactory{
 		Recognizer: r,
 		ArtifactId: artifactIdFactory,
 		CreatedAt:  time.Now(),
@@ -121,7 +121,7 @@ func NewReceivedEndorsementFakeFactory(r *recognizer.RecognizerFakeFactory) *Rec
 }
 
 type ReceivedEndorsementFakeFactory struct {
-	Recognizer *recognizer.RecognizerFakeFactory
-	ArtifactId *artifact.TenantArtifactIdFakeFactory
+	Recognizer recognizer.RecognizerFakeFactory
+	ArtifactId artifact.TenantArtifactIdFakeFactory
 	CreatedAt  time.Time
 }

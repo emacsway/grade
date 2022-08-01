@@ -8,14 +8,14 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
-func NewEndorsementFakeFactory() *EndorsementFakeFactory {
+func NewEndorsementFakeFactory() EndorsementFakeFactory {
 	recognizerIdFactory := member.NewTenantMemberIdFakeFactory()
 	recognizerIdFactory.MemberId = 1
 	endorsedIdFactory := member.NewTenantMemberIdFakeFactory()
 	endorsedIdFactory.MemberId = 2
 	artifactIdFactory := artifact.NewTenantArtifactIdFakeFactory()
 	artifactIdFactory.ArtifactId = 6
-	return &EndorsementFakeFactory{
+	return EndorsementFakeFactory{
 		RecognizerId:      recognizerIdFactory,
 		RecognizerGrade:   2,
 		RecognizerVersion: 3,
@@ -28,13 +28,13 @@ func NewEndorsementFakeFactory() *EndorsementFakeFactory {
 }
 
 type EndorsementFakeFactory struct {
-	RecognizerId      *member.TenantMemberIdFakeFactory
+	RecognizerId      member.TenantMemberIdFakeFactory
 	RecognizerGrade   uint8
 	RecognizerVersion uint
-	EndorsedId        *member.TenantMemberIdFakeFactory
+	EndorsedId        member.TenantMemberIdFakeFactory
 	EndorsedGrade     uint8
 	EndorsedVersion   uint
-	ArtifactId        *artifact.TenantArtifactIdFakeFactory
+	ArtifactId        artifact.TenantArtifactIdFakeFactory
 	CreatedAt         time.Time
 }
 

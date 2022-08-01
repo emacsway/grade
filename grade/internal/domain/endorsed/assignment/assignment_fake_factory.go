@@ -7,10 +7,10 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
-func NewAssignmentFakeFactory() *AssignmentFakeFactory {
+func NewAssignmentFakeFactory() AssignmentFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 2
-	return &AssignmentFakeFactory{
+	return AssignmentFakeFactory{
 		EndorsedId:      idFactory,
 		EndorsedVersion: 2,
 		AssignedGrade:   1,
@@ -20,7 +20,7 @@ func NewAssignmentFakeFactory() *AssignmentFakeFactory {
 }
 
 type AssignmentFakeFactory struct {
-	EndorsedId      *member.TenantMemberIdFakeFactory
+	EndorsedId      member.TenantMemberIdFakeFactory
 	EndorsedVersion uint
 	AssignedGrade   uint8
 	Reason          string

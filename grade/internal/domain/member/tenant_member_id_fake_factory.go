@@ -1,7 +1,7 @@
 package member
 
-func NewTenantMemberIdFakeFactory() *TenantMemberIdFakeFactory {
-	return &TenantMemberIdFakeFactory{
+func NewTenantMemberIdFakeFactory() TenantMemberIdFakeFactory {
+	return TenantMemberIdFakeFactory{
 		TenantId: 10,
 		MemberId: 1,
 	}

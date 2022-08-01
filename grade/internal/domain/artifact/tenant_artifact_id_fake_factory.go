@@ -1,7 +1,7 @@
 package artifact
 
-func NewTenantArtifactIdFakeFactory() *TenantArtifactIdFakeFactory {
-	return &TenantArtifactIdFakeFactory{
+func NewTenantArtifactIdFakeFactory() TenantArtifactIdFakeFactory {
+	return TenantArtifactIdFakeFactory{
 		TenantId:   10,
 		ArtifactId: 1,
 	}
