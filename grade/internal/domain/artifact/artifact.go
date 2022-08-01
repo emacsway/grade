@@ -9,7 +9,7 @@ import (
 
 // Artifact is a good candidate for EventSourcing
 type Artifact struct {
-	id               ArtifactId
+	id               TenantArtifactId
 	status           Status
 	name             Name
 	description      Description

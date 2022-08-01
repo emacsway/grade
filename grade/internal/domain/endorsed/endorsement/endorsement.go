@@ -23,7 +23,7 @@ func NewEndorsement(
 	endorsedId member.TenantMemberId,
 	endorsedGrade grade.Grade,
 	endorsedVersion uint,
-	artifactId artifact.ArtifactId,
+	artifactId artifact.TenantArtifactId,
 	createdAt time.Time,
 ) (Endorsement, error) {
 	return Endorsement{
@@ -45,12 +45,12 @@ type Endorsement struct {
 	endorsedId        member.TenantMemberId
 	endorsedGrade     grade.Grade
 	endorsedVersion   uint
-	artifactId        artifact.ArtifactId
+	artifactId        artifact.TenantArtifactId
 	createdAt         time.Time
 }
 
-func (e Endorsement) IsEndorsedBy(rId member.TenantMemberId, aId artifact.ArtifactId) bool {
-	return e.recognizerId == rId && e.artifactId == aId
+func (e Endorsement) IsEndorsedBy(rId member.TenantMemberId, aId artifact.TenantArtifactId) bool {
+	return e.recognizerId.Equal(rId) && e.artifactId.Equal(aId)
 }
 
 func (e Endorsement) EndorsedGrade() grade.Grade {
@@ -84,6 +84,6 @@ type EndorsementExporterSetter interface {
 	SetEndorsedId(member.TenantMemberId)
 	SetEndorsedGrade(grade.Grade)
 	SetEndorsedVersion(uint)
-	SetArtifactId(id artifact.ArtifactId)
+	SetArtifactId(id artifact.TenantArtifactId)
 	SetCreatedAt(time.Time)
 }

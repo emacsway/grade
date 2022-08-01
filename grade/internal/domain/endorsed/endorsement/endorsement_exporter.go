@@ -16,7 +16,7 @@ type EndorsementExporter struct {
 	EndorsedId        member.TenantMemberIdExporter
 	EndorsedGrade     seedwork.Uint8Exporter
 	EndorsedVersion   uint
-	ArtifactId        seedwork.Uint64Exporter
+	ArtifactId        artifact.TenantArtifactIdExporter
 	CreatedAt         time.Time
 }
 
@@ -44,7 +44,7 @@ func (ex *EndorsementExporter) SetEndorsedVersion(val uint) {
 	ex.EndorsedVersion = val
 }
 
-func (ex *EndorsementExporter) SetArtifactId(val artifact.ArtifactId) {
+func (ex *EndorsementExporter) SetArtifactId(val artifact.TenantArtifactId) {
 	val.Export(&ex.ArtifactId)
 }
 

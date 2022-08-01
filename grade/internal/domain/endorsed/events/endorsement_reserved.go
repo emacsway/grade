@@ -15,7 +15,7 @@ func NewEndorsementReceived(
 	endorsedId member.TenantMemberId,
 	endorsedGrade grade.Grade,
 	endorsedVersion uint,
-	artifactId artifact.ArtifactId,
+	artifactId artifact.TenantArtifactId,
 	createdAt time.Time,
 ) EndorsementReceived {
 	return EndorsementReceived{
@@ -37,7 +37,7 @@ type EndorsementReceived struct {
 	endorsedId        member.TenantMemberId
 	endorsedGrade     grade.Grade
 	endorsedVersion   uint
-	artifactId        artifact.ArtifactId
+	artifactId        artifact.TenantArtifactId
 	createdAt         time.Time
 }
 
@@ -65,7 +65,7 @@ func (e EndorsementReceived) EndorsedVersion() uint {
 	return e.endorsedVersion
 }
 
-func (e EndorsementReceived) ArtifactId() artifact.ArtifactId {
+func (e EndorsementReceived) ArtifactId() artifact.TenantArtifactId {
 	return e.artifactId
 }
 

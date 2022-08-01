@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/assignment"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
@@ -40,8 +41,11 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedId:        member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedGrade:     seedwork.Uint8Exporter(ef.Grade),
 				EndorsedVersion:   0,
-				ArtifactId:        seedwork.Uint64Exporter(ef.ReceivedEndorsements[0].ArtifactId),
-				CreatedAt:         ef.ReceivedEndorsements[0].CreatedAt,
+				ArtifactId: artifact.NewTenantArtifactIdExporter(
+					ef.ReceivedEndorsements[0].ArtifactId.TenantId,
+					ef.ReceivedEndorsements[0].ArtifactId.ArtifactId,
+				),
+				CreatedAt: ef.ReceivedEndorsements[0].CreatedAt,
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
@@ -50,8 +54,11 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedId:        member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedGrade:     seedwork.Uint8Exporter(ef.Grade),
 				EndorsedVersion:   1,
-				ArtifactId:        seedwork.Uint64Exporter(ef.ReceivedEndorsements[1].ArtifactId),
-				CreatedAt:         ef.ReceivedEndorsements[1].CreatedAt,
+				ArtifactId: artifact.NewTenantArtifactIdExporter(
+					ef.ReceivedEndorsements[1].ArtifactId.TenantId,
+					ef.ReceivedEndorsements[1].ArtifactId.ArtifactId,
+				),
+				CreatedAt: ef.ReceivedEndorsements[1].CreatedAt,
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
@@ -60,8 +67,11 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedId:        member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedGrade:     seedwork.Uint8Exporter(ef.Grade),
 				EndorsedVersion:   2,
-				ArtifactId:        seedwork.Uint64Exporter(ef.ReceivedEndorsements[2].ArtifactId),
-				CreatedAt:         ef.ReceivedEndorsements[2].CreatedAt,
+				ArtifactId: artifact.NewTenantArtifactIdExporter(
+					ef.ReceivedEndorsements[2].ArtifactId.TenantId,
+					ef.ReceivedEndorsements[2].ArtifactId.ArtifactId,
+				),
+				CreatedAt: ef.ReceivedEndorsements[2].CreatedAt,
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
@@ -70,8 +80,11 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedId:        member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedGrade:     seedwork.Uint8Exporter(ef.Grade + 1),
 				EndorsedVersion:   3,
-				ArtifactId:        seedwork.Uint64Exporter(ef.ReceivedEndorsements[3].ArtifactId),
-				CreatedAt:         ef.ReceivedEndorsements[3].CreatedAt,
+				ArtifactId: artifact.NewTenantArtifactIdExporter(
+					ef.ReceivedEndorsements[3].ArtifactId.TenantId,
+					ef.ReceivedEndorsements[3].ArtifactId.ArtifactId,
+				),
+				CreatedAt: ef.ReceivedEndorsements[3].CreatedAt,
 			},
 		},
 		Assignments: []assignment.AssignmentExporter{

@@ -58,7 +58,7 @@ type Endorsed struct {
 	seedwork.EventiveEntity
 }
 
-func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, aId artifact.ArtifactId, t time.Time) error {
+func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, aId artifact.TenantArtifactId, t time.Time) error {
 	err := e.canReceiveEndorsement(r, aId)
 	if err != nil {
 		return err
@@ -82,7 +82,7 @@ func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, aId artifact.Arti
 	return nil
 }
 
-func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.ArtifactId) error {
+func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.TenantArtifactId) error {
 	err := r.CanCompleteEndorsement()
 	if err != nil {
 		return err
@@ -90,7 +90,7 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.Ar
 	return e.canBeEndorsed(r, aId)
 }
 
-func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId) error {
+func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.TenantArtifactId) error {
 	var errs error
 	if !r.Id().TenantId().Equal(e.id.TenantId()) {
 		errs = multierror.Append(errs, ErrCrossTenantEndorsement)
@@ -110,7 +110,7 @@ func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId
 	return errs
 }
 
-func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, aId artifact.ArtifactId) error {
+func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, aId artifact.TenantArtifactId) error {
 	err := r.CanReserveEndorsement()
 	if err != nil {
 		return err

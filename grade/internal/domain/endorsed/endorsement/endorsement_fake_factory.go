@@ -13,6 +13,8 @@ func NewEndorsementFakeFactory() *EndorsementFakeFactory {
 	recognizerIdFactory.MemberId = 1
 	endorsedIdFactory := member.NewTenantMemberIdFakeFactory()
 	endorsedIdFactory.MemberId = 2
+	artifactIdFactory := artifact.NewTenantArtifactIdFakeFactory()
+	artifactIdFactory.ArtifactId = 6
 	return &EndorsementFakeFactory{
 		RecognizerId:      recognizerIdFactory,
 		RecognizerGrade:   2,
@@ -20,7 +22,7 @@ func NewEndorsementFakeFactory() *EndorsementFakeFactory {
 		EndorsedId:        endorsedIdFactory,
 		EndorsedGrade:     1,
 		EndorsedVersion:   5,
-		ArtifactId:        6,
+		ArtifactId:        artifactIdFactory,
 		CreatedAt:         time.Now(),
 	}
 }
@@ -32,7 +34,7 @@ type EndorsementFakeFactory struct {
 	EndorsedId        *member.TenantMemberIdFakeFactory
 	EndorsedGrade     uint8
 	EndorsedVersion   uint
-	ArtifactId        uint64
+	ArtifactId        *artifact.TenantArtifactIdFakeFactory
 	CreatedAt         time.Time
 }
 
@@ -53,7 +55,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	artifactId, err := artifact.NewArtifactId(f.ArtifactId)
+	artifactId, err := artifact.NewTenantArtifactId(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId)
 	if err != nil {
 		return Endorsement{}, err
 	}

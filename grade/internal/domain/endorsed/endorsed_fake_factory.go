@@ -69,7 +69,7 @@ func (f *EndorsedFakeFactory) ReceiveEndorsement(r *recognizer.RecognizerFakeFac
 
 func (f *EndorsedFakeFactory) receiveEndorsement(r *recognizer.RecognizerFakeFactory) {
 	e := NewReceivedEndorsementFakeFactory(r)
-	e.ArtifactId = f.CurrentArtifactId
+	e.ArtifactId.ArtifactId = f.CurrentArtifactId
 	f.CurrentArtifactId += 1
 	e.CreatedAt = time.Now()
 	f.ReceivedEndorsements = append(f.ReceivedEndorsements, e)
@@ -93,7 +93,7 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 		if err != nil {
 			return nil, err
 		}
-		artifactId, err := artifact.NewArtifactId(entf.ArtifactId)
+		artifactId, err := artifact.NewTenantArtifactId(entf.ArtifactId.TenantId, entf.ArtifactId.ArtifactId)
 		if err != nil {
 			return nil, err
 		}
@@ -111,15 +111,17 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 }
 
 func NewReceivedEndorsementFakeFactory(r *recognizer.RecognizerFakeFactory) *ReceivedEndorsementFakeFactory {
+	artifactIdFactory := artifact.NewTenantArtifactIdFakeFactory()
+	artifactIdFactory.ArtifactId = 6
 	return &ReceivedEndorsementFakeFactory{
 		Recognizer: r,
-		ArtifactId: 6,
+		ArtifactId: artifactIdFactory,
 		CreatedAt:  time.Now(),
 	}
 }
 
 type ReceivedEndorsementFakeFactory struct {
 	Recognizer *recognizer.RecognizerFakeFactory
-	ArtifactId uint64
+	ArtifactId *artifact.TenantArtifactIdFakeFactory
 	CreatedAt  time.Time
 }

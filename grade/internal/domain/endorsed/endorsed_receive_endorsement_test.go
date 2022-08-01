@@ -19,13 +19,14 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 		EndorsedTenantId   uint64
 		EndorsedMemberId   uint64
 		EndorsedGrade      uint8
+		ArtifactTenantId   uint64
 		ExpectedError      error
 	}{
-		{1, 1, 0, 1, 2, 0, nil},
-		{1, 1, 1, 1, 2, 0, nil},
-		{1, 1, 0, 1, 2, 1, ErrLowerGradeEndorses},
-		{1, 3, 0, 1, 3, 0, ErrEndorsementOneself},
-		{1, 1, 0, 2, 2, 0, ErrCrossTenantEndorsement},
+		{1, 1, 0, 1, 2, 0, 1, nil},
+		{1, 1, 1, 1, 2, 0, 1, nil},
+		{1, 1, 0, 1, 2, 1, 1, ErrLowerGradeEndorses},
+		{1, 3, 0, 1, 3, 0, 1, ErrEndorsementOneself},
+		{1, 1, 0, 2, 2, 0, 1, ErrCrossTenantEndorsement},
 	}
 	ef := NewEndorsedFakeFactory()
 	rf := recognizer.NewRecognizerFakeFactory()
@@ -47,7 +48,7 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			artifactId, err := artifact.NewArtifactId(ef.CurrentArtifactId)
+			artifactId, err := artifact.NewTenantArtifactId(c.ArtifactTenantId, ef.CurrentArtifactId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -113,7 +114,7 @@ func TestEndorsedCanCompleteEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			artifactId, err := artifact.NewArtifactId(ef.CurrentArtifactId)
+			artifactId, err := artifact.NewTenantArtifactId(ef.Id.TenantId, ef.CurrentArtifactId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
