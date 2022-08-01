@@ -9,6 +9,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/assignment"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/events"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
@@ -116,7 +117,7 @@ func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, aId artifact.Arti
 
 func (e *Endorsed) actualizeGrade(t time.Time) error {
 	if e.grade.NextGradeAchieved(e.getReceivedEndorsementCount()) {
-		nextGrade, err := e.grade.Next()
+		assignedGrade, err := e.grade.Next()
 		if err != nil {
 			return err
 		}
@@ -124,7 +125,14 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		return e.setGrade(nextGrade, reason, t)
+		e.AddDomainEvent(events.GradeAssigned{
+			EndorsedId:      e.id,
+			EndorsedVersion: e.GetVersion(),
+			AssignedGrade:   assignedGrade,
+			Reason:          reason,
+			CreatedAt:       t,
+		})
+		return e.setGrade(assignedGrade, reason, t)
 	}
 	return nil
 }
