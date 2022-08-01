@@ -42,9 +42,9 @@ func NewEndorsed(
 	return &Endorsed{
 		id:                 id,
 		grade:              zeroGrade,
+		createdAt:          createdAt,
 		VersionedAggregate: versioned,
 		EventiveEntity:     eventive,
-		createdAt:          createdAt,
 	}, nil
 }
 

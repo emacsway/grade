@@ -7,8 +7,8 @@ import (
 )
 
 type ExpertiseArea struct {
-	id        ExpertiseAreaId
-	name      Name
-	createdBy member.TenantMemberId
-	createdAt time.Time
+	id          ExpertiseAreaId
+	name        Name
+	createdById member.TenantMemberId
+	createdAt   time.Time
 }
