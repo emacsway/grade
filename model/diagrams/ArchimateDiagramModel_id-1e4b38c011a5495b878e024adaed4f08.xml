@@ -1113,7 +1113,7 @@
       <bounds
           x="2592"
           y="442"
-          width="164"
+          width="120"
           height="55"/>
       <archimateElement
           xsi:type="archimate:BusinessObject"
@@ -1138,7 +1138,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-2f4f888262844813b8a64d2eca584ff7"
         textAlignment="1"
-        content="tenantId: int&#xA;endorsedId: int&#xA;endorsedVersion: int&#xA;grade: int&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;endorsedId: int&#xA;endorsedVersion: int&#xA;assignedGrade: int&#xA;createdAt: datetime">
       <sourceConnections
           id="id-2e3736315fbc4bfe8c66c120baa0b951"
           source="id-2f4f888262844813b8a64d2eca584ff7"
@@ -1146,7 +1146,7 @@
       <bounds
           x="2592"
           y="526"
-          width="185"
+          width="144"
           height="96"/>
     </children>
     <children
