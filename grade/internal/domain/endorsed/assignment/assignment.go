@@ -1,4 +1,4 @@
-package gradelogentry
+package assignment
 
 import (
 	"time"
@@ -7,14 +7,14 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
-func NewGradeLogEntry(
+func NewAssignment(
 	endorsedId member.TenantMemberId,
 	endorsedVersion uint,
 	assignedGrade grade.Grade,
 	reason Reason,
 	createdAt time.Time,
-) (GradeLogEntry, error) {
-	return GradeLogEntry{
+) (Assignment, error) {
+	return Assignment{
 		endorsedId:      endorsedId,
 		endorsedVersion: endorsedVersion,
 		assignedGrade:   assignedGrade,
@@ -23,7 +23,7 @@ func NewGradeLogEntry(
 	}, nil
 }
 
-type GradeLogEntry struct {
+type Assignment struct {
 	endorsedId      member.TenantMemberId
 	endorsedVersion uint
 	assignedGrade   grade.Grade
@@ -31,15 +31,15 @@ type GradeLogEntry struct {
 	createdAt       time.Time
 }
 
-func (gle GradeLogEntry) Export(ex GradeLogEntryExporterSetter) {
-	ex.SetEndorsedId(gle.endorsedId)
-	ex.SetEndorsedVersion(gle.endorsedVersion)
-	ex.SetAssignedGrade(gle.assignedGrade)
-	ex.SetReason(gle.reason)
-	ex.SetCreatedAt(gle.createdAt)
+func (a Assignment) Export(ex AssignmentExporterSetter) {
+	ex.SetEndorsedId(a.endorsedId)
+	ex.SetEndorsedVersion(a.endorsedVersion)
+	ex.SetAssignedGrade(a.assignedGrade)
+	ex.SetReason(a.reason)
+	ex.SetCreatedAt(a.createdAt)
 }
 
-type GradeLogEntryExporterSetter interface {
+type AssignmentExporterSetter interface {
 	SetEndorsedId(member.TenantMemberId)
 	SetEndorsedVersion(uint)
 	SetAssignedGrade(grade.Grade)

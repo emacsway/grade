@@ -3,8 +3,8 @@ package endorsed
 import (
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/assignment"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
@@ -14,7 +14,7 @@ type EndorsedExporter struct {
 	Id                   member.TenantMemberIdExporter
 	Grade                seedwork.Uint8Exporter
 	ReceivedEndorsements []endorsement.EndorsementExporter
-	GradeLogEntries      []gradelogentry.GradeLogEntryExporter
+	Assignments          []assignment.AssignmentExporter
 	Version              uint
 	CreatedAt            time.Time
 }
@@ -33,10 +33,10 @@ func (ex *EndorsedExporter) AddEndorsement(val endorsement.Endorsement) {
 	ex.ReceivedEndorsements = append(ex.ReceivedEndorsements, endorsementExporter)
 }
 
-func (ex *EndorsedExporter) AddGradeLogEntry(val gradelogentry.GradeLogEntry) {
-	var gradeLogEntryExporter gradelogentry.GradeLogEntryExporter
-	val.Export(&gradeLogEntryExporter)
-	ex.GradeLogEntries = append(ex.GradeLogEntries, gradeLogEntryExporter)
+func (ex *EndorsedExporter) AddAssignment(val assignment.Assignment) {
+	var assignmentExporter assignment.AssignmentExporter
+	val.Export(&assignmentExporter)
+	ex.Assignments = append(ex.Assignments, assignmentExporter)
 }
 
 func (ex *EndorsedExporter) SetVersion(val uint) {

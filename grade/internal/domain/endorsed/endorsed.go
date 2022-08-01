@@ -7,8 +7,8 @@ import (
 	"github.com/hashicorp/go-multierror"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/assignment"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
@@ -51,7 +51,7 @@ type Endorsed struct {
 	id                   member.TenantMemberId
 	grade                grade.Grade
 	receivedEndorsements []endorsement.Endorsement
-	gradeLogEntries      []gradelogentry.GradeLogEntry
+	assignments          []assignment.Assignment
 	createdAt            time.Time
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
@@ -120,7 +120,7 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		reason, err := gradelogentry.NewReason("Achieved")
+		reason, err := assignment.NewReason("Achieved")
 		if err != nil {
 			return err
 		}
@@ -138,19 +138,19 @@ func (e Endorsed) getReceivedEndorsementCount() uint {
 	return counter
 }
 
-func (e *Endorsed) setGrade(g grade.Grade, reason gradelogentry.Reason, t time.Time) error {
-	gle, err := gradelogentry.NewGradeLogEntry(
+func (e *Endorsed) setGrade(g grade.Grade, reason assignment.Reason, t time.Time) error {
+	a, err := assignment.NewAssignment(
 		e.id, e.GetVersion(), g, reason, t,
 	)
 	if err != nil {
 		return err
 	}
-	e.gradeLogEntries = append(e.gradeLogEntries, gle)
+	e.assignments = append(e.assignments, a)
 	e.grade = g
 	return nil
 }
 
-func (e *Endorsed) DecreaseGrade(reason gradelogentry.Reason, t time.Time) error {
+func (e *Endorsed) DecreaseGrade(reason assignment.Reason, t time.Time) error {
 	previousGrade, err := e.grade.Next()
 	if err != nil {
 		return err
@@ -167,8 +167,8 @@ func (e Endorsed) Export(ex EndorsedExporterSetter) {
 	for i := range e.receivedEndorsements {
 		ex.AddEndorsement(e.receivedEndorsements[i])
 	}
-	for i := range e.gradeLogEntries {
-		ex.AddGradeLogEntry(e.gradeLogEntries[i])
+	for i := range e.assignments {
+		ex.AddAssignment(e.assignments[i])
 	}
 }
 
@@ -176,7 +176,7 @@ type EndorsedExporterSetter interface {
 	SetId(member.TenantMemberId)
 	SetGrade(grade.Grade)
 	AddEndorsement(endorsement.Endorsement)
-	AddGradeLogEntry(gradelogentry.GradeLogEntry)
+	AddAssignment(assignment.Assignment)
 	SetVersion(uint)
 	SetCreatedAt(time.Time)
 }

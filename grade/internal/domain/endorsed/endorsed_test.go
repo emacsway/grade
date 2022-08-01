@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/assignment"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
@@ -74,7 +74,7 @@ func TestEndorsedExport(t *testing.T) {
 				CreatedAt:         ef.ReceivedEndorsements[3].CreatedAt,
 			},
 		},
-		GradeLogEntries: []gradelogentry.GradeLogEntryExporter{
+		Assignments: []assignment.AssignmentExporter{
 			{
 				EndorsedId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorsedVersion: 2,

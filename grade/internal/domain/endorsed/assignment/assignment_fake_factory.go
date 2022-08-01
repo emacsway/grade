@@ -1,4 +1,4 @@
-package gradelogentry
+package assignment
 
 import (
 	"time"
@@ -7,10 +7,10 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
-func NewGradeLogEntryFakeFactory() *GradeLogEntryFakeFactory {
+func NewAssignmentFakeFactory() *AssignmentFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 2
-	return &GradeLogEntryFakeFactory{
+	return &AssignmentFakeFactory{
 		EndorsedId:      idFactory,
 		EndorsedVersion: 2,
 		AssignedGrade:   1,
@@ -19,7 +19,7 @@ func NewGradeLogEntryFakeFactory() *GradeLogEntryFakeFactory {
 	}
 }
 
-type GradeLogEntryFakeFactory struct {
+type AssignmentFakeFactory struct {
 	EndorsedId      *member.TenantMemberIdFakeFactory
 	EndorsedVersion uint
 	AssignedGrade   uint8
@@ -27,18 +27,18 @@ type GradeLogEntryFakeFactory struct {
 	CreatedAt       time.Time
 }
 
-func (f GradeLogEntryFakeFactory) Create() (GradeLogEntry, error) {
+func (f AssignmentFakeFactory) Create() (Assignment, error) {
 	endorsedId, err := member.NewTenantMemberId(f.EndorsedId.TenantId, f.EndorsedId.MemberId)
 	if err != nil {
-		return GradeLogEntry{}, err
+		return Assignment{}, err
 	}
 	assignedGrade, err := grade.DefaultConstructor(f.AssignedGrade)
 	if err != nil {
-		return GradeLogEntry{}, err
+		return Assignment{}, err
 	}
 	reason, err := NewReason(f.Reason)
 	if err != nil {
-		return GradeLogEntry{}, err
+		return Assignment{}, err
 	}
-	return NewGradeLogEntry(endorsedId, f.EndorsedVersion, assignedGrade, reason, f.CreatedAt)
+	return NewAssignment(endorsedId, f.EndorsedVersion, assignedGrade, reason, f.CreatedAt)
 }

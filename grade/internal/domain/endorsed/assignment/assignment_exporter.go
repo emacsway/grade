@@ -1,4 +1,4 @@
-package gradelogentry
+package assignment
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-type GradeLogEntryExporter struct {
+type AssignmentExporter struct {
 	EndorsedId      member.TenantMemberIdExporter
 	EndorsedVersion uint
 	AssignedGrade   seedwork.Uint8Exporter
@@ -16,22 +16,22 @@ type GradeLogEntryExporter struct {
 	CreatedAt       time.Time
 }
 
-func (ex *GradeLogEntryExporter) SetEndorsedId(val member.TenantMemberId) {
+func (ex *AssignmentExporter) SetEndorsedId(val member.TenantMemberId) {
 	val.Export(&ex.EndorsedId)
 }
 
-func (ex *GradeLogEntryExporter) SetEndorsedVersion(val uint) {
+func (ex *AssignmentExporter) SetEndorsedVersion(val uint) {
 	ex.EndorsedVersion = val
 }
 
-func (ex *GradeLogEntryExporter) SetAssignedGrade(val grade.Grade) {
+func (ex *AssignmentExporter) SetAssignedGrade(val grade.Grade) {
 	val.Export(&ex.AssignedGrade)
 }
 
-func (ex *GradeLogEntryExporter) SetReason(val Reason) {
+func (ex *AssignmentExporter) SetReason(val Reason) {
 	val.Export(&ex.Reason)
 }
 
-func (ex *GradeLogEntryExporter) SetCreatedAt(val time.Time) {
+func (ex *AssignmentExporter) SetCreatedAt(val time.Time) {
 	ex.CreatedAt = val
 }

@@ -1,4 +1,4 @@
-package gradelogentry
+package assignment
 
 import (
 	"testing"
@@ -10,11 +10,11 @@ import (
 )
 
 func TestRecognizerExport(t *testing.T) {
-	var actualExporter GradeLogEntryExporter
-	f := NewGradeLogEntryFakeFactory()
+	var actualExporter AssignmentExporter
+	f := NewAssignmentFakeFactory()
 	agg, _ := f.Create()
 	agg.Export(&actualExporter)
-	assert.Equal(t, GradeLogEntryExporter{
+	assert.Equal(t, AssignmentExporter{
 		EndorsedId:      member.NewTenantMemberIdExporter(f.EndorsedId.TenantId, f.EndorsedId.MemberId),
 		EndorsedVersion: f.EndorsedVersion,
 		AssignedGrade:   seedwork.Uint8Exporter(f.AssignedGrade),
