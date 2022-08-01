@@ -9,7 +9,7 @@ import (
 func TestVersionedAggregateConstructor(t *testing.T) {
 	var value uint = 3
 	va := NewVersionedAggregate(value)
-	assert.Equal(t, value, va.GetVersion())
+	assert.Equal(t, value, va.Version())
 	va.IncreaseVersion()
-	assert.Equal(t, value+1, va.GetVersion())
+	assert.Equal(t, value+1, va.Version())
 }

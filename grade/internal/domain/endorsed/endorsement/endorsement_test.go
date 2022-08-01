@@ -65,7 +65,7 @@ func TestEndorsementWeight(t *testing.T) {
 				if j > i {
 					expectedWeight = 2
 				}
-				assert.Equal(t, expectedWeight, ent.GetWeight())
+				assert.Equal(t, expectedWeight, ent.Weight())
 			})
 		}
 	}

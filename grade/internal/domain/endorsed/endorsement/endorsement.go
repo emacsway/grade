@@ -53,11 +53,11 @@ func (e Endorsement) IsEndorsedBy(rId member.TenantMemberId, aId artifact.Artifa
 	return e.recognizerId == rId && e.artifactId == aId
 }
 
-func (e Endorsement) GetEndorsedGrade() grade.Grade {
+func (e Endorsement) EndorsedGrade() grade.Grade {
 	return e.endorsedGrade
 }
 
-func (e Endorsement) GetWeight() Weight {
+func (e Endorsement) Weight() Weight {
 	if e.recognizerGrade.Equal(e.endorsedGrade) {
 		return PeerWeight
 	} else if e.recognizerGrade.GreaterThan(e.endorsedGrade) {

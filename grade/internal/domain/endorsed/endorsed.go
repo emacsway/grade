@@ -64,8 +64,8 @@ func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, aId artifact.Arti
 		return err
 	}
 	ent, err := endorsement.NewEndorsement(
-		r.GetId(), r.GetGrade(), r.GetVersion(),
-		e.id, e.grade, e.GetVersion(),
+		r.Id(), r.Grade(), r.Version(),
+		e.id, e.grade, e.Version(),
 		aId, t,
 	)
 	if err != nil {
@@ -73,7 +73,7 @@ func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, aId artifact.Arti
 	}
 	e.receivedEndorsements = append(e.receivedEndorsements, ent)
 	e.AddDomainEvent(events.NewEndorsementReceived(
-		e.id, e.grade, e.GetVersion(), r.GetId(), r.GetGrade(), e.GetVersion(), aId, t,
+		e.id, e.grade, e.Version(), r.Id(), r.Grade(), e.Version(), aId, t,
 	))
 	err = e.actualizeGrade(t)
 	if err != nil {
@@ -92,17 +92,17 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.Ar
 
 func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.ArtifactId) error {
 	var errs error
-	if !r.GetId().TenantId().Equal(e.id.TenantId()) {
+	if !r.Id().TenantId().Equal(e.id.TenantId()) {
 		errs = multierror.Append(errs, ErrCrossTenantEndorsement)
 	}
-	if r.GetId().Equal(e.id) {
+	if r.Id().Equal(e.id) {
 		errs = multierror.Append(errs, ErrEndorsementOneself)
 	}
-	if r.GetGrade().LessThan(e.grade) {
+	if r.Grade().LessThan(e.grade) {
 		errs = multierror.Append(errs, ErrLowerGradeEndorses)
 	}
 	for _, ent := range e.receivedEndorsements {
-		if ent.IsEndorsedBy(r.GetId(), aId) {
+		if ent.IsEndorsedBy(r.Id(), aId) {
 			errs = multierror.Append(errs, ErrAlreadyEndorsed)
 			break
 		}
@@ -128,7 +128,7 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		e.AddDomainEvent(events.NewGradeAssigned(e.id, e.GetVersion(), assignedGrade, reason, t))
+		e.AddDomainEvent(events.NewGradeAssigned(e.id, e.Version(), assignedGrade, reason, t))
 		return e.setGrade(assignedGrade, reason, t)
 	}
 	return nil
@@ -136,8 +136,8 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 func (e Endorsed) getReceivedEndorsementCount() uint {
 	var counter uint
 	for _, v := range e.receivedEndorsements {
-		if v.GetEndorsedGrade().Equal(e.grade) {
-			counter += uint(v.GetWeight())
+		if v.EndorsedGrade().Equal(e.grade) {
+			counter += uint(v.Weight())
 		}
 	}
 	return counter
@@ -145,7 +145,7 @@ func (e Endorsed) getReceivedEndorsementCount() uint {
 
 func (e *Endorsed) setGrade(g grade.Grade, reason assignment.Reason, t time.Time) error {
 	a, err := assignment.NewAssignment(
-		e.id, e.GetVersion(), g, reason, t,
+		e.id, e.Version(), g, reason, t,
 	)
 	if err != nil {
 		return err
@@ -166,7 +166,7 @@ func (e *Endorsed) DecreaseGrade(reason assignment.Reason, t time.Time) error {
 func (e Endorsed) Export(ex EndorsedExporterSetter) {
 	ex.SetId(e.id)
 	ex.SetGrade(e.grade)
-	ex.SetVersion(e.GetVersion())
+	ex.SetVersion(e.Version())
 	ex.SetCreatedAt(e.createdAt)
 
 	for i := range e.receivedEndorsements {

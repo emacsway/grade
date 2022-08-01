@@ -4,7 +4,7 @@ package seedwork
 
 type EntityEventable interface {
 	AddDomainEvent(...DomainEvent)
-	GetPendingDomainEvents() []DomainEvent
+	PendingDomainEvents() []DomainEvent
 	ClearPendingDomainEvents()
 }
 
@@ -20,7 +20,7 @@ func (e EventiveEntity) AddDomainEvent(domainEvents ...DomainEvent) {
 	e.pendingDomainEvents = append(e.pendingDomainEvents, domainEvents...)
 }
 
-func (e EventiveEntity) GetPendingDomainEvents() []DomainEvent {
+func (e EventiveEntity) PendingDomainEvents() []DomainEvent {
 	return e.pendingDomainEvents
 }
 

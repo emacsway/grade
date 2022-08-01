@@ -1,7 +1,7 @@
 package seedwork
 
 type AggregateVersionable interface {
-	GetVersion() uint
+	Version() uint
 	IncreaseVersion()
 }
 
@@ -13,7 +13,7 @@ type VersionedAggregate struct {
 	version uint
 }
 
-func (a VersionedAggregate) GetVersion() uint {
+func (a VersionedAggregate) Version() uint {
 	return a.version
 }
 

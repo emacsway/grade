@@ -52,11 +52,11 @@ type Recognizer struct {
 	seedwork.EventiveEntity
 }
 
-func (r Recognizer) GetId() member.TenantMemberId {
+func (r Recognizer) Id() member.TenantMemberId {
 	return r.id
 }
 
-func (r Recognizer) GetGrade() grade.Grade {
+func (r Recognizer) Grade() grade.Grade {
 	return r.grade
 }
 
@@ -117,7 +117,7 @@ func (r Recognizer) Export(ex RecognizerExporterSetter) {
 	ex.SetGrade(r.grade)
 	ex.SetAvailableEndorsementCount(r.availableEndorsementCount)
 	ex.SetPendingEndorsementCount(r.pendingEndorsementCount)
-	ex.SetVersion(r.GetVersion())
+	ex.SetVersion(r.Version())
 	ex.SetCreatedAt(r.createdAt)
 }
 
