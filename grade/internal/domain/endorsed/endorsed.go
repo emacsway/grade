@@ -72,6 +72,9 @@ func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, aId artifact.Arti
 		return err
 	}
 	e.receivedEndorsements = append(e.receivedEndorsements, ent)
+	e.AddDomainEvent(events.NewEndorsementReceived(
+		e.id, e.grade, e.GetVersion(), r.GetId(), r.GetGrade(), e.GetVersion(), aId, t,
+	))
 	err = e.actualizeGrade(t)
 	if err != nil {
 		return err
@@ -125,13 +128,7 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		e.AddDomainEvent(events.GradeAssigned{
-			EndorsedId:      e.id,
-			EndorsedVersion: e.GetVersion(),
-			AssignedGrade:   assignedGrade,
-			Reason:          reason,
-			CreatedAt:       t,
-		})
+		e.AddDomainEvent(events.NewGradeAssigned(e.id, e.GetVersion(), assignedGrade, reason, t))
 		return e.setGrade(assignedGrade, reason, t)
 	}
 	return nil
