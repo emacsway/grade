@@ -2,36 +2,40 @@ package endorsed
 
 import (
 	"fmt"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 )
 
 func TestEndorsedReceiveEndorsement(t *testing.T) {
 	cases := []struct {
-		RecogniserId    uint64
-		RecognizerGrade uint8
-		EndorsedId      uint64
-		EndorsedGrade   uint8
-		ExpectedError   error
+		RecogniserTenantId uint64
+		RecogniserMemberId uint64
+		RecognizerGrade    uint8
+		EndorsedTenantId   uint64
+		EndorsedMemberId   uint64
+		EndorsedGrade      uint8
+		ExpectedError      error
 	}{
-		{1, 0, 2, 0, nil},
-		{1, 1, 2, 0, nil},
-		{1, 0, 2, 1, endorsement.ErrLowerGradeEndorses},
-		{3, 0, 3, 0, endorsement.ErrEndorsementOneself},
+		{1, 1, 0, 1, 2, 0, nil},
+		{1, 1, 1, 1, 2, 0, nil},
+		{1, 1, 0, 1, 2, 1, ErrLowerGradeEndorses},
+		{1, 3, 0, 1, 3, 0, ErrEndorsementOneself},
+		{1, 1, 0, 2, 2, 0, ErrCrossTenantEndorsement},
 	}
 	ef := NewEndorsedFakeFactory()
 	rf := recognizer.NewRecognizerFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			ef.Id.MemberId = c.EndorsedId
+			ef.Id.TenantId = c.EndorsedTenantId
+			ef.Id.MemberId = c.EndorsedMemberId
 			ef.Grade = c.EndorsedGrade
-			rf.Id.MemberId = c.RecogniserId
+			rf.Id.TenantId = c.RecogniserTenantId
+			rf.Id.MemberId = c.RecogniserMemberId
 			rf.Grade = c.RecognizerGrade
 			e, err := ef.Create()
 			if err != nil {
@@ -71,7 +75,7 @@ func TestEndorsedCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, recognizer.ErrNoEndorsementReservation},
 		{func(r *recognizer.Recognizer) error {
-			for i := uint8(0); i < recognizer.YearlyEndorsementCount; i++ {
+			for i := uint(0); i < recognizer.YearlyEndorsementCount; i++ {
 				err := r.ReserveEndorsement()
 				if err != nil {
 					return err

@@ -1,7 +1,6 @@
 package member
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/tenant"
 )
 
@@ -33,28 +32,16 @@ func (cid TenantMemberId) MemberId() MemberId {
 	return cid.memberId
 }
 
-func (cid TenantMemberId) Equals(other TenantMemberId) bool {
-	return cid.tenantId.Equals(other.TenantId()) && cid.memberId.Equals(other.MemberId())
+func (cid TenantMemberId) Equal(other TenantMemberId) bool {
+	return cid.tenantId.Equal(other.TenantId()) && cid.memberId.Equal(other.MemberId())
 }
 
-func (cid TenantMemberId) ExportTo(ex TenantMemberIdExporterSetter) {
-	var tenantId, memberId seedwork.Uint64Exporter
-
-	cid.tenantId.ExportTo(&tenantId)
-	cid.memberId.ExportTo(&memberId)
-	ex.SetState(&tenantId, &memberId)
-}
-
-func (cid TenantMemberId) Export() TenantMemberIdState {
-	return TenantMemberIdState{
-		TenantId: cid.tenantId.Export(),
-		MemberId: cid.memberId.Export(),
-	}
+func (cid TenantMemberId) Export(ex TenantMemberIdExporterSetter) {
+	ex.SetTenantId(cid.tenantId)
+	ex.SetMemberId(cid.memberId)
 }
 
 type TenantMemberIdExporterSetter interface {
-	SetState(
-		tenantId seedwork.ExporterSetter[uint64],
-		memberId seedwork.ExporterSetter[uint64],
-	)
+	SetTenantId(tenant.TenantId)
+	SetMemberId(MemberId)
 }

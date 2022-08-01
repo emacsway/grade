@@ -1,49 +1,53 @@
 package endorsement
 
 import (
+	"time"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"time"
 )
 
 type EndorsementExporter struct {
-	RecognizerId      member.TenantMemberIdExporterSetter
-	RecognizerGrade   seedwork.ExporterSetter[uint8]
+	RecognizerId      member.TenantMemberIdExporter
+	RecognizerGrade   seedwork.Uint8Exporter
 	RecognizerVersion uint
-	EndorsedId        member.TenantMemberIdExporterSetter
-	EndorsedGrade     seedwork.ExporterSetter[uint8]
+	EndorsedId        member.TenantMemberIdExporter
+	EndorsedGrade     seedwork.Uint8Exporter
 	EndorsedVersion   uint
-	ArtifactId        seedwork.ExporterSetter[uint64]
+	ArtifactId        seedwork.Uint64Exporter
 	CreatedAt         time.Time
 }
 
-func (ex *EndorsementExporter) SetState(
-	recognizerId member.TenantMemberIdExporterSetter,
-	recognizerGrade seedwork.ExporterSetter[uint8],
-	recognizerVersion uint,
-	endorsedId member.TenantMemberIdExporterSetter,
-	endorsedGrade seedwork.ExporterSetter[uint8],
-	endorsedVersion uint,
-	artifactId seedwork.ExporterSetter[uint64],
-	createdAt time.Time,
-) {
-	ex.RecognizerId = recognizerId
-	ex.RecognizerGrade = recognizerGrade
-	ex.RecognizerVersion = recognizerVersion
-	ex.EndorsedId = endorsedId
-	ex.EndorsedGrade = endorsedGrade
-	ex.EndorsedVersion = endorsedVersion
-	ex.ArtifactId = artifactId
-	ex.CreatedAt = createdAt
+func (ex *EndorsementExporter) SetRecognizerId(val member.TenantMemberId) {
+	val.Export(&ex.RecognizerId)
 }
 
-type EndorsementState struct {
-	RecognizerId      member.TenantMemberIdState
-	RecognizerGrade   uint8
-	RecognizerVersion uint
-	EndorsedId        member.TenantMemberIdState
-	EndorsedGrade     uint8
-	EndorsedVersion   uint
-	ArtifactId        uint64
-	CreatedAt         time.Time
+func (ex *EndorsementExporter) SetRecognizerGrade(val grade.Grade) {
+	val.Export(&ex.RecognizerGrade)
+}
+
+func (ex *EndorsementExporter) SetRecognizerVersion(val uint) {
+	ex.RecognizerVersion = val
+}
+
+func (ex *EndorsementExporter) SetEndorsedId(val member.TenantMemberId) {
+	val.Export(&ex.EndorsedId)
+}
+
+func (ex *EndorsementExporter) SetEndorsedGrade(val grade.Grade) {
+	val.Export(&ex.EndorsedGrade)
+}
+
+func (ex *EndorsementExporter) SetEndorsedVersion(val uint) {
+	ex.EndorsedVersion = val
+}
+
+func (ex *EndorsementExporter) SetArtifactId(val artifact.ArtifactId) {
+	val.Export(&ex.ArtifactId)
+}
+
+func (ex *EndorsementExporter) SetCreatedAt(val time.Time) {
+	ex.CreatedAt = val
 }

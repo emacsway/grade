@@ -5,7 +5,7 @@ import (
 )
 
 func NewMemberId(value uint64) (MemberId, error) {
-	id, err := seedwork.NewIdentity[uint64](value)
+	id, err := seedwork.NewUint64Identity(value)
 	if err != nil {
 		return MemberId{}, err
 	}
@@ -13,5 +13,5 @@ func NewMemberId(value uint64) (MemberId, error) {
 }
 
 type MemberId struct {
-	seedwork.Identity[uint64, seedwork.Identifier[uint64], seedwork.ExporterSetter[uint64]]
+	seedwork.Uint64Identity
 }

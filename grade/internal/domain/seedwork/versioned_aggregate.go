@@ -5,8 +5,8 @@ type AggregateVersionable interface {
 	IncreaseVersion()
 }
 
-func NewVersionedAggregate(version uint) (VersionedAggregate, error) {
-	return VersionedAggregate{version: version}, nil
+func NewVersionedAggregate(version uint) VersionedAggregate {
+	return VersionedAggregate{version: version}
 }
 
 type VersionedAggregate struct {

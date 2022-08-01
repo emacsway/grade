@@ -8,8 +8,8 @@ type EntityEventable interface {
 	ClearPendingDomainEvents()
 }
 
-func NewEventiveEntity() (EventiveEntity, error) {
-	return EventiveEntity{}, nil
+func NewEventiveEntity() EventiveEntity {
+	return EventiveEntity{}
 }
 
 type EventiveEntity struct {

@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func TestTenantMemberIdEquals(t *testing.T) {
+func TestTenantMemberIdEqual(t *testing.T) {
 	cases := []struct {
 		TenantId       uint64
 		MemberId       uint64
@@ -34,34 +35,22 @@ func TestTenantMemberIdEquals(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			r := id.Equals(otherId)
+			r := id.Equal(otherId)
 			assert.Equal(t, c.ExpectedResult, r)
 		})
 	}
 }
 
-func TestTenantMemberIdExport(t *testing.T) {
-	cid, err := NewTenantMemberId(1, 2)
-	if err != nil {
-		t.Error(err)
-		t.FailNow()
-	}
-	assert.Equal(t, TenantMemberIdState{
-		TenantId: 1,
-		MemberId: 2,
-	}, cid.Export())
-}
-
-func TestRecognizerExportTo(t *testing.T) {
+func TestRecognizerExport(t *testing.T) {
 	var actualExporter TenantMemberIdExporter
 	cid, err := NewTenantMemberId(1, 2)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
 	}
-	cid.ExportTo(&actualExporter)
+	cid.Export(&actualExporter)
 	assert.Equal(t, TenantMemberIdExporter{
-		TenantId: seedwork.NewUint64Exporter(1),
-		MemberId: seedwork.NewUint64Exporter(2),
+		TenantId: seedwork.Uint64Exporter(1),
+		MemberId: seedwork.Uint64Exporter(2),
 	}, actualExporter)
 }

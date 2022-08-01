@@ -5,40 +5,39 @@ type ExporterSetter[T any] interface {
 }
 
 type ExportableTo[T any] interface {
-	ExportTo(ExporterSetter[T])
+	Export(ExporterSetter[T])
 }
 
 // alternative approach:
 
-type Exportable[T any] interface {
-	Export() T
+type Accessable[T any] interface {
+	Value() T
 }
 
-type Identifier[T comparable] interface {
-	Exportable[T]
-	ExportableTo[T]
-	Equals(Identifier[T]) bool
+type Equaler interface {
+	Equal(Equaler) bool
 }
 
-func NewIdentity[T comparable](value T) (Identity[T, Identifier[T], ExporterSetter[T]], error) {
-	return Identity[T, Identifier[T], ExporterSetter[T]]{value: value}, nil
+func NewUint64Identity(value uint64) (Uint64Identity, error) {
+	return Uint64Identity{value: value}, nil
 }
 
-// The way to fix issue of generics:
-// https://issuemode.com/issues/golang/go/105227904
-
-type Identity[T comparable, C Identifier[T], D ExporterSetter[T]] struct {
-	value T
+type Uint64Identity struct {
+	value uint64
 }
 
-func (id Identity[T, C, D]) Equals(other C) bool {
-	return id.value == other.Export()
+func (id Uint64Identity) Equal(other Equaler) bool {
+	if id.value == 0 {
+		return false // Aggregate is not saved.
+	}
+	exportableOther := other.(Accessable[uint64])
+	return id.value == exportableOther.Value()
 }
 
-func (id Identity[T, C, D]) Export() T {
+func (id Uint64Identity) Value() uint64 {
 	return id.value
 }
 
-func (id Identity[T, C, D]) ExportTo(ex D) {
+func (id Uint64Identity) Export(ex ExporterSetter[uint64]) {
 	ex.SetState(id.value)
 }

@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 )
 
 var (
@@ -15,6 +15,7 @@ var (
 	ErrEndorsementReservationExceeded = errors.New("endorsement reservation exceeded")
 )
 
+// FIXME: Move this constructor to tenant aggregate
 func NewRecognizer(
 	id member.TenantMemberId,
 	createdAt time.Time,
@@ -27,17 +28,12 @@ func NewRecognizer(
 	if err != nil {
 		return nil, err
 	}
-	versioned, err := seedwork.NewVersionedAggregate(0)
-	if err != nil {
-		return nil, err
-	}
-	eventive, err := seedwork.NewEventiveEntity()
-	if err != nil {
-		return nil, err
-	}
+	versioned := seedwork.NewVersionedAggregate(0)
+	eventive := seedwork.NewEventiveEntity()
+	zeroGrade, _ := grade.NewGradeFactory(grade.MaxGradeValue, grade.GradeMatrix)(0)
 	return &Recognizer{
 		id:                        id,
-		grade:                     shared.WithoutGrade,
+		grade:                     zeroGrade,
 		availableEndorsementCount: availableCount,
 		pendingEndorsementCount:   pendingCount,
 		createdAt:                 createdAt,
@@ -48,7 +44,7 @@ func NewRecognizer(
 
 type Recognizer struct {
 	id                        member.TenantMemberId
-	grade                     shared.Grade
+	grade                     grade.Grade
 	availableEndorsementCount EndorsementCount
 	pendingEndorsementCount   EndorsementCount
 	createdAt                 time.Time
@@ -60,12 +56,12 @@ func (r Recognizer) GetId() member.TenantMemberId {
 	return r.id
 }
 
-func (r Recognizer) GetGrade() shared.Grade {
+func (r Recognizer) GetGrade() grade.Grade {
 	return r.grade
 }
 
-func (r *Recognizer) SetGrade(g shared.Grade) error {
-	r.grade = g
+func (r *Recognizer) SetGrade(val grade.Grade) error {
+	r.grade = val
 	return nil
 }
 
@@ -116,37 +112,20 @@ func (r *Recognizer) CompleteEndorsement() error {
 	return nil
 }
 
-func (r Recognizer) ExportTo(ex RecognizerExporterSetter) {
-	var id member.TenantMemberIdExporter
-	var grade, availableEndorsementCount, pendingEndorsementCount seedwork.Uint8Exporter
-
-	r.id.ExportTo(&id)
-	r.grade.ExportTo(&grade)
-	r.availableEndorsementCount.ExportTo(&availableEndorsementCount)
-	r.pendingEndorsementCount.ExportTo(&pendingEndorsementCount)
-	ex.SetState(
-		&id, &grade, &availableEndorsementCount, &pendingEndorsementCount, r.GetVersion(), r.createdAt,
-	)
-}
-
-func (r Recognizer) Export() RecognizerState {
-	return RecognizerState{
-		Id:                        r.id.Export(),
-		Grade:                     r.grade.Export(),
-		AvailableEndorsementCount: r.availableEndorsementCount.Export(),
-		PendingEndorsementCount:   r.pendingEndorsementCount.Export(),
-		Version:                   r.GetVersion(),
-		CreatedAt:                 r.createdAt,
-	}
+func (r Recognizer) Export(ex RecognizerExporterSetter) {
+	ex.SetId(r.id)
+	ex.SetGrade(r.grade)
+	ex.SetAvailableEndorsementCount(r.availableEndorsementCount)
+	ex.SetPendingEndorsementCount(r.pendingEndorsementCount)
+	ex.SetVersion(r.GetVersion())
+	ex.SetCreatedAt(r.createdAt)
 }
 
 type RecognizerExporterSetter interface {
-	SetState(
-		id member.TenantMemberIdExporterSetter,
-		grade seedwork.ExporterSetter[uint8],
-		availableEndorsementCount seedwork.ExporterSetter[uint8],
-		pendingEndorsementCount seedwork.ExporterSetter[uint8],
-		version uint,
-		createdAt time.Time,
-	)
+	SetId(member.TenantMemberId)
+	SetGrade(grade.Grade)
+	SetAvailableEndorsementCount(EndorsementCount)
+	SetPendingEndorsementCount(EndorsementCount)
+	SetVersion(uint)
+	SetCreatedAt(time.Time)
 }

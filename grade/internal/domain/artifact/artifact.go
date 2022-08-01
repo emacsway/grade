@@ -1,9 +1,9 @@
 package artifact
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea"
 	"time"
 
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 

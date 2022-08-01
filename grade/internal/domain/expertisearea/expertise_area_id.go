@@ -5,7 +5,7 @@ import (
 )
 
 func NewExpertiseAreaId(value uint64) (ExpertiseAreaId, error) {
-	id, err := seedwork.NewIdentity[uint64](value)
+	id, err := seedwork.NewUint64Identity(value)
 	if err != nil {
 		return ExpertiseAreaId{}, err
 	}
@@ -13,5 +13,5 @@ func NewExpertiseAreaId(value uint64) (ExpertiseAreaId, error) {
 }
 
 type ExpertiseAreaId struct {
-	seedwork.Identity[uint64, seedwork.Identifier[uint64], seedwork.ExporterSetter[uint64]]
+	seedwork.Uint64Identity
 }

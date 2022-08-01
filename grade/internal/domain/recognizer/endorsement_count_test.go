@@ -2,17 +2,19 @@ package recognizer
 
 import (
 	"fmt"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 func TestEndorsementCountConstructor(t *testing.T) {
 	cases := []struct {
-		Arg           uint8
+		Arg           uint
 		ExpectedError error
 	}{
-		{uint8(0), nil},
+		{uint(0), nil},
 		{YearlyEndorsementCount / 2, nil},
 		{YearlyEndorsementCount, nil},
 		{YearlyEndorsementCount + 1, ErrInvalidEndorsementCount},
@@ -22,7 +24,7 @@ func TestEndorsementCountConstructor(t *testing.T) {
 			g, err := NewEndorsementCount(c.Arg)
 			assert.Equal(t, c.ExpectedError, err)
 			if err == nil {
-				assert.Equal(t, c.Arg, uint8(g))
+				assert.Equal(t, c.Arg, uint(g))
 			}
 		})
 	}
@@ -30,10 +32,10 @@ func TestEndorsementCountConstructor(t *testing.T) {
 
 func TestEndorsementCountHasAvailable(t *testing.T) {
 	cases := []struct {
-		Arg            uint8
+		Arg            uint
 		ExpectedResult bool
 	}{
-		{uint8(0), false},
+		{uint(0), false},
 		{YearlyEndorsementCount / 2, true},
 		{YearlyEndorsementCount, true},
 	}
@@ -48,11 +50,11 @@ func TestEndorsementCountHasAvailable(t *testing.T) {
 
 func TestEndorsementCountNext(t *testing.T) {
 	cases := []struct {
-		Arg           uint8
-		ExpectedValue uint8
+		Arg           uint
+		ExpectedValue uint
 		ExpectedError error
 	}{
-		{uint8(0), uint8(0), ErrInvalidEndorsementCount},
+		{uint(0), uint(0), ErrInvalidEndorsementCount},
 		{YearlyEndorsementCount / 2, YearlyEndorsementCount/2 - 1, nil},
 		{YearlyEndorsementCount, YearlyEndorsementCount - 1, nil},
 	}
@@ -62,15 +64,15 @@ func TestEndorsementCountNext(t *testing.T) {
 			n, err := g.Decrease()
 			assert.Equal(t, c.ExpectedError, err)
 			if err == nil {
-				assert.Equal(t, c.ExpectedValue, uint8(n))
+				assert.Equal(t, c.ExpectedValue, uint(n))
 			}
 		})
 	}
 }
 
-func TestEndorsementCountExportTo(t *testing.T) {
-	var ex seedwork.Uint8Exporter
+func TestEndorsementCountExport(t *testing.T) {
+	var ex seedwork.UintExporter
 	c, _ := NewEndorsementCount(1)
-	c.ExportTo(&ex)
-	assert.Equal(t, uint8(ex), c.Export())
+	c.Export(&ex)
+	assert.Equal(t, uint(c), uint(ex))
 }

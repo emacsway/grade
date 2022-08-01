@@ -1,43 +1,48 @@
 package endorsed
 
 import (
+	"time"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/assignment"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/gradelogentry"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"time"
 )
 
 type EndorsedExporter struct {
-	Id                   member.TenantMemberIdExporterSetter
-	Grade                seedwork.ExporterSetter[uint8]
-	ReceivedEndorsements []endorsement.EndorsementExporterSetter
-	GradeLogEntries      []gradelogentry.GradeLogEntryExporterSetter
+	Id                   member.TenantMemberIdExporter
+	Grade                seedwork.Uint8Exporter
+	ReceivedEndorsements []endorsement.EndorsementExporter
+	Assignments          []assignment.AssignmentExporter
 	Version              uint
 	CreatedAt            time.Time
 }
 
-func (ex *EndorsedExporter) SetState(
-	id member.TenantMemberIdExporterSetter,
-	grade seedwork.ExporterSetter[uint8],
-	receivedEndorsements []endorsement.EndorsementExporterSetter,
-	gradeLogEntries []gradelogentry.GradeLogEntryExporterSetter,
-	version uint,
-	createdAt time.Time,
-) {
-	ex.Id = id
-	ex.Grade = grade
-	ex.ReceivedEndorsements = receivedEndorsements
-	ex.GradeLogEntries = gradeLogEntries
-	ex.Version = version
-	ex.CreatedAt = createdAt
+func (ex *EndorsedExporter) SetId(val member.TenantMemberId) {
+	val.Export(&ex.Id)
 }
 
-type EndorsedState struct {
-	Id                   member.TenantMemberIdState
-	Grade                uint8
-	ReceivedEndorsements []endorsement.EndorsementState
-	GradeLogEntries      []gradelogentry.GradeLogEntryState
-	Version              uint
-	CreatedAt            time.Time
+func (ex *EndorsedExporter) SetGrade(val grade.Grade) {
+	val.Export(&ex.Grade)
+}
+
+func (ex *EndorsedExporter) AddEndorsement(val endorsement.Endorsement) {
+	var endorsementExporter endorsement.EndorsementExporter
+	val.Export(&endorsementExporter)
+	ex.ReceivedEndorsements = append(ex.ReceivedEndorsements, endorsementExporter)
+}
+
+func (ex *EndorsedExporter) AddAssignment(val assignment.Assignment) {
+	var assignmentExporter assignment.AssignmentExporter
+	val.Export(&assignmentExporter)
+	ex.Assignments = append(ex.Assignments, assignmentExporter)
+}
+
+func (ex *EndorsedExporter) SetVersion(val uint) {
+	ex.Version = val
+}
+
+func (ex *EndorsedExporter) SetCreatedAt(val time.Time) {
+	ex.CreatedAt = val
 }

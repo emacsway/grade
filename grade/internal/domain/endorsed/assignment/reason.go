@@ -1,4 +1,4 @@
-package gradelogentry
+package assignment
 
 import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
@@ -10,10 +10,6 @@ func NewReason(reason string) (Reason, error) {
 
 type Reason string
 
-func (r Reason) Export() string {
-	return string(r)
-}
-
-func (r Reason) ExportTo(ex seedwork.ExporterSetter[string]) {
+func (r Reason) Export(ex seedwork.ExporterSetter[string]) {
 	ex.SetState(string(r))
 }

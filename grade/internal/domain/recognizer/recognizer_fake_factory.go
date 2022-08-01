@@ -1,9 +1,10 @@
 package recognizer
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
 	"time"
+
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
 func NewRecognizerFakeFactory() *RecognizerFakeFactory {
@@ -31,7 +32,7 @@ func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
 	if err != nil {
 		return nil, err
 	}
-	grade, err := shared.NewGrade(f.Grade)
+	grade, err := grade.DefaultConstructor(f.Grade)
 	if err != nil {
 		return nil, err
 	}

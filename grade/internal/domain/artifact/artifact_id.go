@@ -5,7 +5,7 @@ import (
 )
 
 func NewArtifactId(value uint64) (ArtifactId, error) {
-	id, err := seedwork.NewIdentity[uint64](value)
+	id, err := seedwork.NewUint64Identity(value)
 	if err != nil {
 		return ArtifactId{}, err
 	}
@@ -13,5 +13,5 @@ func NewArtifactId(value uint64) (ArtifactId, error) {
 }
 
 type ArtifactId struct {
-	seedwork.Identity[uint64, seedwork.Identifier[uint64], seedwork.ExporterSetter[uint64]]
+	seedwork.Uint64Identity
 }

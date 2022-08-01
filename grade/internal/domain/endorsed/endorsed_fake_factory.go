@@ -1,11 +1,13 @@
 package endorsed
 
 import (
+	"time"
+
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/shared"
-	"time"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
 func NewEndorsedFakeFactory() *EndorsedFakeFactory {
@@ -28,18 +30,21 @@ type EndorsedFakeFactory struct {
 }
 
 func (f *EndorsedFakeFactory) achieveGrade() error {
-	currentGrade := shared.WithoutGrade
-	targetGrade, err := shared.NewGrade(f.Grade)
+	currentGrade, _ := grade.DefaultConstructor(0)
+	targetGrade, err := grade.DefaultConstructor(f.Grade)
 	if err != nil {
 		return err
 	}
-	for currentGrade < targetGrade {
+	for currentGrade.LessThan(targetGrade) {
 		r := recognizer.NewRecognizerFakeFactory()
 		rId := member.NewTenantMemberIdFakeFactory()
+		rId.TenantId = f.Id.TenantId
 		rId.MemberId = 1000
 		r.Id = rId
 		recognizerGrade, _ := currentGrade.Next()
-		r.Grade = recognizerGrade.Export()
+		gradeExporter := seedwork.Uint8Exporter(0)
+		recognizerGrade.Export(&gradeExporter)
+		r.Grade = uint8(gradeExporter)
 		var endorsementCount uint = 0
 		for !currentGrade.NextGradeAchieved(endorsementCount) {
 			f.receiveEndorsement(r)
