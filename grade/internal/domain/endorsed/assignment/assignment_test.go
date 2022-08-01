@@ -9,7 +9,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func TestRecognizerExport(t *testing.T) {
+func TestAssignmentExport(t *testing.T) {
 	var actualExporter AssignmentExporter
 	f := NewAssignmentFakeFactory()
 	agg, _ := f.Create()
