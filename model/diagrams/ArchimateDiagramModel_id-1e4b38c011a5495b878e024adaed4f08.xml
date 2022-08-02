@@ -1058,7 +1058,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-194f4cbb71cb43c49361c4691999b9bd"
         textAlignment="1"
-        content="tenantId: int&#xA;id: int&#xA;status: []str{'proposed', 'accepted'}&#xA;name: str&#xA;description: str&#xA;url: str&#xA;expertiseAreaIds: []int&#xA;authorIds: []int&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;id: int&#xA;status: []str{'proposed', 'accepted'}&#xA;name: str&#xA;description: str&#xA;url: str&#xA;competenceIds: []int&#xA;authorIds: []int&#xA;createdAt: datetime">
       <sourceConnections
           id="id-c9432583c7c048d68b361e74f90a16a3"
           source="id-194f4cbb71cb43c49361c4691999b9bd"

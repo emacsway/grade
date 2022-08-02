@@ -3,7 +3,7 @@ package artifact
 import (
 	"time"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/competence"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 )
 
@@ -11,28 +11,28 @@ func NewArtifactFakeFactory() ArtifactFakeFactory {
 	idFactory := NewTenantArtifactIdFakeFactory()
 	idFactory.ArtifactId = 20
 	return ArtifactFakeFactory{
-		Id:               idFactory,
-		Status:           Accepted,
-		Name:             "Name1",
-		Description:      "Description1",
-		Url:              "https://github.com/emacsway/qualifying-grade",
-		ExpertiseAreaIds: []uint64{},
-		AuthorIds:        []member.TenantMemberIdFakeFactory{},
-		CreatedById:      member.NewTenantMemberIdFakeFactory(),
-		CreatedAt:        time.Now(),
+		Id:            idFactory,
+		Status:        Accepted,
+		Name:          "Name1",
+		Description:   "Description1",
+		Url:           "https://github.com/emacsway/qualifying-grade",
+		CompetenceIds: []uint64{},
+		AuthorIds:     []member.TenantMemberIdFakeFactory{},
+		OwnerId:       member.NewTenantMemberIdFakeFactory(),
+		CreatedAt:     time.Now(),
 	}
 }
 
 type ArtifactFakeFactory struct {
-	Id               TenantArtifactIdFakeFactory
-	Status           Status
-	Name             string
-	Description      string
-	Url              string
-	ExpertiseAreaIds []uint64
-	AuthorIds        []member.TenantMemberIdFakeFactory
-	CreatedById      member.TenantMemberIdFakeFactory
-	CreatedAt        time.Time
+	Id            TenantArtifactIdFakeFactory
+	Status        Status
+	Name          string
+	Description   string
+	Url           string
+	CompetenceIds []uint64
+	AuthorIds     []member.TenantMemberIdFakeFactory
+	OwnerId       member.TenantMemberIdFakeFactory
+	CreatedAt     time.Time
 }
 
 func (f *ArtifactFakeFactory) AddAuthorId(authorId member.TenantMemberIdFakeFactory) error {
@@ -66,12 +66,12 @@ func (f ArtifactFakeFactory) Create() (*Artifact, error) {
 		}
 		authorIds = append(authorIds, authorId)
 	}
-	createdBy, err := f.CreatedById.Create()
+	owner, err := f.OwnerId.Create()
 	if err != nil {
 		return nil, err
 	}
 	return NewArtifact(
 		id, Accepted, name, description, url,
-		[]expertisearea.ExpertiseAreaId{}, authorIds, createdBy, f.CreatedAt,
+		[]competence.CompetenceId{}, authorIds, owner, f.CreatedAt,
 	), nil
 }

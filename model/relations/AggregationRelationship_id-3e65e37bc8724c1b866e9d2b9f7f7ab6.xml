@@ -1,7 +1,7 @@
 <archimate:AggregationRelationship
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:archimate="http://www.archimatetool.com/archimate"
-    name="createdBy (has one)"
+    name="owner (has one)"
     id="id-3e65e37bc8724c1b866e9d2b9f7f7ab6">
   <source
       xsi:type="archimate:BusinessObject"

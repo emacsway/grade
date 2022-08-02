@@ -3,7 +3,7 @@ package artifact
 import (
 	"time"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/expertisearea"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/competence"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
@@ -14,9 +14,9 @@ func NewArtifact(
 	name Name,
 	description Description,
 	url Url,
-	expertiseAreaIds []expertisearea.ExpertiseAreaId,
+	competenceIds []competence.CompetenceId,
 	authorIds []member.TenantMemberId,
-	createdById member.TenantMemberId,
+	ownerId member.TenantMemberId,
 	createdAt time.Time,
 ) *Artifact {
 	versioned := seedwork.NewVersionedAggregate(0)
@@ -28,9 +28,9 @@ func NewArtifact(
 		name:               name,
 		description:        description,
 		url:                url,
-		expertiseAreaIds:   expertiseAreaIds,
+		competenceIds:      competenceIds,
 		authorIds:          authorIds,
-		createdById:        createdById,
+		ownerId:            ownerId,
 		createdAt:          createdAt,
 		VersionedAggregate: versioned,
 		EventiveEntity:     eventive,
@@ -39,15 +39,15 @@ func NewArtifact(
 
 // Artifact is a good candidate for EventSourcing
 type Artifact struct {
-	id               TenantArtifactId
-	status           Status
-	name             Name
-	description      Description
-	url              Url
-	expertiseAreaIds []expertisearea.ExpertiseAreaId
-	authorIds        []member.TenantMemberId
-	createdById      member.TenantMemberId
-	createdAt        time.Time
+	id            TenantArtifactId
+	status        Status
+	name          Name
+	description   Description
+	url           Url
+	competenceIds []competence.CompetenceId
+	authorIds     []member.TenantMemberId
+	ownerId       member.TenantMemberId
+	createdAt     time.Time
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
 }
