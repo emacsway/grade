@@ -35,9 +35,9 @@ type ArtifactFakeFactory struct {
 	CreatedAt        time.Time
 }
 
-func (f ArtifactFakeFactory) AddAuthorId(val member.TenantMemberIdFakeFactory) error {
+func (f *ArtifactFakeFactory) AddAuthorId(authorId member.TenantMemberIdFakeFactory) error {
 	// FIXME: return a error if the authorId already present in the list.
-	f.AuthorIds = append(f.AuthorIds, val)
+	f.AuthorIds = append(f.AuthorIds, authorId)
 	return nil
 }
 

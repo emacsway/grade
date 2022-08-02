@@ -42,8 +42,8 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedGrade:     seedwork.Uint8Exporter(ef.Grade),
 				EndorsedVersion:   0,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
-					ef.ReceivedEndorsements[0].ArtifactId.TenantId,
-					ef.ReceivedEndorsements[0].ArtifactId.ArtifactId,
+					ef.ReceivedEndorsements[0].Artifact.Id.TenantId,
+					ef.ReceivedEndorsements[0].Artifact.Id.ArtifactId,
 				),
 				CreatedAt: ef.ReceivedEndorsements[0].CreatedAt,
 			},
@@ -55,8 +55,8 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedGrade:     seedwork.Uint8Exporter(ef.Grade),
 				EndorsedVersion:   1,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
-					ef.ReceivedEndorsements[1].ArtifactId.TenantId,
-					ef.ReceivedEndorsements[1].ArtifactId.ArtifactId,
+					ef.ReceivedEndorsements[1].Artifact.Id.TenantId,
+					ef.ReceivedEndorsements[1].Artifact.Id.ArtifactId,
 				),
 				CreatedAt: ef.ReceivedEndorsements[1].CreatedAt,
 			},
@@ -68,8 +68,8 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedGrade:     seedwork.Uint8Exporter(ef.Grade),
 				EndorsedVersion:   2,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
-					ef.ReceivedEndorsements[2].ArtifactId.TenantId,
-					ef.ReceivedEndorsements[2].ArtifactId.ArtifactId,
+					ef.ReceivedEndorsements[2].Artifact.Id.TenantId,
+					ef.ReceivedEndorsements[2].Artifact.Id.ArtifactId,
 				),
 				CreatedAt: ef.ReceivedEndorsements[2].CreatedAt,
 			},
@@ -81,8 +81,8 @@ func TestEndorsedExport(t *testing.T) {
 				EndorsedGrade:     seedwork.Uint8Exporter(ef.Grade + 1),
 				EndorsedVersion:   3,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
-					ef.ReceivedEndorsements[3].ArtifactId.TenantId,
-					ef.ReceivedEndorsements[3].ArtifactId.ArtifactId,
+					ef.ReceivedEndorsements[3].Artifact.Id.TenantId,
+					ef.ReceivedEndorsements[3].Artifact.Id.ArtifactId,
 				),
 				CreatedAt: ef.ReceivedEndorsements[3].CreatedAt,
 			},

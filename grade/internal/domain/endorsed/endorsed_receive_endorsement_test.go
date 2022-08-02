@@ -19,19 +19,23 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 		EndorsedTenantId   uint64
 		EndorsedMemberId   uint64
 		EndorsedGrade      uint8
+		ArtifactAuthorId   uint64
 		ArtifactTenantId   uint64
 		ExpectedError      error
 	}{
-		{1, 1, 0, 1, 2, 0, 1, nil},
-		{1, 1, 1, 1, 2, 0, 1, nil},
-		{1, 1, 0, 1, 2, 1, 1, ErrLowerGradeEndorses},
-		{1, 3, 0, 1, 3, 0, 1, ErrEndorsementOneself},
-		{1, 1, 0, 2, 2, 0, 1, ErrCrossTenantEndorsement},
+		{1, 1, 0, 1, 2, 0, 2, 1, nil},
+		{1, 1, 1, 1, 2, 0, 2, 1, nil},
+		{1, 1, 0, 1, 2, 1, 2, 1, ErrLowerGradeEndorses},
+		{1, 3, 0, 1, 3, 0, 3, 1, ErrEndorsementOneself},
+		{1, 1, 0, 2, 2, 0, 2, 1, ErrCrossTenantEndorsement},
+		{1, 1, 0, 1, 2, 0, 2, 2, ErrCrossTenantArtifact},
+		{1, 1, 0, 1, 2, 0, 3, 1, ErrNotAuthor},
 	}
-	ef := NewEndorsedFakeFactory()
-	rf := recognizer.NewRecognizerFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			ef := NewEndorsedFakeFactory()
+			rf := recognizer.NewRecognizerFakeFactory()
+			af := artifact.NewArtifactFakeFactory()
 			ef.Id.TenantId = c.EndorsedTenantId
 			ef.Id.MemberId = c.EndorsedMemberId
 			ef.Grade = c.EndorsedGrade
@@ -48,7 +52,15 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			artifactId, err := artifact.NewTenantArtifactId(c.ArtifactTenantId, ef.CurrentArtifactId)
+			aId := ef.Id
+			aId.MemberId = c.ArtifactAuthorId
+			if err := af.AddAuthorId(aId); err != nil {
+				t.Error(err)
+				t.FailNow()
+			}
+			af.Id.TenantId = c.ArtifactTenantId
+			af.Id.ArtifactId = ef.CurrentArtifactId
+			art, err := af.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -58,7 +70,8 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = e.ReceiveEndorsement(*r, artifactId, time.Now())
+			err = e.ReceiveEndorsement(*r, *art, time.Now())
+			fmt.Println(err, c.ExpectedError)
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
 	}
@@ -100,10 +113,15 @@ func TestEndorsedCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, recognizer.ErrNoEndorsementReservation},
 	}
-	ef := NewEndorsedFakeFactory()
-	rf := recognizer.NewRecognizerFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			ef := NewEndorsedFakeFactory()
+			rf := recognizer.NewRecognizerFakeFactory()
+			af := artifact.NewArtifactFakeFactory()
+			if err := af.AddAuthorId(ef.Id); err != nil {
+				t.Error(err)
+				t.FailNow()
+			}
 			e, err := ef.Create()
 			if err != nil {
 				t.Error(err)
@@ -114,7 +132,9 @@ func TestEndorsedCanCompleteEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			artifactId, err := artifact.NewTenantArtifactId(ef.Id.TenantId, ef.CurrentArtifactId)
+			af.Id.TenantId = ef.Id.TenantId
+			af.Id.ArtifactId = ef.CurrentArtifactId
+			art, err := af.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -124,7 +144,7 @@ func TestEndorsedCanCompleteEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = e.ReceiveEndorsement(*r, artifactId, time.Now())
+			err = e.ReceiveEndorsement(*r, *art, time.Now())
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
 	}

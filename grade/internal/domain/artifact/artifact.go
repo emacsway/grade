@@ -51,3 +51,16 @@ type Artifact struct {
 	seedwork.VersionedAggregate
 	seedwork.EventiveEntity
 }
+
+func (a Artifact) Id() TenantArtifactId {
+	return a.id
+}
+
+func (a Artifact) HasAuthor(authorId member.TenantMemberId) bool {
+	for i := range a.authorIds {
+		if a.authorIds[i].Equal(authorId) {
+			return true
+		}
+	}
+	return false
+}

@@ -20,6 +20,12 @@ var (
 	ErrCrossTenantEndorsement = errors.New(
 		"recognizer can't endorse cross-tenant members",
 	)
+	ErrCrossTenantArtifact = errors.New(
+		"recognizer can't endorse for cross-tenant artifact",
+	)
+	ErrNotAuthor = errors.New(
+		"only author of the artifact can be endorsed",
+	)
 	ErrEndorsementOneself = errors.New(
 		"recognizer can't endorse himself",
 	)
@@ -58,22 +64,22 @@ type Endorsed struct {
 	seedwork.EventiveEntity
 }
 
-func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, aId artifact.TenantArtifactId, t time.Time) error {
-	err := e.canReceiveEndorsement(r, aId)
+func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact, t time.Time) error {
+	err := e.canReceiveEndorsement(r, a)
 	if err != nil {
 		return err
 	}
 	ent, err := endorsement.NewEndorsement(
 		r.Id(), r.Grade(), r.Version(),
 		e.id, e.grade, e.Version(),
-		aId, t,
+		a.Id(), t,
 	)
 	if err != nil {
 		return err
 	}
 	e.receivedEndorsements = append(e.receivedEndorsements, ent)
 	e.AddDomainEvent(events.NewEndorsementReceived(
-		e.id, e.grade, e.Version(), r.Id(), r.Grade(), e.Version(), aId, t,
+		e.id, e.grade, e.Version(), r.Id(), r.Grade(), e.Version(), a.Id(), t,
 	))
 	err = e.actualizeGrade(t)
 	if err != nil {
@@ -82,18 +88,24 @@ func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, aId artifact.Tena
 	return nil
 }
 
-func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, aId artifact.TenantArtifactId) error {
+func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
 	err := r.CanCompleteEndorsement()
 	if err != nil {
 		return err
 	}
-	return e.canBeEndorsed(r, aId)
+	return e.canBeEndorsed(r, a)
 }
 
-func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.TenantArtifactId) error {
+func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) error {
 	var errs error
 	if !r.Id().TenantId().Equal(e.id.TenantId()) {
 		errs = multierror.Append(errs, ErrCrossTenantEndorsement)
+	}
+	if !a.Id().TenantId().Equal(e.id.TenantId()) {
+		errs = multierror.Append(errs, ErrCrossTenantArtifact)
+	}
+	if !a.HasAuthor(e.id) {
+		errs = multierror.Append(errs, ErrNotAuthor)
 	}
 	if r.Id().Equal(e.id) {
 		errs = multierror.Append(errs, ErrEndorsementOneself)
@@ -102,7 +114,7 @@ func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.TenantArti
 		errs = multierror.Append(errs, ErrLowerGradeEndorses)
 	}
 	for _, ent := range e.receivedEndorsements {
-		if ent.IsEndorsedBy(r.Id(), aId) {
+		if ent.IsEndorsedBy(r.Id(), a.Id()) {
 			errs = multierror.Append(errs, ErrAlreadyEndorsed)
 			break
 		}
@@ -110,12 +122,12 @@ func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, aId artifact.TenantArti
 	return errs
 }
 
-func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, aId artifact.TenantArtifactId) error {
+func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
 	err := r.CanReserveEndorsement()
 	if err != nil {
 		return err
 	}
-	return e.canBeEndorsed(r, aId)
+	return e.canBeEndorsed(r, a)
 }
 
 func (e *Endorsed) actualizeGrade(t time.Time) error {
