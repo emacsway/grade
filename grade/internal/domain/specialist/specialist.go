@@ -1,4 +1,4 @@
-package endorsed
+package specialist
 
 import (
 	"errors"
@@ -7,13 +7,13 @@ import (
 	"github.com/hashicorp/go-multierror"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/assignment"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/endorsement"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/endorsed/events"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/specialist/assignment"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/specialist/endorsement"
+	"github.com/emacsway/qualifying-grade/grade/internal/domain/specialist/events"
 )
 
 var (
@@ -38,14 +38,14 @@ var (
 )
 
 // FIXME: Move this constructor to tenant aggregate
-func NewEndorsed(
+func NewSpecialist(
 	id member.TenantMemberId,
 	createdAt time.Time,
-) (*Endorsed, error) {
+) (*Specialist, error) {
 	versioned := seedwork.NewVersionedAggregate(0)
 	eventive := seedwork.NewEventiveEntity()
 	zeroGrade, _ := grade.DefaultConstructor(0)
-	return &Endorsed{
+	return &Specialist{
 		id:                 id,
 		grade:              zeroGrade,
 		createdAt:          createdAt,
@@ -54,7 +54,7 @@ func NewEndorsed(
 	}, nil
 }
 
-type Endorsed struct {
+type Specialist struct {
 	id                   member.TenantMemberId
 	grade                grade.Grade
 	receivedEndorsements []endorsement.Endorsement
@@ -64,7 +64,7 @@ type Endorsed struct {
 	seedwork.EventiveEntity
 }
 
-func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact, t time.Time) error {
+func (e *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact, t time.Time) error {
 	err := e.canReceiveEndorsement(r, a)
 	if err != nil {
 		return err
@@ -88,7 +88,7 @@ func (e *Endorsed) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifa
 	return nil
 }
 
-func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
+func (e Specialist) canReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
 	err := r.CanCompleteEndorsement()
 	if err != nil {
 		return err
@@ -96,7 +96,7 @@ func (e Endorsed) canReceiveEndorsement(r recognizer.Recognizer, a artifact.Arti
 	return e.canBeEndorsed(r, a)
 }
 
-func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) error {
+func (e Specialist) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) error {
 	var errs error
 	if !r.Id().TenantId().Equal(e.id.TenantId()) {
 		errs = multierror.Append(errs, ErrCrossTenantEndorsement)
@@ -122,7 +122,7 @@ func (e Endorsed) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) er
 	return errs
 }
 
-func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
+func (e Specialist) CanBeginEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
 	err := r.CanReserveEndorsement()
 	if err != nil {
 		return err
@@ -130,7 +130,7 @@ func (e Endorsed) CanBeginEndorsement(r recognizer.Recognizer, a artifact.Artifa
 	return e.canBeEndorsed(r, a)
 }
 
-func (e *Endorsed) actualizeGrade(t time.Time) error {
+func (e *Specialist) actualizeGrade(t time.Time) error {
 	if e.grade.NextGradeAchieved(e.getReceivedEndorsementCount()) {
 		assignedGrade, err := e.grade.Next()
 		if err != nil {
@@ -145,17 +145,17 @@ func (e *Endorsed) actualizeGrade(t time.Time) error {
 	}
 	return nil
 }
-func (e Endorsed) getReceivedEndorsementCount() uint {
+func (e Specialist) getReceivedEndorsementCount() uint {
 	var counter uint
 	for _, v := range e.receivedEndorsements {
-		if v.EndorsedGrade().Equal(e.grade) {
+		if v.SpecialistGrade().Equal(e.grade) {
 			counter += uint(v.Weight())
 		}
 	}
 	return counter
 }
 
-func (e *Endorsed) setGrade(g grade.Grade, reason assignment.Reason, t time.Time) error {
+func (e *Specialist) setGrade(g grade.Grade, reason assignment.Reason, t time.Time) error {
 	a, err := assignment.NewAssignment(
 		e.id, e.Version(), g, reason, t,
 	)
@@ -167,7 +167,7 @@ func (e *Endorsed) setGrade(g grade.Grade, reason assignment.Reason, t time.Time
 	return nil
 }
 
-func (e *Endorsed) DecreaseGrade(reason assignment.Reason, t time.Time) error {
+func (e *Specialist) DecreaseGrade(reason assignment.Reason, t time.Time) error {
 	previousGrade, err := e.grade.Next()
 	if err != nil {
 		return err
@@ -175,7 +175,7 @@ func (e *Endorsed) DecreaseGrade(reason assignment.Reason, t time.Time) error {
 	return e.setGrade(previousGrade, reason, t)
 }
 
-func (e Endorsed) Export(ex EndorsedExporterSetter) {
+func (e Specialist) Export(ex SpecialistExporterSetter) {
 	ex.SetId(e.id)
 	ex.SetGrade(e.grade)
 	ex.SetVersion(e.Version())
@@ -189,7 +189,7 @@ func (e Endorsed) Export(ex EndorsedExporterSetter) {
 	}
 }
 
-type EndorsedExporterSetter interface {
+type SpecialistExporterSetter interface {
 	SetId(member.TenantMemberId)
 	SetGrade(grade.Grade)
 	AddEndorsement(endorsement.Endorsement)

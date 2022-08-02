@@ -1,4 +1,4 @@
-package endorsed
+package specialist
 
 import (
 	"time"
@@ -10,10 +10,10 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
 )
 
-func NewEndorsedFakeFactory() EndorsedFakeFactory {
+func NewSpecialistFakeFactory() SpecialistFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 2
-	return EndorsedFakeFactory{
+	return SpecialistFakeFactory{
 		Id:                idFactory,
 		Grade:             0,
 		CreatedAt:         time.Now(),
@@ -21,7 +21,7 @@ func NewEndorsedFakeFactory() EndorsedFakeFactory {
 	}
 }
 
-type EndorsedFakeFactory struct {
+type SpecialistFakeFactory struct {
 	Id                   member.TenantMemberIdFakeFactory
 	Grade                uint8
 	ReceivedEndorsements []ReceivedEndorsementFakeFactory
@@ -29,7 +29,7 @@ type EndorsedFakeFactory struct {
 	CurrentArtifactId    uint64
 }
 
-func (f *EndorsedFakeFactory) achieveGrade() error {
+func (f *SpecialistFakeFactory) achieveGrade() error {
 	currentGrade, _ := grade.DefaultConstructor(0)
 	targetGrade, err := grade.DefaultConstructor(f.Grade)
 	if err != nil {
@@ -60,7 +60,7 @@ func (f *EndorsedFakeFactory) achieveGrade() error {
 	return nil
 }
 
-func (f *EndorsedFakeFactory) ReceiveEndorsement(r recognizer.RecognizerFakeFactory) error {
+func (f *SpecialistFakeFactory) ReceiveEndorsement(r recognizer.RecognizerFakeFactory) error {
 	err := f.achieveGrade()
 	if err != nil {
 		return err
@@ -68,7 +68,7 @@ func (f *EndorsedFakeFactory) ReceiveEndorsement(r recognizer.RecognizerFakeFact
 	return f.receiveEndorsement(r)
 }
 
-func (f *EndorsedFakeFactory) receiveEndorsement(r recognizer.RecognizerFakeFactory) error {
+func (f *SpecialistFakeFactory) receiveEndorsement(r recognizer.RecognizerFakeFactory) error {
 	entf := NewReceivedEndorsementFakeFactory(r)
 	entf.Artifact.Id.TenantId = f.Id.TenantId
 	entf.Artifact.Id.ArtifactId = f.CurrentArtifactId
@@ -81,7 +81,7 @@ func (f *EndorsedFakeFactory) receiveEndorsement(r recognizer.RecognizerFakeFact
 	return nil
 }
 
-func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
+func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 	err := f.achieveGrade()
 	if err != nil {
 		return nil, err
@@ -90,7 +90,7 @@ func (f EndorsedFakeFactory) Create() (*Endorsed, error) {
 	if err != nil {
 		return nil, err
 	}
-	e, err := NewEndorsed(id, f.CreatedAt)
+	e, err := NewSpecialist(id, f.CreatedAt)
 	if err != nil {
 		return nil, err
 	}

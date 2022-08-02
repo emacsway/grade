@@ -56,7 +56,7 @@ func TestEndorsementWeight(t *testing.T) {
 			t.Run(fmt.Sprintf("Case i=%d j=%d", i, j), func(t *testing.T) {
 				var expectedWeight Weight = 1
 				f.RecognizerGrade = j
-				f.EndorsedGrade = i
+				f.SpecialistGrade = i
 				ent, err := f.Create()
 				if err != nil {
 					t.Error(err)
@@ -80,9 +80,9 @@ func TestEndorsementExport(t *testing.T) {
 		RecognizerId:      member.NewTenantMemberIdExporter(f.RecognizerId.TenantId, f.RecognizerId.MemberId),
 		RecognizerGrade:   seedwork.Uint8Exporter(f.RecognizerGrade),
 		RecognizerVersion: f.RecognizerVersion,
-		EndorsedId:        member.NewTenantMemberIdExporter(f.EndorsedId.TenantId, f.EndorsedId.MemberId),
-		EndorsedGrade:     seedwork.Uint8Exporter(f.EndorsedGrade),
-		EndorsedVersion:   f.EndorsedVersion,
+		SpecialistId:      member.NewTenantMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
+		SpecialistGrade:   seedwork.Uint8Exporter(f.SpecialistGrade),
+		SpecialistVersion: f.SpecialistVersion,
 		ArtifactId:        artifact.NewTenantArtifactIdExporter(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId),
 		CreatedAt:         f.CreatedAt,
 	}, actualExporter)

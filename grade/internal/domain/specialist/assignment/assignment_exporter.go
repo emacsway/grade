@@ -9,19 +9,19 @@ import (
 )
 
 type AssignmentExporter struct {
-	EndorsedId      member.TenantMemberIdExporter
-	EndorsedVersion uint
-	AssignedGrade   seedwork.Uint8Exporter
-	Reason          seedwork.StringExporter
-	CreatedAt       time.Time
+	SpecialistId      member.TenantMemberIdExporter
+	SpecialistVersion uint
+	AssignedGrade     seedwork.Uint8Exporter
+	Reason            seedwork.StringExporter
+	CreatedAt         time.Time
 }
 
-func (ex *AssignmentExporter) SetEndorsedId(val member.TenantMemberId) {
-	val.Export(&ex.EndorsedId)
+func (ex *AssignmentExporter) SetSpecialistId(val member.TenantMemberId) {
+	val.Export(&ex.SpecialistId)
 }
 
-func (ex *AssignmentExporter) SetEndorsedVersion(val uint) {
-	ex.EndorsedVersion = val
+func (ex *AssignmentExporter) SetSpecialistVersion(val uint) {
+	ex.SpecialistVersion = val
 }
 
 func (ex *AssignmentExporter) SetAssignedGrade(val grade.Grade) {

@@ -1,4 +1,4 @@
-package endorsed
+package specialist
 
 import (
 	"fmt"
@@ -11,14 +11,14 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
 )
 
-func TestEndorsedReceiveEndorsement(t *testing.T) {
+func TestSpecialistReceiveEndorsement(t *testing.T) {
 	cases := []struct {
 		RecogniserTenantId uint64
 		RecogniserMemberId uint64
 		RecognizerGrade    uint8
-		EndorsedTenantId   uint64
-		EndorsedMemberId   uint64
-		EndorsedGrade      uint8
+		SpecialistTenantId uint64
+		SpecialistMemberId uint64
+		SpecialistGrade    uint8
 		ArtifactAuthorId   uint64
 		ArtifactTenantId   uint64
 		ExpectedError      error
@@ -33,12 +33,12 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			ef := NewEndorsedFakeFactory()
+			ef := NewSpecialistFakeFactory()
 			rf := recognizer.NewRecognizerFakeFactory()
 			af := artifact.NewArtifactFakeFactory()
-			ef.Id.TenantId = c.EndorsedTenantId
-			ef.Id.MemberId = c.EndorsedMemberId
-			ef.Grade = c.EndorsedGrade
+			ef.Id.TenantId = c.SpecialistTenantId
+			ef.Id.MemberId = c.SpecialistMemberId
+			ef.Grade = c.SpecialistGrade
 			rf.Id.TenantId = c.RecogniserTenantId
 			rf.Id.MemberId = c.RecogniserMemberId
 			rf.Grade = c.RecognizerGrade
@@ -77,7 +77,7 @@ func TestEndorsedReceiveEndorsement(t *testing.T) {
 	}
 }
 
-func TestEndorsedCanCompleteEndorsement(t *testing.T) {
+func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 	cases := []struct {
 		Prepare       func(*recognizer.Recognizer) error
 		ExpectedError error
@@ -115,7 +115,7 @@ func TestEndorsedCanCompleteEndorsement(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			ef := NewEndorsedFakeFactory()
+			ef := NewSpecialistFakeFactory()
 			rf := recognizer.NewRecognizerFakeFactory()
 			af := artifact.NewArtifactFakeFactory()
 			if err := af.AddAuthorId(ef.Id); err != nil {

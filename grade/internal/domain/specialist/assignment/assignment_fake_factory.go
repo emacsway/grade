@@ -11,24 +11,24 @@ func NewAssignmentFakeFactory() AssignmentFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = 2
 	return AssignmentFakeFactory{
-		EndorsedId:      idFactory,
-		EndorsedVersion: 2,
-		AssignedGrade:   1,
-		Reason:          "Any",
-		CreatedAt:       time.Now(),
+		SpecialistId:      idFactory,
+		SpecialistVersion: 2,
+		AssignedGrade:     1,
+		Reason:            "Any",
+		CreatedAt:         time.Now(),
 	}
 }
 
 type AssignmentFakeFactory struct {
-	EndorsedId      member.TenantMemberIdFakeFactory
-	EndorsedVersion uint
-	AssignedGrade   uint8
-	Reason          string
-	CreatedAt       time.Time
+	SpecialistId      member.TenantMemberIdFakeFactory
+	SpecialistVersion uint
+	AssignedGrade     uint8
+	Reason            string
+	CreatedAt         time.Time
 }
 
 func (f AssignmentFakeFactory) Create() (Assignment, error) {
-	endorsedId, err := member.NewTenantMemberId(f.EndorsedId.TenantId, f.EndorsedId.MemberId)
+	specialistId, err := member.NewTenantMemberId(f.SpecialistId.TenantId, f.SpecialistId.MemberId)
 	if err != nil {
 		return Assignment{}, err
 	}
@@ -40,5 +40,5 @@ func (f AssignmentFakeFactory) Create() (Assignment, error) {
 	if err != nil {
 		return Assignment{}, err
 	}
-	return NewAssignment(endorsedId, f.EndorsedVersion, assignedGrade, reason, f.CreatedAt)
+	return NewAssignment(specialistId, f.SpecialistVersion, assignedGrade, reason, f.CreatedAt)
 }

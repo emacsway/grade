@@ -11,17 +11,17 @@ import (
 func NewEndorsementFakeFactory() EndorsementFakeFactory {
 	recognizerIdFactory := member.NewTenantMemberIdFakeFactory()
 	recognizerIdFactory.MemberId = 1
-	endorsedIdFactory := member.NewTenantMemberIdFakeFactory()
-	endorsedIdFactory.MemberId = 2
+	specialistIdFactory := member.NewTenantMemberIdFakeFactory()
+	specialistIdFactory.MemberId = 2
 	artifactIdFactory := artifact.NewTenantArtifactIdFakeFactory()
 	artifactIdFactory.ArtifactId = 6
 	return EndorsementFakeFactory{
 		RecognizerId:      recognizerIdFactory,
 		RecognizerGrade:   2,
 		RecognizerVersion: 3,
-		EndorsedId:        endorsedIdFactory,
-		EndorsedGrade:     1,
-		EndorsedVersion:   5,
+		SpecialistId:      specialistIdFactory,
+		SpecialistGrade:   1,
+		SpecialistVersion: 5,
 		ArtifactId:        artifactIdFactory,
 		CreatedAt:         time.Now(),
 	}
@@ -31,9 +31,9 @@ type EndorsementFakeFactory struct {
 	RecognizerId      member.TenantMemberIdFakeFactory
 	RecognizerGrade   uint8
 	RecognizerVersion uint
-	EndorsedId        member.TenantMemberIdFakeFactory
-	EndorsedGrade     uint8
-	EndorsedVersion   uint
+	SpecialistId      member.TenantMemberIdFakeFactory
+	SpecialistGrade   uint8
+	SpecialistVersion uint
 	ArtifactId        artifact.TenantArtifactIdFakeFactory
 	CreatedAt         time.Time
 }
@@ -47,11 +47,11 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	endorsedId, err := member.NewTenantMemberId(f.EndorsedId.TenantId, f.EndorsedId.MemberId)
+	specialistId, err := member.NewTenantMemberId(f.SpecialistId.TenantId, f.SpecialistId.MemberId)
 	if err != nil {
 		return Endorsement{}, err
 	}
-	endorsedGrade, err := grade.DefaultConstructor(f.EndorsedGrade)
+	specialistGrade, err := grade.DefaultConstructor(f.SpecialistGrade)
 	if err != nil {
 		return Endorsement{}, err
 	}
@@ -61,7 +61,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	}
 	return NewEndorsement(
 		recognizerId, recognizerGrade, f.RecognizerVersion,
-		endorsedId, endorsedGrade, f.EndorsedVersion,
+		specialistId, specialistGrade, f.SpecialistVersion,
 		artifactId, f.CreatedAt,
 	)
 }
