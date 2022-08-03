@@ -5,7 +5,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/tenant"
 )
 
-func NewTenantArtifactIdExporter(tenantId uint64, artifactId uint64) TenantArtifactIdExporter {
+func NewTenantArtifactIdExporter(tenantId, artifactId uint64) TenantArtifactIdExporter {
 	return TenantArtifactIdExporter{
 		TenantId:   seedwork.Uint64Exporter(tenantId),
 		ArtifactId: seedwork.Uint64Exporter(artifactId),

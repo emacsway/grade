@@ -1,7 +1,6 @@
 package recognizer
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
@@ -10,9 +9,9 @@ import (
 const YearlyEndorsementCount = uint(20)
 
 var (
-	ErrInvalidEndorsementCount = errors.New(fmt.Sprintf(
+	ErrInvalidEndorsementCount = fmt.Errorf(
 		"endorsement count should be between 0 and %d", YearlyEndorsementCount,
-	))
+	)
 )
 
 func NewEndorsementCount(value uint) (EndorsementCount, error) {

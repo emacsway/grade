@@ -94,12 +94,12 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, entf := range f.ReceivedEndorsements {
-		r, err := entf.Recognizer.Create()
+	for i := range f.ReceivedEndorsements {
+		r, err := f.ReceivedEndorsements[i].Recognizer.Create()
 		if err != nil {
 			return nil, err
 		}
-		art, err := entf.Artifact.Create()
+		art, err := f.ReceivedEndorsements[i].Artifact.Create()
 		if err != nil {
 			return nil, err
 		}
@@ -107,7 +107,7 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = e.ReceiveEndorsement(*r, *art, entf.CreatedAt)
+		err = e.ReceiveEndorsement(*r, *art, f.ReceivedEndorsements[i].CreatedAt)
 		if err != nil {
 			return nil, err
 		}

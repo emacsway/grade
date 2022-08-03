@@ -60,7 +60,7 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			}
 			af.Id.TenantId = c.ArtifactTenantId
 			af.Id.ArtifactId = ef.CurrentArtifactId
-			art, err := af.Create()
+			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -70,7 +70,7 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = e.ReceiveEndorsement(*r, *art, time.Now())
+			err = e.ReceiveEndorsement(*r, *a, time.Now())
 			fmt.Println(err, c.ExpectedError)
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
@@ -134,7 +134,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 			}
 			af.Id.TenantId = ef.Id.TenantId
 			af.Id.ArtifactId = ef.CurrentArtifactId
-			art, err := af.Create()
+			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -144,7 +144,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = e.ReceiveEndorsement(*r, *art, time.Now())
+			err = e.ReceiveEndorsement(*r, *a, time.Now())
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
 	}

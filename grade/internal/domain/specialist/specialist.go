@@ -113,8 +113,8 @@ func (e Specialist) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) 
 	if r.Grade().LessThan(e.grade) {
 		errs = multierror.Append(errs, ErrLowerGradeEndorses)
 	}
-	for _, ent := range e.receivedEndorsements {
-		if ent.IsEndorsedBy(r.Id(), a.Id()) {
+	for i := range e.receivedEndorsements {
+		if e.receivedEndorsements[i].IsEndorsedBy(r.Id(), a.Id()) {
 			errs = multierror.Append(errs, ErrAlreadyEndorsed)
 			break
 		}
@@ -147,9 +147,9 @@ func (e *Specialist) actualizeGrade(t time.Time) error {
 }
 func (e Specialist) getReceivedEndorsementCount() uint {
 	var counter uint
-	for _, v := range e.receivedEndorsements {
-		if v.SpecialistGrade().Equal(e.grade) {
-			counter += uint(v.Weight())
+	for i := range e.receivedEndorsements {
+		if e.receivedEndorsements[i].SpecialistGrade().Equal(e.grade) {
+			counter += uint(e.receivedEndorsements[i].Weight())
 		}
 	}
 	return counter

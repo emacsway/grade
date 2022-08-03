@@ -1,7 +1,6 @@
 package grade
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
@@ -10,7 +9,7 @@ import (
 const MaxGradeValue = uint8(5)
 
 var (
-	ErrInvalidGrade = errors.New(fmt.Sprintf("grade should be between 0 and %d", MaxGradeValue))
+	ErrInvalidGrade = fmt.Errorf("grade should be between 0 and %d", MaxGradeValue)
 )
 
 var DefaultConstructor = NewGradeFactory(MaxGradeValue, GradeMatrix)

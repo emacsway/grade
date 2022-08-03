@@ -4,7 +4,7 @@ import (
 	"github.com/emacsway/qualifying-grade/grade/internal/domain/tenant"
 )
 
-func NewTenantMemberId(tenantId uint64, memberId uint64) (TenantMemberId, error) {
+func NewTenantMemberId(tenantId, memberId uint64) (TenantMemberId, error) {
 	tId, err := tenant.NewTenantId(tenantId)
 	if err != nil {
 		return TenantMemberId{}, err

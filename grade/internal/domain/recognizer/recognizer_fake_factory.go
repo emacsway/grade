@@ -32,11 +32,11 @@ func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
 	if err != nil {
 		return nil, err
 	}
-	grade, err := grade.DefaultConstructor(f.Grade)
+	g, err := grade.DefaultConstructor(f.Grade)
 	if err != nil {
 		return nil, err
 	}
-	err = r.SetGrade(grade)
+	err = r.SetGrade(g)
 	if err != nil {
 		return nil, err
 	}
