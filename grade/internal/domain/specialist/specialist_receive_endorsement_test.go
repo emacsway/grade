@@ -33,16 +33,16 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			ef := NewSpecialistFakeFactory()
+			sf := NewSpecialistFakeFactory()
 			rf := recognizer.NewRecognizerFakeFactory()
 			af := artifact.NewArtifactFakeFactory()
-			ef.Id.TenantId = c.SpecialistTenantId
-			ef.Id.MemberId = c.SpecialistMemberId
-			ef.Grade = c.SpecialistGrade
+			sf.Id.TenantId = c.SpecialistTenantId
+			sf.Id.MemberId = c.SpecialistMemberId
+			sf.Grade = c.SpecialistGrade
 			rf.Id.TenantId = c.RecogniserTenantId
 			rf.Id.MemberId = c.RecogniserMemberId
 			rf.Grade = c.RecognizerGrade
-			e, err := ef.Create()
+			s, err := sf.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -52,14 +52,14 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			aId := ef.Id
+			aId := sf.Id
 			aId.MemberId = c.ArtifactAuthorId
 			if err := af.AddAuthorId(aId); err != nil {
 				t.Error(err)
 				t.FailNow()
 			}
 			af.Id.TenantId = c.ArtifactTenantId
-			af.Id.ArtifactId = ef.CurrentArtifactId
+			af.Id.ArtifactId = sf.CurrentArtifactId
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
@@ -70,7 +70,7 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = e.ReceiveEndorsement(*r, *a, time.Now())
+			err = s.ReceiveEndorsement(*r, *a, time.Now())
 			fmt.Println(err, c.ExpectedError)
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
@@ -115,14 +115,14 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			ef := NewSpecialistFakeFactory()
+			sf := NewSpecialistFakeFactory()
 			rf := recognizer.NewRecognizerFakeFactory()
 			af := artifact.NewArtifactFakeFactory()
-			if err := af.AddAuthorId(ef.Id); err != nil {
+			if err := af.AddAuthorId(sf.Id); err != nil {
 				t.Error(err)
 				t.FailNow()
 			}
-			e, err := ef.Create()
+			s, err := sf.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -132,8 +132,8 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			af.Id.TenantId = ef.Id.TenantId
-			af.Id.ArtifactId = ef.CurrentArtifactId
+			af.Id.TenantId = sf.Id.TenantId
+			af.Id.ArtifactId = sf.CurrentArtifactId
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
@@ -144,7 +144,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = e.ReceiveEndorsement(*r, *a, time.Now())
+			err = s.ReceiveEndorsement(*r, *a, time.Now())
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
 	}

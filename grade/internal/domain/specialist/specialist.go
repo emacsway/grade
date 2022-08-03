@@ -64,57 +64,57 @@ type Specialist struct {
 	seedwork.EventiveEntity
 }
 
-func (e *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact, t time.Time) error {
-	err := e.canReceiveEndorsement(r, a)
+func (s *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact, t time.Time) error {
+	err := s.canReceiveEndorsement(r, a)
 	if err != nil {
 		return err
 	}
 	ent, err := endorsement.NewEndorsement(
 		r.Id(), r.Grade(), r.Version(),
-		e.id, e.grade, e.Version(),
+		s.id, s.grade, s.Version(),
 		a.Id(), t,
 	)
 	if err != nil {
 		return err
 	}
-	e.receivedEndorsements = append(e.receivedEndorsements, ent)
-	e.AddDomainEvent(events.NewEndorsementReceived(
-		e.id, e.grade, e.Version(), r.Id(), r.Grade(), e.Version(), a.Id(), t,
+	s.receivedEndorsements = append(s.receivedEndorsements, ent)
+	s.AddDomainEvent(events.NewEndorsementReceived(
+		s.id, s.grade, s.Version(), r.Id(), r.Grade(), s.Version(), a.Id(), t,
 	))
-	err = e.actualizeGrade(t)
+	err = s.actualizeGrade(t)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (e Specialist) canReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
+func (s Specialist) canReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
 	err := r.CanCompleteEndorsement()
 	if err != nil {
 		return err
 	}
-	return e.canBeEndorsed(r, a)
+	return s.canBeEndorsed(r, a)
 }
 
-func (e Specialist) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) error {
+func (s Specialist) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) error {
 	var errs error
-	if !r.Id().TenantId().Equal(e.id.TenantId()) {
+	if !r.Id().TenantId().Equal(s.id.TenantId()) {
 		errs = multierror.Append(errs, ErrCrossTenantEndorsement)
 	}
-	if !a.Id().TenantId().Equal(e.id.TenantId()) {
+	if !a.Id().TenantId().Equal(s.id.TenantId()) {
 		errs = multierror.Append(errs, ErrCrossTenantArtifact)
 	}
-	if !a.HasAuthor(e.id) {
+	if !a.HasAuthor(s.id) {
 		errs = multierror.Append(errs, ErrNotAuthor)
 	}
-	if r.Id().Equal(e.id) {
+	if r.Id().Equal(s.id) {
 		errs = multierror.Append(errs, ErrEndorsementOneself)
 	}
-	if r.Grade().LessThan(e.grade) {
+	if r.Grade().LessThan(s.grade) {
 		errs = multierror.Append(errs, ErrLowerGradeEndorses)
 	}
-	for i := range e.receivedEndorsements {
-		if e.receivedEndorsements[i].IsEndorsedBy(r.Id(), a.Id()) {
+	for i := range s.receivedEndorsements {
+		if s.receivedEndorsements[i].IsEndorsedBy(r.Id(), a.Id()) {
 			errs = multierror.Append(errs, ErrAlreadyEndorsed)
 			break
 		}
@@ -122,17 +122,17 @@ func (e Specialist) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) 
 	return errs
 }
 
-func (e Specialist) CanBeginEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
+func (s Specialist) CanBeginEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
 	err := r.CanReserveEndorsement()
 	if err != nil {
 		return err
 	}
-	return e.canBeEndorsed(r, a)
+	return s.canBeEndorsed(r, a)
 }
 
-func (e *Specialist) actualizeGrade(t time.Time) error {
-	if e.grade.NextGradeAchieved(e.getReceivedEndorsementCount()) {
-		assignedGrade, err := e.grade.Next()
+func (s *Specialist) actualizeGrade(t time.Time) error {
+	if s.grade.NextGradeAchieved(s.getReceivedEndorsementCount()) {
+		assignedGrade, err := s.grade.Next()
 		if err != nil {
 			return err
 		}
@@ -140,52 +140,52 @@ func (e *Specialist) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		e.AddDomainEvent(events.NewGradeAssigned(e.id, e.Version(), assignedGrade, reason, t))
-		return e.setGrade(assignedGrade, reason, t)
+		s.AddDomainEvent(events.NewGradeAssigned(s.id, s.Version(), assignedGrade, reason, t))
+		return s.setGrade(assignedGrade, reason, t)
 	}
 	return nil
 }
-func (e Specialist) getReceivedEndorsementCount() uint {
+func (s Specialist) getReceivedEndorsementCount() uint {
 	var counter uint
-	for i := range e.receivedEndorsements {
-		if e.receivedEndorsements[i].SpecialistGrade().Equal(e.grade) {
-			counter += uint(e.receivedEndorsements[i].Weight())
+	for i := range s.receivedEndorsements {
+		if s.receivedEndorsements[i].SpecialistGrade().Equal(s.grade) {
+			counter += uint(s.receivedEndorsements[i].Weight())
 		}
 	}
 	return counter
 }
 
-func (e *Specialist) setGrade(g grade.Grade, reason assignment.Reason, t time.Time) error {
+func (s *Specialist) setGrade(g grade.Grade, reason assignment.Reason, t time.Time) error {
 	a, err := assignment.NewAssignment(
-		e.id, e.Version(), g, reason, t,
+		s.id, s.Version(), g, reason, t,
 	)
 	if err != nil {
 		return err
 	}
-	e.assignments = append(e.assignments, a)
-	e.grade = g
+	s.assignments = append(s.assignments, a)
+	s.grade = g
 	return nil
 }
 
-func (e *Specialist) DecreaseGrade(reason assignment.Reason, t time.Time) error {
-	previousGrade, err := e.grade.Next()
+func (s *Specialist) DecreaseGrade(reason assignment.Reason, t time.Time) error {
+	previousGrade, err := s.grade.Next()
 	if err != nil {
 		return err
 	}
-	return e.setGrade(previousGrade, reason, t)
+	return s.setGrade(previousGrade, reason, t)
 }
 
-func (e Specialist) Export(ex SpecialistExporterSetter) {
-	ex.SetId(e.id)
-	ex.SetGrade(e.grade)
-	ex.SetVersion(e.Version())
-	ex.SetCreatedAt(e.createdAt)
+func (s Specialist) Export(ex SpecialistExporterSetter) {
+	ex.SetId(s.id)
+	ex.SetGrade(s.grade)
+	ex.SetVersion(s.Version())
+	ex.SetCreatedAt(s.createdAt)
 
-	for i := range e.receivedEndorsements {
-		ex.AddEndorsement(e.receivedEndorsements[i])
+	for i := range s.receivedEndorsements {
+		ex.AddEndorsement(s.receivedEndorsements[i])
 	}
-	for i := range e.assignments {
-		ex.AddAssignment(e.assignments[i])
+	for i := range s.assignments {
+		ex.AddAssignment(s.assignments[i])
 	}
 }
 

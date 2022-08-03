@@ -15,88 +15,88 @@ import (
 
 func TestSpecialistExport(t *testing.T) {
 	var actualExporter SpecialistExporter
-	ef := NewSpecialistFakeFactory()
+	sf := NewSpecialistFakeFactory()
 	rf := recognizer.NewRecognizerFakeFactory()
 	for i := 0; i < 4; i++ {
-		err := ef.ReceiveEndorsement(rf)
+		err := sf.ReceiveEndorsement(rf)
 		if err != nil {
 			t.Error(err)
 			t.FailNow()
 		}
 	}
-	agg, err := ef.Create()
+	s, err := sf.Create()
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
 	}
-	agg.Export(&actualExporter)
+	s.Export(&actualExporter)
 	assert.Equal(t, SpecialistExporter{
-		Id:    member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-		Grade: seedwork.Uint8Exporter(ef.Grade + 1),
+		Id:    member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+		Grade: seedwork.Uint8Exporter(sf.Grade + 1),
 		ReceivedEndorsements: []endorsement.EndorsementExporter{
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
-				SpecialistId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-				SpecialistGrade:   seedwork.Uint8Exporter(ef.Grade),
+				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistGrade:   seedwork.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 0,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
-					ef.ReceivedEndorsements[0].Artifact.Id.TenantId,
-					ef.ReceivedEndorsements[0].Artifact.Id.ArtifactId,
+					sf.ReceivedEndorsements[0].Artifact.Id.TenantId,
+					sf.ReceivedEndorsements[0].Artifact.Id.ArtifactId,
 				),
-				CreatedAt: ef.ReceivedEndorsements[0].CreatedAt,
+				CreatedAt: sf.ReceivedEndorsements[0].CreatedAt,
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
-				SpecialistId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-				SpecialistGrade:   seedwork.Uint8Exporter(ef.Grade),
+				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistGrade:   seedwork.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 1,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
-					ef.ReceivedEndorsements[1].Artifact.Id.TenantId,
-					ef.ReceivedEndorsements[1].Artifact.Id.ArtifactId,
+					sf.ReceivedEndorsements[1].Artifact.Id.TenantId,
+					sf.ReceivedEndorsements[1].Artifact.Id.ArtifactId,
 				),
-				CreatedAt: ef.ReceivedEndorsements[1].CreatedAt,
+				CreatedAt: sf.ReceivedEndorsements[1].CreatedAt,
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
-				SpecialistId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-				SpecialistGrade:   seedwork.Uint8Exporter(ef.Grade),
+				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistGrade:   seedwork.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 2,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
-					ef.ReceivedEndorsements[2].Artifact.Id.TenantId,
-					ef.ReceivedEndorsements[2].Artifact.Id.ArtifactId,
+					sf.ReceivedEndorsements[2].Artifact.Id.TenantId,
+					sf.ReceivedEndorsements[2].Artifact.Id.ArtifactId,
 				),
-				CreatedAt: ef.ReceivedEndorsements[2].CreatedAt,
+				CreatedAt: sf.ReceivedEndorsements[2].CreatedAt,
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   seedwork.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
-				SpecialistId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-				SpecialistGrade:   seedwork.Uint8Exporter(ef.Grade + 1),
+				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistGrade:   seedwork.Uint8Exporter(sf.Grade + 1),
 				SpecialistVersion: 3,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
-					ef.ReceivedEndorsements[3].Artifact.Id.TenantId,
-					ef.ReceivedEndorsements[3].Artifact.Id.ArtifactId,
+					sf.ReceivedEndorsements[3].Artifact.Id.TenantId,
+					sf.ReceivedEndorsements[3].Artifact.Id.ArtifactId,
 				),
-				CreatedAt: ef.ReceivedEndorsements[3].CreatedAt,
+				CreatedAt: sf.ReceivedEndorsements[3].CreatedAt,
 			},
 		},
 		Assignments: []assignment.AssignmentExporter{
 			{
-				SpecialistId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
+				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistVersion: 2,
-				AssignedGrade:     seedwork.Uint8Exporter(ef.Grade + 1),
+				AssignedGrade:     seedwork.Uint8Exporter(sf.Grade + 1),
 				Reason:            seedwork.StringExporter("Achieved"),
-				CreatedAt:         ef.ReceivedEndorsements[2].CreatedAt,
+				CreatedAt:         sf.ReceivedEndorsements[2].CreatedAt,
 			},
 		},
 		Version:   4,
-		CreatedAt: ef.CreatedAt,
+		CreatedAt: sf.CreatedAt,
 	}, actualExporter)
 }

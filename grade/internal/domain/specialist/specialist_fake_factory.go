@@ -90,7 +90,7 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 	if err != nil {
 		return nil, err
 	}
-	e, err := NewSpecialist(id, f.CreatedAt)
+	s, err := NewSpecialist(id, f.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -107,13 +107,13 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = e.ReceiveEndorsement(*r, *art, f.ReceivedEndorsements[i].CreatedAt)
+		err = s.ReceiveEndorsement(*r, *art, f.ReceivedEndorsements[i].CreatedAt)
 		if err != nil {
 			return nil, err
 		}
-		e.IncreaseVersion()
+		s.IncreaseVersion()
 	}
-	return e, nil
+	return s, nil
 }
 
 func NewReceivedEndorsementFakeFactory(r recognizer.RecognizerFakeFactory) ReceivedEndorsementFakeFactory {
