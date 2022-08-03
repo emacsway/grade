@@ -14,7 +14,7 @@ func NewArtifact(
 	name Name,
 	description Description,
 	url Url,
-	competenceIds []competence.CompetenceId,
+	competenceIds []competence.TenantCompetenceId,
 	authorIds []member.TenantMemberId,
 	ownerId member.TenantMemberId,
 	createdAt time.Time,
@@ -44,7 +44,7 @@ type Artifact struct {
 	name          Name
 	description   Description
 	url           Url
-	competenceIds []competence.CompetenceId
+	competenceIds []competence.TenantCompetenceId
 	authorIds     []member.TenantMemberId
 	ownerId       member.TenantMemberId
 	createdAt     time.Time

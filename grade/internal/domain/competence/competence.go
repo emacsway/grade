@@ -7,7 +7,7 @@ import (
 )
 
 type Competence struct {
-	id        CompetenceId
+	id        TenantCompetenceId
 	name      Name
 	ownerId   member.TenantMemberId
 	createdAt time.Time
