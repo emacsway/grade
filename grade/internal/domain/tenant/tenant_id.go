@@ -1,7 +1,7 @@
 package tenant
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
 )
 
 func NewTenantId(value uint64) (TenantId, error) {

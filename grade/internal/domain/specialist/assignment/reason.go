@@ -1,7 +1,7 @@
 package assignment
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
 )
 
 func NewReason(reason string) (Reason, error) {

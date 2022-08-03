@@ -3,7 +3,7 @@ package recognizer
 import (
 	"fmt"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
 )
 
 const YearlyEndorsementCount = uint(20)

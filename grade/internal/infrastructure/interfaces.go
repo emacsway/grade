@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
 )
 
 type Result interface {

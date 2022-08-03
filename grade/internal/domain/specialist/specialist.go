@@ -6,14 +6,14 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/specialist/assignment"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/specialist/endorsement"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/specialist/events"
+	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	"github.com/emacsway/grade/grade/internal/domain/grade"
+	"github.com/emacsway/grade/grade/internal/domain/member"
+	"github.com/emacsway/grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
+	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
+	"github.com/emacsway/grade/grade/internal/domain/specialist/events"
 )
 
 var (

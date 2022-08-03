@@ -1,8 +1,8 @@
 package artifact
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/tenant"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
 func NewTenantArtifactIdExporter(tenantId, artifactId uint64) TenantArtifactIdExporter {

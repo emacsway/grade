@@ -1,7 +1,7 @@
 package artifact
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
 )
 
 func NewArtifactId(value uint64) (ArtifactId, error) {

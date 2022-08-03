@@ -189,7 +189,7 @@ linters-settings:
     min-complexity: 10
 
   goimports:
-    local-prefixes: github.com/emacsway/qualifying-grade
+    local-prefixes: github.com/emacsway/grade
 
 issues:
   exclude-rules:

@@ -3,8 +3,8 @@ package artifact
 import (
 	"time"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/competence"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
+	"github.com/emacsway/grade/grade/internal/domain/competence"
+	"github.com/emacsway/grade/grade/internal/domain/member"
 )
 
 func NewArtifactFakeFactory() ArtifactFakeFactory {
@@ -15,7 +15,7 @@ func NewArtifactFakeFactory() ArtifactFakeFactory {
 		Status:        Accepted,
 		Name:          "Name1",
 		Description:   "Description1",
-		Url:           "https://github.com/emacsway/qualifying-grade",
+		Url:           "https://github.com/emacsway/grade",
 		CompetenceIds: []uint64{},
 		AuthorIds:     []member.TenantMemberIdFakeFactory{},
 		OwnerId:       member.NewTenantMemberIdFakeFactory(),

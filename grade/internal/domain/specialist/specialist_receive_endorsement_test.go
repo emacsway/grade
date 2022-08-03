@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	"github.com/emacsway/grade/grade/internal/domain/recognizer"
 )
 
 func TestSpecialistReceiveEndorsement(t *testing.T) {

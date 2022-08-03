@@ -1,4 +1,4 @@
-module github.com/emacsway/qualifying-grade
+module github.com/emacsway/grade
 
 go 1.18
 

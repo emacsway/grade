@@ -1,7 +1,7 @@
 package member
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/tenant"
+	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
 func NewTenantMemberId(tenantId, memberId uint64) (TenantMemberId, error) {

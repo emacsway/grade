@@ -3,7 +3,7 @@ package grade
 import (
 	"fmt"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
 )
 
 const MaxGradeValue = uint8(5)

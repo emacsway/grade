@@ -1,7 +1,7 @@
 package artifact
 
 import (
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/tenant"
+	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
 func NewTenantArtifactId(tenantId, artifactId uint64) (TenantArtifactId, error) {

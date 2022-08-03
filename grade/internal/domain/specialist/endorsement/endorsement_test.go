@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/artifact"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/grade"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/member"
-	"github.com/emacsway/qualifying-grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	"github.com/emacsway/grade/grade/internal/domain/grade"
+	"github.com/emacsway/grade/grade/internal/domain/member"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
 )
 
 func TestEndorsementIsEndorsedBy(t *testing.T) {
