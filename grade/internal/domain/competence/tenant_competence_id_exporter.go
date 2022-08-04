@@ -7,13 +7,13 @@ import (
 
 func NewTenantCompetenceIdExporter(tenantId, competenceId uint64) TenantCompetenceIdExporter {
 	return TenantCompetenceIdExporter{
-		TenantId: seedwork.Uint64Exporter(tenantId),
+		TenantId:     seedwork.Uint64Exporter(tenantId),
 		CompetenceId: seedwork.Uint64Exporter(competenceId),
 	}
 }
 
 type TenantCompetenceIdExporter struct {
-	TenantId seedwork.Uint64Exporter
+	TenantId     seedwork.Uint64Exporter
 	CompetenceId seedwork.Uint64Exporter
 }
 

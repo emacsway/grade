@@ -19,6 +19,7 @@ func NewArtifact(
 	ownerId member.TenantMemberId,
 	createdAt time.Time,
 ) *Artifact {
+	eventSourced := seedwork.NewEventSourcedAggregate(id.TenantId(), id.ArtifactId(), "Artifact")
 	return &Artifact{
 		id:            id,
 		status:        status,
@@ -29,6 +30,7 @@ func NewArtifact(
 		authorIds:     authorIds,
 		ownerId:       ownerId,
 		createdAt:     createdAt,
+		eventSourced:  eventSourced,
 	}
 }
 

@@ -11,11 +11,11 @@ import (
 
 func TestTenantCompetenceIdEqual(t *testing.T) {
 	cases := []struct {
-		TenantId       uint64
-		CompetenceId       uint64
-		OtherTenantId  uint64
-		OtherCompetenceId  uint64
-		ExpectedResult bool
+		TenantId          uint64
+		CompetenceId      uint64
+		OtherTenantId     uint64
+		OtherCompetenceId uint64
+		ExpectedResult    bool
 	}{
 		{1, 2, 1, 2, true},
 		{1, 1, 1, 2, false},
@@ -50,7 +50,7 @@ func TestRecognizerExport(t *testing.T) {
 	}
 	cid.Export(&actualExporter)
 	assert.Equal(t, TenantCompetenceIdExporter{
-		TenantId: seedwork.Uint64Exporter(1),
+		TenantId:     seedwork.Uint64Exporter(1),
 		CompetenceId: seedwork.Uint64Exporter(2),
 	}, actualExporter)
 }

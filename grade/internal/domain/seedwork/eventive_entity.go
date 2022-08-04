@@ -1,10 +1,14 @@
 package seedwork
 
+type DomainEvent interface {
+}
+
 type EventiveEntityAccessor interface {
 	AddDomainEvent(...DomainEvent)
 	PendingDomainEvents() []DomainEvent
 	ClearPendingDomainEvents()
 }
+
 type EventiveEntityAdder interface {
 	AddDomainEvent(...DomainEvent)
 }

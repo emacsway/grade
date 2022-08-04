@@ -1,5 +1,9 @@
 package seedwork
 
+import (
+	"fmt"
+)
+
 type ExporterSetter[T any] interface {
 	SetState(T)
 }
@@ -34,10 +38,14 @@ func (id Uint64Identity) Equal(other Equaler) bool {
 	return id.value == exportableOther.Value()
 }
 
+func (id Uint64Identity) Export(ex ExporterSetter[uint64]) {
+	ex.SetState(id.value)
+}
+
 func (id Uint64Identity) Value() uint64 {
 	return id.value
 }
 
-func (id Uint64Identity) Export(ex ExporterSetter[uint64]) {
-	ex.SetState(id.value)
+func (id Uint64Identity) String() string {
+	return fmt.Sprintf("%d", id.value)
 }
