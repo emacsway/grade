@@ -1,11 +1,12 @@
 package seedwork
 
-// There may be an event receiver here in the case of EventSourcing.
-
-type EntityEventable interface {
+type EventiveEntityAccessor interface {
 	AddDomainEvent(...DomainEvent)
 	PendingDomainEvents() []DomainEvent
 	ClearPendingDomainEvents()
+}
+type EventiveEntityAdder interface {
+	AddDomainEvent(...DomainEvent)
 }
 
 func NewEventiveEntity() EventiveEntity {

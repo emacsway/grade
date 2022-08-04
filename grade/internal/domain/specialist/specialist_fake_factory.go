@@ -111,7 +111,7 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 		if err != nil {
 			return nil, err
 		}
-		s.IncreaseVersion()
+		s.SetVersion(s.Version() + 1)
 	}
 	return s, nil
 }

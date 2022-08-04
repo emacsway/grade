@@ -1,8 +1,8 @@
 package seedwork
 
-type AggregateVersionable interface {
+type AggregateVersioner interface {
 	Version() uint
-	IncreaseVersion()
+	SetVersion(uint)
 }
 
 func NewVersionedAggregate(version uint) VersionedAggregate {
@@ -17,6 +17,6 @@ func (a VersionedAggregate) Version() uint {
 	return a.version
 }
 
-func (a *VersionedAggregate) IncreaseVersion() {
-	a.version += 1
+func (a *VersionedAggregate) SetVersion(val uint) {
+	a.version = val
 }
