@@ -43,8 +43,7 @@ type Artifact struct {
 	authorIds     []member.TenantMemberId
 	ownerId       member.TenantMemberId
 	createdAt     time.Time
-	eventive      seedwork.EventiveEntity
-	seedwork.VersionedAggregate
+	eventSourced  seedwork.EventSourcedAggregate
 }
 
 func (a Artifact) Id() TenantArtifactId {
@@ -61,9 +60,17 @@ func (a Artifact) HasAuthor(authorId member.TenantMemberId) bool {
 }
 
 func (a Artifact) PendingDomainEvents() []seedwork.DomainEvent {
-	return a.eventive.PendingDomainEvents()
+	return a.eventSourced.PendingDomainEvents()
 }
 
 func (a *Artifact) ClearPendingDomainEvents() {
-	a.eventive.ClearPendingDomainEvents()
+	a.eventSourced.ClearPendingDomainEvents()
+}
+
+func (a Artifact) Version() uint {
+	return a.eventSourced.Version()
+}
+
+func (a *Artifact) SetVersion(val uint) {
+	a.eventSourced.SetVersion(val)
 }

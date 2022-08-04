@@ -6,13 +6,17 @@ import (
 
 type PersistentDomainEvent interface {
 	DomainEvent
+	EventId() uint64
+	EventType() string
+	EventVersion() uint8
+	TenantId() uint64
+	SetTenantId(uint64)
 	StreamId() fmt.Stringer
 	SetStreamId(value fmt.Stringer)
 	StreamPosition() uint
 	SetStreamPosition(uint)
 	StreamType() string
-	EventType() string
-	EventVersion() uint8
+	SetStreamType(string)
 }
 
 type PersistentDomainEventHandler func(event PersistentDomainEvent)
