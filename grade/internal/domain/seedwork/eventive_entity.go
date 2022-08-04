@@ -9,10 +9,6 @@ type EventiveEntityAdder interface {
 	AddDomainEvent(...DomainEvent)
 }
 
-func NewEventiveEntity() EventiveEntity {
-	return EventiveEntity{}
-}
-
 type EventiveEntity struct {
 	pendingDomainEvents []DomainEvent
 }

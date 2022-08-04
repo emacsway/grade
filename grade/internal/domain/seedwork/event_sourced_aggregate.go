@@ -16,20 +16,21 @@ type PersistentDomainEvent interface {
 }
 
 type PersistentDomainEventHandler func(event PersistentDomainEvent)
-
-func NewEventSourcedAggregate() EventSourcedAggregate {
-	return EventSourcedAggregate{}
-}
-
-type AggregateEventSourcer interface {
-	StreamId() fmt.Stringer
-}
+type StreamIdAccessor func() fmt.Stringer
 
 type EventSourcedAggregate struct {
+	streamId fmt.Stringer
 	handlers map[string]PersistentDomainEventHandler
-	AggregateEventSourcer
-	AggregateVersioner
-	EventiveEntityAdder
+	EventiveEntity
+	VersionedAggregate
+}
+
+func (a EventSourcedAggregate) StreamId() fmt.Stringer {
+	return a.streamId
+}
+
+func (a *EventSourcedAggregate) SetStreamId(val fmt.Stringer) {
+	a.streamId = val
 }
 
 func (a *EventSourcedAggregate) AddHandler(e PersistentDomainEvent, handler PersistentDomainEventHandler) {
