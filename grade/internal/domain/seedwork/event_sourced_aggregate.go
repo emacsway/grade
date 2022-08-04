@@ -19,7 +19,7 @@ type CausalDependency interface {
 }
 
 type EventMeta interface {
-	EventId() uint64
+	EventId() uuid.UUID
 	CorrelationID() uuid.UUID
 	CausationID() uuid.UUID
 	CausalDependencies() []CausalDependency
