@@ -8,7 +8,7 @@ type ExporterSetter[T any] interface {
 	SetState(T)
 }
 
-type ExportableTo[T any] interface {
+type Exportable[T any] interface {
 	Export(ExporterSetter[T])
 }
 

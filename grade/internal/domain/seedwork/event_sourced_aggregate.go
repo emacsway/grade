@@ -8,7 +8,7 @@ import (
 )
 
 type TenantId interface {
-	ExportableTo[uint64]
+	Exportable[uint64]
 }
 
 type CausalDependency interface {
