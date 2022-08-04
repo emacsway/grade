@@ -9,13 +9,13 @@ type PersistentDomainEvent interface {
 	EventId() uint64
 	EventType() string
 	EventVersion() uint8
-	TenantId() uint64
+	TenantId() uint64 // To be able to drop quickly the whole tenant
 	SetTenantId(uint64)
 	StreamId() fmt.Stringer
 	SetStreamId(value fmt.Stringer)
 	StreamPosition() uint
 	SetStreamPosition(uint)
-	StreamType() string
+	StreamType() string // For Causal Dependencies reason and for variability of retention policy
 	SetStreamType(string)
 }
 
