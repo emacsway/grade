@@ -28,6 +28,7 @@ type EventMeta interface {
 type PersistentDomainEvent interface {
 	DomainEvent
 	EventId() uint64
+	SetEventId(uint64)
 	EventType() string
 	EventVersion() uint8
 	TenantId() TenantId // To be able to drop quickly the whole tenant
