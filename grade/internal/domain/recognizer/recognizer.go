@@ -28,8 +28,6 @@ func NewRecognizer(
 	if err != nil {
 		return nil, err
 	}
-	versioned := seedwork.NewVersionedAggregate(0)
-	eventive := seedwork.NewEventiveEntity()
 	zeroGrade, _ := grade.NewGradeFactory(grade.MaxGradeValue, grade.GradeMatrix)(0)
 	return &Recognizer{
 		id:                        id,
@@ -37,8 +35,6 @@ func NewRecognizer(
 		availableEndorsementCount: availableCount,
 		pendingEndorsementCount:   pendingCount,
 		createdAt:                 createdAt,
-		VersionedAggregate:        versioned,
-		EventiveEntity:            eventive,
 	}, nil
 }
 
@@ -48,8 +44,8 @@ type Recognizer struct {
 	availableEndorsementCount EndorsementCount
 	pendingEndorsementCount   EndorsementCount
 	createdAt                 time.Time
+	eventive                  seedwork.EventiveEntity
 	seedwork.VersionedAggregate
-	seedwork.EventiveEntity
 }
 
 func (r Recognizer) Id() member.TenantMemberId {
@@ -119,6 +115,14 @@ func (r Recognizer) Export(ex RecognizerExporterSetter) {
 	ex.SetPendingEndorsementCount(r.pendingEndorsementCount)
 	ex.SetVersion(r.Version())
 	ex.SetCreatedAt(r.createdAt)
+}
+
+func (r Recognizer) PendingDomainEvents() []seedwork.DomainEvent {
+	return r.eventive.PendingDomainEvents()
+}
+
+func (r *Recognizer) ClearPendingDomainEvents() {
+	r.eventive.ClearPendingDomainEvents()
 }
 
 type RecognizerExporterSetter interface {

@@ -25,6 +25,6 @@ func (e EventiveEntity) PendingDomainEvents() []DomainEvent {
 	return e.pendingDomainEvents
 }
 
-func (e EventiveEntity) ClearPendingDomainEvents() {
+func (e *EventiveEntity) ClearPendingDomainEvents() {
 	e.pendingDomainEvents = []DomainEvent{}
 }

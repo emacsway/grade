@@ -42,15 +42,11 @@ func NewSpecialist(
 	id member.TenantMemberId,
 	createdAt time.Time,
 ) (*Specialist, error) {
-	versioned := seedwork.NewVersionedAggregate(0)
-	eventive := seedwork.NewEventiveEntity()
 	zeroGrade, _ := grade.DefaultConstructor(0)
 	return &Specialist{
-		id:                 id,
-		grade:              zeroGrade,
-		createdAt:          createdAt,
-		VersionedAggregate: versioned,
-		EventiveEntity:     eventive,
+		id:        id,
+		grade:     zeroGrade,
+		createdAt: createdAt,
 	}, nil
 }
 
@@ -60,8 +56,8 @@ type Specialist struct {
 	receivedEndorsements []endorsement.Endorsement
 	assignments          []assignment.Assignment
 	createdAt            time.Time
+	eventive             seedwork.EventiveEntity
 	seedwork.VersionedAggregate
-	seedwork.EventiveEntity
 }
 
 func (s *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact, t time.Time) error {
@@ -78,7 +74,7 @@ func (s *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Arti
 		return err
 	}
 	s.receivedEndorsements = append(s.receivedEndorsements, ent)
-	s.AddDomainEvent(events.NewEndorsementReceived(
+	s.eventive.AddDomainEvent(events.NewEndorsementReceived(
 		s.id, s.grade, s.Version(), r.Id(), r.Grade(), s.Version(), a.Id(), t,
 	))
 	err = s.actualizeGrade(t)
@@ -140,7 +136,7 @@ func (s *Specialist) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		s.AddDomainEvent(events.NewGradeAssigned(s.id, s.Version(), assignedGrade, reason, t))
+		s.eventive.AddDomainEvent(events.NewGradeAssigned(s.id, s.Version(), assignedGrade, reason, t))
 		return s.setGrade(assignedGrade, reason, t)
 	}
 	return nil
@@ -187,6 +183,14 @@ func (s Specialist) Export(ex SpecialistExporterSetter) {
 	for i := range s.assignments {
 		ex.AddAssignment(s.assignments[i])
 	}
+}
+
+func (s Specialist) PendingDomainEvents() []seedwork.DomainEvent {
+	return s.eventive.PendingDomainEvents()
+}
+
+func (s *Specialist) ClearPendingDomainEvents() {
+	s.eventive.ClearPendingDomainEvents()
 }
 
 type SpecialistExporterSetter interface {

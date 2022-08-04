@@ -19,21 +19,16 @@ func NewArtifact(
 	ownerId member.TenantMemberId,
 	createdAt time.Time,
 ) *Artifact {
-	versioned := seedwork.NewVersionedAggregate(0)
-	eventive := seedwork.NewEventiveEntity()
-
 	return &Artifact{
-		id:                 id,
-		status:             status,
-		name:               name,
-		description:        description,
-		url:                url,
-		competenceIds:      competenceIds,
-		authorIds:          authorIds,
-		ownerId:            ownerId,
-		createdAt:          createdAt,
-		VersionedAggregate: versioned,
-		EventiveEntity:     eventive,
+		id:            id,
+		status:        status,
+		name:          name,
+		description:   description,
+		url:           url,
+		competenceIds: competenceIds,
+		authorIds:     authorIds,
+		ownerId:       ownerId,
+		createdAt:     createdAt,
 	}
 }
 
@@ -48,8 +43,8 @@ type Artifact struct {
 	authorIds     []member.TenantMemberId
 	ownerId       member.TenantMemberId
 	createdAt     time.Time
+	eventive      seedwork.EventiveEntity
 	seedwork.VersionedAggregate
-	seedwork.EventiveEntity
 }
 
 func (a Artifact) Id() TenantArtifactId {
@@ -63,4 +58,12 @@ func (a Artifact) HasAuthor(authorId member.TenantMemberId) bool {
 		}
 	}
 	return false
+}
+
+func (a Artifact) PendingDomainEvents() []seedwork.DomainEvent {
+	return a.eventive.PendingDomainEvents()
+}
+
+func (a *Artifact) ClearPendingDomainEvents() {
+	a.eventive.ClearPendingDomainEvents()
 }
