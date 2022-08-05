@@ -64,7 +64,7 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 				t.FailNow()
 			}
 			af.Id.TenantId = c.ArtifactTenantId
-			af.Id.ArtifactId = sf.CurrentArtifactId
+			af.Id.NextArtifactId()
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
@@ -138,7 +138,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.FailNow()
 			}
 			af.Id.TenantId = sf.Id.TenantId
-			af.Id.ArtifactId = sf.CurrentArtifactId
+			af.Id.NextArtifactId()
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)

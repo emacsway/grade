@@ -15,10 +15,9 @@ func NewSpecialistFakeFactory() SpecialistFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = uuid.ParseSilent("4a26f2d3-3ffd-46b0-bf92-b55797e33d8f")
 	return SpecialistFakeFactory{
-		Id:                idFactory,
-		Grade:             0,
-		CreatedAt:         time.Now(),
-		CurrentArtifactId: uuid.ParseSilent("c97714ad-8cda-4a8e-9c1e-fd95962b1bcd"),
+		Id:        idFactory,
+		Grade:     0,
+		CreatedAt: time.Now(),
 	}
 }
 
@@ -27,7 +26,6 @@ type SpecialistFakeFactory struct {
 	Grade                uint8
 	ReceivedEndorsements []ReceivedEndorsementFakeFactory
 	CreatedAt            time.Time
-	CurrentArtifactId    uuid.Uuid
 }
 
 func (f *SpecialistFakeFactory) achieveGrade() error {
@@ -72,8 +70,7 @@ func (f *SpecialistFakeFactory) ReceiveEndorsement(r recognizer.RecognizerFakeFa
 func (f *SpecialistFakeFactory) receiveEndorsement(r recognizer.RecognizerFakeFactory) error {
 	entf := NewReceivedEndorsementFakeFactory(r)
 	entf.Artifact.Id.TenantId = f.Id.TenantId
-	entf.Artifact.Id.ArtifactId = f.CurrentArtifactId
-	f.CurrentArtifactId = uuid.NewUuid()
+	entf.Artifact.Id.NextArtifactId()
 	entf.CreatedAt = time.Now()
 	if err := entf.Artifact.AddAuthorId(f.Id); err != nil {
 		return err
@@ -119,7 +116,7 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 
 func NewReceivedEndorsementFakeFactory(r recognizer.RecognizerFakeFactory) ReceivedEndorsementFakeFactory {
 	artifactFactory := artifact.NewArtifactFakeFactory()
-	artifactFactory.Id.ArtifactId = uuid.ParseSilent("b1cd3c67-e57c-4791-8dc7-0abc22a39de1")
+	artifactFactory.Id.NextArtifactId()
 	return ReceivedEndorsementFakeFactory{
 		Recognizer: r,
 		Artifact:   artifactFactory,

@@ -16,6 +16,14 @@ type TenantArtifactIdFakeFactory struct {
 	ArtifactId uuid.Uuid
 }
 
+func (f *TenantArtifactIdFakeFactory) NextTenantId() {
+	f.TenantId = uuid.NewUuid()
+}
+
+func (f *TenantArtifactIdFakeFactory) NextArtifactId() {
+	f.ArtifactId = uuid.NewUuid()
+}
+
 func (f TenantArtifactIdFakeFactory) Create() (TenantArtifactId, error) {
 	return NewTenantArtifactId(f.TenantId, f.ArtifactId)
 }
