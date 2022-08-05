@@ -1,4 +1,4 @@
-package seedwork
+package aggregate
 
 type AggregateVersioner interface {
 	Version() uint

@@ -10,7 +10,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/recognizer"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/events"
@@ -56,8 +56,8 @@ type Specialist struct {
 	receivedEndorsements []endorsement.Endorsement
 	assignments          []assignment.Assignment
 	createdAt            time.Time
-	eventive             seedwork.EventiveEntity
-	seedwork.VersionedAggregate
+	eventive             aggregate.EventiveEntity
+	aggregate.VersionedAggregate
 }
 
 func (s *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact, t time.Time) error {
@@ -185,7 +185,7 @@ func (s Specialist) Export(ex SpecialistExporterSetter) {
 	}
 }
 
-func (s Specialist) PendingDomainEvents() []seedwork.DomainEvent {
+func (s Specialist) PendingDomainEvents() []aggregate.DomainEvent {
 	return s.eventive.PendingDomainEvents()
 }
 

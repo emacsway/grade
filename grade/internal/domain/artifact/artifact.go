@@ -5,7 +5,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
 func NewArtifact(
@@ -43,7 +43,7 @@ type Artifact struct {
 	authorIds     []member.TenantMemberId
 	ownerId       member.TenantMemberId
 	createdAt     time.Time
-	eventSourced  seedwork.EventSourcedAggregate
+	eventSourced  aggregate.EventSourcedAggregate
 }
 
 func (a Artifact) Id() TenantArtifactId {
@@ -59,7 +59,7 @@ func (a Artifact) HasAuthor(authorId member.TenantMemberId) bool {
 	return false
 }
 
-func (a Artifact) PendingDomainEvents() []seedwork.DomainEvent {
+func (a Artifact) PendingDomainEvents() []aggregate.DomainEvent {
 	return a.eventSourced.PendingDomainEvents()
 }
 

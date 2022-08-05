@@ -6,7 +6,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
 var (
@@ -44,8 +44,8 @@ type Recognizer struct {
 	availableEndorsementCount EndorsementCount
 	pendingEndorsementCount   EndorsementCount
 	createdAt                 time.Time
-	eventive                  seedwork.EventiveEntity
-	seedwork.VersionedAggregate
+	eventive                  aggregate.EventiveEntity
+	aggregate.VersionedAggregate
 }
 
 func (r Recognizer) Id() member.TenantMemberId {
@@ -117,7 +117,7 @@ func (r Recognizer) Export(ex RecognizerExporterSetter) {
 	ex.SetCreatedAt(r.createdAt)
 }
 
-func (r Recognizer) PendingDomainEvents() []seedwork.DomainEvent {
+func (r Recognizer) PendingDomainEvents() []aggregate.DomainEvent {
 	return r.eventive.PendingDomainEvents()
 }
 
