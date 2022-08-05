@@ -9,7 +9,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
@@ -83,10 +83,10 @@ func TestEndorsementExport(t *testing.T) {
 	agg.Export(&actualExporter)
 	assert.Equal(t, EndorsementExporter{
 		RecognizerId:      member.NewTenantMemberIdExporter(f.RecognizerId.TenantId, f.RecognizerId.MemberId),
-		RecognizerGrade:   seedwork.Uint8Exporter(f.RecognizerGrade),
+		RecognizerGrade:   exporters.Uint8Exporter(f.RecognizerGrade),
 		RecognizerVersion: f.RecognizerVersion,
 		SpecialistId:      member.NewTenantMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
-		SpecialistGrade:   seedwork.Uint8Exporter(f.SpecialistGrade),
+		SpecialistGrade:   exporters.Uint8Exporter(f.SpecialistGrade),
 		SpecialistVersion: f.SpecialistVersion,
 		ArtifactId:        artifact.NewTenantArtifactIdExporter(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId),
 		CreatedAt:         f.CreatedAt,

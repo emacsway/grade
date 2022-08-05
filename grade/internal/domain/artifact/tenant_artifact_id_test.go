@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
@@ -56,7 +56,7 @@ func TestRecognizerExport(t *testing.T) {
 	}
 	cid.Export(&actualExporter)
 	assert.Equal(t, TenantArtifactIdExporter{
-		TenantId:   seedwork.UuidExporter(f.TenantId),
-		ArtifactId: seedwork.UuidExporter(f.ArtifactId),
+		TenantId:   exporters.UuidExporter(f.TenantId),
+		ArtifactId: exporters.UuidExporter(f.ArtifactId),
 	}, actualExporter)
 }

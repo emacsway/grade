@@ -5,14 +5,14 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
 type RecognizerExporter struct {
 	Id                        member.TenantMemberIdExporter
-	Grade                     seedwork.Uint8Exporter
-	AvailableEndorsementCount seedwork.UintExporter
-	PendingEndorsementCount   seedwork.UintExporter
+	Grade                     exporters.Uint8Exporter
+	AvailableEndorsementCount exporters.UintExporter
+	PendingEndorsementCount   exporters.UintExporter
 	Version                   uint
 	CreatedAt                 time.Time
 }

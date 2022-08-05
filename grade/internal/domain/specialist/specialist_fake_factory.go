@@ -7,7 +7,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/recognizer"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
@@ -43,7 +43,7 @@ func (f *SpecialistFakeFactory) achieveGrade() error {
 		rId.MemberId = uuid.ParseSilent("a19437bc-4476-42dc-9217-10147499f752")
 		r.Id = rId
 		recognizerGrade, _ := currentGrade.Next()
-		gradeExporter := seedwork.Uint8Exporter(0)
+		gradeExporter := exporters.Uint8Exporter(0)
 		recognizerGrade.Export(&gradeExporter)
 		r.Grade = uint8(gradeExporter)
 		var endorsementCount uint = 0

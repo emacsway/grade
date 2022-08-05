@@ -5,14 +5,14 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
 )
 
 type SpecialistExporter struct {
 	Id                   member.TenantMemberIdExporter
-	Grade                seedwork.Uint8Exporter
+	Grade                exporters.Uint8Exporter
 	ReceivedEndorsements []endorsement.EndorsementExporter
 	Assignments          []assignment.AssignmentExporter
 	Version              uint

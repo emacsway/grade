@@ -6,15 +6,15 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
 type EndorsementExporter struct {
 	RecognizerId      member.TenantMemberIdExporter
-	RecognizerGrade   seedwork.Uint8Exporter
+	RecognizerGrade   exporters.Uint8Exporter
 	RecognizerVersion uint
 	SpecialistId      member.TenantMemberIdExporter
-	SpecialistGrade   seedwork.Uint8Exporter
+	SpecialistGrade   exporters.Uint8Exporter
 	SpecialistVersion uint
 	ArtifactId        artifact.TenantArtifactIdExporter
 	CreatedAt         time.Time

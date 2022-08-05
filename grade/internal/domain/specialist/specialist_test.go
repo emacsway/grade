@@ -8,7 +8,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/recognizer"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
 )
@@ -32,14 +32,14 @@ func TestSpecialistExport(t *testing.T) {
 	s.Export(&actualExporter)
 	assert.Equal(t, SpecialistExporter{
 		Id:    member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-		Grade: seedwork.Uint8Exporter(sf.Grade + 1),
+		Grade: exporters.Uint8Exporter(sf.Grade + 1),
 		ReceivedEndorsements: []endorsement.EndorsementExporter{
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
-				RecognizerGrade:   seedwork.Uint8Exporter(rf.Grade),
+				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-				SpecialistGrade:   seedwork.Uint8Exporter(sf.Grade),
+				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 0,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
 					sf.ReceivedEndorsements[0].Artifact.Id.TenantId,
@@ -49,10 +49,10 @@ func TestSpecialistExport(t *testing.T) {
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
-				RecognizerGrade:   seedwork.Uint8Exporter(rf.Grade),
+				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-				SpecialistGrade:   seedwork.Uint8Exporter(sf.Grade),
+				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 1,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
 					sf.ReceivedEndorsements[1].Artifact.Id.TenantId,
@@ -62,10 +62,10 @@ func TestSpecialistExport(t *testing.T) {
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
-				RecognizerGrade:   seedwork.Uint8Exporter(rf.Grade),
+				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-				SpecialistGrade:   seedwork.Uint8Exporter(sf.Grade),
+				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 2,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
 					sf.ReceivedEndorsements[2].Artifact.Id.TenantId,
@@ -75,10 +75,10 @@ func TestSpecialistExport(t *testing.T) {
 			},
 			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
-				RecognizerGrade:   seedwork.Uint8Exporter(rf.Grade),
+				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-				SpecialistGrade:   seedwork.Uint8Exporter(sf.Grade + 1),
+				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade + 1),
 				SpecialistVersion: 3,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
 					sf.ReceivedEndorsements[3].Artifact.Id.TenantId,
@@ -91,8 +91,8 @@ func TestSpecialistExport(t *testing.T) {
 			{
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistVersion: 2,
-				AssignedGrade:     seedwork.Uint8Exporter(sf.Grade + 1),
-				Reason:            seedwork.StringExporter("Achieved"),
+				AssignedGrade:     exporters.Uint8Exporter(sf.Grade + 1),
+				Reason:            exporters.StringExporter("Achieved"),
 				CreatedAt:         sf.ReceivedEndorsements[2].CreatedAt,
 			},
 		},

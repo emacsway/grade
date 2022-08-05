@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
 func TestRecognizerCanCompleteEndorsement(t *testing.T) {
@@ -76,9 +76,9 @@ func TestRecognizerExport(t *testing.T) {
 	agg.Export(&actualExporter)
 	assert.Equal(t, RecognizerExporter{
 		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
-		Grade:                     seedwork.Uint8Exporter(f.Grade),
-		AvailableEndorsementCount: seedwork.UintExporter(YearlyEndorsementCount),
-		PendingEndorsementCount:   seedwork.UintExporter(0),
+		Grade:                     exporters.Uint8Exporter(f.Grade),
+		AvailableEndorsementCount: exporters.UintExporter(YearlyEndorsementCount),
+		PendingEndorsementCount:   exporters.UintExporter(0),
 		Version:                   0,
 		CreatedAt:                 f.CreatedAt,
 	}, actualExporter)

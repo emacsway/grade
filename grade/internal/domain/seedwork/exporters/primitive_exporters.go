@@ -1,4 +1,4 @@
-package seedwork
+package exporters
 
 import (
 	"database/sql/driver"
