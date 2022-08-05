@@ -1,10 +1,11 @@
 package competence
 
 import (
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
-func NewTenantCompetenceId(tenantId, competenceId uint64) (TenantCompetenceId, error) {
+func NewTenantCompetenceId(tenantId, competenceId uuid.Uuid) (TenantCompetenceId, error) {
 	tId, err := tenant.NewTenantId(tenantId)
 	if err != nil {
 		return TenantCompetenceId{}, err
@@ -14,13 +15,13 @@ func NewTenantCompetenceId(tenantId, competenceId uint64) (TenantCompetenceId, e
 		return TenantCompetenceId{}, err
 	}
 	return TenantCompetenceId{
-		tenantId: tId,
+		tenantId:     tId,
 		competenceId: mId,
 	}, nil
 }
 
 type TenantCompetenceId struct {
-	tenantId tenant.TenantId
+	tenantId     tenant.TenantId
 	competenceId CompetenceId
 }
 

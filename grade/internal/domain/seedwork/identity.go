@@ -2,6 +2,8 @@ package seedwork
 
 import (
 	"fmt"
+
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 type ExporterSetter[T any] interface {
@@ -22,30 +24,27 @@ type Equaler interface {
 	Equal(Equaler) bool
 }
 
-func NewUint64Identity(value uint64) (Uint64Identity, error) {
-	return Uint64Identity{value: value}, nil
+func NewUuidIdentity(value uuid.Uuid) (UuidIdentity, error) {
+	return UuidIdentity{value: value}, nil
 }
 
-type Uint64Identity struct {
-	value uint64
+type UuidIdentity struct {
+	value uuid.Uuid
 }
 
-func (id Uint64Identity) Equal(other Equaler) bool {
-	if id.value == 0 {
-		return false // Aggregate is not saved.
-	}
-	exportableOther := other.(Accessable[uint64])
+func (id UuidIdentity) Equal(other Equaler) bool {
+	exportableOther := other.(Accessable[uuid.Uuid])
 	return id.value == exportableOther.Value()
 }
 
-func (id Uint64Identity) Export(ex ExporterSetter[uint64]) {
+func (id UuidIdentity) Export(ex ExporterSetter[uuid.Uuid]) {
 	ex.SetState(id.value)
 }
 
-func (id Uint64Identity) Value() uint64 {
+func (id UuidIdentity) Value() uuid.Uuid {
 	return id.value
 }
 
-func (id Uint64Identity) String() string {
-	return fmt.Sprintf("%d", id.value)
+func (id UuidIdentity) String() string {
+	return fmt.Sprintf("%v", id.value)
 }

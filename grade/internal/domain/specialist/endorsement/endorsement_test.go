@@ -10,19 +10,24 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 func TestEndorsementIsEndorsedBy(t *testing.T) {
+	r1 := uuid.ParseSilent("63e8d541-af30-4593-a8ac-761dc268926d")
+	a1 := uuid.ParseSilent("7c4435dc-6b5d-4628-a1f8-596dde6704b6")
+	r2 := uuid.ParseSilent("e2d9fcaa-565e-4295-9142-bd69e26581cf")
+	a2 := uuid.ParseSilent("c8858e26-6bc6-4775-a3bd-084773216b79")
 	cases := []struct {
-		RecogniserId     uint64
-		ArtifactId       uint64
-		TestRecogniserId uint64
-		TestArtifactId   uint64
+		RecogniserId     uuid.Uuid
+		ArtifactId       uuid.Uuid
+		TestRecogniserId uuid.Uuid
+		TestArtifactId   uuid.Uuid
 		ExpectedResult   bool
 	}{
-		{1, 2, 1, 2, true},
-		{1, 2, 2, 2, false},
-		{1, 2, 1, 1, false},
+		{r1, a2, r1, a2, true},
+		{r1, a2, r2, a2, false},
+		{r1, a2, r1, a1, false},
 	}
 	f := NewEndorsementFakeFactory()
 	for i, c := range cases {

@@ -8,16 +8,17 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 func NewSpecialistFakeFactory() SpecialistFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
-	idFactory.MemberId = 2
+	idFactory.MemberId = uuid.ParseSilent("4a26f2d3-3ffd-46b0-bf92-b55797e33d8f")
 	return SpecialistFakeFactory{
 		Id:                idFactory,
 		Grade:             0,
 		CreatedAt:         time.Now(),
-		CurrentArtifactId: 1000,
+		CurrentArtifactId: uuid.ParseSilent("c97714ad-8cda-4a8e-9c1e-fd95962b1bcd"),
 	}
 }
 
@@ -26,7 +27,7 @@ type SpecialistFakeFactory struct {
 	Grade                uint8
 	ReceivedEndorsements []ReceivedEndorsementFakeFactory
 	CreatedAt            time.Time
-	CurrentArtifactId    uint64
+	CurrentArtifactId    uuid.Uuid
 }
 
 func (f *SpecialistFakeFactory) achieveGrade() error {
@@ -39,7 +40,7 @@ func (f *SpecialistFakeFactory) achieveGrade() error {
 		r := recognizer.NewRecognizerFakeFactory()
 		rId := member.NewTenantMemberIdFakeFactory()
 		rId.TenantId = f.Id.TenantId
-		rId.MemberId = 1000
+		rId.MemberId = uuid.ParseSilent("a19437bc-4476-42dc-9217-10147499f752")
 		r.Id = rId
 		recognizerGrade, _ := currentGrade.Next()
 		gradeExporter := seedwork.Uint8Exporter(0)
@@ -72,7 +73,7 @@ func (f *SpecialistFakeFactory) receiveEndorsement(r recognizer.RecognizerFakeFa
 	entf := NewReceivedEndorsementFakeFactory(r)
 	entf.Artifact.Id.TenantId = f.Id.TenantId
 	entf.Artifact.Id.ArtifactId = f.CurrentArtifactId
-	f.CurrentArtifactId += 1
+	f.CurrentArtifactId = uuid.NewUuid()
 	entf.CreatedAt = time.Now()
 	if err := entf.Artifact.AddAuthorId(f.Id); err != nil {
 		return err
@@ -118,7 +119,7 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 
 func NewReceivedEndorsementFakeFactory(r recognizer.RecognizerFakeFactory) ReceivedEndorsementFakeFactory {
 	artifactFactory := artifact.NewArtifactFakeFactory()
-	artifactFactory.Id.ArtifactId = 6
+	artifactFactory.Id.ArtifactId = uuid.ParseSilent("b1cd3c67-e57c-4791-8dc7-0abc22a39de1")
 	return ReceivedEndorsementFakeFactory{
 		Recognizer: r,
 		Artifact:   artifactFactory,

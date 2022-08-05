@@ -2,10 +2,11 @@ package member
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
-func NewMemberId(value uint64) (MemberId, error) {
-	id, err := seedwork.NewUint64Identity(value)
+func NewMemberId(value uuid.Uuid) (MemberId, error) {
+	id, err := seedwork.NewUuidIdentity(value)
 	if err != nil {
 		return MemberId{}, err
 	}
@@ -13,5 +14,5 @@ func NewMemberId(value uint64) (MemberId, error) {
 }
 
 type MemberId struct {
-	seedwork.Uint64Identity
+	seedwork.UuidIdentity
 }

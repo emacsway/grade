@@ -5,11 +5,12 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 func NewAssignmentFakeFactory() AssignmentFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
-	idFactory.MemberId = 2
+	idFactory.MemberId = uuid.ParseSilent("cf9462cf-51d3-4c0a-b5ef-53b3dfccc7f6")
 	return AssignmentFakeFactory{
 		SpecialistId:      idFactory,
 		SpecialistVersion: 2,

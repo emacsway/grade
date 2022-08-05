@@ -2,10 +2,11 @@ package artifact
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
-func NewArtifactId(value uint64) (ArtifactId, error) {
-	id, err := seedwork.NewUint64Identity(value)
+func NewArtifactId(value uuid.Uuid) (ArtifactId, error) {
+	id, err := seedwork.NewUuidIdentity(value)
 	if err != nil {
 		return ArtifactId{}, err
 	}
@@ -13,5 +14,5 @@ func NewArtifactId(value uint64) (ArtifactId, error) {
 }
 
 type ArtifactId struct {
-	seedwork.Uint64Identity
+	seedwork.UuidIdentity
 }

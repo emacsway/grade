@@ -2,10 +2,11 @@ package tenant
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
-func NewTenantId(value uint64) (TenantId, error) {
-	id, err := seedwork.NewUint64Identity(value)
+func NewTenantId(value uuid.Uuid) (TenantId, error) {
+	id, err := seedwork.NewUuidIdentity(value)
 	if err != nil {
 		return TenantId{}, err
 	}
@@ -13,5 +14,5 @@ func NewTenantId(value uint64) (TenantId, error) {
 }
 
 type TenantId struct {
-	seedwork.Uint64Identity
+	seedwork.UuidIdentity
 }

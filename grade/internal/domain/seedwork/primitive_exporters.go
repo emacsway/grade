@@ -1,6 +1,10 @@
 package seedwork
 
-import "database/sql/driver"
+import (
+	"database/sql/driver"
+
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
+)
 
 type Uint8Exporter uint8
 
@@ -27,6 +31,15 @@ func (ex *Uint64Exporter) SetState(value uint64) {
 }
 func (ex Uint64Exporter) Value() (driver.Value, error) {
 	return uint64(ex), nil
+}
+
+type UuidExporter uuid.Uuid
+
+func (ex *UuidExporter) SetState(value uuid.Uuid) {
+	*ex = UuidExporter(value)
+}
+func (ex UuidExporter) Value() (driver.Value, error) {
+	return uuid.Uuid(ex), nil
 }
 
 type StringExporter string

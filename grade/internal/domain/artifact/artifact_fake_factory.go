@@ -5,11 +5,12 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	"github.com/emacsway/grade/grade/internal/domain/member"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 func NewArtifactFakeFactory() ArtifactFakeFactory {
 	idFactory := NewTenantArtifactIdFakeFactory()
-	idFactory.ArtifactId = 20
+	idFactory.ArtifactId = uuid.ParseSilent("66e2fc13-89e3-483a-aa31-b8e75a20afba")
 	competenceIdsFactory := competence.NewTenantCompetenceIdFakeFactory()
 	return ArtifactFakeFactory{
 		Id:            idFactory,

@@ -1,10 +1,11 @@
 package artifact
 
 import (
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
-func NewTenantArtifactId(tenantId, artifactId uint64) (TenantArtifactId, error) {
+func NewTenantArtifactId(tenantId, artifactId uuid.Uuid) (TenantArtifactId, error) {
 	tId, err := tenant.NewTenantId(tenantId)
 	if err != nil {
 		return TenantArtifactId{}, err

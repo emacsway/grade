@@ -5,22 +5,24 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 func TestIdentityEqual(t *testing.T) {
 	cases := []struct {
-		Left           uint64
-		Right          uint64
+		Left           uuid.Uuid
+		Right          uuid.Uuid
 		ExpectedResult error
 	}{}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			left, err := NewUint64Identity(c.Left)
+			left, err := NewUuidIdentity(c.Left)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
 			}
-			right, err := NewUint64Identity(c.Right)
+			right, err := NewUuidIdentity(c.Right)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -32,8 +34,9 @@ func TestIdentityEqual(t *testing.T) {
 }
 
 func TestIdentityExport(t *testing.T) {
-	var ex Uint64Exporter
-	id, _ := NewUint64Identity(3)
+	var ex UuidExporter
+	val := uuid.ParseSilent("63e8d541-af30-4593-a8ac-761dc268926d")
+	id, _ := NewUuidIdentity(val)
 	id.Export(&ex)
-	assert.Equal(t, uint64(ex), id.Value())
+	assert.Equal(t, val, id.Value())
 }

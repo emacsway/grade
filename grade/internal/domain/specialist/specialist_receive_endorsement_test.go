@@ -9,27 +9,32 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 func TestSpecialistReceiveEndorsement(t *testing.T) {
+	t1 := uuid.ParseSilent("63e8d541-af30-4593-a8ac-761dc268926d")
+	t2 := uuid.ParseSilent("e2d9fcaa-565e-4295-9142-bd69e26581cf")
+	m1 := uuid.ParseSilent("7c4435dc-6b5d-4628-a1f8-596dde6704b6")
+	m2 := uuid.ParseSilent("c8858e26-6bc6-4775-a3bd-084773216b79")
 	cases := []struct {
-		RecogniserTenantId uint64
-		RecogniserMemberId uint64
+		RecogniserTenantId uuid.Uuid
+		RecogniserMemberId uuid.Uuid
 		RecognizerGrade    uint8
-		SpecialistTenantId uint64
-		SpecialistMemberId uint64
+		SpecialistTenantId uuid.Uuid
+		SpecialistMemberId uuid.Uuid
 		SpecialistGrade    uint8
-		ArtifactAuthorId   uint64
-		ArtifactTenantId   uint64
+		ArtifactAuthorId   uuid.Uuid
+		ArtifactTenantId   uuid.Uuid
 		ExpectedError      error
 	}{
-		{1, 1, 0, 1, 2, 0, 2, 1, nil},
-		{1, 1, 1, 1, 2, 0, 2, 1, nil},
-		{1, 1, 0, 1, 2, 1, 2, 1, ErrLowerGradeEndorses},
-		{1, 3, 0, 1, 3, 0, 3, 1, ErrEndorsementOneself},
-		{1, 1, 0, 2, 2, 0, 2, 1, ErrCrossTenantEndorsement},
-		{1, 1, 0, 1, 2, 0, 2, 2, ErrCrossTenantArtifact},
-		{1, 1, 0, 1, 2, 0, 3, 1, ErrNotAuthor},
+		{t1, m1, 0, t1, m2, 0, m2, t1, nil},
+		{t1, m1, 1, t1, m2, 0, m2, t1, nil},
+		{t1, m1, 0, t1, m2, 1, m2, t1, ErrLowerGradeEndorses},
+		{t1, m2, 0, t1, m2, 0, m2, t1, ErrEndorsementOneself},
+		{t1, m1, 0, t2, m2, 0, m2, t1, ErrCrossTenantEndorsement},
+		{t1, m1, 0, t1, m2, 0, m2, t2, ErrCrossTenantArtifact},
+		{t1, m1, 0, t1, m2, 0, m1, t1, ErrNotAuthor},
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {

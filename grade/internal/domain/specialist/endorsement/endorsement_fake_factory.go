@@ -6,15 +6,16 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 func NewEndorsementFakeFactory() EndorsementFakeFactory {
 	recognizerIdFactory := member.NewTenantMemberIdFakeFactory()
-	recognizerIdFactory.MemberId = 1
+	recognizerIdFactory.MemberId = uuid.ParseSilent("0372d476-9b88-43ff-8b2e-53f560dfc66a")
 	specialistIdFactory := member.NewTenantMemberIdFakeFactory()
-	specialistIdFactory.MemberId = 2
+	specialistIdFactory.MemberId = uuid.ParseSilent("f11a3651-9e7a-41ff-931e-bfe9ef77ba61")
 	artifactIdFactory := artifact.NewTenantArtifactIdFakeFactory()
-	artifactIdFactory.ArtifactId = 6
+	artifactIdFactory.ArtifactId = uuid.ParseSilent("13ebf39d-30f1-4904-b1f4-993d2987f7d0")
 	return EndorsementFakeFactory{
 		RecognizerId:      recognizerIdFactory,
 		RecognizerGrade:   2,

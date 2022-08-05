@@ -2,19 +2,20 @@ package artifact
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
-func NewTenantArtifactIdExporter(tenantId, artifactId uint64) TenantArtifactIdExporter {
+func NewTenantArtifactIdExporter(tenantId, artifactId uuid.Uuid) TenantArtifactIdExporter {
 	return TenantArtifactIdExporter{
-		TenantId:   seedwork.Uint64Exporter(tenantId),
-		ArtifactId: seedwork.Uint64Exporter(artifactId),
+		TenantId:   seedwork.UuidExporter(tenantId),
+		ArtifactId: seedwork.UuidExporter(artifactId),
 	}
 }
 
 type TenantArtifactIdExporter struct {
-	TenantId   seedwork.Uint64Exporter
-	ArtifactId seedwork.Uint64Exporter
+	TenantId   seedwork.UuidExporter
+	ArtifactId seedwork.UuidExporter
 }
 
 func (ex *TenantArtifactIdExporter) SetTenantId(val tenant.TenantId) {

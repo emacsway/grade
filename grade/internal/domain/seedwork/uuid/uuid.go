@@ -1,4 +1,4 @@
-package seedwork
+package uuid
 
 import (
 	"github.com/google/uuid"
@@ -8,11 +8,11 @@ import (
 type Uuid = uuid.UUID
 
 func NewUuid() Uuid {
-	u, err := uuid.FromBytes(ulid.Make().Bytes())
-	if err != nil {
-		panic(err)
-	}
-	return Uuid(u)
+	return Must(uuid.FromBytes(ulid.Make().Bytes()))
+}
+
+func ParseSilent(s string) Uuid {
+	return Must(Parse(s))
 }
 
 func Parse(s string) (Uuid, error) {
@@ -21,4 +21,11 @@ func Parse(s string) (Uuid, error) {
 		return Uuid{}, err
 	}
 	return Uuid(u), nil
+}
+
+func Must(uuid Uuid, err error) Uuid {
+	if err != nil {
+		panic(err)
+	}
+	return uuid
 }
