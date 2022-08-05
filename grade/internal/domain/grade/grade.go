@@ -3,7 +3,7 @@ package grade
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
 )
 
 const MaxGradeValue = uint8(5)
@@ -80,6 +80,6 @@ func (g Grade) Equal(other Grade) bool {
 	return g.value == other.value
 }
 
-func (g Grade) Export(ex seedwork.ExporterSetter[uint8]) {
+func (g Grade) Export(ex identity.ExporterSetter[uint8]) {
 	ex.SetState(g.value)
 }

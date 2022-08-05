@@ -1,4 +1,4 @@
-package seedwork
+package identity
 
 import (
 	"fmt"

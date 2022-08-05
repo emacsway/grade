@@ -1,4 +1,4 @@
-package seedwork
+package identity
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/grade/grade/internal/domain/seedwork"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
@@ -34,7 +35,7 @@ func TestIdentityEqual(t *testing.T) {
 }
 
 func TestIdentityExport(t *testing.T) {
-	var ex UuidExporter
+	var ex seedwork.UuidExporter
 	val := uuid.ParseSilent("63e8d541-af30-4593-a8ac-761dc268926d")
 	id, _ := NewUuidIdentity(val)
 	id.Export(&ex)

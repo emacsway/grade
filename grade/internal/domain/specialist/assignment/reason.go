@@ -1,7 +1,7 @@
 package assignment
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
 )
 
 func NewReason(reason string) (Reason, error) {
@@ -10,6 +10,6 @@ func NewReason(reason string) (Reason, error) {
 
 type Reason string
 
-func (r Reason) Export(ex seedwork.ExporterSetter[string]) {
+func (r Reason) Export(ex identity.ExporterSetter[string]) {
 	ex.SetState(string(r))
 }

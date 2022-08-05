@@ -3,7 +3,7 @@ package recognizer
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
 )
 
 const YearlyEndorsementCount = uint(20)
@@ -35,6 +35,6 @@ func (c EndorsementCount) Decrease() (EndorsementCount, error) {
 	return n, nil
 }
 
-func (c EndorsementCount) Export(ex seedwork.ExporterSetter[uint]) {
+func (c EndorsementCount) Export(ex identity.ExporterSetter[uint]) {
 	ex.SetState(uint(c))
 }
