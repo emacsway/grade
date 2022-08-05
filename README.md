@@ -20,3 +20,8 @@
 ## Документация
 
 Сопроводительная методическая информация проекта будет накапливаться [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/index.html).
+
+
+## Contributing
+
+Присоединиться к разработке: https://t.me/emacsway
