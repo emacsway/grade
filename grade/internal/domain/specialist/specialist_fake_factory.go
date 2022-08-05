@@ -8,12 +8,13 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
+
+var SpecialistMemberIdFakeValue = member.MemberIdFakeValue
 
 func NewSpecialistFakeFactory() SpecialistFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
-	idFactory.MemberId = uuid.ParseSilent("4a26f2d3-3ffd-46b0-bf92-b55797e33d8f")
+	idFactory.MemberId = SpecialistMemberIdFakeValue
 	return SpecialistFakeFactory{
 		Id:        idFactory,
 		Grade:     0,
@@ -35,18 +36,15 @@ func (f *SpecialistFakeFactory) achieveGrade() error {
 		return err
 	}
 	for currentGrade.LessThan(targetGrade) {
-		r := recognizer.NewRecognizerFakeFactory()
-		rId := member.NewTenantMemberIdFakeFactory()
-		rId.TenantId = f.Id.TenantId
-		rId.MemberId = uuid.ParseSilent("a19437bc-4476-42dc-9217-10147499f752")
-		r.Id = rId
+		rf := recognizer.NewRecognizerFakeFactory()
+		rf.Id.TenantId = f.Id.TenantId
 		recognizerGrade, _ := currentGrade.Next()
 		gradeExporter := exporters.Uint8Exporter(0)
 		recognizerGrade.Export(&gradeExporter)
-		r.Grade = uint8(gradeExporter)
+		rf.Grade = uint8(gradeExporter)
 		var endorsementCount uint = 0
 		for !currentGrade.NextGradeAchieved(endorsementCount) {
-			if err := f.receiveEndorsement(r); err != nil {
+			if err := f.receiveEndorsement(rf); err != nil {
 				return err
 			}
 			endorsementCount += 2

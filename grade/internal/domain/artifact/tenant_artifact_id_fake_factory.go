@@ -2,11 +2,12 @@ package artifact
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
+	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
 func NewTenantArtifactIdFakeFactory() TenantArtifactIdFakeFactory {
 	return TenantArtifactIdFakeFactory{
-		TenantId:   uuid.ParseSilent("63e8d541-af30-4593-a8ac-761dc268926d"),
+		TenantId:   tenant.TenantIdFakeValue,
 		ArtifactId: uuid.ParseSilent("66e2fc13-89e3-483a-aa31-b8e75a20afba"),
 	}
 }
