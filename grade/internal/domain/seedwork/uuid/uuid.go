@@ -23,9 +23,9 @@ func Parse(s string) (Uuid, error) {
 	return Uuid(u), nil
 }
 
-func Must(uuid Uuid, err error) Uuid {
+func Must(id Uuid, err error) Uuid {
 	if err != nil {
 		panic(err)
 	}
-	return uuid
+	return id
 }

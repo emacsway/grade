@@ -1,8 +1,6 @@
 package identity
 
 import (
-	"fmt"
-
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
@@ -46,5 +44,5 @@ func (id UuidIdentity) Value() uuid.Uuid {
 }
 
 func (id UuidIdentity) String() string {
-	return fmt.Sprintf("%v", id.value)
+	return id.value.String()
 }
