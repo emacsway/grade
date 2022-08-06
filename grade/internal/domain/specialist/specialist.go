@@ -171,6 +171,14 @@ func (s *Specialist) DecreaseGrade(reason assignment.Reason, t time.Time) error 
 	return s.setGrade(previousGrade, reason, t)
 }
 
+func (s Specialist) PendingDomainEvents() []aggregate.DomainEvent {
+	return s.eventive.PendingDomainEvents()
+}
+
+func (s *Specialist) ClearPendingDomainEvents() {
+	s.eventive.ClearPendingDomainEvents()
+}
+
 func (s Specialist) Export(ex SpecialistExporterSetter) {
 	ex.SetId(s.id)
 	ex.SetGrade(s.grade)
@@ -183,14 +191,6 @@ func (s Specialist) Export(ex SpecialistExporterSetter) {
 	for i := range s.assignments {
 		ex.AddAssignment(s.assignments[i])
 	}
-}
-
-func (s Specialist) PendingDomainEvents() []aggregate.DomainEvent {
-	return s.eventive.PendingDomainEvents()
-}
-
-func (s *Specialist) ClearPendingDomainEvents() {
-	s.eventive.ClearPendingDomainEvents()
 }
 
 type SpecialistExporterSetter interface {

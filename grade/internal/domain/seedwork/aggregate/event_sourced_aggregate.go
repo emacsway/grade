@@ -86,7 +86,7 @@ func (m EventMeta) CausationId() uuid.Uuid {
 }
 
 func (m EventMeta) CausalDependencies() []CausalDependency {
-	return m.causalDependencies[:]
+	return m.causalDependencies
 }
 
 func (m EventMeta) OccurredAt() time.Time {

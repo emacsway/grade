@@ -74,3 +74,34 @@ func (a Artifact) Version() uint {
 func (a *Artifact) SetVersion(val uint) {
 	a.eventSourced.SetVersion(val)
 }
+
+func (r Artifact) Export(ex ArtifactExporterSetter) {
+	ex.SetId(r.id)
+	ex.SetStatus(r.status)
+	ex.SetName(r.name)
+	ex.SetDescription(r.description)
+	ex.SetUrl(r.url)
+	for i := range r.competenceIds {
+		ex.AddCompetenceId(r.competenceIds[i])
+	}
+	for i := range r.authorIds {
+		ex.AddAuthorId(r.authorIds[i])
+	}
+	ex.SetDescription(r.description)
+	ex.SetOwnerId(r.ownerId)
+	ex.SetVersion(r.Version())
+	ex.SetCreatedAt(r.createdAt)
+}
+
+type ArtifactExporterSetter interface {
+	SetId(id TenantArtifactId)
+	SetStatus(Status)
+	SetName(Name)
+	SetDescription(Description)
+	SetUrl(Url)
+	AddCompetenceId(competence.TenantCompetenceId)
+	AddAuthorId(member.TenantMemberId)
+	SetOwnerId(member.TenantMemberId)
+	SetVersion(uint)
+	SetCreatedAt(time.Time)
+}

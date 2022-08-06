@@ -16,6 +16,7 @@ var (
 )
 
 // FIXME: Move this constructor to tenant aggregate
+
 func NewRecognizer(
 	id member.TenantMemberId,
 	createdAt time.Time,
@@ -108,6 +109,14 @@ func (r *Recognizer) CompleteEndorsement() error {
 	return nil
 }
 
+func (r Recognizer) PendingDomainEvents() []aggregate.DomainEvent {
+	return r.eventive.PendingDomainEvents()
+}
+
+func (r *Recognizer) ClearPendingDomainEvents() {
+	r.eventive.ClearPendingDomainEvents()
+}
+
 func (r Recognizer) Export(ex RecognizerExporterSetter) {
 	ex.SetId(r.id)
 	ex.SetGrade(r.grade)
@@ -115,14 +124,6 @@ func (r Recognizer) Export(ex RecognizerExporterSetter) {
 	ex.SetPendingEndorsementCount(r.pendingEndorsementCount)
 	ex.SetVersion(r.Version())
 	ex.SetCreatedAt(r.createdAt)
-}
-
-func (r Recognizer) PendingDomainEvents() []aggregate.DomainEvent {
-	return r.eventive.PendingDomainEvents()
-}
-
-func (r *Recognizer) ClearPendingDomainEvents() {
-	r.eventive.ClearPendingDomainEvents()
 }
 
 type RecognizerExporterSetter interface {
