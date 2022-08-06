@@ -17,7 +17,7 @@ type EventiveEntity struct {
 	pendingDomainEvents []DomainEvent
 }
 
-func (e EventiveEntity) AddDomainEvent(domainEvents ...DomainEvent) {
+func (e *EventiveEntity) AddDomainEvent(domainEvents ...DomainEvent) {
 	e.pendingDomainEvents = append(e.pendingDomainEvents, domainEvents...)
 }
 
