@@ -50,6 +50,9 @@ func (a Artifact) Id() TenantArtifactId {
 	return a.id
 }
 
+// TODO: Use Specification pattern instead?
+// https://enterprisecraftsmanship.com/posts/specification-pattern-always-valid-domain-model/
+
 func (a Artifact) HasAuthor(authorId member.TenantMemberId) bool {
 	for i := range a.authorIds {
 		if a.authorIds[i].Equal(authorId) {

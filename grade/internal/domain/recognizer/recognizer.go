@@ -69,6 +69,9 @@ func (r Recognizer) CanReserveEndorsement() error {
 	return nil
 }
 
+// TODO: Use Specification pattern instead?
+// https://enterprisecraftsmanship.com/posts/specification-pattern-always-valid-domain-model/
+
 func (r Recognizer) CanCompleteEndorsement() error {
 	if r.pendingEndorsementCount == 0 {
 		return ErrNoEndorsementReservation
