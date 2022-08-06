@@ -4,6 +4,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
 type RecognizerDeleteQuery struct {
@@ -26,4 +27,8 @@ func (q *RecognizerDeleteQuery) SetMemberId(val member.MemberId) {
 	var v exporters.UuidExporter
 	val.Export(&v)
 	q.params[1] = v
+}
+
+func (q *RecognizerDeleteQuery) Execute(s infrastructure.PgxSession) (infrastructure.Result, error) {
+	return s.Exec(q.sql(), q.params[:]...)
 }
