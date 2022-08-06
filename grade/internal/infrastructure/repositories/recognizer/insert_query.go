@@ -17,10 +17,10 @@ type RecognizerInsertQuery struct {
 
 func (q RecognizerInsertQuery) sql() string {
 	return `
-        INSERT INTO recognizer
-        (tenant_id, member_id, grade, available_endorsement_count, pending_endorsement_count, version, created_at)
-        VALUES
-        ($1, $2, $3, $4, $5, $6, $7)`
+		INSERT INTO recognizer
+		(tenant_id, member_id, grade, available_endorsement_count, pending_endorsement_count, version, created_at)
+		VALUES
+		($1, $2, $3, $4, $5, $6, $7)`
 }
 
 func (q *RecognizerInsertQuery) SetId(val member.TenantMemberId) {
