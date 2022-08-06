@@ -1,7 +1,7 @@
 package artifact
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
 func NewUrl(val string) (Url, error) {
@@ -10,6 +10,6 @@ func NewUrl(val string) (Url, error) {
 
 type Url string
 
-func (u Url) Export(ex identity.ExporterSetter[string]) {
+func (u Url) Export(ex exporters.ExporterSetter[string]) {
 	ex.SetState(string(u))
 }

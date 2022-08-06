@@ -6,6 +6,14 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
+type ExporterSetter[T any] interface {
+	SetState(T)
+}
+
+type Exportable[T any] interface {
+	Export(ExporterSetter[T])
+}
+
 type Uint8Exporter uint8
 
 func (ex *Uint8Exporter) SetState(value uint8) {
@@ -22,15 +30,6 @@ func (ex *UintExporter) SetState(value uint) {
 }
 func (ex UintExporter) Value() (driver.Value, error) {
 	return uint(ex), nil
-}
-
-type Uint64Exporter uint64
-
-func (ex *Uint64Exporter) SetState(value uint64) {
-	*ex = Uint64Exporter(value)
-}
-func (ex Uint64Exporter) Value() (driver.Value, error) {
-	return uint64(ex), nil
 }
 
 type UuidExporter uuid.Uuid

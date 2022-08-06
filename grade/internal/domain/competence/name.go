@@ -1,7 +1,7 @@
 package competence
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
 func NewName(val string) (Name, error) {
@@ -10,6 +10,6 @@ func NewName(val string) (Name, error) {
 
 type Name string
 
-func (n Name) Export(ex identity.ExporterSetter[string]) {
+func (n Name) Export(ex exporters.ExporterSetter[string]) {
 	ex.SetState(string(n))
 }

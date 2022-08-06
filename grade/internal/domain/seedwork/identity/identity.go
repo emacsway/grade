@@ -1,18 +1,9 @@
 package identity
 
 import (
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
-
-type ExporterSetter[T any] interface {
-	SetState(T)
-}
-
-type Exportable[T any] interface {
-	Export(ExporterSetter[T])
-}
-
-// alternative approach:
 
 type Accessable[T any] interface {
 	Value() T
@@ -35,7 +26,7 @@ func (id UuidIdentity) Equal(other Equaler) bool {
 	return id.value == exportableOther.Value()
 }
 
-func (id UuidIdentity) Export(ex ExporterSetter[uuid.Uuid]) {
+func (id UuidIdentity) Export(ex exporters.ExporterSetter[uuid.Uuid]) {
 	ex.SetState(id.value)
 }
 
