@@ -5,6 +5,14 @@ import (
 	"fmt"
 )
 
+type Associativity string
+
+const (
+	LeftAssociative  Associativity = "LEFT"
+	RightAssociative Associativity = "RIGHT"
+	NonAssociative   Associativity = "NON"
+)
+
 type Operator string
 
 const (
@@ -34,6 +42,11 @@ var YieldBooleanOperators = []Operator{
 	OperatorAnd,
 	OperatorOr,
 	OperatorNot,
+}
+
+type Operable interface {
+	Associativity() Associativity
+	Operator() Operator
 }
 
 type Visitable interface {
@@ -67,42 +80,47 @@ func (n ValueNode) Accept(v Visitor) error {
 
 func Equal(left, right Visitable) InfixNode {
 	return InfixNode{
-		left:     left,
-		operator: OperatorEq,
-		right:    right,
+		left:          left,
+		operator:      OperatorEq,
+		right:         right,
+		associativity: NonAssociative,
 	}
 }
 
 func NotEqual(left, right Visitable) InfixNode {
 	return InfixNode{
-		left:     left,
-		operator: OperatorNe,
-		right:    right,
+		left:          left,
+		operator:      OperatorNe,
+		right:         right,
+		associativity: NonAssociative,
 	}
 }
 
 func GreaterThan(left, right Visitable) InfixNode {
 	return InfixNode{
-		left:     left,
-		operator: OperatorGt,
-		right:    right,
+		left:          left,
+		operator:      OperatorGt,
+		right:         right,
+		associativity: NonAssociative,
 	}
 }
 
 func GreaterThanEqual(left, right Visitable) InfixNode {
 	return InfixNode{
-		left:     left,
-		operator: OperatorGte,
-		right:    right,
+		left:          left,
+		operator:      OperatorGte,
+		right:         right,
+		associativity: NonAssociative,
 	}
 }
 
 func And(left Visitable, rights ...Visitable) InfixNode {
 	left, right := foldRights(And, left, rights...)
 	return InfixNode{
-		left:     left,
-		operator: OperatorAnd,
-		right:    right,
+		left:          left,
+		operator:      OperatorAnd,
+		right:         right,
+		associativity: LeftAssociative,
 	}
 }
 
@@ -119,9 +137,10 @@ func foldRights(
 }
 
 type InfixNode struct {
-	left     Visitable
-	operator Operator
-	right    Visitable
+	left          Visitable
+	operator      Operator
+	right         Visitable
+	associativity Associativity
 }
 
 func (n InfixNode) Left() Visitable {
@@ -134,6 +153,10 @@ func (n InfixNode) Operator() Operator {
 
 func (n InfixNode) Right() Visitable {
 	return n.right
+}
+
+func (n InfixNode) Associativity() Associativity {
+	return n.associativity
 }
 
 func (n InfixNode) Accept(v Visitor) error {
@@ -185,6 +208,12 @@ func (n FieldNode) Object() ObjectNode {
 
 func (n FieldNode) Accept(v Visitor) error {
 	return v.VisitField(n)
+}
+
+func NewEvaluateVisitor(context Context) *EvaluateVisitor {
+	return &EvaluateVisitor{
+		Context: context,
+	}
 }
 
 type EvaluateVisitor struct {

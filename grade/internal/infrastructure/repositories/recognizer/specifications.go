@@ -14,10 +14,8 @@ type RecognizerCanCompleteEndorsementSpecification struct {
 }
 
 func (r *RecognizerCanCompleteEndorsementSpecification) Compile() (sql string, params []driver.Valuer, err error) {
-	v := s.SqlVisitor{
-		Context: Context{},
-	}
-	err = r.Expression().Accept(&v)
+	v := s.NewPostgresqlVisitor(Context{})
+	err = r.Expression().Accept(v)
 	if err != nil {
 		return "", []driver.Valuer{}, err
 	}

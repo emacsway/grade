@@ -43,12 +43,10 @@ func (r RecognizerCanCompleteEndorsementSpecification) Expression() s.Visitable 
 }
 
 func (r RecognizerCanCompleteEndorsementSpecification) IsSatisfiedBy(obj Recognizer) (bool, error) {
-	v := s.EvaluateVisitor{
-		Context: Context{
-			recognizer: obj,
-		},
-	}
-	err := r.Expression().Accept(&v)
+	v := s.NewEvaluateVisitor(Context{
+		recognizer: obj,
+	})
+	err := r.Expression().Accept(v)
 	if err != nil {
 		return false, err
 	}

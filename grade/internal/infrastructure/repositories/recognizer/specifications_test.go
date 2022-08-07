@@ -18,9 +18,9 @@ func TestRecognizerCanCompleteEndorsementSpecification(t *testing.T) {
 	}
 	assert.Equal(
 		t,
-		"(((recognizer.available_endorsement_count != ?) AND "+
-			"(recognizer.pending_endorsement_count != ?)) AND "+
-			"(recognizer.available_endorsement_count >= recognizer.pending_endorsement_count))",
+		"recognizer.available_endorsement_count != ? AND "+
+			"recognizer.pending_endorsement_count != ? AND "+
+			"recognizer.available_endorsement_count >= recognizer.pending_endorsement_count",
 		sql)
 	assert.Equal(t, []driver.Valuer{
 		exporters.UintExporter(0),
