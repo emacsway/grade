@@ -1,6 +1,7 @@
 package artifact
 
 import (
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
@@ -33,8 +34,12 @@ func (cid TenantArtifactId) ArtifactId() ArtifactId {
 	return cid.artifactId
 }
 
-func (cid TenantArtifactId) Equal(other TenantArtifactId) bool {
-	return cid.tenantId.Equal(other.TenantId()) && cid.artifactId.Equal(other.ArtifactId())
+func (cid TenantArtifactId) Equal(other specification.EqualOperand) bool {
+	otherTyped, ok := other.(TenantArtifactId)
+	if !ok {
+		return false
+	}
+	return cid.tenantId.Equal(otherTyped.TenantId()) && cid.artifactId.Equal(otherTyped.ArtifactId())
 }
 
 func (cid TenantArtifactId) Export(ex TenantArtifactIdExporterSetter) {

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
 
 const MaxGradeValue = uint8(5)
@@ -68,16 +69,28 @@ func (g Grade) Previous() (Grade, error) {
 	return previousGrade, nil
 }
 
-func (g Grade) LessThan(other Grade) bool {
-	return g.value < other.value
+func (g Grade) LessThan(other specification.LessThanOperand) bool {
+	otherTyped, ok := other.(Grade)
+	if !ok {
+		return false
+	}
+	return g.value < otherTyped.value
 }
 
-func (g Grade) GreaterThan(other Grade) bool {
-	return g.value > other.value
+func (g Grade) GreaterThan(other specification.GreaterThanOperand) bool {
+	otherTyped, ok := other.(Grade)
+	if !ok {
+		return false
+	}
+	return g.value > otherTyped.value
 }
 
-func (g Grade) Equal(other Grade) bool {
-	return g.value == other.value
+func (g Grade) Equal(other specification.EqualOperand) bool {
+	otherTyped, ok := other.(Grade)
+	if !ok {
+		return false
+	}
+	return g.value == otherTyped.value
 }
 
 func (g Grade) Export(ex exporters.ExporterSetter[uint8]) {

@@ -1,6 +1,7 @@
 package competence
 
 import (
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
@@ -33,8 +34,12 @@ func (cid TenantCompetenceId) CompetenceId() CompetenceId {
 	return cid.competenceId
 }
 
-func (cid TenantCompetenceId) Equal(other TenantCompetenceId) bool {
-	return cid.tenantId.Equal(other.TenantId()) && cid.competenceId.Equal(other.CompetenceId())
+func (cid TenantCompetenceId) Equal(other specification.EqualOperand) bool {
+	otherTyped, ok := other.(TenantCompetenceId)
+	if !ok {
+		return false
+	}
+	return cid.tenantId.Equal(otherTyped.TenantId()) && cid.competenceId.Equal(otherTyped.CompetenceId())
 }
 
 func (cid TenantCompetenceId) Export(ex TenantCompetenceIdExporterSetter) {

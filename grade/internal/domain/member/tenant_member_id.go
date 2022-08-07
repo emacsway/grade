@@ -1,6 +1,7 @@
 package member
 
 import (
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
@@ -33,8 +34,12 @@ func (cid TenantMemberId) MemberId() MemberId {
 	return cid.memberId
 }
 
-func (cid TenantMemberId) Equal(other TenantMemberId) bool {
-	return cid.tenantId.Equal(other.TenantId()) && cid.memberId.Equal(other.MemberId())
+func (cid TenantMemberId) Equal(other specification.EqualOperand) bool {
+	otherTyped, ok := other.(TenantMemberId)
+	if !ok {
+		return false
+	}
+	return cid.tenantId.Equal(otherTyped.TenantId()) && cid.memberId.Equal(otherTyped.MemberId())
 }
 
 func (cid TenantMemberId) Export(ex TenantMemberIdExporterSetter) {

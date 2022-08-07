@@ -14,7 +14,6 @@ type SqlVisitor struct {
 }
 
 func (v *SqlVisitor) VisitObject(_ s.ObjectNode) error {
-	// Is not used in Evaluation - only in SQL-building
 	return nil
 }
 
