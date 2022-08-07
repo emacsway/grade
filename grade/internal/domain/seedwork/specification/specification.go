@@ -30,6 +30,17 @@ const (
 	OperatorAnd Operator = "AND"
 	OperatorOr  Operator = "OR"
 	OperatorNot Operator = "NOT"
+
+	// Mathematical
+	/*
+		OperatorAdd Operator = "+"
+		OperatorSub Operator = "-"
+		OperatorMul Operator = "*"
+		OperatorDiv Operator = "/"
+		OperatorMod Operator = "%"
+	*/
+	OperatorPos Operator = "+"
+	OperatorNeg Operator = "-"
 )
 
 var YieldBooleanOperators = []Operator{
@@ -57,6 +68,7 @@ type Visitor interface {
 	VisitObject(ObjectNode) error
 	VisitField(FieldNode) error
 	VisitValue(ValueNode) error
+	VisitPrefix(PrefixNode) error
 	VisitInfix(InfixNode) error
 }
 
@@ -76,6 +88,33 @@ func (n ValueNode) Value() any {
 
 func (n ValueNode) Accept(v Visitor) error {
 	return v.VisitValue(n)
+}
+
+func Not(operand Visitable) PrefixNode {
+	return PrefixNode{
+		operator:      OperatorNot,
+		operand:       operand,
+		associativity: RightAssociative,
+	}
+}
+
+type PrefixNode struct {
+	operator      Operator
+	operand       Visitable
+	associativity Associativity
+}
+
+func (n PrefixNode) Operand() Visitable {
+	return n.operand
+}
+func (n PrefixNode) Operator() Operator {
+	return n.operator
+}
+func (n PrefixNode) Associativity() Associativity {
+	return n.associativity
+}
+func (n PrefixNode) Accept(v Visitor) error {
+	return v.VisitPrefix(n)
 }
 
 func Equal(left, right Visitable) InfixNode {
@@ -259,6 +298,45 @@ func (v *EvaluateVisitor) VisitValue(n ValueNode) error {
 	return nil
 }
 
+func (v *EvaluateVisitor) VisitPrefix(n PrefixNode) error {
+	err := n.Operand().Accept(v)
+	if err != nil {
+		return err
+	}
+	operands := v.CurrentValue()
+	if v.yieldBooleanOperator(n.Operator()) {
+		// aggregate.[]entity.field bool
+		result := false
+		for i := range operands {
+			nextResult, err := v.evalYieldBooleanPrefix(operands[i], n.Operator())
+			if err != nil {
+				return err
+			}
+			result = result || nextResult
+		}
+		v.SetCurrentValue([]any{result})
+	} else {
+		return fmt.Errorf("mathematical operator \"%s\" is not supperted", n.Operator())
+	}
+	return nil
+}
+func (v EvaluateVisitor) evalYieldBooleanPrefix(operand any, op Operator) (bool, error) {
+	switch op {
+	case OperatorNot:
+		return v.evalNot(operand)
+	default:
+		return false, fmt.Errorf("operator \"%s\" is not supperted", op)
+	}
+}
+
+func (v EvaluateVisitor) evalNot(operand any) (bool, error) {
+	operandTyped, ok := operand.(bool)
+	if !ok {
+		return false, errors.New("operand is not a bool")
+	}
+	return !operandTyped, nil
+}
+
 func (v *EvaluateVisitor) VisitInfix(n InfixNode) error {
 	err := n.Left().Accept(v)
 	if err != nil {
@@ -274,7 +352,8 @@ func (v *EvaluateVisitor) VisitInfix(n InfixNode) error {
 		result := false
 		for i := range lefts {
 			for j := range rights {
-				nextResult, err := v.evalYieldBooleanExpression(lefts[i], n.Operator(), rights[j])
+				// aggregate.[]entity.field int == aggregate2.[]entity.field int
+				nextResult, err := v.evalYieldBooleanInfix(lefts[i], n.Operator(), rights[j])
 				if err != nil {
 					return err
 				}
@@ -297,7 +376,7 @@ func (v EvaluateVisitor) yieldBooleanOperator(op Operator) bool {
 	return false
 }
 
-func (v EvaluateVisitor) evalYieldBooleanExpression(left any, op Operator, right any) (bool, error) {
+func (v EvaluateVisitor) evalYieldBooleanInfix(left any, op Operator, right any) (bool, error) {
 	switch op {
 	case OperatorEq:
 		return v.evalEq(left, right)
@@ -317,11 +396,11 @@ func (v EvaluateVisitor) evalYieldBooleanExpression(left any, op Operator, right
 func (v EvaluateVisitor) evalEq(left, right any) (bool, error) {
 	leftTyped, ok := left.(EqualOperand)
 	if !ok {
-		return false, errors.New("left operand is not EqualOperand")
+		return false, errors.New("left operand is not an EqualOperand")
 	}
 	rightTyped, ok := right.(EqualOperand)
 	if !ok {
-		return false, errors.New("right operand is not EqualOperand")
+		return false, errors.New("right operand is not an EqualOperand")
 	}
 	return leftTyped.Equal(rightTyped), nil
 }
@@ -329,11 +408,11 @@ func (v EvaluateVisitor) evalEq(left, right any) (bool, error) {
 func (v EvaluateVisitor) evalNe(left, right any) (bool, error) {
 	leftTyped, ok := left.(EqualOperand)
 	if !ok {
-		return false, errors.New("left operand is not EqualOperand")
+		return false, errors.New("left operand is not an EqualOperand")
 	}
 	rightTyped, ok := right.(EqualOperand)
 	if !ok {
-		return false, errors.New("right operand is not EqualOperand")
+		return false, errors.New("right operand is not an EqualOperand")
 	}
 	return !leftTyped.Equal(rightTyped), nil
 }
@@ -341,11 +420,11 @@ func (v EvaluateVisitor) evalNe(left, right any) (bool, error) {
 func (v EvaluateVisitor) evalGt(left, right any) (bool, error) {
 	leftTyped, ok := left.(GreaterThanOperand)
 	if !ok {
-		return false, errors.New("left operand is not GreaterThanOperand")
+		return false, errors.New("left operand is not a GreaterThanOperand")
 	}
 	rightTyped, ok := right.(GreaterThanOperand)
 	if !ok {
-		return false, errors.New("right operand is not GreaterThanOperand")
+		return false, errors.New("right operand is not a GreaterThanOperand")
 	}
 	return leftTyped.GreaterThan(rightTyped), nil
 }
@@ -353,11 +432,11 @@ func (v EvaluateVisitor) evalGt(left, right any) (bool, error) {
 func (v EvaluateVisitor) evalGte(left, right any) (bool, error) {
 	leftTyped, ok := left.(GreaterThanEqualOperand)
 	if !ok {
-		return false, errors.New("left operand is not GreaterThanEqualOperand")
+		return false, errors.New("left operand is not a GreaterThanEqualOperand")
 	}
 	rightTyped, ok := right.(GreaterThanEqualOperand)
 	if !ok {
-		return false, errors.New("right operand is not GreaterThanEqualOperand")
+		return false, errors.New("right operand is not a GreaterThanEqualOperand")
 	}
 	return leftTyped.GreaterThanEqual(rightTyped), nil
 }
@@ -365,11 +444,11 @@ func (v EvaluateVisitor) evalGte(left, right any) (bool, error) {
 func (v EvaluateVisitor) evalAnd(left, right any) (bool, error) {
 	leftTyped, ok := left.(bool)
 	if !ok {
-		return false, errors.New("left operand is not bool")
+		return false, errors.New("left operand is not a bool")
 	}
 	rightTyped, ok := right.(bool)
 	if !ok {
-		return false, errors.New("right operand is not bool")
+		return false, errors.New("right operand is not a bool")
 	}
 	return leftTyped && rightTyped, nil
 }
@@ -379,7 +458,7 @@ func (v EvaluateVisitor) Result() (bool, error) {
 	for i := range results {
 		resultTyped, ok := results[i].(bool)
 		if !ok {
-			return false, errors.New("the result is not boolean")
+			return false, errors.New("the result is not a bool")
 		}
 		if resultTyped {
 			return resultTyped, nil

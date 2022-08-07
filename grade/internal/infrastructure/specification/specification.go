@@ -23,7 +23,7 @@ func NewPostgresqlVisitor(context Context) *PostgresqlVisitor {
 	// all other native and user-defined operators 👇️
 	v.setPrecedence(100, "(any other operator) LEFT")
 	v.setPrecedence(90, "BETWEEN NON", "IN NON", "LIKE NON", "ILIKE NON", "SIMILAR NON")
-	v.setPrecedence(80, "< NON", "> NON", "= NON", "<= NON", ">= NON", "<> NON")
+	v.setPrecedence(80, "< NON", "> NON", "= NON", "<= NON", ">= NON", "!= NON")
 	v.setPrecedence(70, "IS NON", "ISNULL NON", "NOTNULL NON")
 	v.setPrecedence(60, "NOT RIGHT")
 	v.setPrecedence(50, "AND LEFT")
@@ -105,6 +105,19 @@ func (v *PostgresqlVisitor) VisitValue(n s.ValueNode) error {
 	}
 	v.parameters = append(v.parameters, val)
 	return nil
+}
+
+func (v *PostgresqlVisitor) VisitPrefix(node s.PrefixNode) error {
+	precedenceKey := v.getNodePrecedenceKey(node)
+	return v.visit(precedenceKey, func() error {
+		operator := node.Operator()
+		if operator == s.OperatorPos || operator == s.OperatorNeg {
+			v.sql += string(operator)
+		} else {
+			v.sql += fmt.Sprintf("%s ", operator)
+		}
+		return node.Operand().Accept(v)
+	})
 }
 
 func (v *PostgresqlVisitor) VisitInfix(n s.InfixNode) error {

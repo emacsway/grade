@@ -40,6 +40,19 @@ func (c Context) recognizerPath(prefix string, path ...string) (string, error) {
 		return prefix + ".available_endorsement_count", nil
 	case "pendingEndorsementCount":
 		return prefix + ".pending_endorsement_count", nil
+	case "id":
+		return c.recognizerIdPath(prefix, path[1:]...)
+	default:
+		return "", fmt.Errorf("can't get field \"%s\"", path[0])
+	}
+}
+
+func (c Context) recognizerIdPath(prefix string, path ...string) (string, error) {
+	switch path[0] {
+	case "tenantId":
+		return prefix + ".tenant_id", nil
+	case "memberId":
+		return prefix + ".member_id", nil
 	default:
 		return "", fmt.Errorf("can't get field \"%s\"", path[0])
 	}
