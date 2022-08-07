@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
 
 const YearlyEndorsementCount = uint(20)
@@ -25,6 +26,22 @@ type EndorsementCount uint
 
 func (c EndorsementCount) HasAvailable() bool {
 	return uint(c) > uint(0)
+}
+
+func (c EndorsementCount) Equal(other specification.EqualOperand) bool {
+	otherTyped, ok := other.(EndorsementCount)
+	if !ok {
+		return false
+	}
+	return uint(c) == uint(otherTyped)
+}
+
+func (c EndorsementCount) GreaterThanEqual(other specification.GreaterThanEqualOperand) bool {
+	otherTyped, ok := other.(EndorsementCount)
+	if !ok {
+		return false
+	}
+	return uint(c) >= uint(otherTyped)
 }
 
 func (c EndorsementCount) Decrease() (EndorsementCount, error) {

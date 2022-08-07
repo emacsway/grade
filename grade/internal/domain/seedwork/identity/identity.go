@@ -2,15 +2,12 @@ package identity
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 type Accessable[T any] interface {
 	Value() T
-}
-
-type Equaler interface {
-	Equal(Equaler) bool
 }
 
 func NewUuidIdentity(value uuid.Uuid) (UuidIdentity, error) {
@@ -21,7 +18,7 @@ type UuidIdentity struct {
 	value uuid.Uuid
 }
 
-func (id UuidIdentity) Equal(other Equaler) bool {
+func (id UuidIdentity) Equal(other specification.EqualOperand) bool {
 	exportableOther := other.(Accessable[uuid.Uuid])
 	return id.value == exportableOther.Value()
 }
