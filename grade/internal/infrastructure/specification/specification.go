@@ -78,23 +78,12 @@ func (v *PostgresqlVisitor) VisitObject(_ s.ObjectNode) error {
 }
 
 func (v *PostgresqlVisitor) VisitField(n s.FieldNode) error {
-	name, err := v.Context.NameByPath(v.extractFieldPath(n)...)
+	name, err := v.Context.NameByPath(s.ExtractFieldPath(n)...)
 	if err != nil {
 		return err
 	}
 	v.sql += name
 	return nil
-}
-
-func (v *PostgresqlVisitor) extractFieldPath(n s.FieldNode) []string {
-	path := []string{n.Name()}
-	fistObj := n.Object()
-	obj := &fistObj
-	for obj != nil {
-		path = append([]string{obj.Name()}, path...)
-		obj = obj.Parent()
-	}
-	return path
 }
 
 func (v *PostgresqlVisitor) VisitValue(n s.ValueNode) error {

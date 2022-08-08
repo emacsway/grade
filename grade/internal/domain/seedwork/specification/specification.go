@@ -98,6 +98,14 @@ func Not(operand Visitable) PrefixNode {
 	}
 }
 
+func NewPrefixNode(operator Operator, operand Visitable, associativity Associativity) PrefixNode {
+	return PrefixNode{
+		operator:      operator,
+		operand:       operand,
+		associativity: associativity,
+	}
+}
+
 type PrefixNode struct {
 	operator      Operator
 	operand       Visitable
@@ -175,6 +183,15 @@ func foldRights(
 	return aLeft, aRights[0]
 }
 
+func NewInfixNode(left Visitable, operator Operator, right Visitable, associativity Associativity) InfixNode {
+	return InfixNode{
+		left:          left,
+		operator:      operator,
+		right:         right,
+		associativity: associativity,
+	}
+}
+
 type InfixNode struct {
 	left          Visitable
 	operator      Operator
@@ -202,23 +219,56 @@ func (n InfixNode) Accept(v Visitor) error {
 	return v.VisitInfix(n)
 }
 
-func Object(name string) ObjectNode {
+type EmptiableObject interface {
+	Visitable
+	Parent() EmptiableObject
+	Name() string
+	IsEmpty() bool
+}
+
+func EmptyObject() EmptyObjectNode {
+	return EmptyObjectNode{}
+}
+
+type EmptyObjectNode struct{}
+
+func (n EmptyObjectNode) Parent() EmptiableObject {
+	return n
+}
+
+func (n EmptyObjectNode) Name() string {
+	return "Empty"
+}
+
+func (n EmptyObjectNode) IsEmpty() bool {
+	return true
+}
+func (n EmptyObjectNode) Accept(v Visitor) error {
+	return nil
+}
+
+func Object(parent EmptiableObject, name string) ObjectNode {
 	return ObjectNode{
-		name: name,
+		parent: parent,
+		name:   name,
 	}
 }
 
 type ObjectNode struct {
-	parent *ObjectNode
+	parent EmptiableObject
 	name   string
 }
 
-func (n ObjectNode) Parent() *ObjectNode {
+func (n ObjectNode) Parent() EmptiableObject {
 	return n.parent
 }
 
 func (n ObjectNode) Name() string {
 	return n.name
+}
+
+func (n ObjectNode) IsEmpty() bool {
+	return false
 }
 
 func (n ObjectNode) Accept(v Visitor) error {
@@ -274,23 +324,12 @@ func (v *EvaluateVisitor) VisitObject(_ ObjectNode) error {
 }
 
 func (v *EvaluateVisitor) VisitField(n FieldNode) error {
-	values, err := v.Context.ValuesByPath(v.extractFieldPath(n)...)
+	values, err := v.Context.ValuesByPath(ExtractFieldPath(n)...)
 	if err != nil {
 		return err
 	}
 	v.SetCurrentValue(values)
 	return nil
-}
-
-func (v *EvaluateVisitor) extractFieldPath(n FieldNode) []string {
-	path := []string{n.Name()}
-	fistObj := n.Object()
-	obj := &fistObj
-	for obj != nil {
-		path = append([]string{obj.Name()}, path...)
-		obj = obj.Parent()
-	}
-	return path
 }
 
 func (v *EvaluateVisitor) VisitValue(n ValueNode) error {
@@ -469,4 +508,14 @@ func (v EvaluateVisitor) Result() (bool, error) {
 
 type Context interface {
 	ValuesByPath(...string) ([]any, error)
+}
+
+func ExtractFieldPath(n FieldNode) []string {
+	path := []string{n.Name()}
+	var obj EmptiableObject = n.Object()
+	for !obj.IsEmpty() {
+		path = append([]string{obj.Name()}, path...)
+		obj = obj.Parent()
+	}
+	return path
 }

@@ -17,7 +17,7 @@ func (r RecognizerCriteria) pendingEndorsementCount() s.FieldNode {
 }
 
 func (r RecognizerCriteria) obj() s.ObjectNode {
-	return s.Object("recognizer")
+	return s.Object(s.EmptyObject(), "recognizer")
 }
 
 var recognizer = RecognizerCriteria{}
