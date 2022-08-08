@@ -13,11 +13,13 @@ var (
 
 func NewTransformVisitor(context Context) *TransformVisitor {
 	return &TransformVisitor{
-		Context: context,
+		isChanged: false,
+		Context:   context,
 	}
 }
 
 type TransformVisitor struct {
+	isChanged            bool
 	compositeExpressions []CompositeExpression
 	currentNode          s.Visitable
 	Context
@@ -79,6 +81,9 @@ func (v *TransformVisitor) VisitInfix(n s.InfixNode) error {
 		return err
 	}
 	if newNode != nil {
+		v.currentNode = newNode
+		v.isChanged = true
+	} else {
 		v.currentNode = s.NewInfixNode(left, n.Operator(), right, n.Associativity())
 	}
 	return nil
@@ -101,6 +106,10 @@ func (v *TransformVisitor) buildNodeFromCompositeExpressions(n s.InfixNode) (s.V
 	return nil, nil
 }
 
+func (v TransformVisitor) IsChanged() bool {
+	return v.isChanged
+}
+
 func (v TransformVisitor) Result() (s.Visitable, error) {
 	return v.currentNode, nil
 }
@@ -114,7 +123,7 @@ func (n *CompositeExpression) Add(nodes ...s.Visitable) {
 }
 
 func (n CompositeExpression) Equal(other CompositeExpression) (s.Visitable, error) {
-	operands := []s.Visitable{}
+	var operands []s.Visitable
 	if len(n.nodes) != len(other.nodes) {
 		return nil, ErrCompositeExpressionsDifferentLength
 	}
@@ -125,7 +134,7 @@ func (n CompositeExpression) Equal(other CompositeExpression) (s.Visitable, erro
 }
 
 func (n CompositeExpression) NotEqual(other CompositeExpression) (s.Visitable, error) {
-	operands := []s.Visitable{}
+	var operands []s.Visitable
 	if len(n.nodes) != len(other.nodes) {
 		return nil, ErrCompositeExpressionsDifferentLength
 	}

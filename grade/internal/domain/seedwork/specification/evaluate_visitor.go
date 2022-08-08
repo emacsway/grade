@@ -61,7 +61,7 @@ func (v *EvaluateVisitor) VisitPrefix(n PrefixNode) error {
 		}
 		v.SetCurrentValue([]any{result})
 	} else {
-		return fmt.Errorf("mathematical operator \"%s\" is not supperted", n.Operator())
+		return fmt.Errorf("mathematical operator \"%s\" is not supported", n.Operator())
 	}
 	return nil
 }
@@ -70,7 +70,7 @@ func (v EvaluateVisitor) evalYieldBooleanPrefix(operand any, op Operator) (bool,
 	case OperatorNot:
 		return v.evalNot(operand)
 	default:
-		return false, fmt.Errorf("operator \"%s\" is not supperted", op)
+		return false, fmt.Errorf("operator \"%s\" is not supported", op)
 	}
 }
 
@@ -107,7 +107,7 @@ func (v *EvaluateVisitor) VisitInfix(n InfixNode) error {
 		}
 		v.SetCurrentValue([]any{result})
 	} else {
-		return fmt.Errorf("mathematical operator \"%s\" is not supperted", n.Operator())
+		return fmt.Errorf("mathematical operator \"%s\" is not supported", n.Operator())
 	}
 	return nil
 }
@@ -134,7 +134,7 @@ func (v EvaluateVisitor) evalYieldBooleanInfix(left any, op Operator, right any)
 	case OperatorAnd:
 		return v.evalAnd(left, right)
 	default:
-		return false, fmt.Errorf("operator \"%s\" is not supperted", op)
+		return false, fmt.Errorf("operator \"%s\" is not supported", op)
 	}
 }
 

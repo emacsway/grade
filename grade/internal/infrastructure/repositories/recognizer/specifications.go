@@ -69,6 +69,14 @@ func (c Context) Extract(val any) (driver.Valuer, error) {
 		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return ex, nil
+	case member.MemberId:
+		var ex exporters.UuidExporter
+		valTyped.Export(&ex)
+		return nil, nil
+	case tenant.TenantId:
+		var ex exporters.UuidExporter
+		valTyped.Export(&ex)
+		return nil, nil
 	case member.TenantMemberId:
 		var ex TenantMemberIdExporter
 		valTyped.Export(&ex)
@@ -87,13 +95,9 @@ func (ex TenantMemberIdExporter) Values() []any {
 }
 
 func (ex *TenantMemberIdExporter) SetTenantId(val tenant.TenantId) {
-	var v exporters.UuidExporter
-	val.Export(&v)
-	ex.values[0] = v
+	ex.values[0] = val
 }
 
 func (ex *TenantMemberIdExporter) SetMemberId(val member.MemberId) {
-	var v exporters.UuidExporter
-	val.Export(&v)
-	ex.values[1] = v
+	ex.values[1] = val
 }
