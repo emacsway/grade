@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	var ErrCompositeExpressionsDifferentLength = errors.New("composite expressions have different length")
+	ErrCompositeExpressionsDifferentLength = errors.New("composite expressions have different length")
 )
 
 func NewTransformVisitor(context Context) *TransformVisitor {
