@@ -3,6 +3,9 @@ package specification
 import (
 	"database/sql/driver"
 	"fmt"
+	"testing"
+
+	"github.com/stretchr/testify/assert"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
@@ -81,7 +84,7 @@ func (cid MemberSomethingId) Export(ex MemberSomethingIdExporterSetter) {
 }
 
 type MemberSomethingIdExporterSetter interface {
-	SetMemberId(id TenantMemberId)
+	SetMemberId(TenantMemberId)
 	SetSomethingId(SomethingId)
 }
 
@@ -166,15 +169,15 @@ func (c TestContext) Extract(val any) (driver.Valuer, error) {
 	case MemberId:
 		var ex exporters.UuidExporter
 		valTyped.Export(&ex)
-		return nil, nil
+		return ex, nil
 	case TenantId:
 		var ex exporters.UuidExporter
 		valTyped.Export(&ex)
-		return nil, nil
+		return ex, nil
 	case SomethingId:
 		var ex exporters.UuidExporter
 		valTyped.Export(&ex)
-		return nil, nil
+		return ex, nil
 	case TenantMemberId:
 		var ex TenantMemberIdExporter
 		valTyped.Export(&ex)
@@ -213,9 +216,27 @@ func (ex MemberSomethingIdExporter) Values() []any {
 }
 
 func (ex *MemberSomethingIdExporter) SetMemberId(val TenantMemberId) {
-	ex.values[1] = val
+	ex.values[0] = val
 }
 
 func (ex *MemberSomethingIdExporter) SetSomethingId(val SomethingId) {
-	ex.values[0] = val
+	ex.values[1] = val
+}
+
+func TestSomethingSpecification(t *testing.T) {
+	ss := SomethingSpecification{}
+	sql, params, err := ss.Execute()
+	if err != nil {
+		t.Error(err)
+		t.FailNow()
+	}
+	assert.Equal(
+		t,
+		"something.tenant_id = ? AND something.member_id = ? AND something.something_id = ?",
+		sql)
+	assert.Equal(t, []driver.Valuer{
+		exporters.UuidExporter(tId.Value()),
+		exporters.UuidExporter(mId.Value()),
+		exporters.UuidExporter(sId.Value()),
+	}, params)
 }

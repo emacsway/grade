@@ -39,6 +39,7 @@ func (v *TransformVisitor) VisitField(n s.FieldNode) error {
 			for i := range names {
 				compositeExpression.Add(s.Field(o, names[i]))
 			}
+			v.compositeExpressions = append(v.compositeExpressions, compositeExpression)
 			return nil
 		} else {
 			return err
@@ -51,8 +52,19 @@ func (v *TransformVisitor) VisitField(n s.FieldNode) error {
 func (v *TransformVisitor) VisitValue(n s.ValueNode) error {
 	_, err := v.Extract(n.Value())
 	if err != nil {
-		return err
+		if errTyped, ok := err.(MissingValuesError); ok {
+			values := errTyped.MissingValues()
+			compositeExpression := CompositeExpression{}
+			for i := range values {
+				compositeExpression.Add(s.Value(values[i]))
+			}
+			v.compositeExpressions = append(v.compositeExpressions, compositeExpression)
+			return nil
+		} else {
+			return err
+		}
 	}
+	v.currentNode = n
 	return nil
 }
 
@@ -92,6 +104,9 @@ func (v *TransformVisitor) VisitInfix(n s.InfixNode) error {
 func (v *TransformVisitor) buildNodeFromCompositeExpressions(n s.InfixNode) (s.Visitable, error) {
 	l := len(v.compositeExpressions)
 	if l != 0 {
+		if l < 2 {
+			return nil, errors.New("not enough composite expressions")
+		}
 		left, right := v.compositeExpressions[l-2], v.compositeExpressions[l-1]
 		v.compositeExpressions = v.compositeExpressions[:l-2]
 		switch n.Operator() {

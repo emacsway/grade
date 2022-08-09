@@ -38,7 +38,7 @@ func (ex *UuidExporter) SetState(value uuid.Uuid) {
 	*ex = UuidExporter(value)
 }
 func (ex UuidExporter) Value() (driver.Value, error) {
-	return uuid.Uuid(ex), nil
+	return uuid.Uuid(ex).Value()
 }
 
 type StringExporter string
