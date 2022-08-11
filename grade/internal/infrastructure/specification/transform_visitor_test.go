@@ -232,7 +232,7 @@ func TestSomethingSpecification(t *testing.T) {
 	}
 	assert.Equal(
 		t,
-		"something.tenant_id = ? AND something.member_id = ? AND something.something_id = ?",
+		"something.tenant_id = $1 AND something.member_id = $2 AND something.something_id = $3",
 		sql)
 	assert.Equal(t, []driver.Valuer{
 		exporters.UuidExporter(tId.Value()),

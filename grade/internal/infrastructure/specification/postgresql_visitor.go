@@ -7,7 +7,15 @@ import (
 	s "github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
 
-func NewPostgresqlVisitor(context Context) *PostgresqlVisitor {
+type PostgresqlVisitorOption func(*PostgresqlVisitor)
+
+func PlaceholderIndex(index uint8) PostgresqlVisitorOption {
+	return func(v *PostgresqlVisitor) {
+		v.placeholderIndex = index
+	}
+}
+
+func NewPostgresqlVisitor(context Context, opts ...PostgresqlVisitorOption) *PostgresqlVisitor {
 	v := &PostgresqlVisitor{
 		precedenceMapping: make(map[string]int),
 		Context:           context,
@@ -28,11 +36,15 @@ func NewPostgresqlVisitor(context Context) *PostgresqlVisitor {
 	v.setPrecedence(60, "NOT RIGHT")
 	v.setPrecedence(50, "AND LEFT")
 	v.setPrecedence(40, "OR LEFT")
+	for i := range opts {
+		opts[i](v)
+	}
 	return v
 }
 
 type PostgresqlVisitor struct {
 	sql               string
+	placeholderIndex  uint8
 	parameters        []driver.Valuer
 	precedence        int
 	precedenceMapping map[string]int
@@ -87,12 +99,12 @@ func (v *PostgresqlVisitor) VisitField(n s.FieldNode) error {
 }
 
 func (v *PostgresqlVisitor) VisitValue(n s.ValueNode) error {
-	v.sql += "?"
 	val, err := v.Extract(n.Value())
 	if err != nil {
 		return err
 	}
 	v.parameters = append(v.parameters, val)
+	v.sql += fmt.Sprintf("$%d", len(v.parameters))
 	return nil
 }
 
