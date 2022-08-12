@@ -16,7 +16,7 @@ type Rows interface {
 	Values() ([]interface{}, error)
 }
 
-type PgxSession interface {
+type DbSession interface {
 	seedwork.Session
 
 	Exec(query string, args ...any) (Result, error)

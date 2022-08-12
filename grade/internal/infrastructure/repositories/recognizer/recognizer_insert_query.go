@@ -65,6 +65,6 @@ func (q *RecognizerInsertQuery) SetCreatedAt(val time.Time) {
 	q.params[6] = val
 }
 
-func (q *RecognizerInsertQuery) Execute(s infrastructure.PgxSession) (infrastructure.Result, error) {
+func (q *RecognizerInsertQuery) Execute(s infrastructure.DbSession) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }
