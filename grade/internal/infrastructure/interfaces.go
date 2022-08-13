@@ -1,7 +1,7 @@
 package infrastructure
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork"
+	"github.com/emacsway/grade/grade/internal/application"
 )
 
 type Result interface {
@@ -17,7 +17,7 @@ type Rows interface {
 }
 
 type DbSession interface {
-	seedwork.Session
+	application.Session
 
 	Exec(query string, args ...any) (Result, error)
 	Fetch(query string, args ...any) (Rows, error)
