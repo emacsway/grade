@@ -47,6 +47,14 @@ func (s *PgxSession) Atomic(callback func(session application.Session) error) er
 	return nil
 }
 
+func (s *PgxSession) Exec(query string, args ...any) (Result, error) {
+	return s.dbExecutor.Exec(query, args...)
+}
+
+func (s *PgxSession) Fetch(query string, args ...any) (Rows, error) {
+	return s.dbExecutor.Query(query, args...)
+}
+
 type DbExecutor interface {
 	Exec(query string, args ...any) (sql.Result, error)
 	Query(query string, args ...any) (*sql.Rows, error)

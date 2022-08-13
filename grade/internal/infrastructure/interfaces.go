@@ -10,10 +10,9 @@ type Result interface {
 }
 
 type Rows interface {
-	Close()
+	Close() error
 	Err() error
 	Next() bool
-	Values() ([]interface{}, error)
 }
 
 type DbSession interface {
