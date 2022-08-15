@@ -46,7 +46,7 @@ func (f *ArtifactFakeFactory) AddCompetenceId(competenceId competence.TenantComp
 }
 
 func (f ArtifactFakeFactory) Create() (*Artifact, error) {
-	id, err := NewTenantArtifactId(f.Id.TenantId, f.Id.ArtifactId)
+	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
 	}

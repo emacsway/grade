@@ -36,7 +36,7 @@ type EndorsementFakeFactory struct {
 }
 
 func (f EndorsementFakeFactory) Create() (Endorsement, error) {
-	recognizerId, err := member.NewTenantMemberId(f.RecognizerId.TenantId, f.RecognizerId.MemberId)
+	recognizerId, err := f.RecognizerId.Create()
 	if err != nil {
 		return Endorsement{}, err
 	}
@@ -44,7 +44,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	specialistId, err := member.NewTenantMemberId(f.SpecialistId.TenantId, f.SpecialistId.MemberId)
+	specialistId, err := f.SpecialistId.Create()
 	if err != nil {
 		return Endorsement{}, err
 	}
@@ -52,7 +52,7 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	artifactId, err := artifact.NewTenantArtifactId(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId)
+	artifactId, err := f.ArtifactId.Create()
 	if err != nil {
 		return Endorsement{}, err
 	}

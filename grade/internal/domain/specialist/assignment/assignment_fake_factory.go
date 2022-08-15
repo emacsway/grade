@@ -26,7 +26,7 @@ type AssignmentFakeFactory struct {
 }
 
 func (f AssignmentFakeFactory) Create() (Assignment, error) {
-	specialistId, err := member.NewTenantMemberId(f.SpecialistId.TenantId, f.SpecialistId.MemberId)
+	specialistId, err := f.SpecialistId.Create()
 	if err != nil {
 		return Assignment{}, err
 	}

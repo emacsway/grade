@@ -23,7 +23,7 @@ type CompetenceFakeFactory struct {
 }
 
 func (f CompetenceFakeFactory) Create() (*Competence, error) {
-	id, err := NewTenantCompetenceId(f.Id.TenantId, f.Id.CompetenceId)
+	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
 	}

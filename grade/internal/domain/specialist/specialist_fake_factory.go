@@ -82,7 +82,7 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 	if err != nil {
 		return nil, err
 	}
-	id, err := member.NewTenantMemberId(f.Id.TenantId, f.Id.MemberId)
+	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
 	}

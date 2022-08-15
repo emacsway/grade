@@ -27,7 +27,7 @@ type RecognizerFakeFactory struct {
 }
 
 func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
-	id, err := member.NewTenantMemberId(f.Id.TenantId, f.Id.MemberId)
+	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
 	}
