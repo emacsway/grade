@@ -18,6 +18,7 @@ type RecognizerReconstitutor struct {
 }
 
 func (r RecognizerReconstitutor) Reconstitute() (*Recognizer, error) {
+	// Set here TenantId to other composite FK.
 	id, err := r.Id.Reconstitute()
 	if err != nil {
 		return nil, err
