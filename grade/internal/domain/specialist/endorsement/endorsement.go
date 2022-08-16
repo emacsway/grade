@@ -17,35 +17,35 @@ const (
 )
 
 func NewEndorsement(
-	recognizerId member.TenantMemberId,
-	recognizerGrade grade.Grade,
-	recognizerVersion uint,
 	specialistId member.TenantMemberId,
 	specialistGrade grade.Grade,
 	specialistVersion uint,
 	artifactId artifact.TenantArtifactId,
+	recognizerId member.TenantMemberId,
+	recognizerGrade grade.Grade,
+	recognizerVersion uint,
 	createdAt time.Time,
 ) (Endorsement, error) {
 	return Endorsement{
-		recognizerId:      recognizerId,
-		recognizerGrade:   recognizerGrade,
-		recognizerVersion: recognizerVersion,
 		specialistId:      specialistId,
 		specialistGrade:   specialistGrade,
 		specialistVersion: specialistVersion,
 		artifactId:        artifactId,
+		recognizerId:      recognizerId,
+		recognizerGrade:   recognizerGrade,
+		recognizerVersion: recognizerVersion,
 		createdAt:         createdAt,
 	}, nil
 }
 
 type Endorsement struct {
-	recognizerId      member.TenantMemberId
-	recognizerGrade   grade.Grade
-	recognizerVersion uint
 	specialistId      member.TenantMemberId
 	specialistGrade   grade.Grade
 	specialistVersion uint
 	artifactId        artifact.TenantArtifactId
+	recognizerId      member.TenantMemberId
+	recognizerGrade   grade.Grade
+	recognizerVersion uint
 	createdAt         time.Time
 }
 
@@ -67,23 +67,23 @@ func (e Endorsement) Weight() Weight {
 }
 
 func (e Endorsement) Export(ex EndorsementExporterSetter) {
-	ex.SetRecognizerId(e.recognizerId)
-	ex.SetRecognizerGrade(e.recognizerGrade)
-	ex.SetRecognizerVersion(e.recognizerVersion)
 	ex.SetSpecialistId(e.specialistId)
 	ex.SetSpecialistGrade(e.specialistGrade)
 	ex.SetSpecialistVersion(e.specialistVersion)
 	ex.SetArtifactId(e.artifactId)
+	ex.SetRecognizerId(e.recognizerId)
+	ex.SetRecognizerGrade(e.recognizerGrade)
+	ex.SetRecognizerVersion(e.recognizerVersion)
 	ex.SetCreatedAt(e.createdAt)
 }
 
 type EndorsementExporterSetter interface {
-	SetRecognizerId(member.TenantMemberId)
-	SetRecognizerGrade(grade.Grade)
-	SetRecognizerVersion(uint)
 	SetSpecialistId(member.TenantMemberId)
 	SetSpecialistGrade(grade.Grade)
 	SetSpecialistVersion(uint)
-	SetArtifactId(id artifact.TenantArtifactId)
+	SetArtifactId(artifact.TenantArtifactId)
+	SetRecognizerId(member.TenantMemberId)
+	SetRecognizerGrade(grade.Grade)
+	SetRecognizerVersion(uint)
 	SetCreatedAt(time.Time)
 }

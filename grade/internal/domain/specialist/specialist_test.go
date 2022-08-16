@@ -35,9 +35,6 @@ func TestSpecialistExport(t *testing.T) {
 		Grade: exporters.Uint8Exporter(sf.Grade + 1),
 		ReceivedEndorsements: []endorsement.EndorsementExporter{
 			{
-				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
-				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
-				RecognizerVersion: 0,
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 0,
@@ -45,12 +42,12 @@ func TestSpecialistExport(t *testing.T) {
 					sf.ReceivedEndorsements[0].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[0].Artifact.Id.ArtifactId,
 				),
-				CreatedAt: sf.ReceivedEndorsements[0].CreatedAt,
-			},
-			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
+				CreatedAt:         sf.ReceivedEndorsements[0].CreatedAt,
+			},
+			{
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 1,
@@ -58,12 +55,12 @@ func TestSpecialistExport(t *testing.T) {
 					sf.ReceivedEndorsements[1].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[1].Artifact.Id.ArtifactId,
 				),
-				CreatedAt: sf.ReceivedEndorsements[1].CreatedAt,
-			},
-			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
+				CreatedAt:         sf.ReceivedEndorsements[1].CreatedAt,
+			},
+			{
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 2,
@@ -71,12 +68,12 @@ func TestSpecialistExport(t *testing.T) {
 					sf.ReceivedEndorsements[2].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[2].Artifact.Id.ArtifactId,
 				),
-				CreatedAt: sf.ReceivedEndorsements[2].CreatedAt,
-			},
-			{
 				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
 				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
 				RecognizerVersion: 0,
+				CreatedAt:         sf.ReceivedEndorsements[2].CreatedAt,
+			},
+			{
 				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade + 1),
 				SpecialistVersion: 3,
@@ -84,7 +81,10 @@ func TestSpecialistExport(t *testing.T) {
 					sf.ReceivedEndorsements[3].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[3].Artifact.Id.ArtifactId,
 				),
-				CreatedAt: sf.ReceivedEndorsements[3].CreatedAt,
+				RecognizerId:      member.NewTenantMemberIdExporter(rf.Id.TenantId, rf.Id.MemberId),
+				RecognizerGrade:   exporters.Uint8Exporter(rf.Grade),
+				RecognizerVersion: 0,
+				CreatedAt:         sf.ReceivedEndorsements[3].CreatedAt,
 			},
 		},
 		Assignments: []assignment.AssignmentExporter{

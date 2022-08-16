@@ -20,18 +20,6 @@ type EndorsementExporter struct {
 	CreatedAt         time.Time
 }
 
-func (ex *EndorsementExporter) SetRecognizerId(val member.TenantMemberId) {
-	val.Export(&ex.RecognizerId)
-}
-
-func (ex *EndorsementExporter) SetRecognizerGrade(val grade.Grade) {
-	val.Export(&ex.RecognizerGrade)
-}
-
-func (ex *EndorsementExporter) SetRecognizerVersion(val uint) {
-	ex.RecognizerVersion = val
-}
-
 func (ex *EndorsementExporter) SetSpecialistId(val member.TenantMemberId) {
 	val.Export(&ex.SpecialistId)
 }
@@ -46,6 +34,18 @@ func (ex *EndorsementExporter) SetSpecialistVersion(val uint) {
 
 func (ex *EndorsementExporter) SetArtifactId(val artifact.TenantArtifactId) {
 	val.Export(&ex.ArtifactId)
+}
+
+func (ex *EndorsementExporter) SetRecognizerId(val member.TenantMemberId) {
+	val.Export(&ex.RecognizerId)
+}
+
+func (ex *EndorsementExporter) SetRecognizerGrade(val grade.Grade) {
+	val.Export(&ex.RecognizerGrade)
+}
+
+func (ex *EndorsementExporter) SetRecognizerVersion(val uint) {
+	ex.RecognizerVersion = val
 }
 
 func (ex *EndorsementExporter) SetCreatedAt(val time.Time) {

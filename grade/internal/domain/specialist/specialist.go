@@ -65,11 +65,7 @@ func (s *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Arti
 	if err != nil {
 		return err
 	}
-	ent, err := endorsement.NewEndorsement(
-		r.Id(), r.Grade(), r.Version(),
-		s.id, s.grade, s.Version(),
-		a.Id(), t,
-	)
+	ent, err := endorsement.NewEndorsement(s.id, s.grade, s.Version(), a.Id(), r.Id(), r.Grade(), r.Version(), t)
 	if err != nil {
 		return err
 	}
