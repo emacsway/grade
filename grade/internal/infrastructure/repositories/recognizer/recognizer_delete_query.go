@@ -29,6 +29,6 @@ func (q *RecognizerDeleteQuery) SetMemberId(val member.MemberId) {
 	q.params[1] = v
 }
 
-func (q *RecognizerDeleteQuery) Execute(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (q *RecognizerDeleteQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

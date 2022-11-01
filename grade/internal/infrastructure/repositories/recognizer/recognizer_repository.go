@@ -7,14 +7,14 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-func NewRecognizerRepository(session infrastructure.DbSession) RecognizerRepository {
+func NewRecognizerRepository(session infrastructure.DbSessionExecutor) RecognizerRepository {
 	return RecognizerRepository{
 		session: session,
 	}
 }
 
 type RecognizerRepository struct {
-	session infrastructure.DbSession
+	session infrastructure.DbSessionExecutor
 }
 
 func (r RecognizerRepository) Insert(obj recognizer.Recognizer) error {

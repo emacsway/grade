@@ -68,6 +68,6 @@ func (q *RecognizerUpdateQuery) SetCreatedAt(val time.Time) {
 	q.params[6] = val
 }
 
-func (q *RecognizerUpdateQuery) Execute(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (q *RecognizerUpdateQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

@@ -80,6 +80,6 @@ func (q *AssignmentInsertQuery) Next() {
 	q.params = append(q.params, Params{})
 }
 
-func (q *AssignmentInsertQuery) Execute(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (q *AssignmentInsertQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.flatParams()...)
 }
