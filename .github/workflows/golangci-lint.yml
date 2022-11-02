@@ -43,3 +43,24 @@ jobs:
 
           # Optional: if set to true then the action don't cache or restore ~/.cache/go-build.
           # skip-build-cache: true
+
+  archi_report:
+    permissions:
+      contents: write
+      pages: write
+    runs-on: ubuntu-latest
+    name: Deploy Archi report HTML to GitHub Pages
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
+      - name: Deploy Archi report
+        id: archi
+        uses: WoozyMasta/archimate-ci-image@4.9.2-1.0.3
+        with:
+          archiHtmlReportEnabled: true
+          archiJasperReportEnabled: true
+          archiJasperReportFormats: PDF,DOCX
+          archiCsvReportEnabled: false
+          archiExportModelEnabled: true
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
