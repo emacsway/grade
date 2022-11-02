@@ -5,6 +5,12 @@ type Result interface {
 	RowsAffected() (int64, error)
 }
 
+type DeferredResultCallback func(Result)
+
+type DeferredResult interface {
+	AddCallback(DeferredResultCallback)
+}
+
 type Rows interface {
 	Close() error
 	Err() error
@@ -19,6 +25,6 @@ type DbSessionFetcher interface {
 	Fetch(query string, args ...any) (Rows, error)
 }
 
-type MutableQuery interface {
+type MutableQueryExecutor interface {
 	Execute(s DbSessionExecutor) (Result, error)
 }
