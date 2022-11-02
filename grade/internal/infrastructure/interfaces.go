@@ -18,3 +18,7 @@ type DbSessionExecutor interface {
 type DbSessionFetcher interface {
 	Fetch(query string, args ...any) (Rows, error)
 }
+
+type MutableQuery interface {
+	Execute(s DbSessionExecutor) (Result, error)
+}

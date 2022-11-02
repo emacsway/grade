@@ -1,6 +1,7 @@
 package seedwork
 
 import (
+	"fmt"
 	"regexp"
 
 	"github.com/emacsway/grade/grade/internal/infrastructure"
@@ -8,34 +9,47 @@ import (
 
 var re = regexp.MustCompile(`VALUES\s*(\((?:'(?:[^']|'')+'|[^)])+\))`)
 
-type SingleInsertQuery interface {
-	Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error)
-}
-
 type MultiInsertQuery struct {
-	sql          string
+	sqlTemplate  string
 	placeholders string
 	params       [][]any
+	result       *DeferredResult
 }
 
-func (mq *MultiInsertQuery) Add(sq SingleInsertQuery) {
-	sq.Execute(mq)
+func (q *MultiInsertQuery) sql() string {
+	bulkPlaceholders := ""
+	for i := 0; i < len(q.params); i++ {
+		if i != 0 {
+			bulkPlaceholders += ", "
+		}
+		bulkPlaceholders += q.placeholders
+	}
+	return fmt.Sprintf(q.sqlTemplate, bulkPlaceholders)
 }
 
-func (mq *MultiInsertQuery) Exec(query string, args ...any) (infrastructure.Result, error) {
-	mq.placeholders = re.FindStringSubmatch(query)[1]
-	mq.sql = re.ReplaceAllLiteralString(query, "VALUES %s")
-	mq.params = append(mq.params, args)
-	return Result{}, nil
+func (q *MultiInsertQuery) flatParams() []any {
+	var result []any
+	for i := range q.params {
+		result = append(result, q.params[i][:]...)
+	}
+	return result
 }
 
-type Result struct {
-	// TODO: make me a lazy object with real values
+func (q *MultiInsertQuery) Exec(query string, args ...any) (infrastructure.Result, error) {
+	q.placeholders = re.FindStringSubmatch(query)[1]
+	q.sqlTemplate = re.ReplaceAllLiteralString(query, "VALUES %s")
+	q.params = append(q.params, args)
+	q.result = &DeferredResult{}
+	return q.result, nil
 }
 
-func (r Result) LastInsertId() (int64, error) {
-	return 0, nil
-}
-func (r Result) RowsAffected() (int64, error) {
-	return 0, nil
+func (q MultiInsertQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+	r, err := s.Exec(q.sql(), q.flatParams()...)
+	if err != nil {
+		return nil, err
+	}
+	// TODO: implement me.
+	q.result.SetLastInsertId(0)
+	q.result.SetRowsAffected(0)
+	return r, nil
 }

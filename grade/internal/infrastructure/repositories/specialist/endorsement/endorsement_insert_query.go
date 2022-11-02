@@ -98,6 +98,5 @@ func (q *EndorsementInsertQuery) Next() {
 }
 
 func (q *EndorsementInsertQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
-
 	return s.Exec(q.sql(), q.flatParams()...)
 }
