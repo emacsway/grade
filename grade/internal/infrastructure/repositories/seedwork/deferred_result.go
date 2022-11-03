@@ -10,7 +10,7 @@ type DeferredResult struct {
 	callbacks    []infrastructure.DeferredResultCallback
 }
 
-func (r *DeferredResult) Resolve(lastInsertId int64, rowsAffected int64) {
+func (r *DeferredResult) Resolve(lastInsertId, rowsAffected int64) {
 	r.lastInsertId = lastInsertId
 	r.rowsAffected = rowsAffected
 	for i := range r.callbacks {

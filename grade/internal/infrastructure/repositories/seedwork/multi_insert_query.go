@@ -42,7 +42,7 @@ func (q *MultiQuery) sql() string {
 func (q *MultiQuery) flatParams() []any {
 	var result []any
 	for i := range q.params {
-		result = append(result, q.params[i][:]...)
+		result = append(result, q.params[i]...)
 	}
 	return result
 }

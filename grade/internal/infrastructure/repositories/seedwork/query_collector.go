@@ -30,18 +30,15 @@ func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.Result,
 
 func (c *QueryCollector) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	result := &DeferredResult{}
-	var lastInsertId int64 = 0
-	var rowsAffected int64 = 0
+	var lastInsertId int64
+	var rowsAffected int64
 	for k := range c.multiQueryMap {
 		r, err := c.multiQueryMap[k].Execute(s)
 		if err != nil {
 			return nil, err
 		}
-		if err != nil {
-			return nil, err
-		}
 		rowsAffectedIncrement, err := r.RowsAffected()
-		rowsAffected = rowsAffected + rowsAffectedIncrement
+		rowsAffected += rowsAffectedIncrement
 		if err != nil {
 			return nil, err
 		}
