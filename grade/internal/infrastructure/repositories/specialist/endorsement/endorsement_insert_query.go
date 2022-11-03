@@ -25,7 +25,7 @@ func (q EndorsementInsertQuery) sql() string {
 		) VALUES
 		%s
 		ON CONFLICT DO NOTHING`
-	placeholders := `($1, $2, $3, $4, $5, $6, $7, $8, $9)`
+	placeholders := `($%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d)`
 
 	bulkPlaceholders := ""
 
@@ -33,7 +33,12 @@ func (q EndorsementInsertQuery) sql() string {
 		if i != 0 {
 			bulkPlaceholders += ", "
 		}
-		bulkPlaceholders += placeholders
+		offset := i * len(q.params[i])
+		placeholderIndexes := make([]any, len(q.params[i]))
+		for i := range placeholderIndexes {
+			placeholderIndexes[i] = offset + i + 1
+		}
+		bulkPlaceholders += fmt.Sprintf(placeholders, placeholderIndexes...)
 	}
 	return fmt.Sprintf(sql, bulkPlaceholders)
 }

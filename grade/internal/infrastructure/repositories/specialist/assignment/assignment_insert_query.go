@@ -24,7 +24,7 @@ func (q AssignmentInsertQuery) sql() string {
 		) VALUES
 		%s
 		ON CONFLICT DO NOTHING`
-	placeholders := `($1, $2, $3, $4, $5, $6)`
+	placeholders := `($%d, $%d, $%d, $%d, $%d, $%d)`
 
 	bulkPlaceholders := ""
 
@@ -32,7 +32,12 @@ func (q AssignmentInsertQuery) sql() string {
 		if i != 0 {
 			bulkPlaceholders += ", "
 		}
-		bulkPlaceholders += placeholders
+		offset := i * len(q.params[i])
+		placeholderIndexes := make([]any, len(q.params[i]))
+		for i := range placeholderIndexes {
+			placeholderIndexes[i] = offset + i + 1
+		}
+		bulkPlaceholders += fmt.Sprintf(placeholders, placeholderIndexes...)
 	}
 	return fmt.Sprintf(sql, bulkPlaceholders)
 }
