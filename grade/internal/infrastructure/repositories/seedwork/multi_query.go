@@ -76,6 +76,8 @@ func (q MultiQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.
 	}
 	// TODO: implement me.
 	for i := range q.results {
+		// It seems there is no ability to get lastInsertId for multi insert command.
+		// Thus, it is not possible ke keep the same logic of the clients.
 		q.results[i].Resolve(0, 0)
 	}
 	return r, nil
