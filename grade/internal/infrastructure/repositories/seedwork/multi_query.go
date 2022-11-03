@@ -3,29 +3,41 @@ package seedwork
 import (
 	"fmt"
 	"regexp"
+	"strconv"
 
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-var reInsert = regexp.MustCompile(`VALUES\s*(\((?:'(?:[^']|'')+'|[^)])+\))`)
+var reInsert = regexp.MustCompile(`VALUES\s*(\((?:'(?:[^']|'')*'|[^)])+\))`)
+var reInsertPlaceholder = regexp.MustCompile(`'(?:[^']|'')*'|\$(\d+)`)
 
 func NewMultiInsertQuery() *MultiQuery {
 	r := &MultiQuery{
 		re:      reInsert,
 		replace: "VALUES %s",
-		concat:  ", ",
+		placeholderFactory: func(src string, offset int) string {
+			return reInsertPlaceholder.ReplaceAllStringFunc(src, func(s string) string {
+				if s[:1] == "$" {
+					idx, _ := strconv.Atoi(s[1:])
+					return fmt.Sprintf("$%d", idx+offset)
+				}
+				return s
+			})
+		},
+		concat: ", ",
 	}
 	return r
 }
 
 type MultiQuery struct {
-	sqlTemplate  string
-	placeholders string
-	params       [][]any
-	results      []*DeferredResult
-	re           *regexp.Regexp
-	replace      string
-	concat       string
+	sqlTemplate        string
+	placeholders       string
+	params             [][]any
+	results            []*DeferredResult
+	re                 *regexp.Regexp
+	replace            string
+	placeholderFactory func(src string, offset int) string
+	concat             string
 }
 
 func (q *MultiQuery) sql() string {
@@ -34,7 +46,7 @@ func (q *MultiQuery) sql() string {
 		if i != 0 {
 			bulkPlaceholders += q.concat
 		}
-		bulkPlaceholders += q.placeholders
+		bulkPlaceholders += q.placeholderFactory(q.placeholders, i*len(q.params[i]))
 	}
 	return fmt.Sprintf(q.sqlTemplate, bulkPlaceholders)
 }
