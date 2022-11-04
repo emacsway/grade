@@ -9,6 +9,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork"
 )
 
 type Params [9]any
@@ -25,7 +26,7 @@ func (q EndorsementInsertQuery) sql() string {
 		) VALUES
 		%s
 		ON CONFLICT DO NOTHING`
-	placeholders := `($%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d, $%d)`
+	placeholders := `(?, ?, ?, ?, ?, ?, ?, ?, ?)`
 
 	bulkPlaceholders := ""
 
@@ -33,14 +34,9 @@ func (q EndorsementInsertQuery) sql() string {
 		if i != 0 {
 			bulkPlaceholders += ", "
 		}
-		offset := i * len(q.params[i])
-		placeholderIndexes := make([]any, len(q.params[i]))
-		for i := range placeholderIndexes {
-			placeholderIndexes[i] = offset + i + 1
-		}
-		bulkPlaceholders += fmt.Sprintf(placeholders, placeholderIndexes...)
+		bulkPlaceholders += placeholders
 	}
-	return fmt.Sprintf(sql, bulkPlaceholders)
+	return seedwork.Rebind(fmt.Sprintf(sql, bulkPlaceholders))
 }
 
 func (q EndorsementInsertQuery) flatParams() []any {
