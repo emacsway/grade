@@ -36,13 +36,3 @@ CREATE TABLE endorsement (
     CONSTRAINT endorsement_uniq UNIQUE (tenant_id, recognizer_id, recognizer_version),
     CONSTRAINT endorsement_pk PRIMARY KEY (tenant_id, specialist_id, specialist_version)
 );
-
-CREATE TABLE assignment (
-    tenant_id uuid NOT NULL,
-    specialist_id uuid NOT NULL,
-    specialist_version int NOT NULL,
-    assigned_grade int8 NOT NULL DEFAULT 0,
-    created_at timestamp with time zone NOT NULL,
-    reason      TEXT,
-    CONSTRAINT assignment_pk PRIMARY KEY (tenant_id, specialist_id, specialist_version)
-)
