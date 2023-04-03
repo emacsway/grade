@@ -21,21 +21,7 @@
 
 Сопроводительная методическая информация проекта будет накапливаться [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/index.html).
 
-[Карта контекстов и Event Storming](model) выполнены в нотации [ArchiMate](https://pubs.opengroup.org/architecture/archimate3-doc/)
-
-Для просмотра необходимы [ArchiMateTool](https://www.archimatetool.com/) и плагин [coArchi](https://www.archimatetool.com/plugins/) 
-
 
 ## Contributing
 
 Присоединиться к разработке: https://t.me/emacsway
-
-
-## Сборка
-### Требования
-- golang  1.18+
-- make
-### Основные команды
-- `make tools` - установить все необходимые зависимости
-- `make check` - выполнить юнит-тесты и проверить статанализаторами
-- `make help` - помощь по другим командам
