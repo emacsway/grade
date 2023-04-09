@@ -19,7 +19,7 @@ type ArtifactProposedInsertQuery struct {
 
 func (q ArtifactProposedInsertQuery) sql() string {
 	return `
-		INSERT INTO recognizer
+		INSERT INTO event_log
 		(tenant_id, stream_type, stream_id, stream_position, event_type, event_version, payload, metadata)
 		VALUES
 		($1, $2, $3, $4, $5, $6, $7, $8)`
