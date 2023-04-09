@@ -32,21 +32,26 @@ func (c *QueryCollector) Execute(s infrastructure.DbSessionExecutor) (infrastruc
 	result := &DeferredResult{}
 	var lastInsertId int64
 	var rowsAffected int64
-	for k := range c.multiQueryMap {
-		r, err := c.multiQueryMap[k].Execute(s)
-		if err != nil {
-			return nil, err
+	for len(c.multiQueryMap) > 0 {
+		currentQueryMap := c.multiQueryMap
+		c.multiQueryMap = make(map[string]MultiQuerier)
+		for k := range currentQueryMap {
+			r, err := currentQueryMap[k].Execute(s)
+			if err != nil {
+				return nil, err
+			}
+			rowsAffectedIncrement, err := r.RowsAffected()
+			rowsAffected += rowsAffectedIncrement
+			if err != nil {
+				return nil, err
+			}
+			lastInsertId, err = r.LastInsertId()
+			if err != nil {
+				return nil, err
+			}
+			result.Resolve(rowsAffected, lastInsertId)
+			// Nested queries have got the lastInsertId and can be handled for now
 		}
-		rowsAffectedIncrement, err := r.RowsAffected()
-		rowsAffected += rowsAffectedIncrement
-		if err != nil {
-			return nil, err
-		}
-		lastInsertId, err = r.LastInsertId()
-		if err != nil {
-			return nil, err
-		}
-		result.Resolve(rowsAffected, lastInsertId)
 	}
 	return result, nil
 }
