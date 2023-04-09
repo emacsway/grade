@@ -9,23 +9,22 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/recognizer"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 func TestSpecialistReceiveEndorsement(t *testing.T) {
-	t1 := uuid.ParseSilent("63e8d541-af30-4593-a8ac-761dc268926d")
-	t2 := uuid.ParseSilent("e2d9fcaa-565e-4295-9142-bd69e26581cf")
-	m1 := uuid.ParseSilent("7c4435dc-6b5d-4628-a1f8-596dde6704b6")
-	m2 := uuid.ParseSilent("c8858e26-6bc6-4775-a3bd-084773216b79")
+	t1 := uint(10)
+	m1 := uint(4)
+	t2 := uint(11)
+	m2 := uint(1005)
 	cases := []struct {
-		RecogniserTenantId uuid.Uuid
-		RecogniserMemberId uuid.Uuid
+		RecogniserTenantId uint
+		RecogniserMemberId uint
 		RecognizerGrade    uint8
-		SpecialistTenantId uuid.Uuid
-		SpecialistMemberId uuid.Uuid
+		SpecialistTenantId uint
+		SpecialistMemberId uint
 		SpecialistGrade    uint8
-		ArtifactAuthorId   uuid.Uuid
-		ArtifactTenantId   uuid.Uuid
+		ArtifactAuthorId   uint
+		ArtifactTenantId   uint
 		ExpectedError      error
 	}{
 		{t1, m1, 0, t1, m2, 0, m2, t1, nil},

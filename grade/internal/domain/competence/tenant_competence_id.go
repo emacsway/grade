@@ -2,11 +2,10 @@ package competence
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
-func NewTenantCompetenceId(tenantId, competenceId uuid.Uuid) (TenantCompetenceId, error) {
+func NewTenantCompetenceId(tenantId, competenceId uint) (TenantCompetenceId, error) {
 	tId, err := tenant.NewTenantId(tenantId)
 	if err != nil {
 		return TenantCompetenceId{}, err

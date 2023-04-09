@@ -2,11 +2,10 @@ package member
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
-func NewTenantMemberId(tenantId, memberId uuid.Uuid) (TenantMemberId, error) {
+func NewTenantMemberId(tenantId, memberId uint) (TenantMemberId, error) {
 	tId, err := tenant.NewTenantId(tenantId)
 	if err != nil {
 		return TenantMemberId{}, err

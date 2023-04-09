@@ -1,12 +1,8 @@
 package member
 
-import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
-)
-
 type TenantMemberIdReconstitutor struct {
-	TenantId uuid.Uuid
-	MemberId uuid.Uuid
+	TenantId uint
+	MemberId uint
 }
 
 func (r TenantMemberIdReconstitutor) Reconstitute() (TenantMemberId, error) {

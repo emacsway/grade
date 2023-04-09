@@ -68,6 +68,9 @@ func (f *SpecialistFakeFactory) ReceiveEndorsement(r recognizer.RecognizerFakeFa
 func (f *SpecialistFakeFactory) receiveEndorsement(r recognizer.RecognizerFakeFactory) error {
 	entf := NewReceivedEndorsementFakeFactory(r)
 	entf.Artifact.Id.TenantId = f.Id.TenantId
+	if len(f.ReceivedEndorsements) > 0 {
+		entf.Artifact.Id = f.ReceivedEndorsements[len(f.ReceivedEndorsements)-1].Artifact.Id
+	}
 	entf.Artifact.Id.NextArtifactId()
 	entf.CreatedAt = time.Now()
 	if err := entf.Artifact.AddAuthorId(f.Id); err != nil {

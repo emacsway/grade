@@ -70,11 +70,11 @@ func (c Context) Extract(val any) (driver.Valuer, error) {
 		valTyped.Export(&ex)
 		return ex, nil
 	case member.MemberId:
-		var ex exporters.UuidExporter
+		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return nil, nil
 	case tenant.TenantId:
-		var ex exporters.UuidExporter
+		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return nil, nil
 	case member.TenantMemberId:

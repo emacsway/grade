@@ -30,7 +30,7 @@ func (q *ArtifactProposedInsertQuery) SetId(val artifact.TenantArtifactId) {
 }
 
 func (q *ArtifactProposedInsertQuery) SetTenantId(val tenant.TenantId) {
-	var v exporters.UuidExporter
+	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[0] = v
 }
@@ -40,7 +40,7 @@ func (q *ArtifactProposedInsertQuery) SetStreamType(val string) {
 }
 
 func (q *ArtifactProposedInsertQuery) SetArtifactId(val artifact.ArtifactId) {
-	var v exporters.UuidExporter
+	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[2] = v
 }

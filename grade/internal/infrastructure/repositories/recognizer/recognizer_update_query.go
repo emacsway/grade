@@ -23,7 +23,7 @@ func (q RecognizerUpdateQuery) sql() string {
 			pending_endorsement_count = $6,
 			version = version + 1
 		WHERE
-			tenant_id = $1, member_id=$2, version = $3`
+			tenant_id = $1 AND member_id=$2 AND version = $3`
 }
 
 func (q *RecognizerUpdateQuery) SetId(val member.TenantMemberId) {
@@ -31,13 +31,13 @@ func (q *RecognizerUpdateQuery) SetId(val member.TenantMemberId) {
 }
 
 func (q *RecognizerUpdateQuery) SetTenantId(val tenant.TenantId) {
-	var v exporters.UuidExporter
+	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[0] = v
 }
 
 func (q *RecognizerUpdateQuery) SetMemberId(val member.MemberId) {
-	var v exporters.UuidExporter
+	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v
 }

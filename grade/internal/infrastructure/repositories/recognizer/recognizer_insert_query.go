@@ -28,13 +28,13 @@ func (q *RecognizerInsertQuery) SetId(val member.TenantMemberId) {
 }
 
 func (q *RecognizerInsertQuery) SetTenantId(val tenant.TenantId) {
-	var v exporters.UuidExporter
+	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[0] = v
 }
 
 func (q *RecognizerInsertQuery) SetMemberId(val member.MemberId) {
-	var v exporters.UuidExporter
+	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v
 }

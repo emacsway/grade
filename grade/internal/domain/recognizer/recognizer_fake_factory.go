@@ -5,10 +5,9 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
-var RecognizerMemberIdFakeValue = uuid.ParseSilent("f917dc0a-5b9a-45a9-958d-22885a5e16a7")
+var RecognizerMemberIdFakeValue = uint(1004)
 
 func NewRecognizerFakeFactory() RecognizerFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()

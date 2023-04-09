@@ -2,11 +2,10 @@ package competence
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
-func NewCompetenceId(value uuid.Uuid) (CompetenceId, error) {
-	id, err := identity.NewUuidIdentity(value)
+func NewCompetenceId(value uint) (CompetenceId, error) {
+	id, err := identity.NewIntIdentity(value)
 	if err != nil {
 		return CompetenceId{}, err
 	}
@@ -14,5 +13,5 @@ func NewCompetenceId(value uuid.Uuid) (CompetenceId, error) {
 }
 
 type CompetenceId struct {
-	identity.UuidIdentity
+	identity.IntIdentity
 }

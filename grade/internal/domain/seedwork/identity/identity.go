@@ -1,36 +1,37 @@
 package identity
 
 import (
+	"fmt"
+
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 type Accessable[T any] interface {
 	Value() T
 }
 
-func NewUuidIdentity(value uuid.Uuid) (UuidIdentity, error) {
-	return UuidIdentity{value: value}, nil
+func NewIntIdentity(value uint) (IntIdentity, error) {
+	return IntIdentity{value: value}, nil
 }
 
-type UuidIdentity struct {
-	value uuid.Uuid
+type IntIdentity struct {
+	value uint
 }
 
-func (id UuidIdentity) Equal(other specification.EqualOperand) bool {
-	exportableOther := other.(Accessable[uuid.Uuid])
+func (id IntIdentity) Equal(other specification.EqualOperand) bool {
+	exportableOther := other.(Accessable[uint])
 	return id.value == exportableOther.Value()
 }
 
-func (id UuidIdentity) Export(ex exporters.ExporterSetter[uuid.Uuid]) {
+func (id IntIdentity) Export(ex exporters.ExporterSetter[uint]) {
 	ex.SetState(id.value)
 }
 
-func (id UuidIdentity) Value() uuid.Uuid {
+func (id IntIdentity) Value() uint {
 	return id.value
 }
 
-func (id UuidIdentity) String() string {
-	return id.value.String()
+func (id IntIdentity) String() string {
+	return fmt.Sprintf("%d", id.value)
 }

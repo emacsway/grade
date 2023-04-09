@@ -10,7 +10,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
 	s "github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
 type SomethingCriteria struct {
@@ -28,9 +27,9 @@ type SomethingSpecification struct {
 }
 
 var something = SomethingCriteria{}
-var tId, _ = identity.NewUuidIdentity(uuid.NewUuid())
-var mId, _ = identity.NewUuidIdentity(uuid.NewUuid())
-var sId, _ = identity.NewUuidIdentity(uuid.NewUuid())
+var tId, _ = identity.NewIntIdentity(10)
+var mId, _ = identity.NewIntIdentity(3)
+var sId, _ = identity.NewIntIdentity(3)
 
 func (ss SomethingSpecification) Expression() s.Visitable {
 	return s.Equal(
@@ -104,15 +103,15 @@ type TenantMemberIdExporterSetter interface {
 }
 
 type TenantId struct {
-	identity.UuidIdentity
+	identity.IntIdentity
 }
 
 type MemberId struct {
-	identity.UuidIdentity
+	identity.IntIdentity
 }
 
 type SomethingId struct {
-	identity.UuidIdentity
+	identity.IntIdentity
 }
 
 type TestContext struct {
@@ -167,15 +166,15 @@ func (c TestContext) somethingIdMemberIdPath(prefix string, path ...string) (str
 func (c TestContext) Extract(val any) (driver.Valuer, error) {
 	switch valTyped := val.(type) {
 	case MemberId:
-		var ex exporters.UuidExporter
+		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return ex, nil
 	case TenantId:
-		var ex exporters.UuidExporter
+		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return ex, nil
 	case SomethingId:
-		var ex exporters.UuidExporter
+		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return ex, nil
 	case TenantMemberId:
@@ -235,8 +234,8 @@ func TestSomethingSpecification(t *testing.T) {
 		"something.tenant_id = $1 AND something.member_id = $2 AND something.something_id = $3",
 		sql)
 	assert.Equal(t, []driver.Valuer{
-		exporters.UuidExporter(tId.Value()),
-		exporters.UuidExporter(mId.Value()),
-		exporters.UuidExporter(sId.Value()),
+		exporters.UintExporter(tId.Value()),
+		exporters.UintExporter(mId.Value()),
+		exporters.UintExporter(sId.Value()),
 	}, params)
 }

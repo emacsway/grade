@@ -1,11 +1,10 @@
 package member
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
-var MemberIdFakeValue = uuid.ParseSilent("cf9462cf-51d3-4c0a-b5ef-53b3dfccc7f6")
+var MemberIdFakeValue = uint(3)
 
 func NewTenantMemberIdFakeFactory() TenantMemberIdFakeFactory {
 	return TenantMemberIdFakeFactory{
@@ -15,16 +14,16 @@ func NewTenantMemberIdFakeFactory() TenantMemberIdFakeFactory {
 }
 
 type TenantMemberIdFakeFactory struct {
-	TenantId uuid.Uuid
-	MemberId uuid.Uuid
+	TenantId uint
+	MemberId uint
 }
 
 func (f *TenantMemberIdFakeFactory) NextTenantId() {
-	f.TenantId = uuid.NewUuid()
+	f.TenantId += 1
 }
 
 func (f *TenantMemberIdFakeFactory) NextMemberId() {
-	f.MemberId = uuid.NewUuid()
+	f.MemberId += 1
 }
 
 func (f TenantMemberIdFakeFactory) Create() (TenantMemberId, error) {

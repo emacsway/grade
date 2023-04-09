@@ -2,20 +2,19 @@ package member
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
-func NewTenantMemberIdExporter(tenantId, memberId uuid.Uuid) TenantMemberIdExporter {
+func NewTenantMemberIdExporter(tenantId, memberId uint) TenantMemberIdExporter {
 	return TenantMemberIdExporter{
-		TenantId: exporters.UuidExporter(tenantId),
-		MemberId: exporters.UuidExporter(memberId),
+		TenantId: exporters.UintExporter(tenantId),
+		MemberId: exporters.UintExporter(memberId),
 	}
 }
 
 type TenantMemberIdExporter struct {
-	TenantId exporters.UuidExporter
-	MemberId exporters.UuidExporter
+	TenantId exporters.UintExporter
+	MemberId exporters.UintExporter
 }
 
 func (ex *TenantMemberIdExporter) SetTenantId(val tenant.TenantId) {

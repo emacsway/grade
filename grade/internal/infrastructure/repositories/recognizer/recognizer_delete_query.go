@@ -14,17 +14,17 @@ type RecognizerDeleteQuery struct {
 func (q RecognizerDeleteQuery) sql() string {
 	return `
 		DELETE FROM recognizer
-		WHERE tenant_id = $1, member_id=$2`
+		WHERE tenant_id = $1 AND member_id=$2`
 }
 
 func (q *RecognizerDeleteQuery) SetTenantId(val tenant.TenantId) {
-	var v exporters.UuidExporter
+	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[0] = v
 }
 
 func (q *RecognizerDeleteQuery) SetMemberId(val member.MemberId) {
-	var v exporters.UuidExporter
+	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v
 }
