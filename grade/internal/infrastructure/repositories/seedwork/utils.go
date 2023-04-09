@@ -1,6 +1,7 @@
 package seedwork
 
 import (
+	"database/sql"
 	"fmt"
 	"regexp"
 )
@@ -28,4 +29,8 @@ func RebindReverse(query string) string {
 		}
 		return s
 	})
+}
+
+func NewTestDb() (*sql.DB, error) {
+	return sql.Open("pgx", "postgres://devel:devel@localhost:5432/devel")
 }
