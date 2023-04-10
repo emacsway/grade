@@ -9,7 +9,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
-func TestIdentityEqual(t *testing.T) {
+func TestIntIdentityEqual(t *testing.T) {
 	cases := []struct {
 		Left           uint
 		Right          uint
@@ -33,7 +33,7 @@ func TestIdentityEqual(t *testing.T) {
 	}
 }
 
-func TestIdentityExport(t *testing.T) {
+func TestIntIdentityExport(t *testing.T) {
 	var ex exporters.UintExporter
 	val := uint(3)
 	id, _ := NewIntIdentity(val)

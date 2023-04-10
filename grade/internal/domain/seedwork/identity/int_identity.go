@@ -7,10 +7,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
 
-type Accessable[T any] interface {
-	Value() T
-}
-
 func NewIntIdentity(value uint) (IntIdentity, error) {
 	return IntIdentity{value: value}, nil
 }
