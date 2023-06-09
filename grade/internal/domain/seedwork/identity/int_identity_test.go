@@ -13,8 +13,14 @@ func TestIntIdentityEqual(t *testing.T) {
 	cases := []struct {
 		Left           uint
 		Right          uint
-		ExpectedResult error
-	}{}
+		ExpectedResult bool
+	}{
+		{0, 1, false},
+		{0, 0, false},
+		{1, 1, true},
+		{3, 3, true},
+		{3, 4, false},
+	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			left, err := NewIntIdentity(c.Left)

@@ -1,11 +1,20 @@
 package identity
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
+
+var (
+	ErrNonTransient = errors.New("identity should be transient")
+)
+
+func NewTransientIntIdentity() IntIdentity {
+	return IntIdentity{}
+}
 
 func NewIntIdentity(value uint) (IntIdentity, error) {
 	return IntIdentity{value: value}, nil
@@ -17,7 +26,7 @@ type IntIdentity struct {
 
 func (id IntIdentity) Equal(other specification.EqualOperand) bool {
 	exportableOther := other.(Accessable[uint])
-	return id.value == exportableOther.Value()
+	return !id.IsTransient() && id.value == exportableOther.Value()
 }
 
 func (id IntIdentity) Export(ex exporters.ExporterSetter[uint]) {
@@ -30,4 +39,20 @@ func (id IntIdentity) Value() uint {
 
 func (id IntIdentity) String() string {
 	return fmt.Sprintf("%d", id.value)
+}
+
+func (id IntIdentity) IsTransient() bool {
+	return id.value == 0
+}
+
+func (id IntIdentity) Scan(src any) error {
+	if !id.IsTransient() {
+		return ErrNonTransient
+	}
+	val, ok := src.(uint)
+	if !ok {
+		return errors.New("invalid type")
+	}
+	id.value = val
+	return nil
 }

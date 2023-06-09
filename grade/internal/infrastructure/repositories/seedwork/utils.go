@@ -32,5 +32,5 @@ func RebindReverse(query string) string {
 }
 
 func NewTestDb() (*sql.DB, error) {
-	return sql.Open("pgx", "postgres://devel:devel@localhost:5432/devel")
+	return sql.Open("pgx", "postgres://devel:devel@localhost:5432/devel_grade")
 }
