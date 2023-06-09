@@ -45,7 +45,7 @@ func (id IntIdentity) IsTransient() bool {
 	return id.value == 0
 }
 
-func (id IntIdentity) Scan(src any) error { // Call me in InsertQuery with auto-increment PK
+func (id *IntIdentity) Scan(src any) error { // Call me in InsertQuery with auto-increment PK
 	if !id.IsTransient() {
 		return ErrNonTransient
 	}
