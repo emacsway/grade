@@ -12,6 +12,10 @@ func NewTenantId(value uint) (TenantId, error) {
 	return TenantId{id}, nil
 }
 
+func NewTransientTenantId() TenantId {
+	return TenantId{}
+}
+
 type TenantId struct {
 	identity.IntIdentity
 }

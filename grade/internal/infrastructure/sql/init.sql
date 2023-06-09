@@ -1,5 +1,6 @@
 CREATE TABLE tenant (
         id serial CONSTRAINT tenant_pk PRIMARY KEY,
+        name varchar(150) NOT NULL,
         created_at timestamp with time zone NOT NULL,
         version integer NOT NULL
 );

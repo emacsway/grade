@@ -12,12 +12,12 @@ var (
 	ErrNonTransient = errors.New("identity should be transient")
 )
 
-func NewTransientIntIdentity() IntIdentity {
-	return IntIdentity{}
-}
-
 func NewIntIdentity(value uint) (IntIdentity, error) {
 	return IntIdentity{value: value}, nil
+}
+
+func NewTransientIntIdentity() IntIdentity {
+	return IntIdentity{}
 }
 
 type IntIdentity struct {
