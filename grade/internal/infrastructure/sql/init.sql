@@ -62,7 +62,7 @@ $$;
 CREATE TRIGGER fill_in_member_seq BEFORE INSERT ON member FOR EACH ROW EXECUTE PROCEDURE fill_in_member_seq();
 
 
-CREATE TABLE recognizer (
+CREATE TABLE endorser (
     tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
     member_id bigint NOT NULL REFERENCES member(id) ON DELETE CASCADE,
     grade smallint NOT NULL DEFAULT 0,
@@ -70,7 +70,7 @@ CREATE TABLE recognizer (
     pending_endorsement_count NOT NULL DEFAULT 0,
     created_at timestamp with time zone NOT NULL,
     version integer NOT NULL,
-    CONSTRAINT recognizer_pk PRIMARY KEY (tenant_id, member_id)
+    CONSTRAINT endorser_pk PRIMARY KEY (tenant_id, member_id)
 );
 
 
@@ -80,11 +80,11 @@ CREATE TABLE endorsement (
     specialist_grade smallint NOT NULL DEFAULT 0,
     specialist_version integer NOT NULL,
     artifact_id bigint NOT NULL,
-    recognizer_id bigint NOT NULL REFERENCES member(id) ON DELETE CASCADE,
-    recognizer_grade smallint NOT NULL DEFAULT 0,
-    recognizer_version integer NOT NULL,
+    endorser_id bigint NOT NULL REFERENCES member(id) ON DELETE CASCADE,
+    endorser_grade smallint NOT NULL DEFAULT 0,
+    endorser_version integer NOT NULL,
     created_at timestamp with time zone NOT NULL,
-    CONSTRAINT endorsement_uniq UNIQUE (tenant_id, specialist_id, artifact_id, recognizer_id),
-    CONSTRAINT endorsement_uniq UNIQUE (tenant_id, recognizer_id, recognizer_version),
+    CONSTRAINT endorsement_uniq UNIQUE (tenant_id, specialist_id, artifact_id, endorser_id),
+    CONSTRAINT endorsement_uniq UNIQUE (tenant_id, endorser_id, endorser_version),
     CONSTRAINT endorsement_pk PRIMARY KEY (tenant_id, specialist_id, specialist_version)
 );

@@ -1043,7 +1043,7 @@
         xsi:type="archimate:DiagramModelNote"
         id="id-5e36213e4bf74b6b9f27fffac8f10b7c"
         textAlignment="1"
-        content="tenantId: int&#xA;&#xA;recognizerId: int&#xA;recognizerGrade: int&#xA;recognizerVersion: int&#xA;&#xA;specialistId: int&#xA;specialistGrade: int&#xA;specialistVersion: int&#xA;&#xA;artifactId: int&#xA;createdAt: datetime">
+        content="tenantId: int&#xA;&#xA;endorserId: int&#xA;endorserGrade: int&#xA;endorserVersion: int&#xA;&#xA;specialistId: int&#xA;specialistGrade: int&#xA;specialistVersion: int&#xA;&#xA;artifactId: int&#xA;createdAt: datetime">
       <sourceConnections
           id="id-e5591f06b4fd477c8f5e3eaef007ce31"
           source="id-5e36213e4bf74b6b9f27fffac8f10b7c"

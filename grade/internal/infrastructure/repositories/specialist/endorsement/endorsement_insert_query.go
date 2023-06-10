@@ -22,7 +22,7 @@ func (q EndorsementInsertQuery) sql() string {
 	sql := `
 		INSERT INTO endorsement (
 			tenant_id, specialist_id, specialist_grade, specialist_version,
-			artifact_id, recognizer_id, recognizer_grade, recognizer_version, created_at
+			artifact_id, endorser_id, endorser_grade, endorser_version, created_at
 		) VALUES
 		%s
 		ON CONFLICT DO NOTHING`
@@ -70,19 +70,19 @@ func (q *EndorsementInsertQuery) SetArtifactId(val artifact.TenantArtifactId) {
 	q.addParam(4, v.ArtifactId)
 }
 
-func (q *EndorsementInsertQuery) SetRecognizerId(val member.TenantMemberId) {
+func (q *EndorsementInsertQuery) SetEndorserId(val member.TenantMemberId) {
 	var v member.TenantMemberIdExporter
 	val.Export(&v)
 	q.addParam(5, v.MemberId)
 }
 
-func (q *EndorsementInsertQuery) SetRecognizerGrade(val grade.Grade) {
+func (q *EndorsementInsertQuery) SetEndorserGrade(val grade.Grade) {
 	var v exporters.Uint8Exporter
 	val.Export(&v)
 	q.addParam(6, v)
 }
 
-func (q *EndorsementInsertQuery) SetRecognizerVersion(val uint) {
+func (q *EndorsementInsertQuery) SetEndorserVersion(val uint) {
 	q.addParam(7, val)
 }
 

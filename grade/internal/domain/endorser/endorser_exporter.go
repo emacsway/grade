@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
-type RecognizerExporter struct {
+type EndorserExporter struct {
 	Id                        member.TenantMemberIdExporter
 	Grade                     exporters.Uint8Exporter
 	AvailableEndorsementCount exporters.UintExporter
@@ -17,26 +17,26 @@ type RecognizerExporter struct {
 	CreatedAt                 time.Time
 }
 
-func (ex *RecognizerExporter) SetId(val member.TenantMemberId) {
+func (ex *EndorserExporter) SetId(val member.TenantMemberId) {
 	val.Export(&ex.Id)
 }
 
-func (ex *RecognizerExporter) SetGrade(val grade.Grade) {
+func (ex *EndorserExporter) SetGrade(val grade.Grade) {
 	val.Export(&ex.Grade)
 }
 
-func (ex *RecognizerExporter) SetAvailableEndorsementCount(val EndorsementCount) {
+func (ex *EndorserExporter) SetAvailableEndorsementCount(val EndorsementCount) {
 	val.Export(&ex.AvailableEndorsementCount)
 }
 
-func (ex *RecognizerExporter) SetPendingEndorsementCount(val EndorsementCount) {
+func (ex *EndorserExporter) SetPendingEndorsementCount(val EndorsementCount) {
 	val.Export(&ex.PendingEndorsementCount)
 }
 
-func (ex *RecognizerExporter) SetVersion(val uint) {
+func (ex *EndorserExporter) SetVersion(val uint) {
 	ex.Version = val
 }
 
-func (ex *RecognizerExporter) SetCreatedAt(val time.Time) {
+func (ex *EndorserExporter) SetCreatedAt(val time.Time) {
 	ex.CreatedAt = val
 }

@@ -7,9 +7,9 @@ import (
 	"github.com/hashicorp/go-multierror"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
@@ -18,22 +18,22 @@ import (
 
 var (
 	ErrCrossTenantEndorsement = errors.New(
-		"recognizer can't endorse cross-tenant members",
+		"endorser can't endorse cross-tenant members",
 	)
 	ErrCrossTenantArtifact = errors.New(
-		"recognizer can't endorse for cross-tenant artifact",
+		"endorser can't endorse for cross-tenant artifact",
 	)
 	ErrNotAuthor = errors.New(
 		"only author of the artifact can be endorsed",
 	)
 	ErrEndorsementOneself = errors.New(
-		"recognizer can't endorse himself",
+		"endorser can't endorse himself",
 	)
 	ErrLowerGradeEndorses = errors.New(
 		"it is allowed to receive endorsements only from members with equal or higher grade",
 	)
 	ErrAlreadyEndorsed = errors.New(
-		"this artifact has already been endorsed by the recognizer",
+		"this artifact has already been endorsed by the endorser",
 	)
 )
 
@@ -60,18 +60,18 @@ type Specialist struct {
 	aggregate.VersionedAggregate
 }
 
-func (s *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact, t time.Time) error {
-	err := s.canReceiveEndorsement(r, a)
+func (s *Specialist) ReceiveEndorsement(e endorser.Endorser, a artifact.Artifact, t time.Time) error {
+	err := s.canReceiveEndorsement(e, a)
 	if err != nil {
 		return err
 	}
-	ent, err := endorsement.NewEndorsement(s.id, s.grade, s.Version(), a.Id(), r.Id(), r.Grade(), r.Version(), t)
+	ent, err := endorsement.NewEndorsement(s.id, s.grade, s.Version(), a.Id(), e.Id(), e.Grade(), e.Version(), t)
 	if err != nil {
 		return err
 	}
 	s.receivedEndorsements = append(s.receivedEndorsements, ent)
 	s.eventive.AddDomainEvent(events.NewEndorsementReceived(
-		s.id, s.grade, s.Version(), r.Id(), r.Grade(), s.Version(), a.Id(), t,
+		s.id, s.grade, s.Version(), e.Id(), e.Grade(), s.Version(), a.Id(), t,
 	))
 	err = s.actualizeGrade(t)
 	if err != nil {
@@ -80,17 +80,17 @@ func (s *Specialist) ReceiveEndorsement(r recognizer.Recognizer, a artifact.Arti
 	return nil
 }
 
-func (s Specialist) canReceiveEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
-	err := r.CanCompleteEndorsement()
+func (s Specialist) canReceiveEndorsement(e endorser.Endorser, a artifact.Artifact) error {
+	err := e.CanCompleteEndorsement()
 	if err != nil {
 		return err
 	}
-	return s.canBeEndorsed(r, a)
+	return s.canBeEndorsed(e, a)
 }
 
-func (s Specialist) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) error {
+func (s Specialist) canBeEndorsed(e endorser.Endorser, a artifact.Artifact) error {
 	var errs error
-	if !r.Id().TenantId().Equal(s.id.TenantId()) {
+	if !e.Id().TenantId().Equal(s.id.TenantId()) {
 		errs = multierror.Append(errs, ErrCrossTenantEndorsement)
 	}
 	if !a.Id().TenantId().Equal(s.id.TenantId()) {
@@ -99,14 +99,14 @@ func (s Specialist) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) 
 	if !a.HasAuthor(s.id) {
 		errs = multierror.Append(errs, ErrNotAuthor)
 	}
-	if r.Id().Equal(s.id) {
+	if e.Id().Equal(s.id) {
 		errs = multierror.Append(errs, ErrEndorsementOneself)
 	}
-	if r.Grade().LessThan(s.grade) {
+	if e.Grade().LessThan(s.grade) {
 		errs = multierror.Append(errs, ErrLowerGradeEndorses)
 	}
 	for i := range s.receivedEndorsements {
-		if s.receivedEndorsements[i].IsEndorsedBy(r.Id(), a.Id()) {
+		if s.receivedEndorsements[i].IsEndorsedBy(e.Id(), a.Id()) {
 			errs = multierror.Append(errs, ErrAlreadyEndorsed)
 			break
 		}
@@ -114,12 +114,12 @@ func (s Specialist) canBeEndorsed(r recognizer.Recognizer, a artifact.Artifact) 
 	return errs
 }
 
-func (s Specialist) CanBeginEndorsement(r recognizer.Recognizer, a artifact.Artifact) error {
-	err := r.CanReserveEndorsement()
+func (s Specialist) CanBeginEndorsement(e endorser.Endorser, a artifact.Artifact) error {
+	err := e.CanReserveEndorsement()
 	if err != nil {
 		return err
 	}
-	return s.canBeEndorsed(r, a)
+	return s.canBeEndorsed(e, a)
 }
 
 func (s *Specialist) actualizeGrade(t time.Time) error {

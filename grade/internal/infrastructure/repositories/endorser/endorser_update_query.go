@@ -1,23 +1,23 @@
-package recognizer
+package endorser
 
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-type RecognizerUpdateQuery struct {
+type EndorserUpdateQuery struct {
 	params [7]any
 }
 
-func (q RecognizerUpdateQuery) sql() string {
+func (q EndorserUpdateQuery) sql() string {
 	return `
-		UPDATE recognizer SET
+		UPDATE endorser SET
 			grade = $4,
 			available_endorsement_count = $5,
 			pending_endorsement_count = $6,
@@ -26,48 +26,48 @@ func (q RecognizerUpdateQuery) sql() string {
 			tenant_id = $1 AND member_id=$2 AND version = $3`
 }
 
-func (q *RecognizerUpdateQuery) SetId(val member.TenantMemberId) {
+func (q *EndorserUpdateQuery) SetId(val member.TenantMemberId) {
 	val.Export(q)
 }
 
-func (q *RecognizerUpdateQuery) SetTenantId(val tenant.TenantId) {
+func (q *EndorserUpdateQuery) SetTenantId(val tenant.TenantId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[0] = v
 }
 
-func (q *RecognizerUpdateQuery) SetMemberId(val member.MemberId) {
+func (q *EndorserUpdateQuery) SetMemberId(val member.MemberId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v
 }
 
-func (q *RecognizerUpdateQuery) SetGrade(val grade.Grade) {
+func (q *EndorserUpdateQuery) SetGrade(val grade.Grade) {
 	var v exporters.Uint8Exporter
 	val.Export(&v)
 	q.params[2] = v
 }
 
-func (q *RecognizerUpdateQuery) SetAvailableEndorsementCount(val recognizer.EndorsementCount) {
+func (q *EndorserUpdateQuery) SetAvailableEndorsementCount(val endorser.EndorsementCount) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[3] = v
 }
 
-func (q *RecognizerUpdateQuery) SetPendingEndorsementCount(val recognizer.EndorsementCount) {
+func (q *EndorserUpdateQuery) SetPendingEndorsementCount(val endorser.EndorsementCount) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[4] = v
 }
 
-func (q *RecognizerUpdateQuery) SetVersion(val uint) {
+func (q *EndorserUpdateQuery) SetVersion(val uint) {
 	q.params[5] = val
 }
 
-func (q *RecognizerUpdateQuery) SetCreatedAt(val time.Time) {
+func (q *EndorserUpdateQuery) SetCreatedAt(val time.Time) {
 	q.params[6] = val
 }
 
-func (q *RecognizerUpdateQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *EndorserUpdateQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

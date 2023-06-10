@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
-	"github.com/emacsway/grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/grade/grade/internal/domain/endorser"
 )
 
 func TestSpecialistReceiveEndorsement(t *testing.T) {
@@ -19,7 +19,7 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 	cases := []struct {
 		RecogniserTenantId uint
 		RecogniserMemberId uint
-		RecognizerGrade    uint8
+		EndorserGrade      uint8
 		SpecialistTenantId uint
 		SpecialistMemberId uint
 		SpecialistGrade    uint8
@@ -38,14 +38,14 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			sf := NewSpecialistFakeFactory()
-			rf := recognizer.NewRecognizerFakeFactory()
+			rf := endorser.NewEndorserFakeFactory()
 			af := artifact.NewArtifactFakeFactory()
 			sf.Id.TenantId = c.SpecialistTenantId
 			sf.Id.MemberId = c.SpecialistMemberId
 			sf.Grade = c.SpecialistGrade
 			rf.Id.TenantId = c.RecogniserTenantId
 			rf.Id.MemberId = c.RecogniserMemberId
-			rf.Grade = c.RecognizerGrade
+			rf.Grade = c.EndorserGrade
 			s, err := sf.Create()
 			if err != nil {
 				t.Error(err)
@@ -83,44 +83,44 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 
 func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 	cases := []struct {
-		Prepare       func(*recognizer.Recognizer) error
+		Prepare       func(*endorser.Endorser) error
 		ExpectedError error
 	}{
-		{func(r *recognizer.Recognizer) error {
-			return r.ReserveEndorsement()
+		{func(e *endorser.Endorser) error {
+			return e.ReserveEndorsement()
 		}, nil},
-		{func(r *recognizer.Recognizer) error {
+		{func(e *endorser.Endorser) error {
 			return nil
-		}, recognizer.ErrNoEndorsementReservation},
-		{func(r *recognizer.Recognizer) error {
-			for i := uint(0); i < recognizer.YearlyEndorsementCount; i++ {
-				err := r.ReserveEndorsement()
+		}, endorser.ErrNoEndorsementReservation},
+		{func(e *endorser.Endorser) error {
+			for i := uint(0); i < endorser.YearlyEndorsementCount; i++ {
+				err := e.ReserveEndorsement()
 				if err != nil {
 					return err
 				}
-				err = r.CompleteEndorsement()
+				err = e.CompleteEndorsement()
 				if err != nil {
 					return err
 				}
 			}
 			return nil
-		}, recognizer.ErrNoEndorsementReservation},
-		{func(r *recognizer.Recognizer) error {
-			err := r.ReserveEndorsement()
+		}, endorser.ErrNoEndorsementReservation},
+		{func(e *endorser.Endorser) error {
+			err := e.ReserveEndorsement()
 			if err != nil {
 				return err
 			}
-			err = r.ReleaseEndorsementReservation()
+			err = e.ReleaseEndorsementReservation()
 			if err != nil {
 				return err
 			}
 			return nil
-		}, recognizer.ErrNoEndorsementReservation},
+		}, endorser.ErrNoEndorsementReservation},
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			sf := NewSpecialistFakeFactory()
-			rf := recognizer.NewRecognizerFakeFactory()
+			rf := endorser.NewEndorserFakeFactory()
 			af := artifact.NewArtifactFakeFactory()
 			if err := af.AddAuthorId(sf.Id); err != nil {
 				t.Error(err)

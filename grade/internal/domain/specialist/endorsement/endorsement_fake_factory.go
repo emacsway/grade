@@ -4,22 +4,22 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/recognizer"
 )
 
 func NewEndorsementFakeFactory() EndorsementFakeFactory {
-	recognizerIdFactory := member.NewTenantMemberIdFakeFactory()
-	recognizerIdFactory.MemberId = recognizer.RecognizerMemberIdFakeValue
+	endorserIdFactory := member.NewTenantMemberIdFakeFactory()
+	endorserIdFactory.MemberId = endorser.EndorserMemberIdFakeValue
 	return EndorsementFakeFactory{
 		SpecialistId:      member.NewTenantMemberIdFakeFactory(),
 		SpecialistGrade:   1,
 		SpecialistVersion: 5,
 		ArtifactId:        artifact.NewTenantArtifactIdFakeFactory(),
-		RecognizerId:      recognizerIdFactory,
-		RecognizerGrade:   2,
-		RecognizerVersion: 3,
+		EndorserId:        endorserIdFactory,
+		EndorserGrade:     2,
+		EndorserVersion:   3,
 		CreatedAt:         time.Now(),
 	}
 }
@@ -29,9 +29,9 @@ type EndorsementFakeFactory struct {
 	SpecialistGrade   uint8
 	SpecialistVersion uint
 	ArtifactId        artifact.TenantArtifactIdFakeFactory
-	RecognizerId      member.TenantMemberIdFakeFactory
-	RecognizerGrade   uint8
-	RecognizerVersion uint
+	EndorserId        member.TenantMemberIdFakeFactory
+	EndorserGrade     uint8
+	EndorserVersion   uint
 	CreatedAt         time.Time
 }
 
@@ -48,16 +48,16 @@ func (f EndorsementFakeFactory) Create() (Endorsement, error) {
 	if err != nil {
 		return Endorsement{}, err
 	}
-	recognizerId, err := f.RecognizerId.Create()
+	endorserId, err := f.EndorserId.Create()
 	if err != nil {
 		return Endorsement{}, err
 	}
-	recognizerGrade, err := grade.DefaultConstructor(f.RecognizerGrade)
+	endorserGrade, err := grade.DefaultConstructor(f.EndorserGrade)
 	if err != nil {
 		return Endorsement{}, err
 	}
 	return NewEndorsement(
 		specialistId, specialistGrade, f.SpecialistVersion, artifactId,
-		recognizerId, recognizerGrade, f.RecognizerVersion, f.CreatedAt,
+		endorserId, endorserGrade, f.EndorserVersion, f.CreatedAt,
 	)
 }

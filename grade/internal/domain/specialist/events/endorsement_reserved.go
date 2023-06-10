@@ -9,9 +9,9 @@ import (
 )
 
 func NewEndorsementReceived(
-	recognizerId member.TenantMemberId,
-	recognizerGrade grade.Grade,
-	recognizerVersion uint,
+	endorserId member.TenantMemberId,
+	endorserGrade grade.Grade,
+	endorserVersion uint,
 	specialistId member.TenantMemberId,
 	specialistGrade grade.Grade,
 	specialistVersion uint,
@@ -19,9 +19,9 @@ func NewEndorsementReceived(
 	createdAt time.Time,
 ) EndorsementReceived {
 	return EndorsementReceived{
-		recognizerId:      recognizerId,
-		recognizerGrade:   recognizerGrade,
-		recognizerVersion: recognizerVersion,
+		endorserId:        endorserId,
+		endorserGrade:     endorserGrade,
+		endorserVersion:   endorserVersion,
 		specialistId:      specialistId,
 		specialistGrade:   specialistGrade,
 		specialistVersion: specialistVersion,
@@ -31,9 +31,9 @@ func NewEndorsementReceived(
 }
 
 type EndorsementReceived struct {
-	recognizerId      member.TenantMemberId
-	recognizerGrade   grade.Grade
-	recognizerVersion uint
+	endorserId        member.TenantMemberId
+	endorserGrade     grade.Grade
+	endorserVersion   uint
 	specialistId      member.TenantMemberId
 	specialistGrade   grade.Grade
 	specialistVersion uint
@@ -41,16 +41,16 @@ type EndorsementReceived struct {
 	createdAt         time.Time
 }
 
-func (e EndorsementReceived) RecognizerId() member.TenantMemberId {
-	return e.recognizerId
+func (e EndorsementReceived) EndorserId() member.TenantMemberId {
+	return e.endorserId
 }
 
-func (e EndorsementReceived) RecognizerGrade() grade.Grade {
-	return e.recognizerGrade
+func (e EndorsementReceived) EndorserGrade() grade.Grade {
+	return e.endorserGrade
 }
 
-func (e EndorsementReceived) RecognizerVersion() uint {
-	return e.recognizerVersion
+func (e EndorsementReceived) EndorserVersion() uint {
+	return e.endorserVersion
 }
 
 func (e EndorsementReceived) SpecialistId() member.TenantMemberId {

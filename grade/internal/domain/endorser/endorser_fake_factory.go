@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"time"
@@ -7,30 +7,30 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 )
 
-var RecognizerMemberIdFakeValue = uint(1004)
+var EndorserMemberIdFakeValue = uint(1004)
 
-func NewRecognizerFakeFactory() RecognizerFakeFactory {
+func NewEndorserFakeFactory() EndorserFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
-	idFactory.MemberId = RecognizerMemberIdFakeValue
-	return RecognizerFakeFactory{
+	idFactory.MemberId = EndorserMemberIdFakeValue
+	return EndorserFakeFactory{
 		Id:        idFactory,
 		Grade:     1,
 		CreatedAt: time.Now(),
 	}
 }
 
-type RecognizerFakeFactory struct {
+type EndorserFakeFactory struct {
 	Id        member.TenantMemberIdFakeFactory
 	Grade     uint8
 	CreatedAt time.Time
 }
 
-func (f RecognizerFakeFactory) Create() (*Recognizer, error) {
+func (f EndorserFakeFactory) Create() (*Endorser, error) {
 	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
 	}
-	r, err := NewRecognizer(id, f.CreatedAt)
+	r, err := NewEndorser(id, f.CreatedAt)
 	if err != nil {
 		return nil, err
 	}

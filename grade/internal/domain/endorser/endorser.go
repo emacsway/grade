@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"errors"
@@ -17,10 +17,10 @@ var (
 
 // FIXME: Move this constructor to tenant aggregate
 
-func NewRecognizer(
+func NewEndorser(
 	id member.TenantMemberId,
 	createdAt time.Time,
-) (*Recognizer, error) {
+) (*Endorser, error) {
 	availableCount, err := NewEndorsementCount(YearlyEndorsementCount)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func NewRecognizer(
 		return nil, err
 	}
 	zeroGrade, _ := grade.NewGradeFactory(grade.MaxGradeValue, grade.GradeMatrix)(0)
-	return &Recognizer{
+	return &Endorser{
 		id:                        id,
 		grade:                     zeroGrade,
 		availableEndorsementCount: availableCount,
@@ -44,7 +44,7 @@ func NewRecognizer(
 // - https://martinfowler.com/eaaDev/TemporalObject.html
 // to track grade by version?
 
-type Recognizer struct { // TODO: rename to Recognitory | Endorser | Originator | Sender (to Receiver)
+type Endorser struct { // TODO: rename to Recognitory | Endorser | Originator | Sender (to Receiver)
 	id                        member.TenantMemberId
 	grade                     grade.Grade
 	availableEndorsementCount EndorsementCount
@@ -54,21 +54,21 @@ type Recognizer struct { // TODO: rename to Recognitory | Endorser | Originator 
 	aggregate.VersionedAggregate
 }
 
-func (r Recognizer) Id() member.TenantMemberId {
-	return r.id
+func (e Endorser) Id() member.TenantMemberId {
+	return e.id
 }
 
-func (r Recognizer) Grade() grade.Grade {
-	return r.grade
+func (e Endorser) Grade() grade.Grade {
+	return e.grade
 }
 
-func (r *Recognizer) SetGrade(val grade.Grade) error {
-	r.grade = val
+func (e *Endorser) SetGrade(val grade.Grade) error {
+	e.grade = val
 	return nil
 }
 
-func (r Recognizer) CanReserveEndorsement() error {
-	if !(r.availableEndorsementCount > r.pendingEndorsementCount) {
+func (e Endorser) CanReserveEndorsement() error {
+	if !(e.availableEndorsementCount > e.pendingEndorsementCount) {
 		return ErrEndorsementReservationExceeded
 	}
 	return nil
@@ -77,64 +77,64 @@ func (r Recognizer) CanReserveEndorsement() error {
 // TODO: Use Specification pattern instead?
 // https://enterprisecraftsmanship.com/posts/specification-pattern-always-valid-domain-model/
 
-func (r Recognizer) CanCompleteEndorsement() error {
-	if r.pendingEndorsementCount == 0 {
+func (e Endorser) CanCompleteEndorsement() error {
+	if e.pendingEndorsementCount == 0 {
 		return ErrNoEndorsementReservation
 	}
-	if r.availableEndorsementCount == 0 {
+	if e.availableEndorsementCount == 0 {
 		return ErrNoEndorsementAvailable
 	}
-	if r.availableEndorsementCount < r.pendingEndorsementCount {
+	if e.availableEndorsementCount < e.pendingEndorsementCount {
 		return ErrEndorsementReservationExceeded
 	}
 	return nil
 }
 
-func (r *Recognizer) ReserveEndorsement() error {
-	err := r.CanReserveEndorsement()
+func (e *Endorser) ReserveEndorsement() error {
+	err := e.CanReserveEndorsement()
 	if err != nil {
 		return err
 	}
-	r.pendingEndorsementCount += 1
+	e.pendingEndorsementCount += 1
 	return nil
 }
 
-func (r *Recognizer) ReleaseEndorsementReservation() error {
-	if r.pendingEndorsementCount == 0 {
+func (e *Endorser) ReleaseEndorsementReservation() error {
+	if e.pendingEndorsementCount == 0 {
 		return ErrNoEndorsementReservation
 	}
-	r.pendingEndorsementCount -= 1
+	e.pendingEndorsementCount -= 1
 	return nil
 }
 
-func (r *Recognizer) CompleteEndorsement() error {
-	err := r.CanCompleteEndorsement()
+func (e *Endorser) CompleteEndorsement() error {
+	err := e.CanCompleteEndorsement()
 	if err != nil {
 		return err
 	}
-	r.availableEndorsementCount -= 1
-	r.pendingEndorsementCount -= 1
+	e.availableEndorsementCount -= 1
+	e.pendingEndorsementCount -= 1
 	return nil
 }
 
-func (r Recognizer) PendingDomainEvents() []aggregate.DomainEvent {
-	return r.eventive.PendingDomainEvents()
+func (e Endorser) PendingDomainEvents() []aggregate.DomainEvent {
+	return e.eventive.PendingDomainEvents()
 }
 
-func (r *Recognizer) ClearPendingDomainEvents() {
-	r.eventive.ClearPendingDomainEvents()
+func (e *Endorser) ClearPendingDomainEvents() {
+	e.eventive.ClearPendingDomainEvents()
 }
 
-func (r Recognizer) Export(ex RecognizerExporterSetter) {
-	ex.SetId(r.id)
-	ex.SetGrade(r.grade)
-	ex.SetAvailableEndorsementCount(r.availableEndorsementCount)
-	ex.SetPendingEndorsementCount(r.pendingEndorsementCount)
-	ex.SetVersion(r.Version())
-	ex.SetCreatedAt(r.createdAt)
+func (e Endorser) Export(ex EndorserExporterSetter) {
+	ex.SetId(e.id)
+	ex.SetGrade(e.grade)
+	ex.SetAvailableEndorsementCount(e.availableEndorsementCount)
+	ex.SetPendingEndorsementCount(e.pendingEndorsementCount)
+	ex.SetVersion(e.Version())
+	ex.SetCreatedAt(e.createdAt)
 }
 
-type RecognizerExporterSetter interface {
+type EndorserExporterSetter interface {
 	SetId(member.TenantMemberId)
 	SetGrade(grade.Grade)
 	SetAvailableEndorsementCount(EndorsementCount)

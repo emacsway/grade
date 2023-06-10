@@ -45,7 +45,7 @@ func TestTenantArtifactIdEqual(t *testing.T) {
 	}
 }
 
-func TestRecognizerExport(t *testing.T) {
+func TestEndorserExport(t *testing.T) {
 	var actualExporter TenantArtifactIdExporter
 	f := NewTenantArtifactIdFakeFactory()
 	cid, err := f.Create()

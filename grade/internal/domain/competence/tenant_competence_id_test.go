@@ -45,7 +45,7 @@ func TestTenantCompetenceIdEqual(t *testing.T) {
 	}
 }
 
-func TestRecognizerExport(t *testing.T) {
+func TestEndorserExport(t *testing.T) {
 	var actualExporter TenantCompetenceIdExporter
 	f := NewTenantCompetenceIdFakeFactory()
 	cid, err := f.Create()

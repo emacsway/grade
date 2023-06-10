@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
@@ -7,28 +7,28 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-type RecognizerDeleteQuery struct {
+type EndorserDeleteQuery struct {
 	params [2]any
 }
 
-func (q RecognizerDeleteQuery) sql() string {
+func (q EndorserDeleteQuery) sql() string {
 	return `
-		DELETE FROM recognizer
+		DELETE FROM endorser
 		WHERE tenant_id = $1 AND member_id=$2`
 }
 
-func (q *RecognizerDeleteQuery) SetTenantId(val tenant.TenantId) {
+func (q *EndorserDeleteQuery) SetTenantId(val tenant.TenantId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[0] = v
 }
 
-func (q *RecognizerDeleteQuery) SetMemberId(val member.MemberId) {
+func (q *EndorserDeleteQuery) SetMemberId(val member.MemberId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v
 }
 
-func (q *RecognizerDeleteQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *EndorserDeleteQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

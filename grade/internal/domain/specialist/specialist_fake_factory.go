@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/recognizer"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
@@ -36,11 +36,11 @@ func (f *SpecialistFakeFactory) achieveGrade() error {
 		return err
 	}
 	for currentGrade.LessThan(targetGrade) {
-		rf := recognizer.NewRecognizerFakeFactory()
+		rf := endorser.NewEndorserFakeFactory()
 		rf.Id.TenantId = f.Id.TenantId
-		recognizerGrade, _ := currentGrade.Next()
+		endorserGrade, _ := currentGrade.Next()
 		gradeExporter := exporters.Uint8Exporter(0)
-		recognizerGrade.Export(&gradeExporter)
+		endorserGrade.Export(&gradeExporter)
 		rf.Grade = uint8(gradeExporter)
 		var endorsementCount uint = 0
 		for !currentGrade.NextGradeAchieved(endorsementCount) {
@@ -57,16 +57,16 @@ func (f *SpecialistFakeFactory) achieveGrade() error {
 	return nil
 }
 
-func (f *SpecialistFakeFactory) ReceiveEndorsement(r recognizer.RecognizerFakeFactory) error {
+func (f *SpecialistFakeFactory) ReceiveEndorsement(e endorser.EndorserFakeFactory) error {
 	err := f.achieveGrade()
 	if err != nil {
 		return err
 	}
-	return f.receiveEndorsement(r)
+	return f.receiveEndorsement(e)
 }
 
-func (f *SpecialistFakeFactory) receiveEndorsement(r recognizer.RecognizerFakeFactory) error {
-	entf := NewReceivedEndorsementFakeFactory(r)
+func (f *SpecialistFakeFactory) receiveEndorsement(e endorser.EndorserFakeFactory) error {
+	entf := NewReceivedEndorsementFakeFactory(e)
 	entf.Artifact.Id.TenantId = f.Id.TenantId
 	if len(f.ReceivedEndorsements) > 0 {
 		entf.Artifact.Id = f.ReceivedEndorsements[len(f.ReceivedEndorsements)-1].Artifact.Id
@@ -94,7 +94,7 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 		return nil, err
 	}
 	for i := range f.ReceivedEndorsements {
-		r, err := f.ReceivedEndorsements[i].Recognizer.Create()
+		r, err := f.ReceivedEndorsements[i].Endorser.Create()
 		if err != nil {
 			return nil, err
 		}
@@ -115,18 +115,18 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 	return s, nil
 }
 
-func NewReceivedEndorsementFakeFactory(r recognizer.RecognizerFakeFactory) ReceivedEndorsementFakeFactory {
+func NewReceivedEndorsementFakeFactory(e endorser.EndorserFakeFactory) ReceivedEndorsementFakeFactory {
 	artifactFactory := artifact.NewArtifactFakeFactory()
 	artifactFactory.Id.NextArtifactId()
 	return ReceivedEndorsementFakeFactory{
-		Recognizer: r,
-		Artifact:   artifactFactory,
-		CreatedAt:  time.Now(),
+		Endorser:  e,
+		Artifact:  artifactFactory,
+		CreatedAt: time.Now(),
 	}
 }
 
 type ReceivedEndorsementFakeFactory struct {
-	Recognizer recognizer.RecognizerFakeFactory
-	Artifact   artifact.ArtifactFakeFactory
-	CreatedAt  time.Time
+	Endorser  endorser.EndorserFakeFactory
+	Artifact  artifact.ArtifactFakeFactory
+	CreatedAt time.Time
 }

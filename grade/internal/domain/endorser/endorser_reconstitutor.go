@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"time"
@@ -8,7 +8,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
-type RecognizerReconstitutor struct {
+type EndorserReconstitutor struct {
 	Id                        member.TenantMemberIdReconstitutor
 	Grade                     uint8
 	AvailableEndorsementCount uint
@@ -17,7 +17,7 @@ type RecognizerReconstitutor struct {
 	Version                   uint
 }
 
-func (r RecognizerReconstitutor) Reconstitute() (*Recognizer, error) {
+func (r EndorserReconstitutor) Reconstitute() (*Endorser, error) {
 	// Set here TenantId to other composite FK.
 	id, err := r.Id.Reconstitute()
 	if err != nil {
@@ -35,7 +35,7 @@ func (r RecognizerReconstitutor) Reconstitute() (*Recognizer, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Recognizer{
+	return &Endorser{
 		id:                        id,
 		grade:                     g,
 		availableEndorsementCount: availableEndorsementCount,

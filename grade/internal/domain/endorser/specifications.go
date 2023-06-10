@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"fmt"
@@ -6,47 +6,47 @@ import (
 	s "github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
 
-type RecognizerCriteria struct{}
+type EndorserCriteria struct{}
 
-func (r RecognizerCriteria) availableEndorsementCount() s.FieldNode {
-	return s.Field(r.obj(), "availableEndorsementCount")
+func (c EndorserCriteria) availableEndorsementCount() s.FieldNode {
+	return s.Field(c.obj(), "availableEndorsementCount")
 }
 
-func (r RecognizerCriteria) pendingEndorsementCount() s.FieldNode {
-	return s.Field(r.obj(), "pendingEndorsementCount")
+func (c EndorserCriteria) pendingEndorsementCount() s.FieldNode {
+	return s.Field(c.obj(), "pendingEndorsementCount")
 }
 
-func (r RecognizerCriteria) obj() s.ObjectNode {
-	return s.Object(s.EmptyObject(), "recognizer")
+func (c EndorserCriteria) obj() s.ObjectNode {
+	return s.Object(s.EmptyObject(), "endorser")
 }
 
-var recognizer = RecognizerCriteria{}
+var endorser = EndorserCriteria{}
 
-type RecognizerCanCompleteEndorsementSpecification struct {
+type EndorserCanCompleteEndorsementSpecification struct {
 }
 
-func (r RecognizerCanCompleteEndorsementSpecification) Expression() s.Visitable {
+func (e EndorserCanCompleteEndorsementSpecification) Expression() s.Visitable {
 	return s.And(
 		s.NotEqual(
-			recognizer.availableEndorsementCount(),
+			endorser.availableEndorsementCount(),
 			s.Value(EndorsementCount(0)),
 		),
 		s.NotEqual(
-			recognizer.pendingEndorsementCount(),
+			endorser.pendingEndorsementCount(),
 			s.Value(EndorsementCount(0)),
 		),
 		s.GreaterThanEqual(
-			recognizer.availableEndorsementCount(),
-			recognizer.pendingEndorsementCount(),
+			endorser.availableEndorsementCount(),
+			endorser.pendingEndorsementCount(),
 		),
 	)
 }
 
-func (r RecognizerCanCompleteEndorsementSpecification) IsSatisfiedBy(obj Recognizer) (bool, error) {
+func (e EndorserCanCompleteEndorsementSpecification) IsSatisfiedBy(obj Endorser) (bool, error) {
 	v := s.NewEvaluateVisitor(Context{
-		recognizer: obj,
+		endorser: obj,
 	})
-	err := r.Expression().Accept(v)
+	err := e.Expression().Accept(v)
 	if err != nil {
 		return false, err
 	}
@@ -54,19 +54,19 @@ func (r RecognizerCanCompleteEndorsementSpecification) IsSatisfiedBy(obj Recogni
 }
 
 type Context struct {
-	recognizer Recognizer
+	endorser Endorser
 }
 
 func (c Context) ValuesByPath(path ...string) ([]any, error) {
 	switch path[0] {
-	case "recognizer":
-		return c.recognizerPath(c.recognizer, path[1:]...)
+	case "endorser":
+		return c.endorserPath(c.endorser, path[1:]...)
 	default:
 		return []any{}, fmt.Errorf("can't get object \"%s\"", path[0])
 	}
 }
 
-func (c Context) recognizerPath(obj Recognizer, path ...string) ([]any, error) {
+func (c Context) endorserPath(obj Endorser, path ...string) ([]any, error) {
 	switch path[0] {
 	case "availableEndorsementCount":
 		return []any{obj.availableEndorsementCount}, nil

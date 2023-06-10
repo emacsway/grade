@@ -1,7 +1,7 @@
 <archimate:AggregationRelationship
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:archimate="http://www.archimatetool.com/archimate"
-    name="recognizer (has one)"
+    name="endorser (has one)"
     id="id-5e82a96795db4cb199458f9bb6b1df2e">
   <source
       xsi:type="archimate:BusinessObject"

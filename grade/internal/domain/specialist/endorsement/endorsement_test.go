@@ -31,8 +31,8 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 	f := NewEndorsementFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			f.RecognizerId.MemberId = c.RecogniserId
-			rId, err := member.NewTenantMemberId(f.RecognizerId.TenantId, c.TestRecogniserId)
+			f.EndorserId.MemberId = c.RecogniserId
+			rId, err := member.NewTenantMemberId(f.EndorserId.TenantId, c.TestRecogniserId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -59,7 +59,7 @@ func TestEndorsementWeight(t *testing.T) {
 		for j := i; j <= grade.MaxGradeValue; j++ {
 			t.Run(fmt.Sprintf("Case i=%d j=%d", i, j), func(t *testing.T) {
 				var expectedWeight Weight = 1
-				f.RecognizerGrade = j
+				f.EndorserGrade = j
 				f.SpecialistGrade = i
 				ent, err := f.Create()
 				if err != nil {
@@ -85,9 +85,9 @@ func TestEndorsementExport(t *testing.T) {
 		SpecialistGrade:   exporters.Uint8Exporter(f.SpecialistGrade),
 		SpecialistVersion: f.SpecialistVersion,
 		ArtifactId:        artifact.NewTenantArtifactIdExporter(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId),
-		RecognizerId:      member.NewTenantMemberIdExporter(f.RecognizerId.TenantId, f.RecognizerId.MemberId),
-		RecognizerGrade:   exporters.Uint8Exporter(f.RecognizerGrade),
-		RecognizerVersion: f.RecognizerVersion,
+		EndorserId:        member.NewTenantMemberIdExporter(f.EndorserId.TenantId, f.EndorserId.MemberId),
+		EndorserGrade:     exporters.Uint8Exporter(f.EndorserGrade),
+		EndorserVersion:   f.EndorserVersion,
 		CreatedAt:         f.CreatedAt,
 	}, actualExporter)
 }

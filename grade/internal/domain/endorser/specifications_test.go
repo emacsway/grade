@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"fmt"
@@ -7,43 +7,43 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRecognizerCanCompleteEndorsementSpecification(t *testing.T) {
+func TestEndorserCanCompleteEndorsementSpecification(t *testing.T) {
 	cases := []struct {
-		Prepare        func(*Recognizer) error
+		Prepare        func(*Endorser) error
 		ExpectedResult bool
 	}{
-		{func(r *Recognizer) error {
-			return r.ReserveEndorsement()
+		{func(e *Endorser) error {
+			return e.ReserveEndorsement()
 		}, true},
-		{func(r *Recognizer) error {
+		{func(e *Endorser) error {
 			return nil
 		}, false},
-		{func(r *Recognizer) error {
+		{func(e *Endorser) error {
 			for i := uint(0); i < YearlyEndorsementCount; i++ {
-				err := r.ReserveEndorsement()
+				err := e.ReserveEndorsement()
 				if err != nil {
 					return err
 				}
-				err = r.CompleteEndorsement()
+				err = e.CompleteEndorsement()
 				if err != nil {
 					return err
 				}
 			}
 			return nil
 		}, false},
-		{func(r *Recognizer) error {
-			err := r.ReserveEndorsement()
+		{func(e *Endorser) error {
+			err := e.ReserveEndorsement()
 			if err != nil {
 				return err
 			}
-			err = r.ReleaseEndorsementReservation()
+			err = e.ReleaseEndorsementReservation()
 			if err != nil {
 				return err
 			}
 			return nil
 		}, false},
 	}
-	f := NewRecognizerFakeFactory()
+	f := NewEndorserFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			r, err := f.Create()
@@ -56,7 +56,7 @@ func TestRecognizerCanCompleteEndorsementSpecification(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			sp := RecognizerCanCompleteEndorsementSpecification{}
+			sp := EndorserCanCompleteEndorsementSpecification{}
 			result, err := sp.IsSatisfiedBy(*r)
 			if err != nil {
 				t.Error(err)

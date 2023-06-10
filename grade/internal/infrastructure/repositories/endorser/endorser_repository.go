@@ -1,24 +1,24 @@
-package recognizer
+package endorser
 
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-func NewRecognizerRepository(session infrastructure.DbSession) RecognizerRepository {
-	return RecognizerRepository{
+func NewEndorserRepository(session infrastructure.DbSession) EndorserRepository {
+	return EndorserRepository{
 		session: session,
 	}
 }
 
-type RecognizerRepository struct {
+type EndorserRepository struct {
 	session infrastructure.DbSession
 }
 
-func (r RecognizerRepository) Insert(obj recognizer.Recognizer) error {
-	q := RecognizerInsertQuery{}
+func (r EndorserRepository) Insert(obj endorser.Endorser) error {
+	q := EndorserInsertQuery{}
 	obj.Export(&q)
 	result, err := q.Execute(r.session)
 	if err != nil {

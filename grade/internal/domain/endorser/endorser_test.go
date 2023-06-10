@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"fmt"
@@ -10,43 +10,43 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
-func TestRecognizerCanCompleteEndorsement(t *testing.T) {
+func TestEndorserCanCompleteEndorsement(t *testing.T) {
 	cases := []struct {
-		Prepare       func(*Recognizer) error
+		Prepare       func(*Endorser) error
 		ExpectedError error
 	}{
-		{func(r *Recognizer) error {
-			return r.ReserveEndorsement()
+		{func(e *Endorser) error {
+			return e.ReserveEndorsement()
 		}, nil},
-		{func(r *Recognizer) error {
+		{func(e *Endorser) error {
 			return nil
 		}, ErrNoEndorsementReservation},
-		{func(r *Recognizer) error {
+		{func(e *Endorser) error {
 			for i := uint(0); i < YearlyEndorsementCount; i++ {
-				err := r.ReserveEndorsement()
+				err := e.ReserveEndorsement()
 				if err != nil {
 					return err
 				}
-				err = r.CompleteEndorsement()
+				err = e.CompleteEndorsement()
 				if err != nil {
 					return err
 				}
 			}
 			return nil
 		}, ErrNoEndorsementReservation},
-		{func(r *Recognizer) error {
-			err := r.ReserveEndorsement()
+		{func(e *Endorser) error {
+			err := e.ReserveEndorsement()
 			if err != nil {
 				return err
 			}
-			err = r.ReleaseEndorsementReservation()
+			err = e.ReleaseEndorsementReservation()
 			if err != nil {
 				return err
 			}
 			return nil
 		}, ErrNoEndorsementReservation},
 	}
-	f := NewRecognizerFakeFactory()
+	f := NewEndorserFakeFactory()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			r, err := f.Create()
@@ -65,16 +65,16 @@ func TestRecognizerCanCompleteEndorsement(t *testing.T) {
 	}
 }
 
-func TestRecognizerExport(t *testing.T) {
-	var actualExporter RecognizerExporter
-	f := NewRecognizerFakeFactory()
+func TestEndorserExport(t *testing.T) {
+	var actualExporter EndorserExporter
+	f := NewEndorserFakeFactory()
 	agg, err := f.Create()
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
 	}
 	agg.Export(&actualExporter)
-	assert.Equal(t, RecognizerExporter{
+	assert.Equal(t, EndorserExporter{
 		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Grade:                     exporters.Uint8Exporter(f.Grade),
 		AvailableEndorsementCount: exporters.UintExporter(YearlyEndorsementCount),

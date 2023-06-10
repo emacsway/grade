@@ -1,4 +1,4 @@
-package recognizer
+package endorser
 
 import (
 	"database/sql/driver"
@@ -9,8 +9,8 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
-func TestRecognizerCanCompleteEndorsementSpecification(t *testing.T) {
-	sp := RecognizerCanCompleteEndorsementSpecification{}
+func TestEndorserCanCompleteEndorsementSpecification(t *testing.T) {
+	sp := EndorserCanCompleteEndorsementSpecification{}
 	sql, params, err := sp.Compile()
 	if err != nil {
 		t.Error(err)
@@ -18,9 +18,9 @@ func TestRecognizerCanCompleteEndorsementSpecification(t *testing.T) {
 	}
 	assert.Equal(
 		t,
-		"recognizer.available_endorsement_count != $1 AND "+
-			"recognizer.pending_endorsement_count != $2 AND "+
-			"recognizer.available_endorsement_count >= recognizer.pending_endorsement_count",
+		"endorser.available_endorsement_count != $1 AND "+
+			"endorser.pending_endorsement_count != $2 AND "+
+			"endorser.available_endorsement_count >= endorser.pending_endorsement_count",
 		sql)
 	assert.Equal(t, []driver.Valuer{
 		exporters.UintExporter(0),

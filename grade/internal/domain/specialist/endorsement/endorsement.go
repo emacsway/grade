@@ -21,9 +21,9 @@ func NewEndorsement(
 	specialistGrade grade.Grade,
 	specialistVersion uint,
 	artifactId artifact.TenantArtifactId,
-	recognizerId member.TenantMemberId,
-	recognizerGrade grade.Grade,
-	recognizerVersion uint,
+	endorserId member.TenantMemberId,
+	endorserGrade grade.Grade,
+	endorserVersion uint,
 	createdAt time.Time,
 ) (Endorsement, error) {
 	return Endorsement{
@@ -31,9 +31,9 @@ func NewEndorsement(
 		specialistGrade:   specialistGrade,
 		specialistVersion: specialistVersion,
 		artifactId:        artifactId,
-		recognizerId:      recognizerId,
-		recognizerGrade:   recognizerGrade,
-		recognizerVersion: recognizerVersion,
+		endorserId:        endorserId,
+		endorserGrade:     endorserGrade,
+		endorserVersion:   endorserVersion,
 		createdAt:         createdAt,
 	}, nil
 }
@@ -43,14 +43,14 @@ type Endorsement struct {
 	specialistGrade   grade.Grade
 	specialistVersion uint
 	artifactId        artifact.TenantArtifactId
-	recognizerId      member.TenantMemberId
-	recognizerGrade   grade.Grade
-	recognizerVersion uint
+	endorserId        member.TenantMemberId
+	endorserGrade     grade.Grade
+	endorserVersion   uint
 	createdAt         time.Time
 }
 
 func (e Endorsement) IsEndorsedBy(rId member.TenantMemberId, aId artifact.TenantArtifactId) bool {
-	return e.recognizerId.Equal(rId) && e.artifactId.Equal(aId)
+	return e.endorserId.Equal(rId) && e.artifactId.Equal(aId)
 }
 
 func (e Endorsement) SpecialistGrade() grade.Grade {
@@ -58,9 +58,9 @@ func (e Endorsement) SpecialistGrade() grade.Grade {
 }
 
 func (e Endorsement) Weight() Weight {
-	if e.recognizerGrade.Equal(e.specialistGrade) {
+	if e.endorserGrade.Equal(e.specialistGrade) {
 		return PeerWeight
-	} else if e.recognizerGrade.GreaterThan(e.specialistGrade) {
+	} else if e.endorserGrade.GreaterThan(e.specialistGrade) {
 		return HigherWeight
 	}
 	return LowerWeight
@@ -71,9 +71,9 @@ func (e Endorsement) Export(ex EndorsementExporterSetter) {
 	ex.SetSpecialistGrade(e.specialistGrade)
 	ex.SetSpecialistVersion(e.specialistVersion)
 	ex.SetArtifactId(e.artifactId)
-	ex.SetRecognizerId(e.recognizerId)
-	ex.SetRecognizerGrade(e.recognizerGrade)
-	ex.SetRecognizerVersion(e.recognizerVersion)
+	ex.SetEndorserId(e.endorserId)
+	ex.SetEndorserGrade(e.endorserGrade)
+	ex.SetEndorserVersion(e.endorserVersion)
 	ex.SetCreatedAt(e.createdAt)
 }
 
@@ -82,8 +82,8 @@ type EndorsementExporterSetter interface {
 	SetSpecialistGrade(grade.Grade)
 	SetSpecialistVersion(uint)
 	SetArtifactId(artifact.TenantArtifactId)
-	SetRecognizerId(member.TenantMemberId)
-	SetRecognizerGrade(grade.Grade)
-	SetRecognizerVersion(uint)
+	SetEndorserId(member.TenantMemberId)
+	SetEndorserGrade(grade.Grade)
+	SetEndorserVersion(uint)
 	SetCreatedAt(time.Time)
 }
