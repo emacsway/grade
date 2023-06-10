@@ -57,7 +57,7 @@ func (s *PgxSession) Insert(query string, args ...any) (Result, error) {
 	return LastInsertId(id), err
 }
 
-func (s *PgxSession) Fetch(query string, args ...any) (Rows, error) {
+func (s *PgxSession) Query(query string, args ...any) (Rows, error) {
 	return s.dbExecutor.Query(query, args...)
 }
 
