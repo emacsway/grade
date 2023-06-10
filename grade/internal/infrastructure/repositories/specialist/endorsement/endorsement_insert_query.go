@@ -98,6 +98,6 @@ func (q *EndorsementInsertQuery) Next() {
 	q.params = append(q.params, Params{})
 }
 
-func (q *EndorsementInsertQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *EndorsementInsertQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.flatParams()...)
 }

@@ -68,6 +68,6 @@ func (q *EndorserUpdateQuery) SetCreatedAt(val time.Time) {
 	q.params[6] = val
 }
 
-func (q *EndorserUpdateQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *EndorserUpdateQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

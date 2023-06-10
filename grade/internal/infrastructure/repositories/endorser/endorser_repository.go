@@ -20,7 +20,7 @@ type EndorserRepository struct {
 func (r EndorserRepository) Insert(obj endorser.Endorser) error {
 	q := EndorserInsertQuery{}
 	obj.Export(&q)
-	result, err := q.Execute(r.session)
+	result, err := q.Evaluate(r.session)
 	if err != nil {
 		return err
 	}

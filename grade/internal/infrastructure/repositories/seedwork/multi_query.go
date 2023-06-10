@@ -57,7 +57,7 @@ func (q *MultiQuery) Exec(query string, args ...any) (infrastructure.Result, err
 	return result, nil
 }
 
-func (q MultiQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q MultiQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	r, err := s.Exec(q.sql(), q.flatParams()...)
 	if err != nil {
 		return nil, err

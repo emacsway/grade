@@ -35,6 +35,6 @@ type DbSession interface {
 	DbSessionQuerier
 }
 
-type MutableQueryExecutor interface {
-	Execute(s DbSessionExecutor) (Result, error)
+type MutableQueryEvaluator interface {
+	Evaluate(s DbSessionExecutor) (Result, error)
 }

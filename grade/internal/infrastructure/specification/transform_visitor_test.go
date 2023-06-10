@@ -46,7 +46,7 @@ func (ss SomethingSpecification) Expression() s.Visitable {
 	)
 }
 
-func (ss SomethingSpecification) Execute( /* session infrastructure.PgxSession */ ) (
+func (ss SomethingSpecification) Evaluate( /* session infrastructure.PgxSession */ ) (
 	sql string, params []driver.Valuer, err error,
 ) {
 	exp := ss.Expression()
@@ -224,7 +224,7 @@ func (ex *MemberSomethingIdExporter) SetSomethingId(val SomethingId) {
 
 func TestSomethingSpecification(t *testing.T) {
 	ss := SomethingSpecification{}
-	sql, params, err := ss.Execute()
+	sql, params, err := ss.Evaluate()
 	if err != nil {
 		t.Error(err)
 		t.FailNow()

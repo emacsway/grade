@@ -61,7 +61,7 @@ func TestMultiInsertQuery(t *testing.T) {
 				c.expectedParams,
 				t,
 			}
-			_, err := q.Execute(s)
+			_, err := q.Evaluate(s)
 			assert.Nil(t, err)
 		})
 	}

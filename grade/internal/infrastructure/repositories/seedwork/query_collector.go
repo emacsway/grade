@@ -8,7 +8,7 @@ import (
 )
 
 type MultiQuerier interface {
-	infrastructure.MutableQueryExecutor
+	infrastructure.MutableQueryEvaluator
 	infrastructure.DbSessionExecutor
 }
 
@@ -28,7 +28,7 @@ func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.Result,
 	return nil, errors.New("unknown SQL command")
 }
 
-func (c *QueryCollector) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (c *QueryCollector) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	result := &DeferredResult{}
 	var lastInsertId int64
 	var rowsAffected int64
@@ -36,7 +36,7 @@ func (c *QueryCollector) Execute(s infrastructure.DbSessionExecutor) (infrastruc
 		currentQueryMap := c.multiQueryMap
 		c.multiQueryMap = make(map[string]MultiQuerier)
 		for k := range currentQueryMap {
-			r, err := currentQueryMap[k].Execute(s)
+			r, err := currentQueryMap[k].Evaluate(s)
 			if err != nil {
 				return nil, err
 			}

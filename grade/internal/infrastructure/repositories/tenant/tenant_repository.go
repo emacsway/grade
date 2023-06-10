@@ -20,7 +20,7 @@ type TenantRepository struct {
 func (r TenantRepository) Insert(obj *tenant.Tenant) error {
 	q := TenantInsertQuery{}
 	obj.Export(&q)
-	result, err := q.Execute(r.session)
+	result, err := q.Evaluate(r.session)
 	if err != nil {
 		return err
 	}

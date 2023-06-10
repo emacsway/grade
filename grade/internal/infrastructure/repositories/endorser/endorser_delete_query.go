@@ -29,6 +29,6 @@ func (q *EndorserDeleteQuery) SetMemberId(val member.MemberId) {
 	q.params[1] = v
 }
 
-func (q *EndorserDeleteQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *EndorserDeleteQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

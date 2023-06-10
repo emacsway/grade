@@ -40,7 +40,7 @@ func (q *TenantInsertQuery) SetCreatedAt(val time.Time) {
 	q.params[2] = val
 }
 
-func (q *TenantInsertQuery) Execute(s infrastructure.DbSessionInserter) (infrastructure.Result, error) {
+func (q *TenantInsertQuery) Evaluate(s infrastructure.DbSessionInserter) (infrastructure.Result, error) {
 	result, err := s.Insert(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err
