@@ -39,6 +39,11 @@ func NewRecognizer(
 	}, nil
 }
 
+// TODO: Use
+// - https://martinfowler.com/eaaDev/TemporalProperty.html
+// - https://martinfowler.com/eaaDev/TemporalObject.html
+// to track grade by version?
+
 type Recognizer struct { // TODO: rename to Recognitory | Endorser | Originator | Sender (to Receiver)
 	id                        member.TenantMemberId
 	grade                     grade.Grade
