@@ -1,24 +1,24 @@
-package recognizer
+package tenant
 
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/domain/recognizer"
+	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-func NewRecognizerRepository(session infrastructure.DbSession) RecognizerRepository {
-	return RecognizerRepository{
+func NewTenantRepository(session infrastructure.DbSession) TenantRepository {
+	return TenantRepository{
 		session: session,
 	}
 }
 
-type RecognizerRepository struct {
+type TenantRepository struct {
 	session infrastructure.DbSession
 }
 
-func (r RecognizerRepository) Insert(obj recognizer.Recognizer) error {
-	q := RecognizerInsertQuery{}
+func (r TenantRepository) Insert(obj *tenant.Tenant) error {
+	q := TenantInsertQuery{}
 	obj.Export(&q)
 	result, err := q.Execute(r.session)
 	if err != nil {

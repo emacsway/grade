@@ -40,6 +40,15 @@ func (q *TenantInsertQuery) SetCreatedAt(val time.Time) {
 	q.params[2] = val
 }
 
-func (q *TenantInsertQuery) Execute(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
-	return s.Exec(q.sql(), q.params[:]...)
+func (q *TenantInsertQuery) Execute(s infrastructure.DbSessionInserter) (infrastructure.Result, error) {
+	result, err := s.Insert(q.sql(), q.params[:]...)
+	if err != nil {
+		return result, err
+	}
+	id, err := result.LastInsertId()
+	if err != nil {
+		return result, err
+	}
+	err = q.pkSetter(id)
+	return result, err
 }

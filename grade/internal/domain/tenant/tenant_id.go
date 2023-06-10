@@ -9,7 +9,7 @@ func NewTenantId(value uint) (TenantId, error) {
 	if err != nil {
 		return TenantId{}, err
 	}
-	return TenantId{id}, nil
+	return TenantId{&id}, nil
 }
 
 func NewTransientTenantId() TenantId {
@@ -17,5 +17,5 @@ func NewTransientTenantId() TenantId {
 }
 
 type TenantId struct {
-	identity.IntIdentity
+	*identity.IntIdentity
 }

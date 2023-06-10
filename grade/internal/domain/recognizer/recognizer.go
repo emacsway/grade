@@ -39,7 +39,7 @@ func NewRecognizer(
 	}, nil
 }
 
-type Recognizer struct {
+type Recognizer struct { // TODO: rename to Recognitory
 	id                        member.TenantMemberId
 	grade                     grade.Grade
 	availableEndorsementCount EndorsementCount

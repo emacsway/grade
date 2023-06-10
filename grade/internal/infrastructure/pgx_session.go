@@ -51,6 +51,12 @@ func (s *PgxSession) Exec(query string, args ...any) (Result, error) {
 	return s.dbExecutor.Exec(query, args...)
 }
 
+func (s *PgxSession) Insert(query string, args ...any) (Result, error) {
+	var id int
+	err := s.dbExecutor.QueryRow(query, args...).Scan(&id)
+	return LastInsertId(id), err
+}
+
 func (s *PgxSession) Fetch(query string, args ...any) (Rows, error) {
 	return s.dbExecutor.Query(query, args...)
 }
@@ -58,4 +64,15 @@ func (s *PgxSession) Fetch(query string, args ...any) (Rows, error) {
 type DbExecutor interface {
 	Exec(query string, args ...any) (sql.Result, error)
 	Query(query string, args ...any) (*sql.Rows, error)
+	QueryRow(query string, args ...any) *sql.Row
+}
+
+type LastInsertId int64
+
+func (i LastInsertId) LastInsertId() (int64, error) {
+	return int64(i), nil
+}
+
+func (i LastInsertId) RowsAffected() (int64, error) {
+	return 0, errors.New("RowsAffected is not supported by INSERT command")
 }

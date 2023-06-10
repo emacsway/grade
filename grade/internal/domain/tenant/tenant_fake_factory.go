@@ -4,12 +4,24 @@ import (
 	"time"
 )
 
-func NewTenantFakeFactory() TenantFakeFactory {
-	return TenantFakeFactory{
+type TenantFakeFactoryOption func(*TenantFakeFactory)
+
+func WithTransientId() TenantFakeFactoryOption {
+	return func(f *TenantFakeFactory) {
+		f.Id = 0
+	}
+}
+
+func NewTenantFakeFactory(opts ...TenantFakeFactoryOption) TenantFakeFactory {
+	f := TenantFakeFactory{
 		Id:        TenantIdFakeValue,
 		Name:      "Name1",
 		CreatedAt: time.Now(),
 	}
+	for _, opt := range opts {
+		opt(&f)
+	}
+	return f
 }
 
 type TenantFakeFactory struct {

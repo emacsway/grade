@@ -21,8 +21,18 @@ type DbSessionExecutor interface {
 	Exec(query string, args ...any) (Result, error)
 }
 
+type DbSessionInserter interface {
+	Insert(query string, args ...any) (Result, error)
+}
+
 type DbSessionFetcher interface {
 	Fetch(query string, args ...any) (Rows, error)
+}
+
+type DbSession interface {
+	DbSessionExecutor
+	DbSessionInserter
+	DbSessionFetcher
 }
 
 type MutableQueryExecutor interface {

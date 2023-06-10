@@ -49,10 +49,10 @@ func (id *IntIdentity) Scan(src any) error { // Call me in InsertQuery with auto
 	if !id.IsTransient() {
 		return ErrNonTransient
 	}
-	val, ok := src.(uint)
+	val, ok := src.(int64)
 	if !ok {
 		return errors.New("invalid type")
 	}
-	id.value = val
+	id.value = uint(val)
 	return nil
 }
