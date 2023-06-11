@@ -50,7 +50,7 @@ func (s *PgxSession) Atomic(callback func(session application.Session) error) er
 }
 
 func (s *PgxSession) Exec(query string, args ...any) (Result, error) {
-	if IsInsertQuery(query) {
+	if IsAutoincrementInsertQuery(query) {
 		var id int
 		err := s.dbExecutor.QueryRow(query, args...).Scan(&id)
 		return LastInsertId(id), err
@@ -95,5 +95,9 @@ func (v RowsAffected) RowsAffected() (int64, error) {
 }
 
 func IsInsertQuery(sql string) bool {
-	return strings.TrimSpace(sql)[:6] == "INSERT"
+	return strings.TrimSpace(sql)[:6] == "INSERT" && !strings.Contains(sql, "RETURNING")
+}
+
+func IsAutoincrementInsertQuery(sql string) bool {
+	return strings.TrimSpace(sql)[:6] == "INSERT" && strings.Contains(sql, "RETURNING")
 }

@@ -67,8 +67,8 @@ func TestMultiInsertQuery(t *testing.T) {
 				t,
 			}
 			_ = s
-			// _, err := q.Evaluate(s)
-			// assert.Nil(t, err)
+			_, err := q.Evaluate(s)
+			assert.Nil(t, err)
 		})
 	}
 }

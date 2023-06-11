@@ -7,7 +7,7 @@ import (
 )
 
 type MultiQuerier interface {
-	infrastructure.MutableQueryEvaluator
+	infrastructure.QueryEvaluator
 	infrastructure.DeferredDbSessionExecutor
 }
 
@@ -17,7 +17,9 @@ type QueryCollector struct {
 
 func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.DeferredResult, error) {
 	if _, found := c.multiQueryMap[query]; !found {
-		if infrastructure.IsInsertQuery(query) {
+		if infrastructure.IsAutoincrementInsertQuery(query) {
+			c.multiQueryMap[query] = NewAutoincrementMultiInsertQuery()
+		} else if infrastructure.IsInsertQuery(query) {
 			c.multiQueryMap[query] = NewMultiInsertQuery()
 		}
 	}

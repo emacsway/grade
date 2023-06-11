@@ -30,7 +30,7 @@ type DbSession interface {
 	DbSessionQuerier
 }
 
-type MutableQueryEvaluator interface {
+type QueryEvaluator interface {
 	Evaluate(s DbSession) (Result, error)
 }
 

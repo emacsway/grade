@@ -11,14 +11,27 @@ var reInsert = regexp.MustCompile(`VALUES\s*(\((?:'(?:[^']|'')*'|[^)])+\))`)
 
 func NewMultiInsertQuery() *MultiQuery {
 	r := &MultiQuery{
-		re:          reInsert,
-		replacement: "VALUES %s",
-		concat:      ", ",
+		MultiQueryBase{
+			re:          reInsert,
+			replacement: "VALUES %s",
+			concat:      ", ",
+		},
 	}
 	return r
 }
 
-type MultiQuery struct {
+func NewAutoincrementMultiInsertQuery() *AutoincrementMultiInsertQuery {
+	r := &AutoincrementMultiInsertQuery{
+		MultiQueryBase{
+			re:          reInsert,
+			replacement: "VALUES %s",
+			concat:      ", ",
+		},
+	}
+	return r
+}
+
+type MultiQueryBase struct {
 	sqlTemplate  string
 	placeholders string
 	params       [][]any
@@ -28,7 +41,7 @@ type MultiQuery struct {
 	concat       string
 }
 
-func (q *MultiQuery) sql() string {
+func (q *MultiQueryBase) sql() string {
 	bulkPlaceholders := ""
 	for i := 0; i < len(q.params); i++ {
 		if i != 0 {
@@ -39,7 +52,7 @@ func (q *MultiQuery) sql() string {
 	return Rebind(fmt.Sprintf(q.sqlTemplate, bulkPlaceholders))
 }
 
-func (q *MultiQuery) flatParams() []any {
+func (q *MultiQueryBase) flatParams() []any {
 	var result []any
 	for i := range q.params {
 		result = append(result, q.params[i]...)
@@ -47,7 +60,7 @@ func (q *MultiQuery) flatParams() []any {
 	return result
 }
 
-func (q *MultiQuery) Exec(query string, args ...any) (infrastructure.DeferredResult, error) {
+func (q *MultiQueryBase) Exec(query string, args ...any) (infrastructure.DeferredResult, error) {
 	query = RebindReverse(query)
 	q.placeholders = q.re.FindStringSubmatch(query)[1]
 	q.sqlTemplate = q.re.ReplaceAllLiteralString(query, q.replacement)
@@ -57,7 +70,26 @@ func (q *MultiQuery) Exec(query string, args ...any) (infrastructure.DeferredRes
 	return result, nil
 }
 
+type MultiQuery struct {
+	MultiQueryBase
+}
+
 func (q MultiQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
+	r, err := s.Exec(q.sql(), q.flatParams()...)
+	if err != nil {
+		return nil, err
+	}
+	for i := range q.results {
+		q.results[i].Resolve(0, 0)
+	}
+	return r, nil
+}
+
+type AutoincrementMultiInsertQuery struct {
+	MultiQueryBase
+}
+
+func (q AutoincrementMultiInsertQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
 	var id int64
 	rows, err := s.Query(q.sql(), q.flatParams()...)
 	if err != nil {
