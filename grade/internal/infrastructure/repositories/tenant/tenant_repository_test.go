@@ -55,7 +55,8 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	factory := tenant.NewTenantFakeFactory(tenant.WithTransientId())
 	agg, err := factory.Create()
 	require.NoError(t, err)
-	repositoryOption.Repository.Insert(agg)
+	err = repositoryOption.Repository.Insert(agg)
+	require.NoError(t, err)
 	agg.Export(&actualExporter)
 	assert.Greater(t, int(actualExporter.Id), 0)
 }

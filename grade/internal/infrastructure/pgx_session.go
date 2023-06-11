@@ -94,10 +94,10 @@ func (v RowsAffected) RowsAffected() (int64, error) {
 	return int64(v), nil
 }
 
-func IsInsertQuery(sql string) bool {
-	return strings.TrimSpace(sql)[:6] == "INSERT" && !strings.Contains(sql, "RETURNING")
+func IsInsertQuery(query string) bool {
+	return strings.TrimSpace(query)[:6] == "INSERT" && !strings.Contains(query, "RETURNING")
 }
 
-func IsAutoincrementInsertQuery(sql string) bool {
-	return strings.TrimSpace(sql)[:6] == "INSERT" && strings.Contains(sql, "RETURNING")
+func IsAutoincrementInsertQuery(query string) bool {
+	return strings.TrimSpace(query)[:6] == "INSERT" && strings.Contains(query, "RETURNING")
 }
