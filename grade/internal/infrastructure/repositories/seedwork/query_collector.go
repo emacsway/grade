@@ -2,7 +2,6 @@ package seedwork
 
 import (
 	"errors"
-	"strings"
 
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
@@ -18,7 +17,7 @@ type QueryCollector struct {
 
 func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.DeferredResult, error) {
 	if _, found := c.multiQueryMap[query]; !found {
-		if strings.TrimSpace(query)[:6] == "INSERT" {
+		if infrastructure.IsInsertQuery(query) {
 			c.multiQueryMap[query] = NewMultiInsertQuery()
 		}
 	}

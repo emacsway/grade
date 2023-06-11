@@ -1,6 +1,8 @@
 package infrastructure
 
 import (
+	"strings"
+
 	"database/sql"
 
 	"github.com/hashicorp/go-multierror"
@@ -48,6 +50,11 @@ func (s *PgxSession) Atomic(callback func(session application.Session) error) er
 }
 
 func (s *PgxSession) Exec(query string, args ...any) (Result, error) {
+	if IsInsertQuery(query) {
+		var id int
+		err := s.dbExecutor.QueryRow(query, args...).Scan(&id)
+		return LastInsertId(id), err
+	}
 	return s.dbExecutor.Exec(query, args...)
 }
 
@@ -85,4 +92,8 @@ func (RowsAffected) LastInsertId() (int64, error) {
 
 func (v RowsAffected) RowsAffected() (int64, error) {
 	return int64(v), nil
+}
+
+func IsInsertQuery(sql string) bool {
+	return strings.TrimSpace(sql)[:6] == "INSERT"
 }
