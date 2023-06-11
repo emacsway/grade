@@ -60,10 +60,10 @@ func (q *MultiQuery) Exec(query string, args ...any) (infrastructure.DeferredRes
 func (q MultiQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
 	var id int64
 	rows, err := s.Query(q.sql(), q.flatParams()...)
-	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	i := 0
 	for rows.Next() {
 		err := rows.Scan(&id)
