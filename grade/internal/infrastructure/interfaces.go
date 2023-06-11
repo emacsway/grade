@@ -9,6 +9,12 @@ type Rows interface {
 	Close() error
 	Err() error
 	Next() bool
+	Scan(dest ...any) error
+}
+
+type Row interface {
+	Err() error
+	Scan(dest ...any) error
 }
 
 type DbSessionExecutor interface {
@@ -25,7 +31,7 @@ type DbSession interface {
 }
 
 type MutableQueryEvaluator interface {
-	Evaluate(s DbSessionExecutor) (Result, error)
+	Evaluate(s DbSession) (Result, error)
 }
 
 // Deferred

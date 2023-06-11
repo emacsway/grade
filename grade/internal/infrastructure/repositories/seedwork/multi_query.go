@@ -57,14 +57,25 @@ func (q *MultiQuery) Exec(query string, args ...any) (infrastructure.DeferredRes
 	return result, nil
 }
 
-func (q MultiQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
-	r, err := s.Exec(q.sql(), q.flatParams()...)
+func (q MultiQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
+	var id int64
+	rows, err := s.Query(q.sql(), q.flatParams()...)
+	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
-	// TODO: implement me.
-	for i := range q.results {
-		q.results[i].Resolve(0, 0)
+	i := 0
+	for rows.Next() {
+		err := rows.Scan(&id)
+		if err != nil {
+			return nil, err
+		}
+		q.results[i].Resolve(id, 0)
+		i++
 	}
-	return r, nil
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	return infrastructure.RowsAffected(len(q.results)), nil
 }

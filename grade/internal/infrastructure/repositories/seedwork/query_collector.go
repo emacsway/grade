@@ -27,7 +27,7 @@ func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.Deferre
 	return nil, errors.New("unknown SQL command")
 }
 
-func (c *QueryCollector) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (c *QueryCollector) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
 	var rowsAffected int64
 	for len(c.multiQueryMap) > 0 {
 		// Nested queries have got the lastInsertId and can be handled for now
