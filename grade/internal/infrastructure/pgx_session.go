@@ -76,3 +76,13 @@ func (i LastInsertId) LastInsertId() (int64, error) {
 func (i LastInsertId) RowsAffected() (int64, error) {
 	return 0, errors.New("RowsAffected is not supported by INSERT command")
 }
+
+type RowsAffected int64
+
+func (RowsAffected) LastInsertId() (int64, error) {
+	return 0, errors.New("LastInsertId is not supported by this driver")
+}
+
+func (v RowsAffected) RowsAffected() (int64, error) {
+	return int64(v), nil
+}

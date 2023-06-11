@@ -9,14 +9,14 @@ import (
 
 type MultiQuerier interface {
 	infrastructure.MutableQueryEvaluator
-	infrastructure.DbSessionExecutor
+	infrastructure.DeferredDbSessionExecutor
 }
 
 type QueryCollector struct {
 	multiQueryMap map[string]MultiQuerier
 }
 
-func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.Result, error) {
+func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.DeferredResult, error) {
 	if _, found := c.multiQueryMap[query]; !found {
 		if strings.TrimSpace(query)[:6] == "INSERT" {
 			c.multiQueryMap[query] = NewMultiInsertQuery()
@@ -29,29 +29,21 @@ func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.Result,
 }
 
 func (c *QueryCollector) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
-	result := &DeferredResult{}
-	var lastInsertId int64
 	var rowsAffected int64
 	for len(c.multiQueryMap) > 0 {
-		currentQueryMap := c.multiQueryMap
+		// Nested queries have got the lastInsertId and can be handled for now
+		currentMultiQueryMap := c.multiQueryMap
 		c.multiQueryMap = make(map[string]MultiQuerier)
-		for k := range currentQueryMap {
-			r, err := currentQueryMap[k].Evaluate(s)
+		for k := range currentMultiQueryMap {
+			r, err := currentMultiQueryMap[k].Evaluate(s)
 			if err != nil {
 				return nil, err
 			}
 			rowsAffectedIncrement, err := r.RowsAffected()
-			rowsAffected += rowsAffectedIncrement
-			if err != nil {
-				return nil, err
+			if err == nil {
+				rowsAffected += rowsAffectedIncrement
 			}
-			lastInsertId, err = r.LastInsertId()
-			if err != nil {
-				return nil, err
-			}
-			result.Resolve(rowsAffected, lastInsertId)
-			// Nested queries have got the lastInsertId and can be handled for now
 		}
 	}
-	return result, nil
+	return infrastructure.RowsAffected(rowsAffected), nil
 }

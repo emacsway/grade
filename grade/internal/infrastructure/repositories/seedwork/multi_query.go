@@ -47,7 +47,7 @@ func (q *MultiQuery) flatParams() []any {
 	return result
 }
 
-func (q *MultiQuery) Exec(query string, args ...any) (infrastructure.Result, error) {
+func (q *MultiQuery) Exec(query string, args ...any) (infrastructure.DeferredResult, error) {
 	query = RebindReverse(query)
 	q.placeholders = q.re.FindStringSubmatch(query)[1]
 	q.sqlTemplate = q.re.ReplaceAllLiteralString(query, q.replacement)
@@ -64,8 +64,6 @@ func (q MultiQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure
 	}
 	// TODO: implement me.
 	for i := range q.results {
-		// It seems there is no ability to get lastInsertId for multi insert command.
-		// Thus, it is not possible ke keep the same logic of the clients.
 		q.results[i].Resolve(0, 0)
 	}
 	return r, nil

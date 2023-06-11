@@ -1,6 +1,8 @@
 package seedwork
 
 import (
+	"errors"
+
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
@@ -27,8 +29,17 @@ func (r *DeferredResult) AddCallback(callback infrastructure.DeferredResultCallb
 }
 
 func (r DeferredResult) LastInsertId() (int64, error) {
-	return r.lastInsertId, nil
+	if r.rowsAffected == 0 {
+		return r.lastInsertId, nil
+	} else {
+		return 0, errors.New("LastInsertId is not supported by this driver")
+	}
 }
+
 func (r DeferredResult) RowsAffected() (int64, error) {
-	return r.rowsAffected, nil
+	if r.lastInsertId == 0 {
+		return r.rowsAffected, nil
+	} else {
+		return 0, errors.New("RowsAffected is not supported by INSERT command")
+	}
 }
