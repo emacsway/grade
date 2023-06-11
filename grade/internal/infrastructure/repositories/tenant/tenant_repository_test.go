@@ -14,7 +14,7 @@ import (
 type testCase func(t *testing.T, repositoryOption RepositoryOption)
 
 func TestTenantRepository(t *testing.T) {
-	// r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	// TODO: r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	repositoryOption := createRepositories(t)
 

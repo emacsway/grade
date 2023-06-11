@@ -24,12 +24,12 @@ func (r TenantRepository) Insert(obj *tenant.Tenant) error {
 	if err != nil {
 		return err
 	}
-	affectedRows, err := result.RowsAffected()
+	lastInsertId, err := result.LastInsertId()
 	if err != nil {
 		return err
 	}
-	if affectedRows != 0 {
-		return fmt.Errorf("wrong rows affected: %d", affectedRows)
+	if lastInsertId == 0 {
+		return fmt.Errorf("wrong LastInsertId: %d", lastInsertId)
 	}
 	return nil
 }
