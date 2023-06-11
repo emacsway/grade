@@ -3,11 +3,12 @@ package tenant
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 type testCase func(t *testing.T, repositoryOption RepositoryOption)
