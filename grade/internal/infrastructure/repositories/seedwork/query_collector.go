@@ -32,6 +32,7 @@ func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.Deferre
 func (c *QueryCollector) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
 	var rowsAffected int64
 	for len(c.multiQueryMap) > 0 {
+		// Resolve N+1 query problem with auto-increment primary key.
 		// Nested queries have got the lastInsertId and can be handled for now
 		currentMultiQueryMap := c.multiQueryMap
 		c.multiQueryMap = make(map[string]MultiQuerier)
