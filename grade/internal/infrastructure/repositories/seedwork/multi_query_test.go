@@ -11,52 +11,52 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-type FakeDbSession struct {
+type DbSessionStub struct {
 	expectedSql    string
 	expectedParams []any
 	t              *testing.T
-	rows           *FakeRows
+	rows           *RowsStub
 }
 
-func (s FakeDbSession) Exec(query string, args ...any) (infrastructure.Result, error) {
+func (s DbSessionStub) Exec(query string, args ...any) (infrastructure.Result, error) {
 	assert.Equal(s.t, s.expectedSql, query)
 	assert.Equal(s.t, s.expectedParams, args)
 	return &DeferredResult{}, nil
 }
 
-func (s *FakeDbSession) Query(query string, args ...any) (infrastructure.Rows, error) {
+func (s *DbSessionStub) Query(query string, args ...any) (infrastructure.Rows, error) {
 	assert.Equal(s.t, s.expectedSql, query)
 	assert.Equal(s.t, s.expectedParams, args)
 	return s.rows, nil
 }
 
-func NewFakeRows(rows ...[]any) *FakeRows {
-	return &FakeRows{
+func NewFakeRows(rows ...[]any) *RowsStub {
+	return &RowsStub{
 		rows, 0, false,
 	}
 }
 
-type FakeRows struct {
+type RowsStub struct {
 	rows   [][]any
 	idx    int
 	Closed bool
 }
 
-func (r *FakeRows) Close() error {
+func (r *RowsStub) Close() error {
 	r.Closed = true
 	return nil
 }
 
-func (r FakeRows) Err() error {
+func (r RowsStub) Err() error {
 	return nil
 }
 
-func (r *FakeRows) Next() bool {
+func (r *RowsStub) Next() bool {
 	r.idx++
 	return len(r.rows) < r.idx
 }
 
-func (r FakeRows) Scan(dest ...any) error {
+func (r RowsStub) Scan(dest ...any) error {
 	for i, d := range dest {
 		dt, ok := d.(sql.Scanner)
 		if !ok {
@@ -105,7 +105,7 @@ func TestMultiInsertQuery(t *testing.T) {
 				_, err := q.Exec(fmt.Sprintf(sqlTemplate, c.sql), v...)
 				assert.Nil(t, err)
 			}
-			s := &FakeDbSession{
+			s := &DbSessionStub{
 				fmt.Sprintf(sqlTemplate, c.expectedSql),
 				c.expectedParams,
 				t,
@@ -153,7 +153,7 @@ func TestAutoincrementMultiInsertQuery(t *testing.T) {
 				_, err := q.Exec(fmt.Sprintf(sqlTemplate, c.sql), v...)
 				assert.Nil(t, err)
 			}
-			s := &FakeDbSession{
+			s := &DbSessionStub{
 				fmt.Sprintf(sqlTemplate, c.expectedSql),
 				c.expectedParams,
 				t,
