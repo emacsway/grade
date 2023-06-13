@@ -30,7 +30,7 @@ func (s *DbSessionStub) Query(query string, args ...any) (infrastructure.Rows, e
 	return s.rows, nil
 }
 
-func NewFakeRows(rows ...[]any) *RowsStub {
+func NewRowsStub(rows ...[]any) *RowsStub {
 	return &RowsStub{
 		rows, 0, false,
 	}
@@ -109,7 +109,7 @@ func TestMultiInsertQuery(t *testing.T) {
 				fmt.Sprintf(sqlTemplate, c.expectedSql),
 				c.expectedParams,
 				t,
-				NewFakeRows(),
+				NewRowsStub(),
 			}
 			_ = s
 			_, err := q.Evaluate(s)
@@ -157,7 +157,7 @@ func TestAutoincrementMultiInsertQuery(t *testing.T) {
 				fmt.Sprintf(sqlTemplate, c.expectedSql),
 				c.expectedParams,
 				t,
-				NewFakeRows([]any{1}, []any{2}, []any{3}),
+				NewRowsStub([]any{1}, []any{2}, []any{3}),
 			}
 			_ = s
 			_, err := q.Evaluate(s)
