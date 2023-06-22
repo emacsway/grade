@@ -11,7 +11,7 @@ func NewCompetenceFakeFactory() CompetenceFakeFactory {
 		Id:        NewTenantCompetenceIdFakeFactory(),
 		Name:      "Name1",
 		OwnerId:   member.NewTenantMemberIdFakeFactory(),
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 

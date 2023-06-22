@@ -74,7 +74,7 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = s.ReceiveEndorsement(*r, *a, time.Now())
+			err = s.ReceiveEndorsement(*r, *a, time.Now().Truncate(time.Microsecond))
 			fmt.Println(err, c.ExpectedError)
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
@@ -148,7 +148,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = s.ReceiveEndorsement(*r, *a, time.Now())
+			err = s.ReceiveEndorsement(*r, *a, time.Now().Truncate(time.Microsecond))
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
 	}

@@ -30,6 +30,12 @@ func (s *DbSessionStub) Query(query string, args ...any) (infrastructure.Rows, e
 	return s.rows, nil
 }
 
+func (s *DbSessionStub) QueryRow(query string, args ...any) infrastructure.Row {
+	assert.Equal(s.t, s.expectedSql, query)
+	assert.Equal(s.t, s.expectedParams, args)
+	return s.rows
+}
+
 func NewRowsStub(rows ...[]any) *RowsStub {
 	return &RowsStub{
 		rows, 0, false,
@@ -68,6 +74,18 @@ func (r RowsStub) Scan(dest ...any) error {
 		}
 	}
 	return nil
+}
+
+type RowStub struct {
+	rows *RowsStub
+}
+
+func (r *RowStub) Err() error {
+	return r.rows.Err()
+}
+
+func (r *RowStub) Scan(dest ...any) error {
+	return r.rows.Scan(dest...)
 }
 
 func TestMultiInsertQuery(t *testing.T) {

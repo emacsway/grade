@@ -51,14 +51,12 @@ func (s *PgxSession) Atomic(callback func(session application.Session) error) er
 
 func (s *PgxSession) Exec(query string, args ...any) (Result, error) {
 	if IsAutoincrementInsertQuery(query) {
-		var id int
-		err := s.dbExecutor.QueryRow(query, args...).Scan(&id)
-		return LastInsertId(id), err
+		return s.insert(query, args...)
 	}
 	return s.dbExecutor.Exec(query, args...)
 }
 
-func (s *PgxSession) Insert(query string, args ...any) (Result, error) {
+func (s *PgxSession) insert(query string, args ...any) (Result, error) {
 	var id int
 	err := s.dbExecutor.QueryRow(query, args...).Scan(&id)
 	return LastInsertId(id), err
@@ -66,6 +64,10 @@ func (s *PgxSession) Insert(query string, args ...any) (Result, error) {
 
 func (s *PgxSession) Query(query string, args ...any) (Rows, error) {
 	return s.dbExecutor.Query(query, args...)
+}
+
+func (s *PgxSession) QueryRow(query string, args ...any) Row {
+	return s.dbExecutor.QueryRow(query, args...)
 }
 
 type DbExecutor interface {

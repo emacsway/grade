@@ -7,8 +7,8 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-func NewTenantRepository(session infrastructure.DbSession) TenantRepository {
-	return TenantRepository{
+func NewTenantRepository(session infrastructure.DbSession) *TenantRepository {
+	return &TenantRepository{
 		session: session,
 	}
 }
@@ -32,4 +32,9 @@ func (r TenantRepository) Insert(obj *tenant.Tenant) error {
 		return fmt.Errorf("wrong LastInsertId: %d", lastInsertId)
 	}
 	return nil
+}
+
+func (r TenantRepository) Get(id tenant.TenantId) (*tenant.Tenant, error) {
+	q := TenantGetQuery{id}
+	return q.Get(r.session)
 }

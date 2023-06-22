@@ -15,7 +15,7 @@ func NewEndorserFakeFactory() EndorserFakeFactory {
 	return EndorserFakeFactory{
 		Id:        idFactory,
 		Grade:     1,
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 

@@ -33,6 +33,11 @@ func TestTenantRepository(t *testing.T) {
 				t.Parallel()
 				clearable(testInsert)(t, r)
 			})
+
+			t.Run("testGet", func(t *testing.T) {
+				t.Parallel()
+				clearable(testGet)(t, r)
+			})
 		})
 	}
 
@@ -61,9 +66,28 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	assert.Greater(t, int(actualExporter.Id), 0)
 }
 
+func testGet(t *testing.T, repositoryOption RepositoryOption) {
+	var exporterActual tenant.TenantExporter
+	var exporterRead tenant.TenantExporter
+	factory := tenant.NewTenantFakeFactory(tenant.WithTransientId())
+	agg, err := factory.Create()
+	require.NoError(t, err)
+	err = repositoryOption.Repository.Insert(agg)
+	require.NoError(t, err)
+	agg.Export(&exporterActual)
+	assert.Greater(t, int(exporterActual.Id), 0)
+
+	id, err := tenant.NewTenantId(uint(exporterActual.Id))
+	require.NoError(t, err)
+	aggRead, err := repositoryOption.Repository.Get(id)
+	require.NoError(t, err)
+	aggRead.Export(&exporterRead)
+	assert.Equal(t, exporterActual, exporterRead)
+}
+
 type RepositoryOption struct {
 	Name       string
-	Repository TenantRepository
+	Repository *TenantRepository
 	Session    infrastructure.DbSessionExecutor
 }
 

@@ -16,7 +16,7 @@ func NewTenantFakeFactory(opts ...TenantFakeFactoryOption) TenantFakeFactory {
 	f := TenantFakeFactory{
 		Id:        TenantIdFakeValue,
 		Name:      "Name1",
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 	for _, opt := range opts {
 		opt(&f)

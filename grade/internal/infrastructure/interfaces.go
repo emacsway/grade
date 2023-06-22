@@ -25,9 +25,14 @@ type DbSessionQuerier interface {
 	Query(query string, args ...any) (Rows, error)
 }
 
+type DbSessionSingleQuerier interface {
+	QueryRow(query string, args ...any) Row
+}
+
 type DbSession interface {
 	DbSessionExecutor
 	DbSessionQuerier
+	DbSessionSingleQuerier
 }
 
 type QueryEvaluator interface {
@@ -42,11 +47,32 @@ type DeferredResult interface {
 	AddCallback(DeferredResultCallback)
 }
 
+type DeferredRowsCallback func(Rows)
+
+type DeferredRows interface {
+	AddCallback(DeferredRowsCallback)
+}
+
+type DeferredRowCallback func(Rows)
+
+type DeferredRow interface {
+	AddCallback(DeferredRowsCallback)
+}
+
 type DeferredDbSessionExecutor interface {
 	Exec(query string, args ...any) (DeferredResult, error)
 }
 
+type DeferredDbSessionQuerier interface {
+	Query(query string, args ...any) (DeferredRows, error)
+}
+
+type DeferredDbSessionSingleQuerier interface {
+	QueryRow(query string, args ...any) DeferredRow
+}
+
 type DeferredDbSession interface {
 	DeferredDbSessionExecutor
-	DbSessionQuerier
+	DeferredDbSessionQuerier
+	DeferredDbSessionSingleQuerier
 }

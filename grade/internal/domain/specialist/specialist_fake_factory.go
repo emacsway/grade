@@ -18,7 +18,7 @@ func NewSpecialistFakeFactory() SpecialistFakeFactory {
 	return SpecialistFakeFactory{
 		Id:        idFactory,
 		Grade:     0,
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 
@@ -72,7 +72,7 @@ func (f *SpecialistFakeFactory) receiveEndorsement(e endorser.EndorserFakeFactor
 		entf.Artifact.Id = f.ReceivedEndorsements[len(f.ReceivedEndorsements)-1].Artifact.Id
 	}
 	entf.Artifact.Id.NextArtifactId()
-	entf.CreatedAt = time.Now()
+	entf.CreatedAt = time.Now().Truncate(time.Microsecond)
 	if err := entf.Artifact.AddAuthorId(f.Id); err != nil {
 		return err
 	}
@@ -121,7 +121,7 @@ func NewReceivedEndorsementFakeFactory(e endorser.EndorserFakeFactory) ReceivedE
 	return ReceivedEndorsementFakeFactory{
 		Endorser:  e,
 		Artifact:  artifactFactory,
-		CreatedAt: time.Now(),
+		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 

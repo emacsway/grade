@@ -20,7 +20,7 @@ func NewEndorsementFakeFactory() EndorsementFakeFactory {
 		EndorserId:        endorserIdFactory,
 		EndorserGrade:     2,
 		EndorserVersion:   3,
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().Truncate(time.Microsecond),
 	}
 }
 

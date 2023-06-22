@@ -17,7 +17,7 @@ func NewArtifactFakeFactory() ArtifactFakeFactory {
 		CompetenceIds: []competence.TenantCompetenceIdFakeFactory{competence.NewTenantCompetenceIdFakeFactory()},
 		AuthorIds:     []member.TenantMemberIdFakeFactory{},
 		OwnerId:       member.NewTenantMemberIdFakeFactory(),
-		CreatedAt:     time.Now(),
+		CreatedAt:     time.Now().Truncate(time.Microsecond),
 	}
 }
 

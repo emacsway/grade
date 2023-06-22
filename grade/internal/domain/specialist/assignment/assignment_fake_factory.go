@@ -13,7 +13,7 @@ func NewAssignmentFakeFactory() AssignmentFakeFactory {
 		SpecialistVersion: 2,
 		AssignedGrade:     1,
 		Reason:            "Any",
-		CreatedAt:         time.Now(),
+		CreatedAt:         time.Now().Truncate(time.Microsecond),
 	}
 }
 
