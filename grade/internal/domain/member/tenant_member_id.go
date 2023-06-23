@@ -20,6 +20,18 @@ func NewTenantMemberId(tenantId, memberId uint) (TenantMemberId, error) {
 	}, nil
 }
 
+func NewTransientTenantMemberId(tenantId uint) (TenantMemberId, error) {
+	tId, err := tenant.NewTenantId(tenantId)
+	if err != nil {
+		return TenantMemberId{}, err
+	}
+	mId := NewTransientMemberId()
+	return TenantMemberId{
+		tenantId: tId,
+		memberId: mId,
+	}, nil
+}
+
 type TenantMemberId struct {
 	tenantId tenant.TenantId
 	memberId MemberId

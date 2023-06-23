@@ -12,6 +12,10 @@ func NewMemberId(value uint) (MemberId, error) {
 	return MemberId{id}, nil
 }
 
+func NewTransientMemberId() MemberId {
+	return MemberId{}
+}
+
 type MemberId struct {
 	identity.IntIdentity
 }
