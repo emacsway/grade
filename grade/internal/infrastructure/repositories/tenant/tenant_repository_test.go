@@ -69,10 +69,8 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
 	var exporterActual tenant.TenantExporter
 	var exporterRead tenant.TenantExporter
-	factory := tenant.NewTenantFakeFactory(tenant.WithTransientId())
+	factory := NewTenantFakeFactory(repositoryOption.Session)
 	agg, err := factory.Create()
-	require.NoError(t, err)
-	err = repositoryOption.Repository.Insert(agg)
 	require.NoError(t, err)
 	agg.Export(&exporterActual)
 	assert.Greater(t, int(exporterActual.Id), 0)
@@ -88,7 +86,7 @@ func testGet(t *testing.T, repositoryOption RepositoryOption) {
 type RepositoryOption struct {
 	Name       string
 	Repository *TenantRepository
-	Session    infrastructure.DbSessionExecutor
+	Session    infrastructure.DbSession
 }
 
 func createRepositories(t *testing.T) []RepositoryOption {
