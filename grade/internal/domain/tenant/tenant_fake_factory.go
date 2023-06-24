@@ -2,6 +2,8 @@ package tenant
 
 import (
 	"time"
+
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/faker"
 )
 
 type TenantFakeFactoryOption func(*TenantFakeFactory)
@@ -13,9 +15,10 @@ func WithTransientId() TenantFakeFactoryOption {
 }
 
 func NewTenantFakeFactory(opts ...TenantFakeFactoryOption) TenantFakeFactory {
+	fakerInstance := faker.NewFaker()
 	f := TenantFakeFactory{
 		Id:        TenantIdFakeValue,
-		Name:      "Name1",
+		Name:      fakerInstance.Company(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 	for _, opt := range opts {
