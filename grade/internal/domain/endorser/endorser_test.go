@@ -6,6 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
@@ -22,7 +23,7 @@ func TestEndorserCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, ErrNoEndorsementReservation},
 		{func(e *Endorser) error {
-			for i := uint(0); i < YearlyEndorsementCount; i++ {
+			for i := uint(0); i < values.YearlyEndorsementCount; i++ {
 				err := e.ReserveEndorsement()
 				if err != nil {
 					return err
@@ -77,7 +78,7 @@ func TestEndorserExport(t *testing.T) {
 	assert.Equal(t, EndorserExporter{
 		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Grade:                     exporters.Uint8Exporter(f.Grade),
-		AvailableEndorsementCount: exporters.UintExporter(YearlyEndorsementCount),
+		AvailableEndorsementCount: exporters.UintExporter(values.YearlyEndorsementCount),
 		PendingEndorsementCount:   exporters.UintExporter(0),
 		Version:                   0,
 		CreatedAt:                 f.CreatedAt,

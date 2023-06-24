@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -19,7 +20,7 @@ func TestEndorserCanCompleteEndorsementSpecification(t *testing.T) {
 			return nil
 		}, false},
 		{func(e *Endorser) error {
-			for i := uint(0); i < YearlyEndorsementCount; i++ {
+			for i := uint(0); i < values.YearlyEndorsementCount; i++ {
 				err := e.ReserveEndorsement()
 				if err != nil {
 					return err

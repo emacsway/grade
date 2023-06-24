@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
+	endorserVal "github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
@@ -65,7 +66,7 @@ func (c Context) endorserIdPath(prefix string, path ...string) (string, error) {
 
 func (c Context) Extract(val any) (driver.Valuer, error) {
 	switch valTyped := val.(type) {
-	case endorser.EndorsementCount:
+	case endorserVal.EndorsementCount:
 		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return ex, nil

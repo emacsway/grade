@@ -9,6 +9,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
+	endorserVal "github.com/emacsway/grade/grade/internal/domain/endorser/values"
 )
 
 func TestSpecialistReceiveEndorsement(t *testing.T) {
@@ -93,7 +94,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, endorser.ErrNoEndorsementReservation},
 		{func(e *endorser.Endorser) error {
-			for i := uint(0); i < endorser.YearlyEndorsementCount; i++ {
+			for i := uint(0); i < endorserVal.YearlyEndorsementCount; i++ {
 				err := e.ReserveEndorsement()
 				if err != nil {
 					return err

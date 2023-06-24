@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
@@ -21,11 +22,11 @@ func NewEndorser(
 	id member.TenantMemberId,
 	createdAt time.Time,
 ) (*Endorser, error) {
-	availableCount, err := NewEndorsementCount(YearlyEndorsementCount)
+	availableCount, err := values.NewEndorsementCount(values.YearlyEndorsementCount)
 	if err != nil {
 		return nil, err
 	}
-	pendingCount, err := NewEndorsementCount(0)
+	pendingCount, err := values.NewEndorsementCount(0)
 	if err != nil {
 		return nil, err
 	}
@@ -47,8 +48,8 @@ func NewEndorser(
 type Endorser struct { // TODO: rename to Recognitory | Endorser | Originator | Sender (to Receiver)
 	id                        member.TenantMemberId
 	grade                     grade.Grade
-	availableEndorsementCount EndorsementCount
-	pendingEndorsementCount   EndorsementCount
+	availableEndorsementCount values.EndorsementCount
+	pendingEndorsementCount   values.EndorsementCount
 	createdAt                 time.Time
 	eventive                  aggregate.EventiveEntity
 	aggregate.VersionedAggregate
@@ -137,8 +138,8 @@ func (e Endorser) Export(ex EndorserExporterSetter) {
 type EndorserExporterSetter interface {
 	SetId(member.TenantMemberId)
 	SetGrade(grade.Grade)
-	SetAvailableEndorsementCount(EndorsementCount)
-	SetPendingEndorsementCount(EndorsementCount)
+	SetAvailableEndorsementCount(values.EndorsementCount)
+	SetPendingEndorsementCount(values.EndorsementCount)
 	SetVersion(uint)
 	SetCreatedAt(time.Time)
 }

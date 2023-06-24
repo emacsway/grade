@@ -3,6 +3,7 @@ package endorser
 import (
 	"fmt"
 
+	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	s "github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
 
@@ -29,11 +30,11 @@ func (e EndorserCanCompleteEndorsementSpecification) Expression() s.Visitable {
 	return s.And(
 		s.NotEqual(
 			endorser.availableEndorsementCount(),
-			s.Value(EndorsementCount(0)),
+			s.Value(values.EndorsementCount(0)),
 		),
 		s.NotEqual(
 			endorser.pendingEndorsementCount(),
-			s.Value(EndorsementCount(0)),
+			s.Value(values.EndorsementCount(0)),
 		),
 		s.GreaterThanEqual(
 			endorser.availableEndorsementCount(),

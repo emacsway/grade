@@ -3,6 +3,7 @@ package endorser
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
@@ -27,11 +28,11 @@ func (r EndorserReconstitutor) Reconstitute() (*Endorser, error) {
 	if err != nil {
 		return nil, err
 	}
-	availableEndorsementCount, err := NewEndorsementCount(r.AvailableEndorsementCount)
+	availableEndorsementCount, err := values.NewEndorsementCount(r.AvailableEndorsementCount)
 	if err != nil {
 		return nil, err
 	}
-	pendingEndorsementCount, err := NewEndorsementCount(r.PendingEndorsementCount)
+	pendingEndorsementCount, err := values.NewEndorsementCount(r.PendingEndorsementCount)
 	if err != nil {
 		return nil, err
 	}

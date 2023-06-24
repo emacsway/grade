@@ -3,6 +3,7 @@ package endorser
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
@@ -25,11 +26,11 @@ func (ex *EndorserExporter) SetGrade(val grade.Grade) {
 	val.Export(&ex.Grade)
 }
 
-func (ex *EndorserExporter) SetAvailableEndorsementCount(val EndorsementCount) {
+func (ex *EndorserExporter) SetAvailableEndorsementCount(val values.EndorsementCount) {
 	val.Export(&ex.AvailableEndorsementCount)
 }
 
-func (ex *EndorserExporter) SetPendingEndorsementCount(val EndorsementCount) {
+func (ex *EndorserExporter) SetPendingEndorsementCount(val values.EndorsementCount) {
 	val.Export(&ex.PendingEndorsementCount)
 }
 
