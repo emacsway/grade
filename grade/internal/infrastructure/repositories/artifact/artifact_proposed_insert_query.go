@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	artifact "github.com/emacsway/grade/grade/internal/domain/artifact/values"
+	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
@@ -24,7 +24,7 @@ func (q ArtifactProposedInsertQuery) sql() string {
 		VALUES
 		($1, $2, $3, $4, $5, $6, $7, $8)`
 }
-func (q *ArtifactProposedInsertQuery) SetId(val artifact.TenantArtifactId) {
+func (q *ArtifactProposedInsertQuery) SetId(val values.TenantArtifactId) {
 	val.Export(&q.payload.Id)
 	val.Export(q)
 }
@@ -39,7 +39,7 @@ func (q *ArtifactProposedInsertQuery) SetStreamType(val string) {
 	q.params[1] = val
 }
 
-func (q *ArtifactProposedInsertQuery) SetArtifactId(val artifact.ArtifactId) {
+func (q *ArtifactProposedInsertQuery) SetArtifactId(val values.ArtifactId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[2] = v
@@ -57,16 +57,16 @@ func (q *ArtifactProposedInsertQuery) SetEventVersion(val uint8) {
 	q.params[5] = val
 }
 
-func (q *ArtifactProposedInsertQuery) SetStatus(val artifact.Status) {
+func (q *ArtifactProposedInsertQuery) SetStatus(val values.Status) {
 	val.Export(&q.payload.Status)
 }
-func (q *ArtifactProposedInsertQuery) SetName(val artifact.Name) {
+func (q *ArtifactProposedInsertQuery) SetName(val values.Name) {
 	val.Export(&q.payload.Name)
 }
-func (q *ArtifactProposedInsertQuery) SetDescription(val artifact.Description) {
+func (q *ArtifactProposedInsertQuery) SetDescription(val values.Description) {
 	val.Export(&q.payload.Description)
 }
-func (q *ArtifactProposedInsertQuery) SetUrl(val artifact.Url) {
+func (q *ArtifactProposedInsertQuery) SetUrl(val values.Url) {
 	val.Export(&q.payload.Url)
 }
 func (q *ArtifactProposedInsertQuery) AddCompetenceId(val competence.TenantCompetenceId) {
@@ -96,7 +96,7 @@ func (q *ArtifactProposedInsertQuery) Evaluate(s infrastructure.DbSessionExecuto
 }
 
 type ArtifactProposedPayload struct {
-	Id            artifact.TenantArtifactIdExporter // Remove?
+	Id            values.TenantArtifactIdExporter // Remove?
 	Status        exporters.Uint8Exporter
 	Name          exporters.StringExporter
 	Description   exporters.StringExporter
