@@ -15,10 +15,10 @@ func WithTransientId() TenantFakeFactoryOption {
 }
 
 func NewTenantFakeFactory(opts ...TenantFakeFactoryOption) TenantFakeFactory {
-	fakerInstance := faker.NewFaker()
+	aFaker := faker.NewFaker()
 	f := TenantFakeFactory{
 		Id:        TenantIdFakeValue,
-		Name:      fakerInstance.Company(),
+		Name:      aFaker.Company(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 	for _, opt := range opts {

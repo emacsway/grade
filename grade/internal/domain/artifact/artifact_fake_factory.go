@@ -83,7 +83,7 @@ func (f ArtifactFakeFactory) Create() (*Artifact, error) {
 		return nil, err
 	}
 	return NewArtifact(
-		id, Accepted, name, description, url,
+		id, f.Status, name, description, url,
 		competenceIds, authorIds, owner, f.CreatedAt,
 	), nil
 }

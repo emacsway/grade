@@ -1,9 +1,12 @@
 package member
 
+import "github.com/emacsway/grade/grade/internal/domain/seedwork/faker"
+
 func NewFullNameFakeFactory() FullNameFakeFactory {
+	aFaker := faker.NewFaker()
 	return FullNameFakeFactory{
-		FirstName: "FirstName1",
-		LastName:  "LastName1",
+		FirstName: aFaker.FirstName(),
+		LastName:  aFaker.LastName(),
 	}
 }
 
