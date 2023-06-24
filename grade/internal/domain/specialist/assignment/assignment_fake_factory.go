@@ -5,6 +5,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
 )
 
 func NewAssignmentFakeFactory() AssignmentFakeFactory {
@@ -34,7 +35,7 @@ func (f AssignmentFakeFactory) Create() (Assignment, error) {
 	if err != nil {
 		return Assignment{}, err
 	}
-	reason, err := NewReason(f.Reason)
+	reason, err := values.NewReason(f.Reason)
 	if err != nil {
 		return Assignment{}, err
 	}

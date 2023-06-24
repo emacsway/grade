@@ -6,6 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
 )
 
 type AssignmentExporter struct {
@@ -28,7 +29,7 @@ func (ex *AssignmentExporter) SetAssignedGrade(val grade.Grade) {
 	val.Export(&ex.AssignedGrade)
 }
 
-func (ex *AssignmentExporter) SetReason(val Reason) {
+func (ex *AssignmentExporter) SetReason(val values.Reason) {
 	val.Export(&ex.Reason)
 }
 

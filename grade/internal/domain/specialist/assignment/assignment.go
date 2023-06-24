@@ -5,13 +5,14 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
 )
 
 func NewAssignment(
 	specialistId member.TenantMemberId,
 	specialistVersion uint,
 	assignedGrade grade.Grade,
-	reason Reason,
+	reason values.Reason,
 	createdAt time.Time,
 ) (Assignment, error) {
 	return Assignment{
@@ -27,7 +28,7 @@ type Assignment struct {
 	specialistId      member.TenantMemberId
 	specialistVersion uint
 	assignedGrade     grade.Grade
-	reason            Reason
+	reason            values.Reason
 	createdAt         time.Time
 }
 
@@ -43,6 +44,6 @@ type AssignmentExporterSetter interface {
 	SetSpecialistId(member.TenantMemberId)
 	SetSpecialistVersion(uint)
 	SetAssignedGrade(grade.Grade)
-	SetReason(Reason)
+	SetReason(values.Reason)
 	SetCreatedAt(time.Time)
 }
