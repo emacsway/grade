@@ -12,7 +12,7 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
-	assignmentValues "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
+	assignmentVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/events"
 )
@@ -129,7 +129,7 @@ func (s *Specialist) actualizeGrade(t time.Time) error {
 		if err != nil {
 			return err
 		}
-		reason, err := assignmentValues.NewReason("Achieved")
+		reason, err := assignmentVal.NewReason("Achieved")
 		if err != nil {
 			return err
 		}
@@ -148,7 +148,7 @@ func (s Specialist) getReceivedEndorsementCount() uint {
 	return counter
 }
 
-func (s *Specialist) setGrade(g grade.Grade, reason assignmentValues.Reason, t time.Time) error {
+func (s *Specialist) setGrade(g grade.Grade, reason assignmentVal.Reason, t time.Time) error {
 	a, err := assignment.NewAssignment(
 		s.id, s.Version(), g, reason, t,
 	)
@@ -160,7 +160,7 @@ func (s *Specialist) setGrade(g grade.Grade, reason assignmentValues.Reason, t t
 	return nil
 }
 
-func (s *Specialist) DecreaseGrade(reason assignmentValues.Reason, t time.Time) error {
+func (s *Specialist) DecreaseGrade(reason assignmentVal.Reason, t time.Time) error {
 	previousGrade, err := s.grade.Next()
 	if err != nil {
 		return err
