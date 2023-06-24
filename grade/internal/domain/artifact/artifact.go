@@ -78,22 +78,22 @@ func (a *Artifact) SetVersion(val uint) {
 	a.eventSourced.SetVersion(val)
 }
 
-func (r Artifact) Export(ex ArtifactExporterSetter) {
-	ex.SetId(r.id)
-	ex.SetStatus(r.status)
-	ex.SetName(r.name)
-	ex.SetDescription(r.description)
-	ex.SetUrl(r.url)
-	for i := range r.competenceIds {
-		ex.AddCompetenceId(r.competenceIds[i])
+func (a Artifact) Export(ex ArtifactExporterSetter) {
+	ex.SetId(a.id)
+	ex.SetStatus(a.status)
+	ex.SetName(a.name)
+	ex.SetDescription(a.description)
+	ex.SetUrl(a.url)
+	for i := range a.competenceIds {
+		ex.AddCompetenceId(a.competenceIds[i])
 	}
-	for i := range r.authorIds {
-		ex.AddAuthorId(r.authorIds[i])
+	for i := range a.authorIds {
+		ex.AddAuthorId(a.authorIds[i])
 	}
-	ex.SetDescription(r.description)
-	ex.SetOwnerId(r.ownerId)
-	ex.SetVersion(r.Version())
-	ex.SetCreatedAt(r.createdAt)
+	ex.SetDescription(a.description)
+	ex.SetOwnerId(a.ownerId)
+	ex.SetVersion(a.Version())
+	ex.SetCreatedAt(a.createdAt)
 }
 
 type ArtifactExporterSetter interface {
