@@ -6,7 +6,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/competence"
-	"github.com/emacsway/grade/grade/internal/domain/member"
+	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	"github.com/emacsway/grade/grade/internal/infrastructure"

@@ -9,7 +9,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
-	"github.com/emacsway/grade/grade/internal/domain/member"
+	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"

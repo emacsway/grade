@@ -1,4 +1,4 @@
-package member
+package values
 
 func NewFullName(firstName, lastName string) (FullName, error) {
 	firstNameValue, err := NewFirstName(firstName)

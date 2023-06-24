@@ -6,6 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
@@ -16,11 +17,11 @@ func TestMemberExport(t *testing.T) {
 	require.NoError(t, err)
 	agg.Export(&actualExporter)
 	assert.Equal(t, MemberExporter{
-		Id:     NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
+		Id:     values.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Status: exporters.Uint8Exporter(f.Status),
-		FullName: FullNameExporter{
-			exporters.StringExporter(f.FullName.FirstName),
-			exporters.StringExporter(f.FullName.LastName),
+		FullName: values.FullNameExporter{
+			FirstName: exporters.StringExporter(f.FullName.FirstName),
+			LastName:  exporters.StringExporter(f.FullName.LastName),
 		},
 		CreatedAt: f.CreatedAt,
 	}, actualExporter)

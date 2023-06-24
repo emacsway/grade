@@ -1,4 +1,4 @@
-package member
+package values
 
 type TenantMemberIdReconstitutor struct {
 	TenantId uint

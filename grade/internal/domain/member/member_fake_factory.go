@@ -2,21 +2,23 @@ package member
 
 import (
 	"time"
+
+	"github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
 func NewMemberFakeFactory() MemberFakeFactory {
 	return MemberFakeFactory{
-		Id:        NewTenantMemberIdFakeFactory(),
+		Id:        values.NewTenantMemberIdFakeFactory(),
 		Status:    Active,
-		FullName:  NewFullNameFakeFactory(),
+		FullName:  values.NewFullNameFakeFactory(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 
 type MemberFakeFactory struct {
-	Id        TenantMemberIdFakeFactory
+	Id        values.TenantMemberIdFakeFactory
 	Status    Status
-	FullName  FullNameFakeFactory
+	FullName  values.FullNameFakeFactory
 	CreatedAt time.Time
 }
 

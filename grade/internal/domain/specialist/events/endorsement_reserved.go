@@ -5,7 +5,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
-	"github.com/emacsway/grade/grade/internal/domain/member"
+	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
 func NewEndorsementReceived(

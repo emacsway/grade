@@ -3,13 +3,14 @@ package member
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
 func NewMember(
-	id TenantMemberId,
+	id values.TenantMemberId,
 	status Status,
-	fullName FullName,
+	fullName values.FullName,
 	createdAt time.Time,
 ) *Member {
 	return &Member{
@@ -21,14 +22,14 @@ func NewMember(
 }
 
 type Member struct {
-	id           TenantMemberId
+	id           values.TenantMemberId
 	status       Status
-	fullName     FullName
+	fullName     values.FullName
 	createdAt    time.Time
 	eventSourced aggregate.EventSourcedAggregate
 }
 
-func (m Member) Id() TenantMemberId {
+func (m Member) Id() values.TenantMemberId {
 	return m.id
 }
 
@@ -57,9 +58,9 @@ func (m Member) Export(ex MemberExporterSetter) {
 }
 
 type MemberExporterSetter interface {
-	SetId(id TenantMemberId)
+	SetId(id values.TenantMemberId)
 	SetStatus(Status)
-	SetFullName(FullName)
+	SetFullName(values.FullName)
 	SetVersion(uint)
 	SetCreatedAt(time.Time)
 }

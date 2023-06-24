@@ -1,4 +1,4 @@
-package member
+package values
 
 type FullNameReconstitutor struct {
 	FirstName string

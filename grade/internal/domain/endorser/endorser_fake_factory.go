@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
-	"github.com/emacsway/grade/grade/internal/domain/member"
+	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
 var EndorserMemberIdFakeValue = uint(1004)
