@@ -19,7 +19,7 @@ func (ex *MemberExporter) SetId(val values.TenantMemberId) {
 	val.Export(&ex.Id)
 }
 
-func (ex *MemberExporter) SetStatus(val Status) {
+func (ex *MemberExporter) SetStatus(val values.Status) {
 	val.Export(&ex.Status)
 }
 

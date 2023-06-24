@@ -9,7 +9,7 @@ import (
 func NewMemberFakeFactory() MemberFakeFactory {
 	return MemberFakeFactory{
 		Id:        values.NewTenantMemberIdFakeFactory(),
-		Status:    Active,
+		Status:    values.Active,
 		FullName:  values.NewFullNameFakeFactory(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
@@ -17,7 +17,7 @@ func NewMemberFakeFactory() MemberFakeFactory {
 
 type MemberFakeFactory struct {
 	Id        values.TenantMemberIdFakeFactory
-	Status    Status
+	Status    values.Status
 	FullName  values.FullNameFakeFactory
 	CreatedAt time.Time
 }
