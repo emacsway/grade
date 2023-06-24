@@ -3,19 +3,20 @@ package competence
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
 type CompetenceExporter struct {
-	Id        TenantCompetenceIdExporter
+	Id        values.TenantCompetenceIdExporter
 	Name      exporters.StringExporter
 	OwnerId   member.TenantMemberIdExporter
 	Version   uint
 	CreatedAt time.Time
 }
 
-func (ex *CompetenceExporter) SetId(val TenantCompetenceId) {
+func (ex *CompetenceExporter) SetId(val values.TenantCompetenceId) {
 	val.Export(&ex.Id)
 }
 

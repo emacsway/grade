@@ -3,12 +3,13 @@ package competence
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
 func NewCompetence(
-	id TenantCompetenceId,
+	id values.TenantCompetenceId,
 	name Name,
 	ownerId member.TenantMemberId,
 	createdAt time.Time,
@@ -22,7 +23,7 @@ func NewCompetence(
 }
 
 type Competence struct {
-	id        TenantCompetenceId
+	id        values.TenantCompetenceId
 	name      Name
 	ownerId   member.TenantMemberId
 	createdAt time.Time
@@ -47,7 +48,7 @@ func (c Competence) Export(ex CompetenceExporterSetter) {
 }
 
 type CompetenceExporterSetter interface {
-	SetId(id TenantCompetenceId)
+	SetId(id values.TenantCompetenceId)
 	SetName(Name)
 	SetOwnerId(member.TenantMemberId)
 	SetVersion(uint)

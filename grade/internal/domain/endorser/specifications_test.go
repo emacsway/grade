@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 )
 
 func TestEndorserCanCompleteEndorsementSpecification(t *testing.T) {

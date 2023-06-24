@@ -1,4 +1,4 @@
-package competence
+package values
 
 import (
 	"fmt"

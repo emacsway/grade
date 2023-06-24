@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
-	"github.com/emacsway/grade/grade/internal/domain/competence"
+	competence "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )

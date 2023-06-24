@@ -3,12 +3,13 @@ package competence
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
 func NewCompetenceFakeFactory() CompetenceFakeFactory {
 	return CompetenceFakeFactory{
-		Id:        NewTenantCompetenceIdFakeFactory(),
+		Id:        values.NewTenantCompetenceIdFakeFactory(),
 		Name:      "Name1",
 		OwnerId:   member.NewTenantMemberIdFakeFactory(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
@@ -16,7 +17,7 @@ func NewCompetenceFakeFactory() CompetenceFakeFactory {
 }
 
 type CompetenceFakeFactory struct {
-	Id        TenantCompetenceIdFakeFactory
+	Id        values.TenantCompetenceIdFakeFactory
 	Name      string
 	OwnerId   member.TenantMemberIdFakeFactory
 	CreatedAt time.Time

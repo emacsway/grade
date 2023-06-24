@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
@@ -19,7 +20,7 @@ func TestCompetenceExport(t *testing.T) {
 	}
 	agg.Export(&actualExporter)
 	assert.Equal(t, CompetenceExporter{
-		Id:        NewTenantCompetenceIdExporter(f.Id.TenantId, f.Id.CompetenceId),
+		Id:        values.NewTenantCompetenceIdExporter(f.Id.TenantId, f.Id.CompetenceId),
 		Name:      exporters.StringExporter(f.Name),
 		OwnerId:   member.NewTenantMemberIdExporter(f.OwnerId.TenantId, f.OwnerId.MemberId),
 		CreatedAt: f.CreatedAt,
