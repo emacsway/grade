@@ -2,7 +2,7 @@ package values
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
 func NewTenantMemberIdExporter(tenantId, memberId uint) TenantMemberIdExporter {

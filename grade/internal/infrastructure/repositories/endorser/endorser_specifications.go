@@ -8,7 +8,7 @@ import (
 	endorserVal "github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	s "github.com/emacsway/grade/grade/internal/infrastructure/specification"
 )
 

@@ -3,11 +3,12 @@ package tenant
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
 type TenantGetQuery struct {
-	Id tenant.TenantId
+	Id tenantVal.TenantId
 }
 
 func (q TenantGetQuery) sql() string {

@@ -1,7 +1,7 @@
 package values
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
 var MemberIdFakeValue = uint(3)

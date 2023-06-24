@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
 type TenantExporter struct {
@@ -13,11 +14,11 @@ type TenantExporter struct {
 	CreatedAt time.Time
 }
 
-func (ex *TenantExporter) SetId(val TenantId) {
+func (ex *TenantExporter) SetId(val values.TenantId) {
 	val.Export(&ex.Id)
 }
 
-func (ex *TenantExporter) SetName(val Name) {
+func (ex *TenantExporter) SetName(val values.Name) {
 	val.Export(&ex.Name)
 }
 

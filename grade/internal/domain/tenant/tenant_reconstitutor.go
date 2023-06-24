@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
+	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
 type TenantReconstitutor struct {
@@ -14,11 +15,11 @@ type TenantReconstitutor struct {
 }
 
 func (r TenantReconstitutor) Reconstitute() (*Tenant, error) {
-	id, err := NewTenantId(r.Id)
+	id, err := values.NewTenantId(r.Id)
 	if err != nil {
 		return nil, err
 	}
-	name, err := NewName(r.Name)
+	name, err := values.NewName(r.Name)
 	if err != nil {
 		return nil, err
 	}

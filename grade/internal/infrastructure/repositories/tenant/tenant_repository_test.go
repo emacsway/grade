@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork"
 )
@@ -75,7 +76,7 @@ func testGet(t *testing.T, repositoryOption RepositoryOption) {
 	agg.Export(&exporterActual)
 	assert.Greater(t, int(exporterActual.Id), 0)
 
-	id, err := tenant.NewTenantId(uint(exporterActual.Id))
+	id, err := tenantVal.NewTenantId(uint(exporterActual.Id))
 	require.NoError(t, err)
 	aggRead, err := repositoryOption.Repository.Get(id)
 	require.NoError(t, err)

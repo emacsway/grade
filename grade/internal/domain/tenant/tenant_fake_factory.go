@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/faker"
+	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
 type TenantFakeFactoryOption func(*TenantFakeFactory)
@@ -17,7 +18,7 @@ func WithTransientId() TenantFakeFactoryOption {
 func NewTenantFakeFactory(opts ...TenantFakeFactoryOption) TenantFakeFactory {
 	aFaker := faker.NewFaker()
 	f := TenantFakeFactory{
-		Id:        TenantIdFakeValue,
+		Id:        values.TenantIdFakeValue,
 		Name:      aFaker.Company(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
@@ -34,11 +35,11 @@ type TenantFakeFactory struct {
 }
 
 func (f TenantFakeFactory) Create() (*Tenant, error) {
-	id, err := NewTenantId(f.Id)
+	id, err := values.NewTenantId(f.Id)
 	if err != nil {
 		return nil, err
 	}
-	name, err := NewName(f.Name)
+	name, err := values.NewName(f.Name)
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package tenant
+package values
 
 import (
 	"testing"

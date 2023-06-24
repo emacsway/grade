@@ -4,11 +4,12 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
+	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
 func NewTenant(
-	id TenantId,
-	name Name,
+	id values.TenantId,
+	name values.Name,
 	createdAt time.Time,
 ) (*Tenant, error) {
 	return &Tenant{
@@ -19,8 +20,8 @@ func NewTenant(
 }
 
 type Tenant struct {
-	id        TenantId
-	name      Name
+	id        values.TenantId
+	name      values.Name
 	createdAt time.Time
 	eventive  aggregate.EventiveEntity
 	aggregate.VersionedAggregate
@@ -42,8 +43,8 @@ func (t Tenant) Export(ex TenantExporterSetter) {
 }
 
 type TenantExporterSetter interface {
-	SetId(id TenantId)
-	SetName(Name)
+	SetId(id values.TenantId)
+	SetName(values.Name)
 	SetVersion(uint)
 	SetCreatedAt(time.Time)
 }

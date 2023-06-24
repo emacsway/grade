@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
@@ -34,7 +35,7 @@ func (r TenantRepository) Insert(obj *tenant.Tenant) error {
 	return nil
 }
 
-func (r TenantRepository) Get(id tenant.TenantId) (*tenant.Tenant, error) {
+func (r TenantRepository) Get(id tenantVal.TenantId) (*tenant.Tenant, error) {
 	q := TenantGetQuery{id}
 	return q.Get(r.session)
 }

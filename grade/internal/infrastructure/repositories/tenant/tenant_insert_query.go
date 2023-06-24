@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
@@ -22,11 +22,11 @@ func (q TenantInsertQuery) sql() string {
 		RETURNING id`
 }
 
-func (q *TenantInsertQuery) SetId(val tenant.TenantId) {
+func (q *TenantInsertQuery) SetId(val tenantVal.TenantId) {
 	q.pkSetter = val.Scan
 }
 
-func (q *TenantInsertQuery) SetName(val tenant.Name) {
+func (q *TenantInsertQuery) SetName(val tenantVal.Name) {
 	var v exporters.StringExporter
 	val.Export(&v)
 	q.params[0] = v
