@@ -20,7 +20,7 @@ func (ex *CompetenceExporter) SetId(val values.TenantCompetenceId) {
 	val.Export(&ex.Id)
 }
 
-func (ex *CompetenceExporter) SetName(val Name) {
+func (ex *CompetenceExporter) SetName(val values.Name) {
 	val.Export(&ex.Name)
 }
 

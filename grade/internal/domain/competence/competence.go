@@ -10,7 +10,7 @@ import (
 
 func NewCompetence(
 	id values.TenantCompetenceId,
-	name Name,
+	name values.Name,
 	ownerId member.TenantMemberId,
 	createdAt time.Time,
 ) (*Competence, error) {
@@ -24,7 +24,7 @@ func NewCompetence(
 
 type Competence struct {
 	id        values.TenantCompetenceId
-	name      Name
+	name      values.Name
 	ownerId   member.TenantMemberId
 	createdAt time.Time
 	eventive  aggregate.EventiveEntity
@@ -49,7 +49,7 @@ func (c Competence) Export(ex CompetenceExporterSetter) {
 
 type CompetenceExporterSetter interface {
 	SetId(id values.TenantCompetenceId)
-	SetName(Name)
+	SetName(values.Name)
 	SetOwnerId(member.TenantMemberId)
 	SetVersion(uint)
 	SetCreatedAt(time.Time)

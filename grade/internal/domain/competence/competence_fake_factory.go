@@ -28,7 +28,7 @@ func (f CompetenceFakeFactory) Create() (*Competence, error) {
 	if err != nil {
 		return nil, err
 	}
-	name, err := NewName(f.Name)
+	name, err := values.NewName(f.Name)
 	if err != nil {
 		return nil, err
 	}
