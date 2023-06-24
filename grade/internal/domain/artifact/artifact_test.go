@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
@@ -20,7 +21,7 @@ func TestArtifactExport(t *testing.T) {
 	}
 	agg.Export(&actualExporter)
 	assert.Equal(t, ArtifactExporter{
-		Id:          NewTenantArtifactIdExporter(f.Id.TenantId, f.Id.ArtifactId),
+		Id:          values.NewTenantArtifactIdExporter(f.Id.TenantId, f.Id.ArtifactId),
 		Status:      exporters.Uint8Exporter(f.Status),
 		Name:        exporters.StringExporter(f.Name),
 		Description: exporters.StringExporter(f.Description),

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	artifact "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"

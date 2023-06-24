@@ -3,7 +3,7 @@ package endorsement
 import (
 	"time"
 
-	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	artifact "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"

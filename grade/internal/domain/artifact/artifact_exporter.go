@@ -3,13 +3,14 @@ package artifact
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
 type ArtifactExporter struct {
-	Id            TenantArtifactIdExporter
+	Id            values.TenantArtifactIdExporter
 	Status        exporters.Uint8Exporter
 	Name          exporters.StringExporter
 	Description   exporters.StringExporter
@@ -21,23 +22,23 @@ type ArtifactExporter struct {
 	CreatedAt     time.Time
 }
 
-func (ex *ArtifactExporter) SetId(val TenantArtifactId) {
+func (ex *ArtifactExporter) SetId(val values.TenantArtifactId) {
 	val.Export(&ex.Id)
 }
 
-func (ex *ArtifactExporter) SetStatus(val Status) {
+func (ex *ArtifactExporter) SetStatus(val values.Status) {
 	val.Export(&ex.Status)
 }
 
-func (ex *ArtifactExporter) SetName(val Name) {
+func (ex *ArtifactExporter) SetName(val values.Name) {
 	val.Export(&ex.Name)
 }
 
-func (ex *ArtifactExporter) SetDescription(val Description) {
+func (ex *ArtifactExporter) SetDescription(val values.Description) {
 	val.Export(&ex.Description)
 }
 
-func (ex *ArtifactExporter) SetUrl(val Url) {
+func (ex *ArtifactExporter) SetUrl(val values.Url) {
 	val.Export(&ex.Url)
 }
 

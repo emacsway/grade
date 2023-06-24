@@ -1,4 +1,4 @@
-package artifact
+package values
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"

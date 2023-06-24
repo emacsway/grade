@@ -3,14 +3,15 @@ package artifact
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
 func NewArtifactFakeFactory() ArtifactFakeFactory {
 	return ArtifactFakeFactory{
-		Id:            NewTenantArtifactIdFakeFactory(),
-		Status:        Accepted,
+		Id:            values.NewTenantArtifactIdFakeFactory(),
+		Status:        values.Accepted,
 		Name:          "Name1",
 		Description:   "Description1",
 		Url:           "https://github.com/emacsway/grade",
@@ -22,8 +23,8 @@ func NewArtifactFakeFactory() ArtifactFakeFactory {
 }
 
 type ArtifactFakeFactory struct {
-	Id            TenantArtifactIdFakeFactory
-	Status        Status
+	Id            values.TenantArtifactIdFakeFactory
+	Status        values.Status
 	Name          string
 	Description   string
 	Url           string
@@ -50,15 +51,15 @@ func (f ArtifactFakeFactory) Create() (*Artifact, error) {
 	if err != nil {
 		return nil, err
 	}
-	name, err := NewName(f.Name)
+	name, err := values.NewName(f.Name)
 	if err != nil {
 		return nil, err
 	}
-	description, err := NewDescription(f.Description)
+	description, err := values.NewDescription(f.Description)
 	if err != nil {
 		return nil, err
 	}
-	url, err := NewUrl(f.Url)
+	url, err := values.NewUrl(f.Url)
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package artifact
+package values
 
 import (
 	"testing"

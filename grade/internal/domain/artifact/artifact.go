@@ -3,17 +3,18 @@ package artifact
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
 func NewArtifact(
-	id TenantArtifactId,
-	status Status,
-	name Name,
-	description Description,
-	url Url,
+	id values.TenantArtifactId,
+	status values.Status,
+	name values.Name,
+	description values.Description,
+	url values.Url,
 	competenceIds []competence.TenantCompetenceId,
 	authorIds []member.TenantMemberId,
 	ownerId member.TenantMemberId,
@@ -34,11 +35,11 @@ func NewArtifact(
 
 // Artifact is a good candidate for EventSourcing
 type Artifact struct {
-	id            TenantArtifactId
-	status        Status
-	name          Name
-	description   Description
-	url           Url
+	id            values.TenantArtifactId
+	status        values.Status
+	name          values.Name
+	description   values.Description
+	url           values.Url
 	competenceIds []competence.TenantCompetenceId
 	authorIds     []member.TenantMemberId
 	ownerId       member.TenantMemberId
@@ -46,7 +47,7 @@ type Artifact struct {
 	eventSourced  aggregate.EventSourcedAggregate
 }
 
-func (a Artifact) Id() TenantArtifactId {
+func (a Artifact) Id() values.TenantArtifactId {
 	return a.id
 }
 
@@ -97,11 +98,11 @@ func (a Artifact) Export(ex ArtifactExporterSetter) {
 }
 
 type ArtifactExporterSetter interface {
-	SetId(id TenantArtifactId)
-	SetStatus(Status)
-	SetName(Name)
-	SetDescription(Description)
-	SetUrl(Url)
+	SetId(id values.TenantArtifactId)
+	SetStatus(values.Status)
+	SetName(values.Name)
+	SetDescription(values.Description)
+	SetUrl(values.Url)
 	AddCompetenceId(competence.TenantCompetenceId)
 	AddAuthorId(member.TenantMemberId)
 	SetOwnerId(member.TenantMemberId)
