@@ -15,7 +15,7 @@ func (q MemberGetQuery) sql() string {
 		SELECT
 		tenant_id, member_id, status, first_name, last_name, version, created_at
 		FROM member
-		WHERE tenant_id=$1 AND id=$2`
+		WHERE tenant_id=$1 AND member_id=$2`
 }
 
 func (q MemberGetQuery) params() []any {
