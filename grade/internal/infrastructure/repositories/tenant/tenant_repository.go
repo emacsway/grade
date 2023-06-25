@@ -19,7 +19,7 @@ type TenantRepository struct {
 	session infrastructure.DbSession
 }
 
-func (r TenantRepository) Insert(obj *tenant.Tenant) error {
+func (r *TenantRepository) Insert(obj *tenant.Tenant) error {
 	q := queries.TenantInsertQuery{}
 	obj.Export(&q)
 	result, err := q.Evaluate(r.session)
@@ -36,7 +36,7 @@ func (r TenantRepository) Insert(obj *tenant.Tenant) error {
 	return nil
 }
 
-func (r TenantRepository) Get(id tenantVal.TenantId) (*tenant.Tenant, error) {
+func (r *TenantRepository) Get(id tenantVal.TenantId) (*tenant.Tenant, error) {
 	q := queries.TenantGetQuery{Id: id}
 	return q.Get(r.session)
 }
