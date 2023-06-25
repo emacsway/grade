@@ -47,13 +47,15 @@ func TestMemberRepository(t *testing.T) {
 
 func clearable(callable testCase) testCase {
 	return func(t *testing.T, repositoryOption RepositoryOption) {
-		/* defer func() {
+		/* TODO:
+			defer func() {
 			r, err := repositoryOption.Session.Exec("DELETE FROM member")
 			require.NoError(t, err)
 			rowsAffected, err := r.RowsAffected()
 			require.NoError(t, err)
 			assert.Greater(t, int(rowsAffected), 0)
-		}() */
+		}()
+		*/
 		callable(t, repositoryOption)
 	}
 }
@@ -114,9 +116,9 @@ func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	require.NoError(t, err)
 	session := infrastructure.NewPgxSession(db)
 	tf := tenantRepo.NewTenantFakeFactory(session)
-	tenant, err := tf.Create()
+	aTenant, err := tf.Create()
 	require.NoError(t, err)
-	tenant.Export(&tenantExp)
+	aTenant.Export(&tenantExp)
 	return RepositoryOption{
 		Name:       "PostgreSQL",
 		Repository: NewMemberRepository(session),

@@ -46,13 +46,15 @@ func TestTenantRepository(t *testing.T) {
 
 func clearable(callable testCase) testCase {
 	return func(t *testing.T, repositoryOption RepositoryOption) {
-		/* defer func() {
+		/* TODO:
+			defer func() {
 			r, err := repositoryOption.Session.Exec("DELETE FROM tenant")
 			require.NoError(t, err)
 			rowsAffected, err := r.RowsAffected()
 			require.NoError(t, err)
 			assert.Greater(t, int(rowsAffected), 0)
-		}() */
+		}()
+		*/
 		callable(t, repositoryOption)
 	}
 }
