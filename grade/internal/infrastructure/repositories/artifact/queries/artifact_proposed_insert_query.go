@@ -1,4 +1,4 @@
-package artifact
+package queries
 
 import (
 	"encoding/json"
