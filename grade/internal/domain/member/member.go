@@ -22,11 +22,12 @@ func NewMember(
 }
 
 type Member struct {
-	id           values.TenantMemberId
-	status       values.Status
-	fullName     values.FullName
-	createdAt    time.Time
-	eventSourced aggregate.EventSourcedAggregate
+	id        values.TenantMemberId
+	status    values.Status
+	fullName  values.FullName
+	createdAt time.Time
+	eventive  aggregate.EventiveEntity
+	aggregate.VersionedAggregate
 }
 
 func (m Member) Id() values.TenantMemberId {
@@ -34,19 +35,11 @@ func (m Member) Id() values.TenantMemberId {
 }
 
 func (m Member) PendingDomainEvents() []aggregate.DomainEvent {
-	return m.eventSourced.PendingDomainEvents()
+	return m.eventive.PendingDomainEvents()
 }
 
 func (m *Member) ClearPendingDomainEvents() {
-	m.eventSourced.ClearPendingDomainEvents()
-}
-
-func (m Member) Version() uint {
-	return m.eventSourced.Version()
-}
-
-func (m *Member) SetVersion(val uint) {
-	m.eventSourced.SetVersion(val)
+	m.eventive.ClearPendingDomainEvents()
 }
 
 func (m Member) Export(ex MemberExporterSetter) {
