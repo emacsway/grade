@@ -6,6 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant/queries"
 )
 
 func NewTenantRepository(session infrastructure.DbSession) *TenantRepository {
@@ -19,7 +20,7 @@ type TenantRepository struct {
 }
 
 func (r TenantRepository) Insert(obj *tenant.Tenant) error {
-	q := TenantInsertQuery{}
+	q := queries.TenantInsertQuery{}
 	obj.Export(&q)
 	result, err := q.Evaluate(r.session)
 	if err != nil {
@@ -36,6 +37,6 @@ func (r TenantRepository) Insert(obj *tenant.Tenant) error {
 }
 
 func (r TenantRepository) Get(id tenantVal.TenantId) (*tenant.Tenant, error) {
-	q := TenantGetQuery{id}
+	q := queries.TenantGetQuery{Id: id}
 	return q.Get(r.session)
 }

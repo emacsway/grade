@@ -1,5 +1,5 @@
 CREATE TABLE tenant (
-        id serial CONSTRAINT tenant_pk PRIMARY KEY,
+        id bigserial CONSTRAINT tenant_pk PRIMARY KEY,
         name varchar(150) NOT NULL,
         created_at timestamp with time zone NOT NULL,
         version integer NOT NULL
@@ -23,9 +23,12 @@ CREATE TABLE event_log (
 CREATE TABLE member (
     tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
     id bigint NOT NULL,
+    status smallint NOT NULL,
+    first_name varchar(150) NOT NULL,
+    last_name varchar(150) NOT NULL,
     created_at timestamp with time zone NOT NULL,
     version integer NOT NULL,
-    CONSTRAINT member_pk PRIMARY KEY (tenant_id, member_id)
+    CONSTRAINT member_pk PRIMARY KEY (tenant_id, id)
 );
 
 
