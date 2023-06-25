@@ -27,7 +27,7 @@ func (q MemberGetQuery) params() []any {
 func (q *MemberGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (*member.Member, error) {
 	rec := &member.MemberReconstitutor{}
 	err := s.QueryRow(q.sql(), q.params()...).Scan(
-		&rec.TenantId, &rec.Id, &rec.Status, &rec.FirstName, &rec.LastName, &rec.Version, &rec.CreatedAt,
+		&rec.TenantId, &rec.MemberId, &rec.Status, &rec.FirstName, &rec.LastName, &rec.Version, &rec.CreatedAt,
 	)
 	if err != nil {
 		return nil, err
