@@ -6,6 +6,12 @@ import (
 
 type TenantMemberIdFakeFactoryOption func(*TenantMemberIdFakeFactory)
 
+func WithTenantId(tenantId uint) TenantMemberIdFakeFactoryOption {
+	return func(f *TenantMemberIdFakeFactory) {
+		f.TenantId = tenantId
+	}
+}
+
 func WithTransientId() TenantMemberIdFakeFactoryOption {
 	return func(f *TenantMemberIdFakeFactory) {
 		f.MemberId = 0
