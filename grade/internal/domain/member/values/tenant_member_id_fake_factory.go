@@ -4,13 +4,25 @@ import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
+type TenantMemberIdFakeFactoryOption func(*TenantMemberIdFakeFactory)
+
+func WithTransientId() TenantMemberIdFakeFactoryOption {
+	return func(f *TenantMemberIdFakeFactory) {
+		f.MemberId = 0
+	}
+}
+
 var MemberIdFakeValue = uint(3)
 
-func NewTenantMemberIdFakeFactory() TenantMemberIdFakeFactory {
-	return TenantMemberIdFakeFactory{
+func NewTenantMemberIdFakeFactory(opts ...TenantMemberIdFakeFactoryOption) TenantMemberIdFakeFactory {
+	f := TenantMemberIdFakeFactory{
 		TenantId: tenant.TenantIdFakeValue,
 		MemberId: MemberIdFakeValue,
 	}
+	for _, opt := range opts {
+		opt(&f)
+	}
+	return f
 }
 
 type TenantMemberIdFakeFactory struct {

@@ -6,13 +6,25 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
-func NewMemberFakeFactory() MemberFakeFactory {
-	return MemberFakeFactory{
+type MemberFakeFactoryOption func(*MemberFakeFactory)
+
+func WithTransientId() MemberFakeFactoryOption {
+	return func(f *MemberFakeFactory) {
+		f.Id.MemberId = 0
+	}
+}
+
+func NewMemberFakeFactory(opts ...MemberFakeFactoryOption) MemberFakeFactory {
+	f := MemberFakeFactory{
 		Id:        values.NewTenantMemberIdFakeFactory(),
 		Status:    values.Active,
 		FullName:  values.NewFullNameFakeFactory(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
+	for _, opt := range opts {
+		opt(&f)
+	}
+	return f
 }
 
 type MemberFakeFactory struct {
