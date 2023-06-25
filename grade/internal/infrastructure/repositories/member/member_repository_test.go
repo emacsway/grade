@@ -1,4 +1,4 @@
-package tenant
+package member
 
 import (
 	"testing"
@@ -6,15 +6,17 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/emacsway/grade/grade/internal/domain/member"
+	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
-	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork"
+	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
 )
 
 type testCase func(t *testing.T, repositoryOption RepositoryOption)
 
-func TestTenantRepository(t *testing.T) {
+func TestMemberRepository(t *testing.T) {
 	// TODO: r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	repositoryOptions := createRepositories(t)
@@ -41,13 +43,12 @@ func TestTenantRepository(t *testing.T) {
 			})
 		})
 	}
-
 }
 
 func clearable(callable testCase) testCase {
 	return func(t *testing.T, repositoryOption RepositoryOption) {
 		/* defer func() {
-			r, err := repositoryOption.Session.Exec("DELETE FROM tenant")
+			r, err := repositoryOption.Session.Exec("DELETE FROM member")
 			require.NoError(t, err)
 			rowsAffected, err := r.RowsAffected()
 			require.NoError(t, err)
@@ -58,26 +59,35 @@ func clearable(callable testCase) testCase {
 }
 
 func testInsert(t *testing.T, repositoryOption RepositoryOption) {
-	var actualExporter tenant.TenantExporter
-	factory := tenant.NewTenantFakeFactory(tenant.WithTransientId())
+	var actualExporter member.MemberExporter
+	factory := member.NewMemberFakeFactory(
+		member.WithTenantId(repositoryOption.TenantId),
+		member.WithTransientId(),
+	)
 	agg, err := factory.Create()
 	require.NoError(t, err)
 	err = repositoryOption.Repository.Insert(agg)
 	require.NoError(t, err)
 	agg.Export(&actualExporter)
-	assert.Greater(t, int(actualExporter.Id), 0)
+	assert.Greater(t, int(actualExporter.Id.MemberId), 0)
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
-	var exporterActual tenant.TenantExporter
-	var exporterRead tenant.TenantExporter
-	factory := NewTenantFakeFactory(repositoryOption.Session)
+	var exporterActual member.MemberExporter
+	var exporterRead member.MemberExporter
+	factory := NewMemberFakeFactory(
+		repositoryOption.Session,
+		member.WithTenantId(repositoryOption.TenantId),
+	)
 	agg, err := factory.Create()
 	require.NoError(t, err)
 	agg.Export(&exporterActual)
-	assert.Greater(t, int(exporterActual.Id), 0)
+	assert.Greater(t, int(exporterActual.Id.MemberId), 0)
 
-	id, err := tenantVal.NewTenantId(uint(exporterActual.Id))
+	id, err := memberVal.NewTenantMemberId(
+		uint(exporterActual.Id.TenantId),
+		uint(exporterActual.Id.MemberId),
+	)
 	require.NoError(t, err)
 	aggRead, err := repositoryOption.Repository.Get(id)
 	require.NoError(t, err)
@@ -87,8 +97,9 @@ func testGet(t *testing.T, repositoryOption RepositoryOption) {
 
 type RepositoryOption struct {
 	Name       string
-	Repository *TenantRepository
+	Repository *MemberRepository
 	Session    infrastructure.DbSession
+	TenantId   uint
 }
 
 func createRepositories(t *testing.T) []RepositoryOption {
@@ -98,12 +109,18 @@ func createRepositories(t *testing.T) []RepositoryOption {
 }
 
 func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
+	var tenantExp tenant.TenantExporter
 	db, err := seedwork.NewTestDb()
 	require.NoError(t, err)
 	session := infrastructure.NewPgxSession(db)
+	tf := tenantRepo.NewTenantFakeFactory(session)
+	tenant, err := tf.Create()
+	require.NoError(t, err)
+	tenant.Export(&tenantExp)
 	return RepositoryOption{
 		Name:       "PostgreSQL",
-		Repository: NewTenantRepository(session),
+		Repository: NewMemberRepository(session),
 		Session:    session,
+		TenantId:   uint(tenantExp.Id),
 	}
 }

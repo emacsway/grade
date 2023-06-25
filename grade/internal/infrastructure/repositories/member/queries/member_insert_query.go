@@ -20,7 +20,7 @@ func (q MemberInsertQuery) sql() string {
 		(tenant_id, status, first_name, last_name, version, created_at)
 		VALUES
 		($1, $2, $3, $4, $5, $6)
-		RETURNING id`
+		RETURNING member_id`
 }
 
 func (q *MemberInsertQuery) SetId(val memberVal.TenantMemberId) {
@@ -60,11 +60,11 @@ func (q *MemberInsertQuery) SetLastName(val memberVal.LastName) {
 }
 
 func (q *MemberInsertQuery) SetVersion(val uint) {
-	q.params[1] = val
+	q.params[4] = val
 }
 
 func (q *MemberInsertQuery) SetCreatedAt(val time.Time) {
-	q.params[2] = val
+	q.params[5] = val
 }
 
 func (q *MemberInsertQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {

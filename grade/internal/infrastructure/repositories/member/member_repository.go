@@ -20,8 +20,8 @@ type MemberRepository struct {
 }
 
 func (r *MemberRepository) Insert(obj *member.Member) error {
-	q := queries.MemberInsertQuery{}
-	obj.Export(&q)
+	q := &queries.MemberInsertQuery{}
+	obj.Export(q)
 	result, err := q.Evaluate(r.session)
 	if err != nil {
 		return err

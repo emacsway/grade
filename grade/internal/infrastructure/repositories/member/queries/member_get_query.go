@@ -13,9 +13,9 @@ type MemberGetQuery struct {
 func (q MemberGetQuery) sql() string {
 	return `
 		SELECT
-		tenant_id, id, status, first_name, last_name, version, created_at
+		tenant_id, member_id, status, first_name, last_name, version, created_at
 		FROM member
-		WHERE tenant_id=$ AND id=$1`
+		WHERE tenant_id=$1 AND id=$2`
 }
 
 func (q MemberGetQuery) params() []any {

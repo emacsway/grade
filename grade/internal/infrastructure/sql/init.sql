@@ -22,13 +22,13 @@ CREATE TABLE event_log (
 
 CREATE TABLE member (
     tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
-    id bigint NOT NULL,
+    member_id bigint NOT NULL,
     status smallint NOT NULL,
     first_name varchar(150) NOT NULL,
     last_name varchar(150) NOT NULL,
     created_at timestamp with time zone NOT NULL,
     version integer NOT NULL,
-    CONSTRAINT member_pk PRIMARY KEY (tenant_id, id)
+    CONSTRAINT member_pk PRIMARY KEY (tenant_id, member_id)
 );
 
 
@@ -58,7 +58,7 @@ CREATE FUNCTION fill_in_member_seq() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
 begin
-    NEW.seq := nextval('member_seq_' || NEW.id);
+    NEW.member_id := nextval('member_seq_' || NEW.tenant_id);
     RETURN NEW;
 end
 $$;

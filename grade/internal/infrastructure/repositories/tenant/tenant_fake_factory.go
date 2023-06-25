@@ -8,9 +8,9 @@ import (
 func NewTenantFakeFactory(
 	session infrastructure.DbSession,
 	opts ...tenant.TenantFakeFactoryOption,
-) TenantFakeFactory {
+) *TenantFakeFactory {
 	opts = append(opts, tenant.WithTransientId())
-	return TenantFakeFactory{
+	return &TenantFakeFactory{
 		tenant.NewTenantFakeFactory(opts...),
 		NewTenantRepository(session),
 	}
@@ -21,14 +21,17 @@ type TenantFakeFactory struct {
 	Repository *TenantRepository
 }
 
-func (f TenantFakeFactory) Create() (*tenant.Tenant, error) {
-	obj, err := f.TenantFakeFactory.Create()
+func (f *TenantFakeFactory) Create() (*tenant.Tenant, error) {
+	var aggExp tenant.TenantExporter
+	agg, err := f.TenantFakeFactory.Create()
 	if err != nil {
 		return nil, err
 	}
-	err = f.Repository.Insert(obj)
+	err = f.Repository.Insert(agg)
 	if err != nil {
 		return nil, err
 	}
-	return obj, nil
+	agg.Export(&aggExp)
+	f.Id = uint(aggExp.Id)
+	return agg, nil
 }
