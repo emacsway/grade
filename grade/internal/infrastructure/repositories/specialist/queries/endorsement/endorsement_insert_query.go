@@ -1,4 +1,4 @@
-package Endorsement
+package endorsement
 
 import (
 	"fmt"
