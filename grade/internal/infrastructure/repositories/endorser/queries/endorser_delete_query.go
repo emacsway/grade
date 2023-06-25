@@ -1,4 +1,4 @@
-package endorser
+package queries
 
 import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"

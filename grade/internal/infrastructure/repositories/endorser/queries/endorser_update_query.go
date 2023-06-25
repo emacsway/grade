@@ -1,4 +1,4 @@
-package endorser
+package queries
 
 import (
 	"time"

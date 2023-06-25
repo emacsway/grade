@@ -5,6 +5,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/endorser/queries"
 )
 
 func NewEndorserRepository(session infrastructure.DbSession) EndorserRepository {
@@ -18,7 +19,7 @@ type EndorserRepository struct {
 }
 
 func (r EndorserRepository) Insert(obj endorser.Endorser) error {
-	q := EndorserInsertQuery{}
+	q := queries.EndorserInsertQuery{}
 	obj.Export(&q)
 	result, err := q.Evaluate(r.session)
 	if err != nil {
