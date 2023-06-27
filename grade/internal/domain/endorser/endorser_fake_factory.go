@@ -9,10 +9,10 @@ import (
 
 var EndorserMemberIdFakeValue = uint(1004)
 
-func NewEndorserFakeFactory() EndorserFakeFactory {
+func NewEndorserFakeFactory() *EndorserFakeFactory {
 	idFactory := member.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = EndorserMemberIdFakeValue
-	return EndorserFakeFactory{
+	return &EndorserFakeFactory{
 		Id:        idFactory,
 		Grade:     1,
 		CreatedAt: time.Now().Truncate(time.Microsecond),

@@ -59,7 +59,7 @@ func (f *SpecialistFakeFactory) achieveGrade() error {
 	return nil
 }
 
-func (f *SpecialistFakeFactory) ReceiveEndorsement(e endorser.EndorserFakeFactory) error {
+func (f *SpecialistFakeFactory) ReceiveEndorsement(e *endorser.EndorserFakeFactory) error {
 	err := f.achieveGrade()
 	if err != nil {
 		return err
@@ -67,7 +67,7 @@ func (f *SpecialistFakeFactory) ReceiveEndorsement(e endorser.EndorserFakeFactor
 	return f.receiveEndorsement(e)
 }
 
-func (f *SpecialistFakeFactory) receiveEndorsement(e endorser.EndorserFakeFactory) error {
+func (f *SpecialistFakeFactory) receiveEndorsement(e *endorser.EndorserFakeFactory) error {
 	entf := f.Dependency.MakeReceivedEndorsementFakeItem(e)
 	entf.Artifact.Id.TenantId = f.Id.TenantId
 	if len(f.ReceivedEndorsements) > 0 {
@@ -121,15 +121,15 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 }
 
 type SpecialistDependencyFakeFactoryMaker interface {
-	MakeReceivedEndorsementFakeItem(endorser.EndorserFakeFactory) ReceivedEndorsementFakeItem
+	MakeReceivedEndorsementFakeItem(*endorser.EndorserFakeFactory) ReceivedEndorsementFakeItem
 	MakeArtifactFakeFactory() *artifact.ArtifactFakeFactory
-	MakeEndorserFakeFactory() endorser.EndorserFakeFactory
+	MakeEndorserFakeFactory() *endorser.EndorserFakeFactory
 }
 
 type SpecialistDependencyFakeFactory struct{}
 
 func (d SpecialistDependencyFakeFactory) MakeReceivedEndorsementFakeItem(
-	e endorser.EndorserFakeFactory,
+	e *endorser.EndorserFakeFactory,
 ) ReceivedEndorsementFakeItem {
 	return ReceivedEndorsementFakeItem{
 		Endorser:  e,
@@ -142,12 +142,12 @@ func (d SpecialistDependencyFakeFactory) MakeArtifactFakeFactory() *artifact.Art
 	return artifact.NewArtifactFakeFactory()
 }
 
-func (d SpecialistDependencyFakeFactory) MakeEndorserFakeFactory() endorser.EndorserFakeFactory {
+func (d SpecialistDependencyFakeFactory) MakeEndorserFakeFactory() *endorser.EndorserFakeFactory {
 	return endorser.NewEndorserFakeFactory()
 }
 
 type ReceivedEndorsementFakeItem struct {
-	Endorser  endorser.EndorserFakeFactory
+	Endorser  *endorser.EndorserFakeFactory
 	Artifact  *artifact.ArtifactFakeFactory
 	CreatedAt time.Time
 }
