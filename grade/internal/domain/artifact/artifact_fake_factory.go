@@ -88,3 +88,8 @@ func (f ArtifactFakeFactory) Create() (*Artifact, error) {
 		competenceIds, authorIds, owner, f.CreatedAt,
 	), nil
 }
+
+func (f *ArtifactFakeFactory) Next() error {
+	f.Id.ArtifactId += 1
+	return nil
+}

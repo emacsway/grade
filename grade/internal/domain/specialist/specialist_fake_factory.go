@@ -73,7 +73,10 @@ func (f *SpecialistFakeFactory) receiveEndorsement(e endorser.EndorserFakeFactor
 	if len(f.ReceivedEndorsements) > 0 {
 		entf.Artifact.Id = f.ReceivedEndorsements[len(f.ReceivedEndorsements)-1].Artifact.Id
 	}
-	entf.Artifact.Id.NextArtifactId()
+	err := entf.Artifact.Next()
+	if err != nil {
+		return err
+	}
 	entf.CreatedAt = time.Now().Truncate(time.Microsecond)
 	if err := entf.Artifact.AddAuthorId(f.Id); err != nil {
 		return err
@@ -127,7 +130,6 @@ func (d SpecialistDependencyFakeFactory) MakeReceivedEndorsementFakeItem(
 	e endorser.EndorserFakeFactory,
 ) ReceivedEndorsementFakeItem {
 	artifactFactory := artifact.NewArtifactFakeFactory()
-	artifactFactory.Id.NextArtifactId()
 	return ReceivedEndorsementFakeItem{
 		Endorser:  e,
 		Artifact:  artifactFactory,
