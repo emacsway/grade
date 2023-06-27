@@ -16,10 +16,6 @@ type TenantCompetenceIdFakeFactory struct {
 	CompetenceId uint
 }
 
-func (f *TenantCompetenceIdFakeFactory) NextCompetenceId() {
-	f.CompetenceId += 1
-}
-
 func (f TenantCompetenceIdFakeFactory) Create() (TenantCompetenceId, error) {
 	return NewTenantCompetenceId(f.TenantId, f.CompetenceId)
 }
