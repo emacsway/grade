@@ -7,8 +7,8 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
-func NewCompetenceFakeFactory() CompetenceFakeFactory {
-	return CompetenceFakeFactory{
+func NewCompetenceFakeFactory() *CompetenceFakeFactory {
+	return &CompetenceFakeFactory{
 		Id:        values.NewTenantCompetenceIdFakeFactory(),
 		Name:      "Name1",
 		OwnerId:   member.NewTenantMemberIdFakeFactory(),
