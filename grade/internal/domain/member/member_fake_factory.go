@@ -20,27 +20,37 @@ func WithTransientId() MemberFakeFactoryOption {
 	}
 }
 
-func NewMemberFakeFactory(opts ...MemberFakeFactoryOption) MemberFakeFactory {
-	f := MemberFakeFactory{
+func WithRepository(repo MemberRepository) MemberFakeFactoryOption {
+	return func(f *MemberFakeFactory) {
+		f.Repository = repo
+	}
+}
+
+func NewMemberFakeFactory(opts ...MemberFakeFactoryOption) *MemberFakeFactory {
+	f := &MemberFakeFactory{
 		Id:        values.NewTenantMemberIdFakeFactory(),
 		Status:    values.Active,
 		FullName:  values.NewFullNameFakeFactory(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
+		// Repo and dependecies should be at Aggregate-level FakeFactory, not at TenantMemberIdFakeFactory
+		Repository: MemberDummyRepository{},
 	}
 	for _, opt := range opts {
-		opt(&f)
+		opt(f)
 	}
 	return f
 }
 
 type MemberFakeFactory struct {
-	Id        values.TenantMemberIdFakeFactory
-	Status    values.Status
-	FullName  values.FullNameFakeFactory
-	CreatedAt time.Time
+	Id         values.TenantMemberIdFakeFactory
+	Status     values.Status
+	FullName   values.FullNameFakeFactory
+	CreatedAt  time.Time
+	Repository MemberRepository
 }
 
 func (f MemberFakeFactory) Create() (*Member, error) {
+	var aggExp MemberExporter
 	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
@@ -49,7 +59,27 @@ func (f MemberFakeFactory) Create() (*Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewMember(
+	agg, err := NewMember(
 		id, f.Status, fullName, f.CreatedAt,
 	), nil
+	if err != nil {
+		return nil, err
+	}
+	err = f.Repository.Insert(agg)
+	if err != nil {
+		return nil, err
+	}
+	agg.Export(&aggExp)
+	f.Id.MemberId = uint(aggExp.Id.MemberId)
+	return agg, nil
+}
+
+type MemberRepository interface {
+	Insert(*Member) error
+}
+
+type MemberDummyRepository struct{}
+
+func (r MemberDummyRepository) Insert(agg *Member) error {
+	return nil
 }
