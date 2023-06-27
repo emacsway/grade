@@ -8,8 +8,8 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
-func NewArtifactFakeFactory() ArtifactFakeFactory {
-	return ArtifactFakeFactory{
+func NewArtifactFakeFactory() *ArtifactFakeFactory {
+	return &ArtifactFakeFactory{
 		Id:            values.NewTenantArtifactIdFakeFactory(),
 		Status:        values.Accepted,
 		Name:          "Name1",

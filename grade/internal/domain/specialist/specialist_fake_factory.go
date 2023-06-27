@@ -139,6 +139,6 @@ func (d SpecialistDependencyFakeFactory) MakeReceivedEndorsementFakeItem(
 
 type ReceivedEndorsementFakeItem struct {
 	Endorser  endorser.EndorserFakeFactory
-	Artifact  artifact.ArtifactFakeFactory
+	Artifact  *artifact.ArtifactFakeFactory
 	CreatedAt time.Time
 }
