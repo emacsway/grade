@@ -12,10 +12,10 @@ import (
 
 var SpecialistMemberIdFakeValue = memberVal.MemberIdFakeValue
 
-func NewSpecialistFakeFactory() SpecialistFakeFactory {
+func NewSpecialistFakeFactory() *SpecialistFakeFactory {
 	idFactory := memberVal.NewTenantMemberIdFakeFactory()
 	idFactory.MemberId = SpecialistMemberIdFakeValue
-	return SpecialistFakeFactory{
+	return &SpecialistFakeFactory{
 		Id:         idFactory,
 		Grade:      0,
 		CreatedAt:  time.Now().Truncate(time.Microsecond),
