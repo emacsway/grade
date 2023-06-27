@@ -16,10 +16,6 @@ type TenantArtifactIdFakeFactory struct {
 	ArtifactId uint
 }
 
-func (f *TenantArtifactIdFakeFactory) NextTenantId() {
-	f.TenantId += 1
-}
-
 func (f *TenantArtifactIdFakeFactory) NextArtifactId() {
 	f.ArtifactId += 1
 }
