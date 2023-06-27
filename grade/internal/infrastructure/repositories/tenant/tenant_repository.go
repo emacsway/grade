@@ -19,9 +19,9 @@ type TenantRepository struct {
 	session infrastructure.DbSession
 }
 
-func (r *TenantRepository) Insert(obj *tenant.Tenant) error {
+func (r *TenantRepository) Insert(agg *tenant.Tenant) error {
 	q := &queries.TenantInsertQuery{}
-	obj.Export(q)
+	agg.Export(q)
 	result, err := q.Evaluate(r.session)
 	if err != nil {
 		return err
