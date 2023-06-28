@@ -39,9 +39,9 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			sf := NewSpecialistFakeFactory()
-			rf := endorser.NewEndorserFakeFactory()
-			af := artifact.NewArtifactFakeFactory()
+			sf := NewSpecialistFaker()
+			rf := endorser.NewEndorserFaker()
+			af := artifact.NewArtifactFaker()
 			sf.Id.TenantId = c.SpecialistTenantId
 			sf.Id.MemberId = c.SpecialistMemberId
 			sf.Grade = c.SpecialistGrade
@@ -122,9 +122,9 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			sf := NewSpecialistFakeFactory()
-			rf := endorser.NewEndorserFakeFactory()
-			af := artifact.NewArtifactFakeFactory()
+			sf := NewSpecialistFaker()
+			rf := endorser.NewEndorserFaker()
+			af := artifact.NewArtifactFaker()
 			if err := af.AddAuthorId(sf.Id); err != nil {
 				t.Error(err)
 				t.FailNow()

@@ -5,14 +5,14 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-func NewTenantFakeFactory(
+func NewTenantFaker(
 	session infrastructure.DbSession,
-	opts ...tenant.TenantFakeFactoryOption,
-) *tenant.TenantFakeFactory {
+	opts ...tenant.TenantFakerOption,
+) *tenant.TenantFaker {
 	opts = append(
 		opts,
 		tenant.WithTransientId(),
 		tenant.WithRepository(NewTenantRepository(session)),
 	)
-	return tenant.NewTenantFakeFactory(opts...)
+	return tenant.NewTenantFaker(opts...)
 }

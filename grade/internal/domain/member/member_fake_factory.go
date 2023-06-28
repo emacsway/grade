@@ -6,33 +6,33 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
-type MemberFakeFactoryOption func(*MemberFakeFactory)
+type MemberFakerOption func(*MemberFaker)
 
-func WithTenantId(tenantId uint) MemberFakeFactoryOption {
-	return func(f *MemberFakeFactory) {
+func WithTenantId(tenantId uint) MemberFakerOption {
+	return func(f *MemberFaker) {
 		f.Id.TenantId = tenantId
 	}
 }
 
-func WithTransientId() MemberFakeFactoryOption {
-	return func(f *MemberFakeFactory) {
+func WithTransientId() MemberFakerOption {
+	return func(f *MemberFaker) {
 		f.Id.MemberId = 0
 	}
 }
 
-func WithRepository(repo MemberRepository) MemberFakeFactoryOption {
-	return func(f *MemberFakeFactory) {
+func WithRepository(repo MemberRepository) MemberFakerOption {
+	return func(f *MemberFaker) {
 		f.Repository = repo
 	}
 }
 
-func NewMemberFakeFactory(opts ...MemberFakeFactoryOption) *MemberFakeFactory {
-	f := &MemberFakeFactory{
-		Id:        values.NewTenantMemberIdFakeFactory(),
+func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
+	f := &MemberFaker{
+		Id:        values.NewTenantMemberIdFaker(),
 		Status:    values.Active,
-		FullName:  values.NewFullNameFakeFactory(),
+		FullName:  values.NewFullNameFaker(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
-		// Repo and dependecies should be at Aggregate-level FakeFactory, not at TenantMemberIdFakeFactory
+		// Repo and dependecies should be at Aggregate-level Faker, not at TenantMemberIdFaker
 		Repository: MemberDummyRepository{},
 	}
 	for _, opt := range opts {
@@ -41,15 +41,15 @@ func NewMemberFakeFactory(opts ...MemberFakeFactoryOption) *MemberFakeFactory {
 	return f
 }
 
-type MemberFakeFactory struct {
-	Id         values.TenantMemberIdFakeFactory
+type MemberFaker struct {
+	Id         values.TenantMemberIdFaker
 	Status     values.Status
-	FullName   values.FullNameFakeFactory
+	FullName   values.FullNameFaker
 	CreatedAt  time.Time
 	Repository MemberRepository
 }
 
-func (f MemberFakeFactory) Create() (*Member, error) {
+func (f MemberFaker) Create() (*Member, error) {
 	var aggExp MemberExporter
 	id, err := f.Id.Create()
 	if err != nil {

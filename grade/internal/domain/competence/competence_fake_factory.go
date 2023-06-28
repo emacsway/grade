@@ -7,23 +7,23 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
-func NewCompetenceFakeFactory() *CompetenceFakeFactory {
-	return &CompetenceFakeFactory{
-		Id:        values.NewTenantCompetenceIdFakeFactory(),
+func NewCompetenceFaker() *CompetenceFaker {
+	return &CompetenceFaker{
+		Id:        values.NewTenantCompetenceIdFaker(),
 		Name:      "Name1",
-		OwnerId:   member.NewTenantMemberIdFakeFactory(),
+		OwnerId:   member.NewTenantMemberIdFaker(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 
-type CompetenceFakeFactory struct {
-	Id        values.TenantCompetenceIdFakeFactory
+type CompetenceFaker struct {
+	Id        values.TenantCompetenceIdFaker
 	Name      string
-	OwnerId   member.TenantMemberIdFakeFactory
+	OwnerId   member.TenantMemberIdFaker
 	CreatedAt time.Time
 }
 
-func (f CompetenceFakeFactory) Create() (*Competence, error) {
+func (f CompetenceFaker) Create() (*Competence, error) {
 	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err

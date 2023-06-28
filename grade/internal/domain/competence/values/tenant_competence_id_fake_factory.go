@@ -4,18 +4,18 @@ import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
-func NewTenantCompetenceIdFakeFactory() TenantCompetenceIdFakeFactory {
-	return TenantCompetenceIdFakeFactory{
+func NewTenantCompetenceIdFaker() TenantCompetenceIdFaker {
+	return TenantCompetenceIdFaker{
 		TenantId:     tenant.TenantIdFakeValue,
 		CompetenceId: uint(3),
 	}
 }
 
-type TenantCompetenceIdFakeFactory struct {
+type TenantCompetenceIdFaker struct {
 	TenantId     uint
 	CompetenceId uint
 }
 
-func (f TenantCompetenceIdFakeFactory) Create() (TenantCompetenceId, error) {
+func (f TenantCompetenceIdFaker) Create() (TenantCompetenceId, error) {
 	return NewTenantCompetenceId(f.TenantId, f.CompetenceId)
 }

@@ -12,33 +12,33 @@ import (
 
 var SpecialistMemberIdFakeValue = memberVal.MemberIdFakeValue
 
-func NewSpecialistFakeFactory() *SpecialistFakeFactory {
-	idFactory := memberVal.NewTenantMemberIdFakeFactory()
+func NewSpecialistFaker() *SpecialistFaker {
+	idFactory := memberVal.NewTenantMemberIdFaker()
 	idFactory.MemberId = SpecialistMemberIdFakeValue
-	return &SpecialistFakeFactory{
+	return &SpecialistFaker{
 		Id:         idFactory,
 		Grade:      0,
 		CreatedAt:  time.Now().Truncate(time.Microsecond),
-		Dependency: SpecialistDependencyFakeFactory{},
+		Dependency: SpecialistDependencyFakerImp{},
 	}
 }
 
-type SpecialistFakeFactory struct {
-	Id                   memberVal.TenantMemberIdFakeFactory
+type SpecialistFaker struct {
+	Id                   memberVal.TenantMemberIdFaker
 	Grade                uint8
 	ReceivedEndorsements []ReceivedEndorsementFakeItem
 	CreatedAt            time.Time
-	Dependency           SpecialistDependencyFakeFactoryMaker
+	Dependency           SpecialistDependencyFaker
 }
 
-func (f *SpecialistFakeFactory) achieveGrade() error {
+func (f *SpecialistFaker) achieveGrade() error {
 	currentGrade, _ := grade.DefaultConstructor(0)
 	targetGrade, err := grade.DefaultConstructor(f.Grade)
 	if err != nil {
 		return err
 	}
 	for currentGrade.LessThan(targetGrade) {
-		rf := f.Dependency.MakeEndorserFakeFactory()
+		rf := f.Dependency.MakeEndorserFaker()
 		rf.Id.TenantId = f.Id.TenantId
 		endorserGrade, _ := currentGrade.Next()
 		gradeExporter := exporters.Uint8Exporter(0)
@@ -59,7 +59,7 @@ func (f *SpecialistFakeFactory) achieveGrade() error {
 	return nil
 }
 
-func (f *SpecialistFakeFactory) ReceiveEndorsement(e *endorser.EndorserFakeFactory) error {
+func (f *SpecialistFaker) ReceiveEndorsement(e *endorser.EndorserFaker) error {
 	err := f.achieveGrade()
 	if err != nil {
 		return err
@@ -67,7 +67,7 @@ func (f *SpecialistFakeFactory) ReceiveEndorsement(e *endorser.EndorserFakeFacto
 	return f.receiveEndorsement(e)
 }
 
-func (f *SpecialistFakeFactory) receiveEndorsement(e *endorser.EndorserFakeFactory) error {
+func (f *SpecialistFaker) receiveEndorsement(e *endorser.EndorserFaker) error {
 	entf := f.Dependency.MakeReceivedEndorsementFakeItem(e)
 	entf.Artifact.Id.TenantId = f.Id.TenantId
 	if len(f.ReceivedEndorsements) > 0 {
@@ -85,7 +85,7 @@ func (f *SpecialistFakeFactory) receiveEndorsement(e *endorser.EndorserFakeFacto
 	return nil
 }
 
-func (f SpecialistFakeFactory) Create() (*Specialist, error) {
+func (f SpecialistFaker) Create() (*Specialist, error) {
 	err := f.achieveGrade()
 	if err != nil {
 		return nil, err
@@ -120,34 +120,34 @@ func (f SpecialistFakeFactory) Create() (*Specialist, error) {
 	return s, nil
 }
 
-type SpecialistDependencyFakeFactoryMaker interface {
-	MakeReceivedEndorsementFakeItem(*endorser.EndorserFakeFactory) ReceivedEndorsementFakeItem
-	MakeArtifactFakeFactory() *artifact.ArtifactFakeFactory
-	MakeEndorserFakeFactory() *endorser.EndorserFakeFactory
+type SpecialistDependencyFaker interface {
+	MakeReceivedEndorsementFakeItem(*endorser.EndorserFaker) ReceivedEndorsementFakeItem
+	MakeArtifactFaker() *artifact.ArtifactFaker
+	MakeEndorserFaker() *endorser.EndorserFaker
 }
 
-type SpecialistDependencyFakeFactory struct{}
+type SpecialistDependencyFakerImp struct{}
 
-func (d SpecialistDependencyFakeFactory) MakeReceivedEndorsementFakeItem(
-	e *endorser.EndorserFakeFactory,
+func (d SpecialistDependencyFakerImp) MakeReceivedEndorsementFakeItem(
+	e *endorser.EndorserFaker,
 ) ReceivedEndorsementFakeItem {
 	return ReceivedEndorsementFakeItem{
 		Endorser:  e,
-		Artifact:  d.MakeArtifactFakeFactory(),
+		Artifact:  d.MakeArtifactFaker(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 
-func (d SpecialistDependencyFakeFactory) MakeArtifactFakeFactory() *artifact.ArtifactFakeFactory {
-	return artifact.NewArtifactFakeFactory()
+func (d SpecialistDependencyFakerImp) MakeArtifactFaker() *artifact.ArtifactFaker {
+	return artifact.NewArtifactFaker()
 }
 
-func (d SpecialistDependencyFakeFactory) MakeEndorserFakeFactory() *endorser.EndorserFakeFactory {
-	return endorser.NewEndorserFakeFactory()
+func (d SpecialistDependencyFakerImp) MakeEndorserFaker() *endorser.EndorserFaker {
+	return endorser.NewEndorserFaker()
 }
 
 type ReceivedEndorsementFakeItem struct {
-	Endorser  *endorser.EndorserFakeFactory
-	Artifact  *artifact.ArtifactFakeFactory
+	Endorser  *endorser.EndorserFaker
+	Artifact  *artifact.ArtifactFaker
 	CreatedAt time.Time
 }

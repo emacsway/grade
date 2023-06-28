@@ -5,14 +5,14 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-func NewMemberFakeFactory(
+func NewMemberFaker(
 	session infrastructure.DbSession,
-	opts ...member.MemberFakeFactoryOption,
-) *member.MemberFakeFactory {
+	opts ...member.MemberFakerOption,
+) *member.MemberFaker {
 	opts = append(
 		opts,
 		member.WithTransientId(),
 		member.WithRepository(NewMemberRepository(session)),
 	)
-	return member.NewMemberFakeFactory(opts...)
+	return member.NewMemberFaker(opts...)
 }

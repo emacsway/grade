@@ -28,7 +28,7 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 		{r1, a2, r2, a2, false},
 		{r1, a2, r1, a1, false},
 	}
-	f := NewEndorsementFakeFactory()
+	f := NewEndorsementFaker()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			f.EndorserId.MemberId = c.RecogniserId
@@ -54,7 +54,7 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 }
 
 func TestEndorsementWeight(t *testing.T) {
-	f := NewEndorsementFakeFactory()
+	f := NewEndorsementFaker()
 	for i := uint8(0); i <= grade.MaxGradeValue; i++ {
 		for j := i; j <= grade.MaxGradeValue; j++ {
 			t.Run(fmt.Sprintf("Case i=%d j=%d", i, j), func(t *testing.T) {
@@ -77,7 +77,7 @@ func TestEndorsementWeight(t *testing.T) {
 
 func TestEndorsementExport(t *testing.T) {
 	var actualExporter EndorsementExporter
-	f := NewEndorsementFakeFactory()
+	f := NewEndorsementFaker()
 	agg, _ := f.Create()
 	agg.Export(&actualExporter)
 	assert.Equal(t, EndorsementExporter{

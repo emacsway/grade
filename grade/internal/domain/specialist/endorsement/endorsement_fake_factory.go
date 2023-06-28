@@ -9,14 +9,14 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
-func NewEndorsementFakeFactory() EndorsementFakeFactory {
-	endorserIdFactory := member.NewTenantMemberIdFakeFactory()
+func NewEndorsementFaker() EndorsementFaker {
+	endorserIdFactory := member.NewTenantMemberIdFaker()
 	endorserIdFactory.MemberId = endorser.EndorserMemberIdFakeValue
-	return EndorsementFakeFactory{
-		SpecialistId:      member.NewTenantMemberIdFakeFactory(),
+	return EndorsementFaker{
+		SpecialistId:      member.NewTenantMemberIdFaker(),
 		SpecialistGrade:   1,
 		SpecialistVersion: 5,
-		ArtifactId:        artifact.NewTenantArtifactIdFakeFactory(),
+		ArtifactId:        artifact.NewTenantArtifactIdFaker(),
 		EndorserId:        endorserIdFactory,
 		EndorserGrade:     2,
 		EndorserVersion:   3,
@@ -24,18 +24,18 @@ func NewEndorsementFakeFactory() EndorsementFakeFactory {
 	}
 }
 
-type EndorsementFakeFactory struct {
-	SpecialistId      member.TenantMemberIdFakeFactory
+type EndorsementFaker struct {
+	SpecialistId      member.TenantMemberIdFaker
 	SpecialistGrade   uint8
 	SpecialistVersion uint
-	ArtifactId        artifact.TenantArtifactIdFakeFactory
-	EndorserId        member.TenantMemberIdFakeFactory
+	ArtifactId        artifact.TenantArtifactIdFaker
+	EndorserId        member.TenantMemberIdFaker
 	EndorserGrade     uint8
 	EndorserVersion   uint
 	CreatedAt         time.Time
 }
 
-func (f EndorsementFakeFactory) Create() (Endorsement, error) {
+func (f EndorsementFaker) Create() (Endorsement, error) {
 	specialistId, err := f.SpecialistId.Create()
 	if err != nil {
 		return Endorsement{}, err

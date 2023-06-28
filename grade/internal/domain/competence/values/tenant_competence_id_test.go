@@ -47,7 +47,7 @@ func TestTenantCompetenceIdEqual(t *testing.T) {
 
 func TestEndorserExport(t *testing.T) {
 	var actualExporter TenantCompetenceIdExporter
-	f := NewTenantCompetenceIdFakeFactory()
+	f := NewTenantCompetenceIdFaker()
 	cid, err := f.Create()
 	if err != nil {
 		t.Error(err)

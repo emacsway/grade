@@ -47,7 +47,7 @@ func TestTenantMemberIdEqual(t *testing.T) {
 
 func TestMemberIdExport(t *testing.T) {
 	var actualExporter TenantMemberIdExporter
-	f := NewTenantMemberIdFakeFactory()
+	f := NewTenantMemberIdFaker()
 	cid, err := f.Create()
 	if err != nil {
 		t.Error(err)

@@ -61,7 +61,7 @@ func clearable(callable testCase) testCase {
 
 func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	var actualExporter tenant.TenantExporter
-	factory := tenant.NewTenantFakeFactory(tenant.WithTransientId())
+	factory := tenant.NewTenantFaker(tenant.WithTransientId())
 	agg, err := factory.Create()
 	require.NoError(t, err)
 	err = repositoryOption.Repository.Insert(agg)
@@ -73,7 +73,7 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
 	var exporterActual tenant.TenantExporter
 	var exporterRead tenant.TenantExporter
-	factory := NewTenantFakeFactory(repositoryOption.Session)
+	factory := NewTenantFaker(repositoryOption.Session)
 	agg, err := factory.Create()
 	require.NoError(t, err)
 	agg.Export(&exporterActual)

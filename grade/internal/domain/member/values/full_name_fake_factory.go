@@ -2,19 +2,19 @@ package values
 
 import "github.com/emacsway/grade/grade/internal/domain/seedwork/faker"
 
-func NewFullNameFakeFactory() FullNameFakeFactory {
+func NewFullNameFaker() FullNameFaker {
 	aFaker := faker.NewFaker()
-	return FullNameFakeFactory{
+	return FullNameFaker{
 		FirstName: aFaker.FirstName(),
 		LastName:  aFaker.LastName(),
 	}
 }
 
-type FullNameFakeFactory struct {
+type FullNameFaker struct {
 	FirstName string
 	LastName  string
 }
 
-func (f FullNameFakeFactory) Create() (FullName, error) {
+func (f FullNameFaker) Create() (FullName, error) {
 	return NewFullName(f.FirstName, f.LastName)
 }

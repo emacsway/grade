@@ -15,8 +15,8 @@ import (
 
 func TestSpecialistExport(t *testing.T) {
 	var actualExporter SpecialistExporter
-	sf := NewSpecialistFakeFactory()
-	rf := endorser.NewEndorserFakeFactory()
+	sf := NewSpecialistFaker()
+	rf := endorser.NewEndorserFaker()
 	for i := 0; i < 4; i++ {
 		err := sf.ReceiveEndorsement(rf)
 		if err != nil {

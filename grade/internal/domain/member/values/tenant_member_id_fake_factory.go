@@ -4,24 +4,24 @@ import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
-type TenantMemberIdFakeFactoryOption func(*TenantMemberIdFakeFactory)
+type TenantMemberIdFakerOption func(*TenantMemberIdFaker)
 
-func WithTenantId(tenantId uint) TenantMemberIdFakeFactoryOption {
-	return func(f *TenantMemberIdFakeFactory) {
+func WithTenantId(tenantId uint) TenantMemberIdFakerOption {
+	return func(f *TenantMemberIdFaker) {
 		f.TenantId = tenantId
 	}
 }
 
-func WithTransientId() TenantMemberIdFakeFactoryOption {
-	return func(f *TenantMemberIdFakeFactory) {
+func WithTransientId() TenantMemberIdFakerOption {
+	return func(f *TenantMemberIdFaker) {
 		f.MemberId = 0
 	}
 }
 
 var MemberIdFakeValue = uint(3)
 
-func NewTenantMemberIdFakeFactory(opts ...TenantMemberIdFakeFactoryOption) TenantMemberIdFakeFactory {
-	f := TenantMemberIdFakeFactory{
+func NewTenantMemberIdFaker(opts ...TenantMemberIdFakerOption) TenantMemberIdFaker {
+	f := TenantMemberIdFaker{
 		TenantId: tenant.TenantIdFakeValue,
 		MemberId: MemberIdFakeValue,
 	}
@@ -31,15 +31,15 @@ func NewTenantMemberIdFakeFactory(opts ...TenantMemberIdFakeFactoryOption) Tenan
 	return f
 }
 
-type TenantMemberIdFakeFactory struct {
+type TenantMemberIdFaker struct {
 	TenantId uint
 	MemberId uint
 }
 
-func (f *TenantMemberIdFakeFactory) NextMemberId() {
+func (f *TenantMemberIdFaker) NextMemberId() {
 	f.MemberId += 1
 }
 
-func (f TenantMemberIdFakeFactory) Create() (TenantMemberId, error) {
+func (f TenantMemberIdFaker) Create() (TenantMemberId, error) {
 	return NewTenantMemberId(f.TenantId, f.MemberId)
 }

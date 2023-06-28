@@ -10,7 +10,7 @@ import (
 
 func TestFullNameExport(t *testing.T) {
 	var actualExporter FullNameExporter
-	f := NewFullNameFakeFactory()
+	f := NewFullNameFaker()
 	cid, err := f.Create()
 	if err != nil {
 		t.Error(err)

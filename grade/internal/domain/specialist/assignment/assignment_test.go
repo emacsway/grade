@@ -11,7 +11,7 @@ import (
 
 func TestAssignmentExport(t *testing.T) {
 	var actualExporter AssignmentExporter
-	f := NewAssignmentFakeFactory()
+	f := NewAssignmentFaker()
 	agg, _ := f.Create()
 	agg.Export(&actualExporter)
 	assert.Equal(t, AssignmentExporter{

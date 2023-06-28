@@ -12,7 +12,7 @@ import (
 
 func TestMemberExport(t *testing.T) {
 	var actualExporter MemberExporter
-	f := NewMemberFakeFactory()
+	f := NewMemberFaker()
 	agg, err := f.Create()
 	require.NoError(t, err)
 	agg.Export(&actualExporter)

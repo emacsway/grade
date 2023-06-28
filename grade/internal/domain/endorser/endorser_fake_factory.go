@@ -9,23 +9,23 @@ import (
 
 var EndorserMemberIdFakeValue = uint(1004)
 
-func NewEndorserFakeFactory() *EndorserFakeFactory {
-	idFactory := member.NewTenantMemberIdFakeFactory()
+func NewEndorserFaker() *EndorserFaker {
+	idFactory := member.NewTenantMemberIdFaker()
 	idFactory.MemberId = EndorserMemberIdFakeValue
-	return &EndorserFakeFactory{
+	return &EndorserFaker{
 		Id:        idFactory,
 		Grade:     1,
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 
-type EndorserFakeFactory struct {
-	Id        member.TenantMemberIdFakeFactory
+type EndorserFaker struct {
+	Id        member.TenantMemberIdFaker
 	Grade     uint8
 	CreatedAt time.Time
 }
 
-func (f EndorserFakeFactory) Create() (*Endorser, error) {
+func (f EndorserFaker) Create() (*Endorser, error) {
 	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err

@@ -7,23 +7,23 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
-type TenantFakeFactoryOption func(*TenantFakeFactory)
+type TenantFakerOption func(*TenantFaker)
 
-func WithTransientId() TenantFakeFactoryOption {
-	return func(f *TenantFakeFactory) {
+func WithTransientId() TenantFakerOption {
+	return func(f *TenantFaker) {
 		f.Id = 0
 	}
 }
 
-func WithRepository(repo TenantRepository) TenantFakeFactoryOption {
-	return func(f *TenantFakeFactory) {
+func WithRepository(repo TenantRepository) TenantFakerOption {
+	return func(f *TenantFaker) {
 		f.Repository = repo
 	}
 }
 
-func NewTenantFakeFactory(opts ...TenantFakeFactoryOption) *TenantFakeFactory {
+func NewTenantFaker(opts ...TenantFakerOption) *TenantFaker {
 	aFaker := faker.NewFaker()
-	f := &TenantFakeFactory{
+	f := &TenantFaker{
 		Id:         values.TenantIdFakeValue,
 		Name:       aFaker.Company(),
 		CreatedAt:  time.Now().Truncate(time.Microsecond),
@@ -35,14 +35,14 @@ func NewTenantFakeFactory(opts ...TenantFakeFactoryOption) *TenantFakeFactory {
 	return f
 }
 
-type TenantFakeFactory struct {
+type TenantFaker struct {
 	Id         uint
 	Name       string
 	CreatedAt  time.Time
 	Repository TenantRepository
 }
 
-func (f *TenantFakeFactory) Create() (*Tenant, error) {
+func (f *TenantFaker) Create() (*Tenant, error) {
 	var aggExp TenantExporter
 	id, err := values.NewTenantId(f.Id)
 	if err != nil {

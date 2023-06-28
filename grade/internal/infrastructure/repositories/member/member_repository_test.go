@@ -62,7 +62,7 @@ func clearable(callable testCase) testCase {
 
 func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	var actualExporter member.MemberExporter
-	factory := member.NewMemberFakeFactory(
+	factory := member.NewMemberFaker(
 		member.WithTenantId(repositoryOption.TenantId),
 		member.WithTransientId(),
 	)
@@ -77,7 +77,7 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
 	var exporterActual member.MemberExporter
 	var exporterRead member.MemberExporter
-	factory := NewMemberFakeFactory(
+	factory := NewMemberFaker(
 		repositoryOption.Session,
 		member.WithTenantId(repositoryOption.TenantId),
 	)
@@ -115,7 +115,7 @@ func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	db, err := seedwork.NewTestDb()
 	require.NoError(t, err)
 	session := infrastructure.NewPgxSession(db)
-	tf := tenantRepo.NewTenantFakeFactory(session)
+	tf := tenantRepo.NewTenantFaker(session)
 	aTenant, err := tf.Create()
 	require.NoError(t, err)
 	aTenant.Export(&tenantExp)

@@ -8,9 +8,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
 )
 
-func NewAssignmentFakeFactory() AssignmentFakeFactory {
-	return AssignmentFakeFactory{
-		SpecialistId:      member.NewTenantMemberIdFakeFactory(),
+func NewAssignmentFaker() AssignmentFaker {
+	return AssignmentFaker{
+		SpecialistId:      member.NewTenantMemberIdFaker(),
 		SpecialistVersion: 2,
 		AssignedGrade:     1,
 		Reason:            "Any",
@@ -18,15 +18,15 @@ func NewAssignmentFakeFactory() AssignmentFakeFactory {
 	}
 }
 
-type AssignmentFakeFactory struct {
-	SpecialistId      member.TenantMemberIdFakeFactory
+type AssignmentFaker struct {
+	SpecialistId      member.TenantMemberIdFaker
 	SpecialistVersion uint
 	AssignedGrade     uint8
 	Reason            string
 	CreatedAt         time.Time
 }
 
-func (f AssignmentFakeFactory) Create() (Assignment, error) {
+func (f AssignmentFaker) Create() (Assignment, error) {
 	specialistId, err := f.SpecialistId.Create()
 	if err != nil {
 		return Assignment{}, err

@@ -8,45 +8,45 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
-func NewArtifactFakeFactory() *ArtifactFakeFactory {
-	return &ArtifactFakeFactory{
-		Id:            values.NewTenantArtifactIdFakeFactory(),
+func NewArtifactFaker() *ArtifactFaker {
+	return &ArtifactFaker{
+		Id:            values.NewTenantArtifactIdFaker(),
 		Status:        values.Accepted,
 		Name:          "Name1",
 		Description:   "Description1",
 		Url:           "https://github.com/emacsway/grade",
-		CompetenceIds: []competence.TenantCompetenceIdFakeFactory{competence.NewTenantCompetenceIdFakeFactory()},
-		AuthorIds:     []member.TenantMemberIdFakeFactory{},
-		OwnerId:       member.NewTenantMemberIdFakeFactory(),
+		CompetenceIds: []competence.TenantCompetenceIdFaker{competence.NewTenantCompetenceIdFaker()},
+		AuthorIds:     []member.TenantMemberIdFaker{},
+		OwnerId:       member.NewTenantMemberIdFaker(),
 		CreatedAt:     time.Now().Truncate(time.Microsecond),
 	}
 }
 
-type ArtifactFakeFactory struct {
-	Id            values.TenantArtifactIdFakeFactory
+type ArtifactFaker struct {
+	Id            values.TenantArtifactIdFaker
 	Status        values.Status
 	Name          string
 	Description   string
 	Url           string
-	CompetenceIds []competence.TenantCompetenceIdFakeFactory
-	AuthorIds     []member.TenantMemberIdFakeFactory
-	OwnerId       member.TenantMemberIdFakeFactory
+	CompetenceIds []competence.TenantCompetenceIdFaker
+	AuthorIds     []member.TenantMemberIdFaker
+	OwnerId       member.TenantMemberIdFaker
 	CreatedAt     time.Time
 }
 
-func (f *ArtifactFakeFactory) AddAuthorId(authorId member.TenantMemberIdFakeFactory) error {
+func (f *ArtifactFaker) AddAuthorId(authorId member.TenantMemberIdFaker) error {
 	// FIXME: return a error if the authorId already present in the list.
 	f.AuthorIds = append(f.AuthorIds, authorId)
 	return nil
 }
 
-func (f *ArtifactFakeFactory) AddCompetenceId(competenceId competence.TenantCompetenceIdFakeFactory) error {
+func (f *ArtifactFaker) AddCompetenceId(competenceId competence.TenantCompetenceIdFaker) error {
 	// FIXME: return a error if the authorId already present in the list.
 	f.CompetenceIds = append(f.CompetenceIds, competenceId)
 	return nil
 }
 
-func (f ArtifactFakeFactory) Create() (*Artifact, error) {
+func (f ArtifactFaker) Create() (*Artifact, error) {
 	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
@@ -89,7 +89,7 @@ func (f ArtifactFakeFactory) Create() (*Artifact, error) {
 	), nil
 }
 
-func (f *ArtifactFakeFactory) Next() error {
+func (f *ArtifactFaker) Next() error {
 	f.Id.ArtifactId += 1
 	return nil
 }

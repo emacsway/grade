@@ -12,7 +12,7 @@ import (
 
 func TestCompetenceExport(t *testing.T) {
 	var actualExporter CompetenceExporter
-	f := NewCompetenceFakeFactory()
+	f := NewCompetenceFaker()
 	agg, err := f.Create()
 	if err != nil {
 		t.Error(err)

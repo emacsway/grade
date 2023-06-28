@@ -10,7 +10,7 @@ import (
 
 func TestTenantExport(t *testing.T) {
 	var actualExporter TenantExporter
-	f := NewTenantFakeFactory()
+	f := NewTenantFaker()
 	agg, err := f.Create()
 	if err != nil {
 		t.Error(err)
