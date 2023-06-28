@@ -8,8 +8,7 @@ import (
 )
 
 type MemberReconstitutor struct {
-	TenantId  uint
-	MemberId  uint
+	Id        values.TenantMemberIdReconstitutor
 	Status    uint8
 	FirstName string
 	LastName  string
@@ -18,7 +17,7 @@ type MemberReconstitutor struct {
 }
 
 func (r MemberReconstitutor) Reconstitute() (*Member, error) {
-	id, err := values.NewTenantMemberId(r.TenantId, r.MemberId)
+	id, err := r.Id.Reconstitute()
 	if err != nil {
 		return nil, err
 	}
