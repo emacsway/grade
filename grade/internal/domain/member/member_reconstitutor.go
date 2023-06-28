@@ -10,8 +10,7 @@ import (
 type MemberReconstitutor struct {
 	Id        values.TenantMemberIdReconstitutor
 	Status    uint8
-	FirstName string
-	LastName  string
+	FullName  values.FullNameReconstitutor
 	CreatedAt time.Time
 	Version   uint
 }
@@ -25,7 +24,7 @@ func (r MemberReconstitutor) Reconstitute() (*Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	fullName, err := values.NewFullName(r.FirstName, r.LastName)
+	fullName, err := r.FullName.Reconstitute()
 	if err != nil {
 		return nil, err
 	}
