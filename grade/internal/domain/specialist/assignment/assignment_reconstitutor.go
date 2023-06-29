@@ -25,7 +25,7 @@ func (r AssignmentReconstitutor) Reconstitute() (*Assignment, error) {
 	if err != nil {
 		return nil, err
 	}
-	reason, err := values.NewReason(f.Reason)
+	reason, err := values.NewReason(r.Reason)
 	if err != nil {
 		return nil, err
 	}
