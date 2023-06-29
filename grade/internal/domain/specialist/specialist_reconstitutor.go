@@ -39,11 +39,11 @@ func (r SpecialistReconstitutor) Reconstitute() (*Specialist, error) {
 
 	assignments := []assignment.Assignment{}
 	for i := range r.assignments {
-		assignment, err := r.assignments[i].Reconstitute()
+		anAssignment, err := r.assignments[i].Reconstitute()
 		if err != nil {
 			return nil, err
 		}
-		assignments = append(assignments, assignment)
+		assignments = append(assignments, anAssignment)
 	}
 	return &Specialist{
 		id:                   id,
