@@ -6,6 +6,14 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 )
 
+func NewEventSourcedAggregate(version uint) EventSourcedAggregate {
+	return EventSourcedAggregate{
+		handlers:           make(map[string]PersistentDomainEventHandler),
+		EventiveEntity:     EventiveEntity{},
+		VersionedAggregate: NewVersionedAggregate(version),
+	}
+}
+
 type EventSourcedAggregate struct {
 	handlers map[string]PersistentDomainEventHandler
 	EventiveEntity

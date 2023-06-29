@@ -13,8 +13,8 @@ import (
 type SpecialistReconstitutor struct {
 	Id                   member.TenantMemberIdReconstitutor
 	Grade                uint8
-	receivedEndorsements []endorsement.EndorsementReconstitutor
-	assignments          []assignment.AssignmentReconstitutor
+	ReceivedEndorsements []endorsement.EndorsementReconstitutor
+	Assignments          []assignment.AssignmentReconstitutor
 	CreatedAt            time.Time
 	Version              uint
 }
@@ -29,8 +29,8 @@ func (r SpecialistReconstitutor) Reconstitute() (*Specialist, error) {
 		return nil, err
 	}
 	receivedEndorsements := []endorsement.Endorsement{}
-	for i := range r.receivedEndorsements {
-		receivedEndorsement, err := r.receivedEndorsements[i].Reconstitute()
+	for i := range r.ReceivedEndorsements {
+		receivedEndorsement, err := r.ReceivedEndorsements[i].Reconstitute()
 		if err != nil {
 			return nil, err
 		}
@@ -38,8 +38,8 @@ func (r SpecialistReconstitutor) Reconstitute() (*Specialist, error) {
 	}
 
 	assignments := []assignment.Assignment{}
-	for i := range r.assignments {
-		anAssignment, err := r.assignments[i].Reconstitute()
+	for i := range r.Assignments {
+		anAssignment, err := r.Assignments[i].Reconstitute()
 		if err != nil {
 			return nil, err
 		}
