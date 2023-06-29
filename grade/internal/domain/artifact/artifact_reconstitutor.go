@@ -9,7 +9,8 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
-// TODO: Remove me and use only anArtifact.eventSourced.LoadFrom(pastEvents []PersistentDomainEvent)
+// ~~TODO: Remove me and use only anArtifact.eventSourced.LoadFrom(pastEvents []PersistentDomainEvent)~~
+// It will be used to load snapshot.
 
 type ArtifactReconstitutor struct {
 	Id            values.TenantArtifactIdReconstitutor
