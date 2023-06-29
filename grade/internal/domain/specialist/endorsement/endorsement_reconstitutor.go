@@ -17,7 +17,6 @@ type EndorsementReconstitutor struct {
 	EndorserGrade     uint8
 	EndorserVersion   uint
 	CreatedAt         time.Time
-	Version           uint
 }
 
 func (r EndorsementReconstitutor) Reconstitute() (*Endorsement, error) {
