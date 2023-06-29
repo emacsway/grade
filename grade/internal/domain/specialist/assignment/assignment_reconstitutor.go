@@ -16,20 +16,20 @@ type AssignmentReconstitutor struct {
 	CreatedAt         time.Time
 }
 
-func (r AssignmentReconstitutor) Reconstitute() (*Assignment, error) {
+func (r AssignmentReconstitutor) Reconstitute() (Assignment, error) {
 	specialistId, err := r.SpecialistId.Reconstitute()
 	if err != nil {
-		return nil, err
+		return Assignment{}, err
 	}
 	assignedGrade, err := grade.DefaultConstructor(r.AssignedGrade)
 	if err != nil {
-		return nil, err
+		return Assignment{}, err
 	}
 	reason, err := values.NewReason(r.Reason)
 	if err != nil {
-		return nil, err
+		return Assignment{}, err
 	}
-	return &Assignment{
+	return Assignment{
 		specialistId:      specialistId,
 		specialistVersion: r.SpecialistVersion,
 		assignedGrade:     assignedGrade,

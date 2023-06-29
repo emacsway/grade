@@ -19,28 +19,28 @@ type EndorsementReconstitutor struct {
 	CreatedAt         time.Time
 }
 
-func (r EndorsementReconstitutor) Reconstitute() (*Endorsement, error) {
+func (r EndorsementReconstitutor) Reconstitute() (Endorsement, error) {
 	specialistId, err := r.SpecialistId.Reconstitute()
 	if err != nil {
-		return nil, err
+		return Endorsement{}, err
 	}
 	specialistGrade, err := grade.DefaultConstructor(r.SpecialistGrade)
 	if err != nil {
-		return nil, err
+		return Endorsement{}, err
 	}
 	artifactId, err := r.ArtifactId.Reconstitute()
 	if err != nil {
-		return nil, err
+		return Endorsement{}, err
 	}
 	endorserId, err := r.EndorserId.Reconstitute()
 	if err != nil {
-		return nil, err
+		return Endorsement{}, err
 	}
 	endorserGrade, err := grade.DefaultConstructor(r.EndorserGrade)
 	if err != nil {
-		return nil, err
+		return Endorsement{}, err
 	}
-	return &Endorsement{
+	return Endorsement{
 		specialistId:      specialistId,
 		specialistGrade:   specialistGrade,
 		specialistVersion: r.SpecialistVersion,
