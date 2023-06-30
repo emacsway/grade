@@ -9,10 +9,28 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
+type ArtifactReconstitutor struct {
+	Snapshot   *ArtifactSnapshotReconstitutor
+	PastEvents []aggregate.PersistentDomainEvent
+}
+
+func (r ArtifactReconstitutor) Reconstitute() (agg *Artifact, err error) {
+	if r.Snapshot != nil {
+		agg, err = r.Snapshot.Reconstitute()
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		agg = &Artifact{}
+	}
+	agg.eventSourced.LoadFrom(r.PastEvents)
+	return agg, nil
+}
+
 // It will be used to load snapshot only.
 // To load events use anArtifact.eventSourced.LoadFrom(pastEvents []PersistentDomainEvent)
 
-type ArtifactReconstitutor struct {
+type ArtifactSnapshotReconstitutor struct {
 	Id            values.TenantArtifactIdReconstitutor
 	Status        uint8
 	Name          string
@@ -25,7 +43,7 @@ type ArtifactReconstitutor struct {
 	Version       uint
 }
 
-func (r ArtifactReconstitutor) Reconstitute() (*Artifact, error) {
+func (r ArtifactSnapshotReconstitutor) Reconstitute() (*Artifact, error) {
 	id, err := r.Id.Reconstitute()
 	if err != nil {
 		return nil, err
