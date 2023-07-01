@@ -13,7 +13,7 @@ type MemberGetQuery struct {
 func (q MemberGetQuery) sql() string {
 	return `
 		SELECT
-		tenant_id, member_id, status, first_name, last_name, version, created_at
+		tenant_id, member_id, status, first_name, last_name, created_at, version
 		FROM member
 		WHERE tenant_id=$1 AND member_id=$2`
 }
@@ -28,7 +28,7 @@ func (q *MemberGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (*member.M
 	rec := &member.MemberReconstitutor{}
 	err := s.QueryRow(q.sql(), q.params()...).Scan(
 		&rec.Id.TenantId, &rec.Id.MemberId, &rec.Status, &rec.FullName.FirstName, &rec.FullName.LastName,
-		&rec.Version, &rec.CreatedAt,
+		&rec.CreatedAt, &rec.Version,
 	)
 	if err != nil {
 		return nil, err

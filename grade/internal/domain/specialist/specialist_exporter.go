@@ -39,10 +39,10 @@ func (ex *SpecialistExporter) AddAssignment(val assignment.Assignment) {
 	ex.Assignments = append(ex.Assignments, assignmentExporter)
 }
 
-func (ex *SpecialistExporter) SetVersion(val uint) {
-	ex.Version = val
-}
-
 func (ex *SpecialistExporter) SetCreatedAt(val time.Time) {
 	ex.CreatedAt = val
+}
+
+func (ex *SpecialistExporter) SetVersion(val uint) {
+	ex.Version = val
 }

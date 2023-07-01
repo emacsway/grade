@@ -179,8 +179,8 @@ func (s *Specialist) ClearPendingDomainEvents() {
 func (s Specialist) Export(ex SpecialistExporterSetter) {
 	ex.SetId(s.id)
 	ex.SetGrade(s.grade)
-	ex.SetVersion(s.Version())
 	ex.SetCreatedAt(s.createdAt)
+	ex.SetVersion(s.Version())
 
 	for i := range s.receivedEndorsements {
 		ex.AddEndorsement(s.receivedEndorsements[i])
@@ -195,6 +195,6 @@ type SpecialistExporterSetter interface {
 	SetGrade(grade.Grade)
 	AddEndorsement(endorsement.Endorsement)
 	AddAssignment(assignment.Assignment)
-	SetVersion(uint)
 	SetCreatedAt(time.Time)
+	SetVersion(uint)
 }

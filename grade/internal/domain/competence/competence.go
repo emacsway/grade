@@ -43,14 +43,14 @@ func (c Competence) Export(ex CompetenceExporterSetter) {
 	ex.SetId(c.id)
 	ex.SetName(c.name)
 	ex.SetOwnerId(c.ownerId)
-	ex.SetVersion(c.Version())
 	ex.SetCreatedAt(c.createdAt)
+	ex.SetVersion(c.Version())
 }
 
 type CompetenceExporterSetter interface {
 	SetId(id values.TenantCompetenceId)
 	SetName(values.Name)
 	SetOwnerId(member.TenantMemberId)
-	SetVersion(uint)
 	SetCreatedAt(time.Time)
+	SetVersion(uint)
 }

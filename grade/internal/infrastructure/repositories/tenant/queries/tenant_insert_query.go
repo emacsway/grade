@@ -16,7 +16,7 @@ type TenantInsertQuery struct {
 func (q TenantInsertQuery) sql() string {
 	return `
 		INSERT INTO tenant
-		(name, version, created_at)
+		(name, created_at, version)
 		VALUES
 		($1, $2, $3)
 		RETURNING id`
@@ -32,11 +32,11 @@ func (q *TenantInsertQuery) SetName(val tenantVal.Name) {
 	q.params[0] = v
 }
 
-func (q *TenantInsertQuery) SetVersion(val uint) {
+func (q *TenantInsertQuery) SetCreatedAt(val time.Time) {
 	q.params[1] = val
 }
 
-func (q *TenantInsertQuery) SetCreatedAt(val time.Time) {
+func (q *TenantInsertQuery) SetVersion(val uint) {
 	q.params[2] = val
 }
 

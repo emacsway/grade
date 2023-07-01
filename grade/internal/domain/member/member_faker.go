@@ -49,7 +49,7 @@ type MemberFaker struct {
 	Repository MemberRepository
 }
 
-func (f MemberFaker) Create() (*Member, error) {
+func (f *MemberFaker) Create() (*Member, error) {
 	var aggExp MemberExporter
 	id, err := f.Id.Create()
 	if err != nil {
@@ -61,7 +61,7 @@ func (f MemberFaker) Create() (*Member, error) {
 	}
 	agg, err := NewMember(
 		id, f.Status, fullName, f.CreatedAt,
-	), nil
+	)
 	if err != nil {
 		return nil, err
 	}

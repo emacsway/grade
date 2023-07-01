@@ -17,7 +17,7 @@ type MemberInsertQuery struct {
 func (q MemberInsertQuery) sql() string {
 	return `
 		INSERT INTO member
-		(tenant_id, status, first_name, last_name, version, created_at)
+		(tenant_id, status, first_name, last_name, created_at, version)
 		VALUES
 		($1, $2, $3, $4, $5, $6)
 		RETURNING member_id`
@@ -59,11 +59,11 @@ func (q *MemberInsertQuery) SetLastName(val memberVal.LastName) {
 	q.params[3] = v
 }
 
-func (q *MemberInsertQuery) SetVersion(val uint) {
+func (q *MemberInsertQuery) SetCreatedAt(val time.Time) {
 	q.params[4] = val
 }
 
-func (q *MemberInsertQuery) SetCreatedAt(val time.Time) {
+func (q *MemberInsertQuery) SetVersion(val uint) {
 	q.params[5] = val
 }
 

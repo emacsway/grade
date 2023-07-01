@@ -38,13 +38,13 @@ func (t *Tenant) ClearPendingDomainEvents() {
 func (t Tenant) Export(ex TenantExporterSetter) {
 	ex.SetId(t.id)
 	ex.SetName(t.name)
-	ex.SetVersion(t.Version())
 	ex.SetCreatedAt(t.createdAt)
+	ex.SetVersion(t.Version())
 }
 
 type TenantExporterSetter interface {
 	SetId(id values.TenantId)
 	SetName(values.Name)
-	SetVersion(uint)
 	SetCreatedAt(time.Time)
+	SetVersion(uint)
 }

@@ -12,13 +12,13 @@ func NewMember(
 	status values.Status,
 	fullName values.FullName,
 	createdAt time.Time,
-) *Member {
+) (*Member, error) {
 	return &Member{
 		id:        id,
 		status:    status,
 		fullName:  fullName,
 		createdAt: createdAt,
-	}
+	}, nil
 }
 
 type Member struct {
@@ -46,14 +46,14 @@ func (m Member) Export(ex MemberExporterSetter) {
 	ex.SetId(m.id)
 	ex.SetStatus(m.status)
 	ex.SetFullName(m.fullName)
-	ex.SetVersion(m.Version())
 	ex.SetCreatedAt(m.createdAt)
+	ex.SetVersion(m.Version())
 }
 
 type MemberExporterSetter interface {
 	SetId(id values.TenantMemberId)
 	SetStatus(values.Status)
 	SetFullName(values.FullName)
-	SetVersion(uint)
 	SetCreatedAt(time.Time)
+	SetVersion(uint)
 }

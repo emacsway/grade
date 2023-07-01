@@ -28,10 +28,10 @@ func (ex *CompetenceExporter) SetOwnerId(val member.TenantMemberId) {
 	val.Export(&ex.OwnerId)
 }
 
-func (ex *CompetenceExporter) SetVersion(val uint) {
-	ex.Version = val
-}
-
 func (ex *CompetenceExporter) SetCreatedAt(val time.Time) {
 	ex.CreatedAt = val
+}
+
+func (ex *CompetenceExporter) SetVersion(val uint) {
+	ex.Version = val
 }

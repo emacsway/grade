@@ -22,10 +22,10 @@ func (ex *TenantExporter) SetName(val values.Name) {
 	val.Export(&ex.Name)
 }
 
-func (ex *TenantExporter) SetVersion(val uint) {
-	ex.Version = val
-}
-
 func (ex *TenantExporter) SetCreatedAt(val time.Time) {
 	ex.CreatedAt = val
+}
+
+func (ex *TenantExporter) SetVersion(val uint) {
+	ex.Version = val
 }

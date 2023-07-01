@@ -19,7 +19,7 @@ func NewArtifact(
 	authorIds []member.TenantMemberId,
 	ownerId member.TenantMemberId,
 	createdAt time.Time,
-) *Artifact {
+) (*Artifact, error) {
 	return &Artifact{
 		id:            id,
 		status:        status,
@@ -30,7 +30,7 @@ func NewArtifact(
 		authorIds:     authorIds,
 		ownerId:       ownerId,
 		createdAt:     createdAt,
-	}
+	}, nil
 }
 
 // Artifact is a good candidate for EventSourcing
@@ -93,8 +93,8 @@ func (a Artifact) Export(ex ArtifactExporterSetter) {
 	}
 	ex.SetDescription(a.description)
 	ex.SetOwnerId(a.ownerId)
-	ex.SetVersion(a.Version())
 	ex.SetCreatedAt(a.createdAt)
+	ex.SetVersion(a.Version())
 }
 
 type ArtifactExporterSetter interface {
@@ -106,6 +106,6 @@ type ArtifactExporterSetter interface {
 	AddCompetenceId(competence.TenantCompetenceId)
 	AddAuthorId(member.TenantMemberId)
 	SetOwnerId(member.TenantMemberId)
-	SetVersion(uint)
 	SetCreatedAt(time.Time)
+	SetVersion(uint)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
+	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/endorser/queries"
 )
@@ -29,8 +30,13 @@ func (r EndorserRepository) Insert(obj *endorser.Endorser) error {
 	if err != nil {
 		return err
 	}
-	if affectedRows != 0 {
+	if affectedRows != 1 {
 		return fmt.Errorf("wrong rows affected: %d", affectedRows)
 	}
 	return nil
+}
+
+func (r *EndorserRepository) Get(id memberVal.TenantMemberId) (*endorser.Endorser, error) {
+	q := queries.EndorserGetQuery{Id: id}
+	return q.Get(r.session)
 }

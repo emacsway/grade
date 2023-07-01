@@ -67,28 +67,30 @@ CREATE TABLE event_log (
 
 
 CREATE TABLE endorser (
-    tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
-    member_id bigint NOT NULL REFERENCES member(id) ON DELETE CASCADE,
+    tenant_id integer NOT NULL,
+    member_id bigint NOT NULL,
     grade smallint NOT NULL DEFAULT 0,
-    available_endorsement_count NOT NULL,
-    pending_endorsement_count NOT NULL DEFAULT 0,
+    available_endorsement_count integer NOT NULL,
+    pending_endorsement_count integer NOT NULL DEFAULT 0,
     created_at timestamp with time zone NOT NULL,
     version integer NOT NULL,
+    FOREIGN KEY (tenant_id, member_id) REFERENCES member (tenant_id, member_id) ON DELETE CASCADE,
     CONSTRAINT endorser_pk PRIMARY KEY (tenant_id, member_id)
 );
 
 
 CREATE TABLE endorsement (
-    tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
-    specialist_id bigint NOT NULL REFERENCES member(id) ON DELETE CASCADE,
+    tenant_id integer NOT NULL,
+    specialist_id bigint NOT NULL,
     specialist_grade smallint NOT NULL DEFAULT 0,
     specialist_version integer NOT NULL,
     artifact_id bigint NOT NULL,
-    endorser_id bigint NOT NULL REFERENCES member(id) ON DELETE CASCADE,
+    endorser_id bigint NOT NULL REFERENCES member(member_id) ON DELETE CASCADE,
     endorser_grade smallint NOT NULL DEFAULT 0,
     endorser_version integer NOT NULL,
     created_at timestamp with time zone NOT NULL,
+    FOREIGN KEY (tenant_id, member_id) REFERENCES specialist (tenant_id, member_id) ON DELETE CASCADE,
     CONSTRAINT endorsement_uniq UNIQUE (tenant_id, specialist_id, artifact_id, endorser_id),
-    CONSTRAINT endorsement_uniq UNIQUE (tenant_id, endorser_id, endorser_version),
+    CONSTRAINT endorsement_endorser_uniq UNIQUE (tenant_id, endorser_id, endorser_version),
     CONSTRAINT endorsement_pk PRIMARY KEY (tenant_id, specialist_id, specialist_version)
 );

@@ -61,7 +61,7 @@ func clearable(callable testCase) testCase {
 }
 
 func testInsert(t *testing.T, repositoryOption RepositoryOption) {
-	var actualExporter member.MemberExporter
+	var exporterActual member.MemberExporter
 	factory := member.NewMemberFaker(
 		member.WithTenantId(repositoryOption.TenantId),
 		member.WithTransientId(),
@@ -70,8 +70,8 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	require.NoError(t, err)
 	err = repositoryOption.Repository.Insert(agg)
 	require.NoError(t, err)
-	agg.Export(&actualExporter)
-	assert.Greater(t, int(actualExporter.Id.MemberId), 0)
+	agg.Export(&exporterActual)
+	assert.Greater(t, int(exporterActual.Id.MemberId), 0)
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {

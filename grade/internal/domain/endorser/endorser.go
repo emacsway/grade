@@ -131,8 +131,8 @@ func (e Endorser) Export(ex EndorserExporterSetter) {
 	ex.SetGrade(e.grade)
 	ex.SetAvailableEndorsementCount(e.availableEndorsementCount)
 	ex.SetPendingEndorsementCount(e.pendingEndorsementCount)
-	ex.SetVersion(e.Version())
 	ex.SetCreatedAt(e.createdAt)
+	ex.SetVersion(e.Version())
 }
 
 type EndorserExporterSetter interface {
@@ -140,6 +140,6 @@ type EndorserExporterSetter interface {
 	SetGrade(grade.Grade)
 	SetAvailableEndorsementCount(values.EndorsementCount)
 	SetPendingEndorsementCount(values.EndorsementCount)
-	SetVersion(uint)
 	SetCreatedAt(time.Time)
+	SetVersion(uint)
 }

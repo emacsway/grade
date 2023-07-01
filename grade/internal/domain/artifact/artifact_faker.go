@@ -109,10 +109,18 @@ func (f ArtifactFaker) Create() (*Artifact, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewArtifact(
+	agg, err := NewArtifact(
 		id, f.Status, name, description, url,
 		competenceIds, authorIds, owner, f.CreatedAt,
-	), nil
+	)
+	if err != nil {
+		return nil, err
+	}
+	err = f.Repository.Insert(agg)
+	if err != nil {
+		return nil, err
+	}
+	return agg, nil
 }
 
 func (f *ArtifactFaker) Next() error {

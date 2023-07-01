@@ -58,10 +58,10 @@ func (ex *ArtifactExporter) SetOwnerId(val member.TenantMemberId) {
 	val.Export(&ex.OwnerId)
 }
 
-func (ex *ArtifactExporter) SetVersion(val uint) {
-	ex.Version = val
-}
-
 func (ex *ArtifactExporter) SetCreatedAt(val time.Time) {
 	ex.CreatedAt = val
+}
+
+func (ex *ArtifactExporter) SetVersion(val uint) {
+	ex.Version = val
 }

@@ -120,7 +120,7 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 	if err != nil {
 		return nil, err
 	}
-	s, err := NewSpecialist(id, f.CreatedAt)
+	agg, err := NewSpecialist(id, f.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -137,13 +137,17 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = s.ReceiveEndorsement(*r, *art, f.ReceivedEndorsements[i].CreatedAt)
+		err = agg.ReceiveEndorsement(*r, *art, f.ReceivedEndorsements[i].CreatedAt)
 		if err != nil {
 			return nil, err
 		}
-		s.SetVersion(s.Version() + 1)
+		agg.SetVersion(agg.Version() + 1)
 	}
-	return s, nil
+	err = f.Repository.Insert(agg)
+	if err != nil {
+		return nil, err
+	}
+	return agg, nil
 }
 
 type SpecialistDependencyFaker interface {

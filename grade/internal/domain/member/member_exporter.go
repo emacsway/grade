@@ -27,10 +27,10 @@ func (ex *MemberExporter) SetFullName(val values.FullName) {
 	val.Export(&ex.FullName)
 }
 
-func (ex *MemberExporter) SetVersion(val uint) {
-	ex.Version = val
-}
-
 func (ex *MemberExporter) SetCreatedAt(val time.Time) {
 	ex.CreatedAt = val
+}
+
+func (ex *MemberExporter) SetVersion(val uint) {
+	ex.Version = val
 }

@@ -34,10 +34,10 @@ func (ex *EndorserExporter) SetPendingEndorsementCount(val values.EndorsementCou
 	val.Export(&ex.PendingEndorsementCount)
 }
 
-func (ex *EndorserExporter) SetVersion(val uint) {
-	ex.Version = val
-}
-
 func (ex *EndorserExporter) SetCreatedAt(val time.Time) {
 	ex.CreatedAt = val
+}
+
+func (ex *EndorserExporter) SetVersion(val uint) {
+	ex.Version = val
 }

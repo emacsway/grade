@@ -45,7 +45,8 @@ type CompetenceFaker struct {
 	Repository CompetenceRepository
 }
 
-func (f CompetenceFaker) Create() (*Competence, error) {
+func (f *CompetenceFaker) Create() (*Competence, error) {
+	var aggExp CompetenceExporter
 	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
@@ -58,9 +59,19 @@ func (f CompetenceFaker) Create() (*Competence, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewCompetence(
+	agg, err := NewCompetence(
 		id, name, owner, f.CreatedAt,
 	)
+	if err != nil {
+		return nil, err
+	}
+	err = f.Repository.Insert(agg)
+	if err != nil {
+		return nil, err
+	}
+	agg.Export(&aggExp)
+	f.Id.CompetenceId = uint(aggExp.Id.CompetenceId)
+	return agg, nil
 }
 
 type CompetenceRepository interface {

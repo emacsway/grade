@@ -18,7 +18,7 @@ type EndorserInsertQuery struct {
 func (q EndorserInsertQuery) sql() string {
 	return `
 		INSERT INTO endorser
-		(tenant_id, member_id, grade, available_endorsement_count, pending_endorsement_count, version, created_at)
+		(tenant_id, member_id, grade, available_endorsement_count, pending_endorsement_count, created_at, version)
 		VALUES
 		($1, $2, $3, $4, $5, $6, $7)`
 }
@@ -57,11 +57,11 @@ func (q *EndorserInsertQuery) SetPendingEndorsementCount(val endorserVal.Endorse
 	q.params[4] = v
 }
 
-func (q *EndorserInsertQuery) SetVersion(val uint) {
+func (q *EndorserInsertQuery) SetCreatedAt(val time.Time) {
 	q.params[5] = val
 }
 
-func (q *EndorserInsertQuery) SetCreatedAt(val time.Time) {
+func (q *EndorserInsertQuery) SetVersion(val uint) {
 	q.params[6] = val
 }
 

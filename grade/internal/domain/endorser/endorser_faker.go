@@ -56,7 +56,7 @@ func (f EndorserFaker) Create() (*Endorser, error) {
 	if err != nil {
 		return nil, err
 	}
-	r, err := NewEndorser(id, f.CreatedAt)
+	agg, err := NewEndorser(id, f.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -64,11 +64,15 @@ func (f EndorserFaker) Create() (*Endorser, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = r.SetGrade(g)
+	err = agg.SetGrade(g)
 	if err != nil {
 		return nil, err
 	}
-	return r, nil
+	err = f.Repository.Insert(agg)
+	if err != nil {
+		return nil, err
+	}
+	return agg, nil
 }
 
 type EndorserRepository interface {
