@@ -12,15 +12,40 @@ import (
 
 var SpecialistMemberIdFakeValue = memberVal.MemberIdFakeValue
 
-func NewSpecialistFaker() *SpecialistFaker {
+type SpecialistFakerOption func(*SpecialistFaker)
+
+func WithTenantId(tenantId uint) SpecialistFakerOption {
+	return func(f *SpecialistFaker) {
+		f.Id.TenantId = tenantId
+	}
+}
+
+func WithMemberId(memberId uint) SpecialistFakerOption {
+	return func(f *SpecialistFaker) {
+		f.Id.MemberId = memberId
+	}
+}
+
+func WithRepository(repo SpecialistRepository) SpecialistFakerOption {
+	return func(f *SpecialistFaker) {
+		f.Repository = repo
+	}
+}
+
+func NewSpecialistFaker(opts ...SpecialistFakerOption) *SpecialistFaker {
 	idFactory := memberVal.NewTenantMemberIdFaker()
 	idFactory.MemberId = SpecialistMemberIdFakeValue
-	return &SpecialistFaker{
+	f := &SpecialistFaker{
 		Id:         idFactory,
 		Grade:      0,
 		CreatedAt:  time.Now().Truncate(time.Microsecond),
 		Dependency: SpecialistDependencyFakerImp{},
+		Repository: SpecialistDummyRepository{},
 	}
+	for _, opt := range opts {
+		opt(f)
+	}
+	return f
 }
 
 type SpecialistFaker struct {
@@ -29,6 +54,7 @@ type SpecialistFaker struct {
 	ReceivedEndorsements []ReceivedEndorsementFakeItem
 	CreatedAt            time.Time
 	Dependency           SpecialistDependencyFaker
+	Repository           SpecialistRepository
 }
 
 func (f *SpecialistFaker) achieveGrade() error {
@@ -150,4 +176,14 @@ type ReceivedEndorsementFakeItem struct {
 	Endorser  *endorser.EndorserFaker
 	Artifact  *artifact.ArtifactFaker
 	CreatedAt time.Time
+}
+
+type SpecialistRepository interface {
+	Insert(*Specialist) error
+}
+
+type SpecialistDummyRepository struct{}
+
+func (r SpecialistDummyRepository) Insert(agg *Specialist) error {
+	return nil
 }
