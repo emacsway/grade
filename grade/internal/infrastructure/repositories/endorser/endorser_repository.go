@@ -8,8 +8,8 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/endorser/queries"
 )
 
-func NewEndorserRepository(session infrastructure.DbSession) EndorserRepository {
-	return EndorserRepository{
+func NewEndorserRepository(session infrastructure.DbSession) *EndorserRepository {
+	return &EndorserRepository{
 		session: session,
 	}
 }
@@ -18,7 +18,7 @@ type EndorserRepository struct {
 	session infrastructure.DbSession
 }
 
-func (r EndorserRepository) Insert(obj endorser.Endorser) error {
+func (r EndorserRepository) Insert(obj *endorser.Endorser) error {
 	q := queries.EndorserInsertQuery{}
 	obj.Export(&q)
 	result, err := q.Evaluate(r.session)

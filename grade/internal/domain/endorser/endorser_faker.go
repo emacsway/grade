@@ -9,20 +9,46 @@ import (
 
 var EndorserMemberIdFakeValue = uint(1004)
 
-func NewEndorserFaker() *EndorserFaker {
-	idFactory := member.NewTenantMemberIdFaker()
-	idFactory.MemberId = EndorserMemberIdFakeValue
-	return &EndorserFaker{
-		Id:        idFactory,
-		Grade:     1,
-		CreatedAt: time.Now().Truncate(time.Microsecond),
+type EndorserFakerOption func(*EndorserFaker)
+
+func WithTenantId(tenantId uint) EndorserFakerOption {
+	return func(f *EndorserFaker) {
+		f.Id.TenantId = tenantId
 	}
 }
 
+func WithMemberId(memberId uint) EndorserFakerOption {
+	return func(f *EndorserFaker) {
+		f.Id.MemberId = memberId
+	}
+}
+
+func WithRepository(repo EndorserRepository) EndorserFakerOption {
+	return func(f *EndorserFaker) {
+		f.Repository = repo
+	}
+}
+
+func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
+	idFactory := member.NewTenantMemberIdFaker()
+	idFactory.MemberId = EndorserMemberIdFakeValue
+	f := &EndorserFaker{
+		Id:         idFactory,
+		Grade:      1,
+		CreatedAt:  time.Now().Truncate(time.Microsecond),
+		Repository: EndorserDummyRepository{},
+	}
+	for _, opt := range opts {
+		opt(f)
+	}
+	return f
+}
+
 type EndorserFaker struct {
-	Id        member.TenantMemberIdFaker
-	Grade     uint8
-	CreatedAt time.Time
+	Id         member.TenantMemberIdFaker
+	Grade      uint8
+	CreatedAt  time.Time
+	Repository EndorserRepository
 }
 
 func (f EndorserFaker) Create() (*Endorser, error) {
@@ -43,4 +69,14 @@ func (f EndorserFaker) Create() (*Endorser, error) {
 		return nil, err
 	}
 	return r, nil
+}
+
+type EndorserRepository interface {
+	Insert(*Endorser) error
+}
+
+type EndorserDummyRepository struct{}
+
+func (r EndorserDummyRepository) Insert(agg *Endorser) error {
+	return nil
 }
