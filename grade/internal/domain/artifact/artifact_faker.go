@@ -8,8 +8,28 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
-func NewArtifactFaker() *ArtifactFaker {
-	return &ArtifactFaker{
+type ArtifactFakerOption func(*ArtifactFaker)
+
+func WithTenantId(tenantId uint) ArtifactFakerOption {
+	return func(f *ArtifactFaker) {
+		f.Id.TenantId = tenantId
+	}
+}
+
+func WithArtifactId(artifactId uint) ArtifactFakerOption {
+	return func(f *ArtifactFaker) {
+		f.Id.ArtifactId = artifactId
+	}
+}
+
+func WithRepository(repo ArtifactRepository) ArtifactFakerOption {
+	return func(f *ArtifactFaker) {
+		f.Repository = repo
+	}
+}
+
+func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
+	f := &ArtifactFaker{
 		Id:            values.NewTenantArtifactIdFaker(),
 		Status:        values.Accepted,
 		Name:          "Name1",
@@ -19,7 +39,12 @@ func NewArtifactFaker() *ArtifactFaker {
 		AuthorIds:     []member.TenantMemberIdFaker{},
 		OwnerId:       member.NewTenantMemberIdFaker(),
 		CreatedAt:     time.Now().Truncate(time.Microsecond),
+		Repository:    ArtifactDummyRepository{},
 	}
+	for _, opt := range opts {
+		opt(f)
+	}
+	return f
 }
 
 type ArtifactFaker struct {
@@ -32,6 +57,7 @@ type ArtifactFaker struct {
 	AuthorIds     []member.TenantMemberIdFaker
 	OwnerId       member.TenantMemberIdFaker
 	CreatedAt     time.Time
+	Repository    ArtifactRepository
 }
 
 func (f *ArtifactFaker) AddAuthorId(authorId member.TenantMemberIdFaker) error {
@@ -91,5 +117,15 @@ func (f ArtifactFaker) Create() (*Artifact, error) {
 
 func (f *ArtifactFaker) Next() error {
 	f.Id.ArtifactId += 1
+	return nil
+}
+
+type ArtifactRepository interface {
+	Insert(*Artifact) error
+}
+
+type ArtifactDummyRepository struct{}
+
+func (r ArtifactDummyRepository) Insert(agg *Artifact) error {
 	return nil
 }
