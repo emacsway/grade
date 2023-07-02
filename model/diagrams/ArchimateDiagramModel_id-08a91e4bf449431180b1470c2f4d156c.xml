@@ -10,8 +10,7 @@
       font="1|Sans|12.0|1|GTK|1|"
       fontColor="#ffffff"
       fillColor="#027180"
-      textPosition="1"
-      type="1">
+      textPosition="1">
     <sourceConnections
         xsi:type="archimate:DiagramModelArchimateConnection"
         id="id-6df2e17b3be649bbbb309686af31385a"
@@ -65,8 +64,7 @@
       font="1|Sans|12.0|1|GTK|1|"
       fontColor="#ffffff"
       fillColor="#027180"
-      textPosition="1"
-      type="1">
+      textPosition="1">
     <sourceConnections
         xsi:type="archimate:DiagramModelArchimateConnection"
         id="id-551035933d1c4834b623191b8a0afb93"
@@ -92,8 +90,7 @@
       font="1|Sans|12.0|1|GTK|1|"
       fontColor="#ffffff"
       fillColor="#027180"
-      textPosition="1"
-      type="1">
+      textPosition="1">
     <bounds
         x="540"
         y="252"
@@ -110,8 +107,7 @@
       font="1|Sans|12.0|1|GTK|1|"
       fontColor="#ffffff"
       fillColor="#027180"
-      textPosition="1"
-      type="1">
+      textPosition="1">
     <bounds
         x="540"
         y="36"
@@ -234,8 +230,7 @@
       font="1|Sans|12.0|1|GTK|1|"
       fontColor="#ffffff"
       fillColor="#027180"
-      textPosition="1"
-      type="1">
+      textPosition="1">
     <sourceConnections
         xsi:type="archimate:DiagramModelArchimateConnection"
         id="id-995cb8d36ff04697b1e713f2bfdcf648"
