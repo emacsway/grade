@@ -49,8 +49,8 @@ type Endorsement struct {
 	createdAt         time.Time
 }
 
-func (e Endorsement) IsEndorsedBy(rId member.TenantMemberId, aId artifact.TenantArtifactId) bool {
-	return e.endorserId.Equal(rId) && e.artifactId.Equal(aId)
+func (e Endorsement) IsEndorsedBy(endorserId member.TenantMemberId, artifactId artifact.TenantArtifactId) bool {
+	return e.endorserId.Equal(endorserId) && e.artifactId.Equal(artifactId)
 }
 
 func (e Endorsement) SpecialistGrade() grade.Grade {
