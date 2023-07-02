@@ -91,6 +91,8 @@
 
 Сопроводительная методическая информация проекта будет накапливаться [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/index.html).
 
+Event Storming диаграмму можно посмотреть [здесь](https://emacsway.github.io/grade/?view=id-1e4b38c011a5495b878e024adaed4f08).
+
 
 ## Contributing
 
