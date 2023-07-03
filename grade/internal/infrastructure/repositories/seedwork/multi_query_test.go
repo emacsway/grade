@@ -1,97 +1,12 @@
 package seedwork
 
 import (
-	"database/sql"
-	"errors"
 	"fmt"
 	"testing"
 
+	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/testutils"
 	"github.com/stretchr/testify/assert"
-
-	"github.com/emacsway/grade/grade/internal/application"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
-
-type DbSessionStub struct {
-	expectedSql    string
-	expectedParams []any
-	t              *testing.T
-	rows           *RowsStub
-}
-
-func (s DbSessionStub) Atomic(callback application.SessionCallback) error {
-	return callback(s)
-}
-
-func (s DbSessionStub) Exec(query string, args ...any) (infrastructure.Result, error) {
-	assert.Equal(s.t, s.expectedSql, query)
-	assert.Equal(s.t, s.expectedParams, args)
-	return &DeferredResult{}, nil
-}
-
-func (s *DbSessionStub) Query(query string, args ...any) (infrastructure.Rows, error) {
-	assert.Equal(s.t, s.expectedSql, query)
-	assert.Equal(s.t, s.expectedParams, args)
-	return s.rows, nil
-}
-
-func (s *DbSessionStub) QueryRow(query string, args ...any) infrastructure.Row {
-	assert.Equal(s.t, s.expectedSql, query)
-	assert.Equal(s.t, s.expectedParams, args)
-	return s.rows
-}
-
-func NewRowsStub(rows ...[]any) *RowsStub {
-	return &RowsStub{
-		rows, 0, false,
-	}
-}
-
-type RowsStub struct {
-	rows   [][]any
-	idx    int
-	Closed bool
-}
-
-func (r *RowsStub) Close() error {
-	r.Closed = true
-	return nil
-}
-
-func (r RowsStub) Err() error {
-	return nil
-}
-
-func (r *RowsStub) Next() bool {
-	r.idx++
-	return len(r.rows) < r.idx
-}
-
-func (r RowsStub) Scan(dest ...any) error {
-	for i, d := range dest {
-		dt, ok := d.(sql.Scanner)
-		if !ok {
-			return errors.New("value should implement sql.Scanner interface")
-		}
-		err := dt.Scan(r.rows[r.idx][i])
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-type RowStub struct {
-	rows *RowsStub
-}
-
-func (r *RowStub) Err() error {
-	return r.rows.Err()
-}
-
-func (r *RowStub) Scan(dest ...any) error {
-	return r.rows.Scan(dest...)
-}
 
 func TestMultiInsertQuery(t *testing.T) {
 	cases := []struct {
@@ -128,14 +43,10 @@ func TestMultiInsertQuery(t *testing.T) {
 				_, err := q.Exec(fmt.Sprintf(sqlTemplate, c.sql), v...)
 				assert.Nil(t, err)
 			}
-			s := &DbSessionStub{
-				fmt.Sprintf(sqlTemplate, c.expectedSql),
-				c.expectedParams,
-				t,
-				NewRowsStub(),
-			}
-			_ = s
+			s := testutils.NewDbSessionStub(testutils.NewRowsStub())
 			_, err := q.Evaluate(s)
+			assert.Equal(t, fmt.Sprintf(sqlTemplate, c.expectedSql), s.ActualQuery)
+			assert.Equal(t, c.expectedParams, s.ActualParams)
 			assert.Nil(t, err)
 		})
 	}
@@ -176,14 +87,10 @@ func TestAutoincrementMultiInsertQuery(t *testing.T) {
 				_, err := q.Exec(fmt.Sprintf(sqlTemplate, c.sql), v...)
 				assert.Nil(t, err)
 			}
-			s := &DbSessionStub{
-				fmt.Sprintf(sqlTemplate, c.expectedSql),
-				c.expectedParams,
-				t,
-				NewRowsStub([]any{1}, []any{2}, []any{3}),
-			}
-			_ = s
+			s := testutils.NewDbSessionStub(testutils.NewRowsStub([]any{1}, []any{2}, []any{3}))
 			_, err := q.Evaluate(s)
+			assert.Equal(t, fmt.Sprintf(sqlTemplate, c.expectedSql), s.ActualQuery)
+			assert.Equal(t, c.expectedParams, s.ActualParams)
 			assert.Nil(t, err)
 		})
 	}
