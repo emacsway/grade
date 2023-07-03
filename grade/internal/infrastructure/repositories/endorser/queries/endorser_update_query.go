@@ -69,5 +69,6 @@ func (q *EndorserUpdateQuery) SetCreatedAt(val time.Time) {
 }
 
 func (q *EndorserUpdateQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+	// TODO: Optimistic lock
 	return s.Exec(q.sql(), q.params[:]...)
 }
