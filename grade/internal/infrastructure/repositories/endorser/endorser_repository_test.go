@@ -12,7 +12,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
-	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork"
+	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/testutils"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
 )
 
@@ -91,7 +91,7 @@ func createRepositories(t *testing.T) []RepositoryOption {
 
 func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	var tenantExp tenant.TenantExporter
-	db, err := seedwork.NewTestDb()
+	db, err := testutils.NewTestDb()
 	require.NoError(t, err)
 	session := infrastructure.NewPgxSession(db)
 	tenantFaker := tenantRepo.NewTenantFaker(session)
