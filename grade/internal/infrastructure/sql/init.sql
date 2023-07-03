@@ -1,3 +1,6 @@
+-- Tenant
+
+
 CREATE TABLE tenant (
         id bigserial CONSTRAINT tenant_pk PRIMARY KEY,
         name varchar(150) NOT NULL,
@@ -5,6 +8,8 @@ CREATE TABLE tenant (
         version integer NOT NULL
 );
 
+
+-- Member
 
 CREATE TABLE member (
     tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
@@ -50,7 +55,57 @@ end
 $$;
 CREATE TRIGGER fill_in_member_seq BEFORE INSERT ON member FOR EACH ROW EXECUTE PROCEDURE fill_in_member_seq();
 
--- tested up to here
+
+-- Competence
+
+
+CREATE TABLE competence (
+    tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
+    competence_id bigint NOT NULL,
+    name varchar(150) NOT NULL,
+    owner_id bigint NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    version integer NOT NULL,
+    FOREIGN KEY (tenant_id, owner_id) REFERENCES member (tenant_id, member_id) ON DELETE CASCADE,
+    CONSTRAINT competence_pk PRIMARY KEY (tenant_id, competence_id)
+);
+
+
+CREATE FUNCTION make_competence_seq() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+    execute format('CREATE SEQUENCE IF NOT EXISTS competence_seq_%s', NEW.id);
+    return NEW;
+end
+$$;
+CREATE TRIGGER make_competence_seq AFTER INSERT ON tenant FOR EACH ROW EXECUTE PROCEDURE make_competence_seq();
+
+
+CREATE FUNCTION drop_competence_seq() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+execute format('DROP SEQUENCE IF EXISTS competence_seq_%s', OLD.id);
+return NEW;
+end
+$$;
+CREATE TRIGGER drop_competence_seq AFTER DELETE ON tenant FOR EACH ROW EXECUTE PROCEDURE drop_competence_seq();
+
+
+CREATE FUNCTION fill_in_competence_seq() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+    NEW.competence_id := nextval('competence_seq_' || NEW.tenant_id);
+    RETURN NEW;
+end
+$$;
+CREATE TRIGGER fill_in_competence_seq BEFORE INSERT ON competence FOR EACH ROW EXECUTE PROCEDURE fill_in_competence_seq();
+
+
+-- Artifact
+
 
 CREATE TABLE event_log (
     tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
@@ -66,6 +121,9 @@ CREATE TABLE event_log (
 );
 
 
+-- Endorser
+
+
 CREATE TABLE endorser (
     tenant_id integer NOT NULL,
     member_id bigint NOT NULL,
@@ -79,6 +137,9 @@ CREATE TABLE endorser (
 );
 
 
+-- Specialist
+
+
 CREATE TABLE endorsement (
     tenant_id integer NOT NULL,
     specialist_id bigint NOT NULL,
@@ -89,7 +150,8 @@ CREATE TABLE endorsement (
     endorser_grade smallint NOT NULL DEFAULT 0,
     endorser_version integer NOT NULL,
     created_at timestamp with time zone NOT NULL,
-    FOREIGN KEY (tenant_id, member_id) REFERENCES specialist (tenant_id, member_id) ON DELETE CASCADE,
+    FOREIGN KEY (tenant_id, specialist_id) REFERENCES specialist (tenant_id, member_id) ON DELETE CASCADE,
+    FOREIGN KEY (tenant_id, endorser_id) REFERENCES endorser (tenant_id, member_id) ON DELETE CASCADE,
     CONSTRAINT endorsement_uniq UNIQUE (tenant_id, specialist_id, artifact_id, endorser_id),
     CONSTRAINT endorsement_endorser_uniq UNIQUE (tenant_id, endorser_id, endorser_version),
     CONSTRAINT endorsement_pk PRIMARY KEY (tenant_id, specialist_id, specialist_version)
