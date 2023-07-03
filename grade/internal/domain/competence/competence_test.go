@@ -24,5 +24,6 @@ func TestCompetenceExport(t *testing.T) {
 		Name:      exporters.StringExporter(f.Name),
 		OwnerId:   member.NewTenantMemberIdExporter(f.OwnerId.TenantId, f.OwnerId.MemberId),
 		CreatedAt: f.CreatedAt,
+		Version:   1,
 	}, actualExporter)
 }

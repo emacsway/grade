@@ -7,6 +7,20 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
+func NewCompetenceCreated(
+	id values.TenantCompetenceId,
+	name values.Name,
+	ownerId memberVal.TenantMemberId,
+	createdAt time.Time,
+) *CompetenceCreated {
+	return &CompetenceCreated{
+		id:        id,
+		name:      name,
+		ownerId:   ownerId,
+		createdAt: createdAt,
+	}
+}
+
 type CompetenceCreated struct {
 	id               values.TenantCompetenceId
 	name             values.Name
@@ -16,7 +30,7 @@ type CompetenceCreated struct {
 }
 
 func (e CompetenceCreated) EventType() string {
-	return "CompetenceAvailable"
+	return "CompetenceCreated"
 }
 
 func (e CompetenceCreated) EventVersion() uint8 {

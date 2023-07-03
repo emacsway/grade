@@ -3,6 +3,7 @@ package competence
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/competence/events"
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
@@ -14,12 +15,21 @@ func NewCompetence(
 	ownerId member.TenantMemberId,
 	createdAt time.Time,
 ) (*Competence, error) {
-	return &Competence{
+	agg := &Competence{
 		id:        id,
 		name:      name,
 		ownerId:   ownerId,
 		createdAt: createdAt,
-	}, nil
+	}
+	e := events.NewCompetenceCreated(
+		id,
+		name,
+		ownerId,
+		createdAt,
+	)
+	e.SetAggregateVersion(agg.NextVersion())
+	agg.eventive.AddDomainEvent(e)
+	return agg, nil
 }
 
 type Competence struct {

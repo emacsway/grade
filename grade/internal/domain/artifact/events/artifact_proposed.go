@@ -8,6 +8,30 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
+func NewArtifactProposed(
+	id values.TenantArtifactId,
+	status values.Status,
+	name values.Name,
+	description values.Description,
+	url values.Url,
+	competenceIds []competence.TenantCompetenceId,
+	authorIds []member.TenantMemberId,
+	ownerId member.TenantMemberId,
+	createdAt time.Time,
+) *ArtifactProposed {
+	return &ArtifactProposed{
+		id:            id,
+		status:        status,
+		name:          name,
+		description:   description,
+		url:           url,
+		competenceIds: competenceIds,
+		authorIds:     authorIds,
+		ownerId:       ownerId,
+		createdAt:     createdAt,
+	}
+}
+
 type ArtifactProposed struct {
 	id               values.TenantArtifactId
 	status           values.Status

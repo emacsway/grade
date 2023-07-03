@@ -11,7 +11,7 @@ import (
 )
 
 type CompetenceCreatedQuery struct {
-	params   [4]any
+	params   [5]any
 	pkSetter func(any) error
 }
 
@@ -20,7 +20,7 @@ func (q CompetenceCreatedQuery) sql() string {
 		INSERT INTO competence
 		(tenant_id, name, owner_id, created_at, version)
 		VALUES
-		($1, $2, $3, $4, 1)
+		($1, $2, $3, $4, $5)
 		RETURNING competence_id`
 }
 
@@ -55,6 +55,7 @@ func (q *CompetenceCreatedQuery) SetCreatedAt(val time.Time) {
 }
 
 func (q *CompetenceCreatedQuery) SetVersion(val uint) {
+	q.params[4] = val
 }
 
 func (q *CompetenceCreatedQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {

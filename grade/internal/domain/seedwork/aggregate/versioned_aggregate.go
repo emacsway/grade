@@ -17,6 +17,11 @@ func (a VersionedAggregate) Version() uint {
 	return a.version
 }
 
+func (a *VersionedAggregate) NextVersion() uint {
+	a.version += 1
+	return a.version
+}
+
 func (a *VersionedAggregate) SetVersion(val uint) {
 	a.version = val
 }
