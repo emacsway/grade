@@ -8,6 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/emacsway/grade/grade/internal/application"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
@@ -16,6 +17,10 @@ type DbSessionStub struct {
 	expectedParams []any
 	t              *testing.T
 	rows           *RowsStub
+}
+
+func (s DbSessionStub) Atomic(callback application.SessionCallback) error {
+	return callback(s)
 }
 
 func (s DbSessionStub) Exec(query string, args ...any) (infrastructure.Result, error) {

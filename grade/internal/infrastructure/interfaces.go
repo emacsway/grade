@@ -1,5 +1,7 @@
 package infrastructure
 
+import "github.com/emacsway/grade/grade/internal/application"
+
 type Result interface {
 	LastInsertId() (int64, error)
 	RowsAffected() (int64, error)
@@ -30,6 +32,7 @@ type DbSessionSingleQuerier interface {
 }
 
 type DbSession interface {
+	application.Session
 	DbSessionExecutor
 	DbSessionQuerier
 	DbSessionSingleQuerier
