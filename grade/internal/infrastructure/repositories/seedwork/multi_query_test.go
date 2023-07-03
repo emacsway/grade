@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/testutils"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/testutils"
 )
 
 func TestMultiInsertQuery(t *testing.T) {

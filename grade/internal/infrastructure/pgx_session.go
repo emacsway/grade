@@ -51,7 +51,7 @@ func (s *SessionContext) Atomic(callback application.SessionContextCallback) err
 	callbackUnclothed := func(dbSession application.Session) error {
 		sessionContext := &SessionContext{
 			NewBackgroundContext(s.Context),
-			s.DbSession,
+			dbSession.(DbSession),
 		}
 		return callback(sessionContext)
 	}
