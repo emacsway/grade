@@ -66,7 +66,7 @@ type ArtifactProposedExporterSetter interface {
 	AddCompetenceId(competence.TenantCompetenceId)
 	AddAuthorId(member.TenantMemberId)
 	SetOwnerId(member.TenantMemberId)
+	SetCreatedAt(time.Time)
 	SetEventType(string)
 	SetAggregateVersion(uint)
-	SetCreatedAt(time.Time)
 }
