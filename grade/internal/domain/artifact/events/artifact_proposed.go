@@ -54,6 +54,7 @@ func (e ArtifactProposed) Export(ex ArtifactProposedExporterSetter) {
 	ex.SetOwnerId(e.ownerId)
 	ex.SetCreatedAt(e.createdAt)
 	ex.SetEventType(e.EventType())
+	ex.SetEventVersion(e.EventVersion())
 	ex.SetAggregateVersion(e.AggregateVersion())
 }
 
@@ -68,5 +69,6 @@ type ArtifactProposedExporterSetter interface {
 	SetOwnerId(member.TenantMemberId)
 	SetCreatedAt(time.Time)
 	SetEventType(string)
+	SetEventVersion(uint8)
 	SetAggregateVersion(uint)
 }
