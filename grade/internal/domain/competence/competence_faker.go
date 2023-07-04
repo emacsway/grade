@@ -27,14 +27,18 @@ func WithRepository(repo CompetenceRepository) CompetenceFakerOption {
 	}
 }
 
-func NewCompetenceFaker() *CompetenceFaker {
-	return &CompetenceFaker{
+func NewCompetenceFaker(opts ...CompetenceFakerOption) *CompetenceFaker {
+	f := &CompetenceFaker{
 		Id:         values.NewTenantCompetenceIdFaker(),
 		Name:       "Name1",
 		OwnerId:    member.NewTenantMemberIdFaker(),
 		CreatedAt:  time.Now().Truncate(time.Microsecond),
 		Repository: CompetenceDummyRepository{},
 	}
+	for _, opt := range opts {
+		opt(f)
+	}
+	return f
 }
 
 type CompetenceFaker struct {
