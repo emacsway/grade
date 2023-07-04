@@ -19,9 +19,9 @@ type EndorserRepository struct {
 	session infrastructure.DbSession
 }
 
-func (r EndorserRepository) Insert(obj *endorser.Endorser) error {
+func (r EndorserRepository) Insert(agg *endorser.Endorser) error {
 	q := queries.EndorserInsertQuery{}
-	obj.Export(&q)
+	agg.Export(&q)
 	result, err := q.Evaluate(r.session)
 	if err != nil {
 		return err

@@ -45,7 +45,7 @@ func (e *CompetenceCreated) SetAggregateVersion(val uint) {
 	e.aggregateVersion = val
 }
 
-func (e CompetenceCreated) Export(ex ArtifactProposedExporterSetter) {
+func (e CompetenceCreated) Export(ex CompetenceCreatedExporterSetter) {
 	ex.SetId(e.id)
 	ex.SetName(e.name)
 	ex.SetOwnerId(e.ownerId)
@@ -54,7 +54,7 @@ func (e CompetenceCreated) Export(ex ArtifactProposedExporterSetter) {
 	ex.SetAggregateVersion(e.AggregateVersion())
 }
 
-type ArtifactProposedExporterSetter interface {
+type CompetenceCreatedExporterSetter interface {
 	SetId(id values.TenantCompetenceId)
 	SetName(values.Name)
 	SetOwnerId(memberVal.TenantMemberId)

@@ -19,9 +19,9 @@ type MemberRepository struct {
 	session infrastructure.DbSession
 }
 
-func (r *MemberRepository) Insert(obj *member.Member) error {
+func (r *MemberRepository) Insert(agg *member.Member) error {
 	q := &queries.MemberInsertQuery{}
-	obj.Export(q)
+	agg.Export(q)
 	result, err := q.Evaluate(r.session)
 	if err != nil {
 		return err

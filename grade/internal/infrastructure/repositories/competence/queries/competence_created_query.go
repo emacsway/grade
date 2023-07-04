@@ -54,11 +54,14 @@ func (q *CompetenceCreatedQuery) SetCreatedAt(val time.Time) {
 	q.params[3] = val
 }
 
-func (q *CompetenceCreatedQuery) SetVersion(val uint) {
+func (q *CompetenceCreatedQuery) SetAggregateVersion(val uint) {
 	q.params[4] = val
 }
 
-func (q *CompetenceCreatedQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *CompetenceCreatedQuery) SetEventType(val string) {
+}
+
+func (q *CompetenceCreatedQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
 	result, err := s.Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err
