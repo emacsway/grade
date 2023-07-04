@@ -1,10 +1,11 @@
-package seedwork
+package batch
 
 import (
 	"fmt"
 	"regexp"
 
 	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork"
 )
 
 var reInsert = regexp.MustCompile(`VALUES\s*(\((?:'(?:[^']|'')*'|[^)])+\))`)
@@ -49,7 +50,7 @@ func (q *MultiQueryBase) sql() string {
 		}
 		bulkPlaceholders += q.placeholders
 	}
-	return Rebind(fmt.Sprintf(q.sqlTemplate, bulkPlaceholders))
+	return seedwork.Rebind(fmt.Sprintf(q.sqlTemplate, bulkPlaceholders))
 }
 
 func (q *MultiQueryBase) flatParams() []any {
@@ -61,7 +62,7 @@ func (q *MultiQueryBase) flatParams() []any {
 }
 
 func (q *MultiQueryBase) Exec(query string, args ...any) (infrastructure.DeferredResult, error) {
-	query = RebindReverse(query)
+	query = seedwork.RebindReverse(query)
 	q.placeholders = q.re.FindStringSubmatch(query)[1]
 	q.sqlTemplate = q.re.ReplaceAllLiteralString(query, q.replacement)
 	q.params = append(q.params, args)
