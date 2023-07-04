@@ -13,7 +13,7 @@ type CompetenceGetQuery struct {
 func (q CompetenceGetQuery) sql() string {
 	return `
 		SELECT
-		tenant_id, competence_id, status, name, owner_id, created_at, version
+		tenant_id, competence_id, name, owner_id, created_at, version
 		FROM competence
 		WHERE tenant_id=$1 AND competence_id=$2`
 }

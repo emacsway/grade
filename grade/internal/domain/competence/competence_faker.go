@@ -12,6 +12,7 @@ type CompetenceFakerOption func(*CompetenceFaker)
 func WithTenantId(tenantId uint) CompetenceFakerOption {
 	return func(f *CompetenceFaker) {
 		f.Id.TenantId = tenantId
+		f.OwnerId.TenantId = tenantId
 	}
 }
 

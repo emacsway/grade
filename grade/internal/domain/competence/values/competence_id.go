@@ -9,9 +9,9 @@ func NewCompetenceId(value uint) (CompetenceId, error) {
 	if err != nil {
 		return CompetenceId{}, err
 	}
-	return CompetenceId{id}, nil
+	return CompetenceId{&id}, nil
 }
 
 type CompetenceId struct {
-	identity.IntIdentity
+	*identity.IntIdentity
 }

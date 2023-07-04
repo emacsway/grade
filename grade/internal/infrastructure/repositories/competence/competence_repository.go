@@ -35,15 +35,15 @@ func (r *CompetenceRepository) Update(agg *competence.Competence) error {
 
 func (r *CompetenceRepository) save(agg *competence.Competence) error {
 	pendingEvents := agg.PendingDomainEvents()
-	for i := range pendingEvents {
+	for _, iEvent := range pendingEvents {
 		var q infrastructure.QueryEvaluator
 
-		switch event := pendingEvents[i].(type) {
-		case events.CompetenceCreated:
+		switch event := iEvent.(type) {
+		case *events.CompetenceCreated:
 			q = &queries.CompetenceCreatedQuery{}
 			qt := q.(events.CompetenceCreatedExporterSetter)
 			event.Export(qt)
-		case events.NameUpdated:
+		case *events.NameUpdated:
 			q = &queries.NameUpdatedQuery{}
 			qt := q.(events.NameUpdatedExporterSetter)
 			event.Export(qt)
@@ -53,6 +53,7 @@ func (r *CompetenceRepository) save(agg *competence.Competence) error {
 			return err
 		}
 	}
+	agg.ClearPendingDomainEvents()
 	return nil
 }
 
