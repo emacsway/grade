@@ -41,6 +41,17 @@ type Competence struct {
 	aggregate.VersionedAggregate
 }
 
+func (c *Competence) SetName(name values.Name) error {
+	c.name = name
+	e := events.NewNameUpdated(
+		c.id,
+		c.name,
+	)
+	e.SetAggregateVersion(c.NextVersion())
+	c.eventive.AddDomainEvent(e)
+	return nil
+}
+
 func (c Competence) PendingDomainEvents() []aggregate.DomainEvent {
 	return c.eventive.PendingDomainEvents()
 }
