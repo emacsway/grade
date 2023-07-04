@@ -23,7 +23,7 @@ func (q EndorserUpdateQuery) sql() string {
 			pending_endorsement_count = $6,
 			version = version + 1
 		WHERE
-			tenant_id = $1 AND member_id=$2 AND version = $3`
+			tenant_id = $1 AND member_id = $2 AND version = $3`
 }
 
 func (q *EndorserUpdateQuery) SetId(val member.TenantMemberId) {

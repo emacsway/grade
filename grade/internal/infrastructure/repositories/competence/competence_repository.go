@@ -18,7 +18,22 @@ type CompetenceRepository struct {
 	session infrastructure.DbSession
 }
 
-func (r *CompetenceRepository) Save(agg *competence.Competence) error {
+func (r *CompetenceRepository) Insert(agg *competence.Competence) error {
+	return r.save(agg)
+}
+
+func (r *CompetenceRepository) Update(agg *competence.Competence) error {
+	q := &queries.OptimisticOfflineLockLockQuery{}
+	agg.Export(q)
+	q.SetInitialVersion(agg.Version() - uint(len(agg.PendingDomainEvents())))
+	_, err := q.Evaluate(r.session)
+	if err != nil {
+		return err
+	}
+	return r.save(agg)
+}
+
+func (r *CompetenceRepository) save(agg *competence.Competence) error {
 	pendingEvents := agg.PendingDomainEvents()
 	for i := range pendingEvents {
 		var q infrastructure.QueryEvaluator
@@ -27,6 +42,10 @@ func (r *CompetenceRepository) Save(agg *competence.Competence) error {
 		case events.CompetenceCreated:
 			q = &queries.CompetenceCreatedQuery{}
 			qt := q.(events.CompetenceCreatedExporterSetter)
+			event.Export(qt)
+		case events.NameUpdated:
+			q = &queries.NameUpdatedQuery{}
+			qt := q.(events.NameUpdatedExporterSetter)
 			event.Export(qt)
 		}
 		_, err := q.Evaluate(r.session)

@@ -69,7 +69,7 @@ func (f *CompetenceFaker) Create() (*Competence, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = f.Repository.Save(agg)
+	err = f.Repository.Insert(agg)
 	if err != nil {
 		return nil, err
 	}
@@ -79,11 +79,11 @@ func (f *CompetenceFaker) Create() (*Competence, error) {
 }
 
 type CompetenceRepository interface {
-	Save(*Competence) error
+	Insert(*Competence) error
 }
 
 type CompetenceDummyRepository struct{}
 
-func (r CompetenceDummyRepository) Save(agg *Competence) error {
+func (r CompetenceDummyRepository) Insert(agg *Competence) error {
 	return nil
 }
