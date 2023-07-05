@@ -14,7 +14,7 @@ type ArtifactPkGetQuery struct {
 }
 
 func (q ArtifactPkGetQuery) sql() string {
-	return fmt.Sprintf(`SELECT  nextval('artifact_seq_%d')`, q.idValue())
+	return fmt.Sprintf(`SELECT  nextval('artifact_seq_%d'::regclass)`, q.idValue())
 }
 
 func (q ArtifactPkGetQuery) idValue() uint {
