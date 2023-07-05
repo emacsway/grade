@@ -107,6 +107,31 @@ CREATE TRIGGER fill_in_competence_seq BEFORE INSERT ON competence FOR EACH ROW E
 -- Artifact
 
 
+CREATE FUNCTION make_artifact_seq() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+    execute format('CREATE SEQUENCE IF NOT EXISTS artifact_seq_%s', NEW.id);
+    return NEW;
+end
+$$;
+CREATE TRIGGER make_artifact_seq AFTER INSERT ON tenant FOR EACH ROW EXECUTE PROCEDURE make_artifact_seq();
+
+
+CREATE FUNCTION drop_artifact_seq() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+begin
+execute format('DROP SEQUENCE IF EXISTS artifact_seq_%s', OLD.id);
+return NEW;
+end
+$$;
+CREATE TRIGGER drop_artifact_seq AFTER DELETE ON tenant FOR EACH ROW EXECUTE PROCEDURE drop_artifact_seq();
+
+
+-- EventLog
+
+
 CREATE TABLE event_log (
     tenant_id integer NOT NULL REFERENCES tenant(id) ON DELETE CASCADE,
     stream_type varchar(128) NOT NULL,
@@ -116,9 +141,9 @@ CREATE TABLE event_log (
     event_version smallint NOT NULL,
     payload jsonb NOT NULL,
     metadata jsonb NULL,
-    CONSTRAINT event_log_event_id_uniq UNIQUE (metadata->>'event_id'),
     CONSTRAINT event_log_pk PRIMARY KEY (tenant_id, stream_type, stream_id, stream_position)
 );
+CREATE UNIQUE INDEX event_log_event_id_uniq ON event_log( ((metadata->>'event_id')::uuid) ) ;
 
 
 -- Endorser
@@ -140,13 +165,24 @@ CREATE TABLE endorser (
 -- Specialist
 
 
+CREATE TABLE specialist (
+    tenant_id integer NOT NULL,
+    member_id bigint NOT NULL,
+    grade smallint NOT NULL DEFAULT 0,
+    created_at timestamp with time zone NOT NULL,
+    version integer NOT NULL,
+    FOREIGN KEY (tenant_id, member_id) REFERENCES member (tenant_id, member_id) ON DELETE CASCADE,
+    CONSTRAINT specialist_pk PRIMARY KEY (tenant_id, member_id)
+);
+
+
 CREATE TABLE endorsement (
     tenant_id integer NOT NULL,
     specialist_id bigint NOT NULL,
     specialist_grade smallint NOT NULL DEFAULT 0,
     specialist_version integer NOT NULL,
     artifact_id bigint NOT NULL,
-    endorser_id bigint NOT NULL REFERENCES member(member_id) ON DELETE CASCADE,
+    endorser_id bigint NOT NULL,
     endorser_grade smallint NOT NULL DEFAULT 0,
     endorser_version integer NOT NULL,
     created_at timestamp with time zone NOT NULL,
@@ -156,3 +192,16 @@ CREATE TABLE endorsement (
     CONSTRAINT endorsement_endorser_uniq UNIQUE (tenant_id, endorser_id, endorser_version),
     CONSTRAINT endorsement_pk PRIMARY KEY (tenant_id, specialist_id, specialist_version)
 );
+
+
+CREATE TABLE assignment (
+    tenant_id integer NOT NULL,
+    specialist_id bigint NOT NULL,
+    assigned_grade smallint NOT NULL DEFAULT 0,
+    reason text NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    version integer NOT NULL,
+    FOREIGN KEY (tenant_id, specialist_id) REFERENCES specialist (tenant_id, member_id) ON DELETE CASCADE,
+    CONSTRAINT assignment_pk PRIMARY KEY (tenant_id, specialist_id, version)
+);
+
