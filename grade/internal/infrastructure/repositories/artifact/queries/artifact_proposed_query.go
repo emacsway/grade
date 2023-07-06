@@ -86,7 +86,7 @@ func (q *ArtifactProposedQuery) SetCreatedAt(val time.Time) {
 	q.payload.CreatedAt = val
 }
 
-func (q *ArtifactProposedQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *ArtifactProposedQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
 	payload, err := json.Marshal(q.payload)
 	if err != nil {
 		return nil, err

@@ -9,23 +9,23 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-type ArtifactPkGetQuery struct {
-	Id tenantVal.TenantId
+type ArtifactNextIdGetQuery struct {
+	TenantId tenantVal.TenantId
 }
 
-func (q ArtifactPkGetQuery) sql() string {
-	return fmt.Sprintf(`SELECT  nextval('artifact_seq_%d'::regclass)`, q.idValue())
+func (q ArtifactNextIdGetQuery) sql() string {
+	return fmt.Sprintf(`SELECT nextval('artifact_seq_%d'::regclass)`, q.tenantIdValue())
 }
 
-func (q ArtifactPkGetQuery) idValue() uint {
-	var id exporters.UintExporter
-	q.Id.Export(&id)
-	return uint(id)
+func (q ArtifactNextIdGetQuery) tenantIdValue() uint {
+	var tenantIdExp exporters.UintExporter
+	q.TenantId.Export(&tenantIdExp)
+	return uint(tenantIdExp)
 }
 
-func (q *ArtifactPkGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (artifactVal.TenantArtifactId, error) {
+func (q *ArtifactNextIdGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (artifactVal.TenantArtifactId, error) {
 	rec := &artifactVal.TenantArtifactIdReconstitutor{}
-	rec.TenantId = q.idValue()
+	rec.TenantId = q.tenantIdValue()
 	err := s.QueryRow(q.sql()).Scan(&rec.ArtifactId)
 	if err != nil {
 		return artifactVal.TenantArtifactId{}, err
