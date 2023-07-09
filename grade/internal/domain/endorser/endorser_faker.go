@@ -4,7 +4,8 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
-	member "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/emacsway/grade/grade/internal/domain/member"
+	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 )
 
 var EndorserMemberIdFakeValue = uint(1004)
@@ -29,15 +30,27 @@ func WithRepository(repo EndorserRepository) EndorserFakerOption {
 	}
 }
 
+func WithMemberFaker(memberFaker *member.MemberFaker) EndorserFakerOption {
+	return func(f *EndorserFaker) {
+		f.Dependency.MemberFaker = memberFaker
+	}
+}
+
 func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
-	idFactory := member.NewTenantMemberIdFaker()
+	idFactory := memberVal.NewTenantMemberIdFaker()
 	idFactory.MemberId = EndorserMemberIdFakeValue
 	f := &EndorserFaker{
-		Id:         idFactory,
-		Grade:      1,
-		CreatedAt:  time.Now().Truncate(time.Microsecond),
-		Repository: EndorserDummyRepository{},
+		Id:        idFactory,
+		Grade:     1,
+		CreatedAt: time.Now().Truncate(time.Microsecond),
+		Dependency: &Dependency{
+			MemberFaker: member.NewMemberFaker(),
+		},
 	}
+	repo := &EndorserDummyRepository{
+		Faker: f,
+	}
+	f.Repository = repo
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -45,10 +58,15 @@ func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
 }
 
 type EndorserFaker struct {
-	Id         member.TenantMemberIdFaker
+	Id         memberVal.TenantMemberIdFaker
 	Grade      uint8
 	CreatedAt  time.Time
 	Repository EndorserRepository
+	Dependency *Dependency
+}
+
+func (f *EndorserFaker) CreateDependencies() error {
+	return f.Dependency.Create(f)
 }
 
 func (f EndorserFaker) Create() (*Endorser, error) {
@@ -79,8 +97,21 @@ type EndorserRepository interface {
 	Insert(*Endorser) error
 }
 
-type EndorserDummyRepository struct{}
+type EndorserDummyRepository struct {
+	Faker *EndorserFaker
+}
 
 func (r EndorserDummyRepository) Insert(agg *Endorser) error {
 	return nil
+}
+
+type Dependency struct {
+	MemberFaker *member.MemberFaker
+}
+
+func (d *Dependency) Create(f *EndorserFaker) (err error) {
+	d.MemberFaker.CreateDependencies()
+	_, err = d.MemberFaker.Create()
+	f.Id = d.MemberFaker.Id
+	return err
 }

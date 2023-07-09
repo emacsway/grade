@@ -14,7 +14,7 @@ func NewMemberFaker(
 		opts,
 		member.WithTransientId(),
 		member.WithRepository(NewMemberRepository(session)),
-		// TODO: Is it an argument to pass a session to repository method?
+		// TODO: Is this an argument to pass a session to repository method?
 		member.WithTenantFaker(tenantRepo.NewTenantFaker(session)),
 	)
 	return member.NewMemberFaker(opts...)

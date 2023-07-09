@@ -44,7 +44,7 @@ func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 		},
 	}
 	repo := &MemberDummyRepository{
-		IdFaker: &f.Id,
+		Faker: f,
 	}
 	f.Repository = repo
 	for _, opt := range opts {
@@ -61,6 +61,10 @@ type MemberFaker struct {
 	// Repo and dependecies should be at Aggregate-level Faker, not at TenantMemberIdFaker
 	Repository MemberRepository
 	Dependency *Dependency
+}
+
+func (f *MemberFaker) CreateDependencies() error {
+	return f.Dependency.Create(f)
 }
 
 func (f *MemberFaker) Create() (*Member, error) {
@@ -93,21 +97,21 @@ type MemberRepository interface {
 }
 
 type MemberDummyRepository struct {
-	IdFaker *values.TenantMemberIdFaker
+	Faker *MemberFaker
 }
 
 func (r *MemberDummyRepository) Insert(agg *Member) error {
-	r.IdFaker.MemberId += 1
+	r.Faker.Id.MemberId += 1
 	return nil
 }
 
 type Dependency struct {
 	TenantFaker *tenant.TenantFaker
-	Tenant      *tenant.Tenant
+	Tenant      *tenant.Tenant // Use Repo instead...
 }
 
-func (d *Dependency) Create(memberFaker *MemberFaker) (err error) {
+func (d *Dependency) Create(f *MemberFaker) (err error) {
 	d.Tenant, err = d.TenantFaker.Create()
-	memberFaker.Id.TenantId = d.TenantFaker.Id
+	f.Id.TenantId = d.TenantFaker.Id
 	return err
 }
