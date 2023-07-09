@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/emacsway/grade/grade/internal/domain/tenant"
 )
 
 type MemberFakerOption func(*MemberFaker)
@@ -26,12 +27,21 @@ func WithRepository(repo MemberRepository) MemberFakerOption {
 	}
 }
 
+func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
+	return func(f *MemberFaker) {
+		f.Dependency.TenantFaker = tenantFaker
+	}
+}
+
 func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 	f := &MemberFaker{
 		Id:        values.NewTenantMemberIdFaker(),
 		Status:    values.Active,
 		FullName:  values.NewFullNameFaker(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
+		Dependency: &Dependency{
+			TenantFaker: tenant.NewTenantFaker(),
+		},
 	}
 	repo := &MemberDummyRepository{
 		IdFaker: &f.Id,
@@ -50,6 +60,7 @@ type MemberFaker struct {
 	CreatedAt time.Time
 	// Repo and dependecies should be at Aggregate-level Faker, not at TenantMemberIdFaker
 	Repository MemberRepository
+	Dependency *Dependency
 }
 
 func (f *MemberFaker) Create() (*Member, error) {
@@ -88,4 +99,15 @@ type MemberDummyRepository struct {
 func (r *MemberDummyRepository) Insert(agg *Member) error {
 	r.IdFaker.MemberId += 1
 	return nil
+}
+
+type Dependency struct {
+	TenantFaker *tenant.TenantFaker
+	Tenant      *tenant.Tenant
+}
+
+func (d *Dependency) Create(memberFaker *MemberFaker) (err error) {
+	d.Tenant, err = d.TenantFaker.Create()
+	memberFaker.Id.TenantId = d.TenantFaker.Id
+	return err
 }
