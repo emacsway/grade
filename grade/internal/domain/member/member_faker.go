@@ -32,9 +32,11 @@ func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 		Status:    values.Active,
 		FullName:  values.NewFullNameFaker(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
-		// Repo and dependecies should be at Aggregate-level Faker, not at TenantMemberIdFaker
-		Repository: MemberDummyRepository{},
 	}
+	repo := &MemberDummyRepository{
+		IdFaker: &f.Id,
+	}
+	f.Repository = repo
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -42,10 +44,11 @@ func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 }
 
 type MemberFaker struct {
-	Id         values.TenantMemberIdFaker
-	Status     values.Status
-	FullName   values.FullNameFaker
-	CreatedAt  time.Time
+	Id        values.TenantMemberIdFaker
+	Status    values.Status
+	FullName  values.FullNameFaker
+	CreatedAt time.Time
+	// Repo and dependecies should be at Aggregate-level Faker, not at TenantMemberIdFaker
 	Repository MemberRepository
 }
 
@@ -78,8 +81,11 @@ type MemberRepository interface {
 	Insert(*Member) error
 }
 
-type MemberDummyRepository struct{}
+type MemberDummyRepository struct {
+	IdFaker *values.TenantMemberIdFaker
+}
 
-func (r MemberDummyRepository) Insert(agg *Member) error {
+func (r *MemberDummyRepository) Insert(agg *Member) error {
+	r.IdFaker.MemberId += 1
 	return nil
 }
