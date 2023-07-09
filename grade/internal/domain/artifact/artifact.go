@@ -3,6 +3,7 @@ package artifact
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/artifact/events"
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competence "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
@@ -20,17 +21,27 @@ func NewArtifact(
 	ownerId member.TenantMemberId,
 	createdAt time.Time,
 ) (*Artifact, error) {
-	return &Artifact{
-		id:            id,
-		status:        status,
-		name:          name,
-		description:   description,
-		url:           url,
-		competenceIds: competenceIds,
-		authorIds:     authorIds,
-		ownerId:       ownerId,
-		createdAt:     createdAt,
-	}, nil
+	e := events.NewArtifactProposed(
+		id, status, name, description, url, competenceIds,
+		authorIds, ownerId, createdAt,
+	)
+	agg := &Artifact{
+		/*
+			id:            id,
+			status:        status,
+			name:          name,
+			description:   description,
+			url:           url,
+			competenceIds: competenceIds,
+			authorIds:     authorIds,
+			ownerId:       ownerId,
+			createdAt:     createdAt,
+		*/
+		eventSourced: aggregate.NewEventSourcedAggregate(0),
+	}
+	agg.eventSourced.AddHandler(&events.ArtifactProposed{}, agg.onArtifactProposed)
+	agg.eventSourced.Update(e)
+	return agg, nil
 }
 
 // Artifact is a good candidate for EventSourcing
@@ -95,6 +106,19 @@ func (a Artifact) Export(ex ArtifactExporterSetter) {
 	ex.SetOwnerId(a.ownerId)
 	ex.SetCreatedAt(a.createdAt)
 	ex.SetVersion(a.Version())
+}
+
+func (a *Artifact) onArtifactProposed(e aggregate.PersistentDomainEvent) {
+	et := e.(*events.ArtifactProposed)
+	a.id = et.Id()
+	a.status = et.Status()
+	a.name = et.Name()
+	a.description = et.Description()
+	a.url = et.Url()
+	a.competenceIds = et.CompetenceIds()
+	a.authorIds = et.AuthorIds()
+	a.ownerId = et.OwnerId()
+	a.createdAt = et.CreatedAt()
 }
 
 type ArtifactExporterSetter interface {

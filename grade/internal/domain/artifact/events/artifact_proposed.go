@@ -6,6 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competence "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
 func NewArtifactProposed(
@@ -43,6 +44,43 @@ type ArtifactProposed struct {
 	ownerId          member.TenantMemberId
 	createdAt        time.Time
 	aggregateVersion uint
+	eventMeta        aggregate.EventMeta
+}
+
+func (e ArtifactProposed) Id() values.TenantArtifactId {
+	return e.id
+}
+
+func (e ArtifactProposed) Status() values.Status {
+	return e.status
+}
+
+func (e ArtifactProposed) Name() values.Name {
+	return e.name
+}
+
+func (e ArtifactProposed) Description() values.Description {
+	return e.description
+}
+
+func (e ArtifactProposed) Url() values.Url {
+	return e.url
+}
+
+func (e ArtifactProposed) CompetenceIds() []competence.TenantCompetenceId {
+	return e.competenceIds[:]
+}
+
+func (e ArtifactProposed) AuthorIds() []member.TenantMemberId {
+	return e.authorIds[:]
+}
+
+func (e ArtifactProposed) OwnerId() member.TenantMemberId {
+	return e.ownerId
+}
+
+func (e ArtifactProposed) CreatedAt() time.Time {
+	return e.createdAt
 }
 
 // EventType should be used instead of Invoke(Aggregate) approach
@@ -60,6 +98,14 @@ func (e ArtifactProposed) AggregateVersion() uint {
 
 func (e *ArtifactProposed) SetAggregateVersion(val uint) {
 	e.aggregateVersion = val
+}
+
+func (e *ArtifactProposed) EventMeta() aggregate.EventMeta {
+	return e.eventMeta
+}
+
+func (e *ArtifactProposed) SetEventMeta(val aggregate.EventMeta) {
+	e.eventMeta = val
 }
 
 func (e ArtifactProposed) Export(ex ArtifactProposedExporterSetter) {

@@ -34,5 +34,6 @@ func TestArtifactExport(t *testing.T) {
 		},
 		OwnerId:   member.NewTenantMemberIdExporter(f.OwnerId.TenantId, f.OwnerId.MemberId),
 		CreatedAt: f.CreatedAt,
+		Version:   1,
 	}, actualExporter)
 }

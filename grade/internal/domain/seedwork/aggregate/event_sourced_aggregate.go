@@ -28,15 +28,14 @@ func (a *EventSourcedAggregate) AddHandler(e PersistentDomainEvent, handler Pers
 
 func (a *EventSourcedAggregate) LoadFrom(pastEvents []PersistentDomainEvent) {
 	for i := range pastEvents {
-		a.handlers[pastEvents[i].EventType()](pastEvents[i])
 		a.SetVersion(pastEvents[i].AggregateVersion())
+		a.handlers[pastEvents[i].EventType()](pastEvents[i])
 	}
 }
 
 func (a *EventSourcedAggregate) Update(e PersistentDomainEvent) {
-	e.SetAggregateVersion(a.Version() + 1)
+	e.SetAggregateVersion(a.NextVersion())
 	a.handlers[e.EventType()](e)
-	a.SetVersion(a.Version() + 1)
 	a.AddDomainEvent(e)
 }
 

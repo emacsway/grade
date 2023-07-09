@@ -4,7 +4,9 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
+	"github.com/emacsway/grade/grade/internal/domain/competence"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
+	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
@@ -179,4 +181,9 @@ func (r *ArtifactDummyRepository) NextId(tenantId tenantVal.TenantId) (values.Te
 	r.IdFaker.TenantId = uint(tenantIdExp)
 	r.IdFaker.ArtifactId += 1
 	return r.IdFaker.Create()
+}
+
+type ArtifactDependencyFaker interface {
+	MakeComptetnceFaker() *competence.CompetenceFaker
+	MakeMemberFaker() *endorser.EndorserFaker
 }
