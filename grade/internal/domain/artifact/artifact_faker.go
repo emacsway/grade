@@ -8,6 +8,7 @@ import (
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
@@ -151,7 +152,7 @@ func (f ArtifactFaker) Create() (*Artifact, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = f.Repository.Insert(agg)
+	err = f.Repository.Insert(agg, aggregate.EventMeta{})
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +164,7 @@ func (f *ArtifactFaker) Next() error {
 }
 
 type ArtifactRepository interface {
-	Insert(*Artifact) error
+	Insert(*Artifact, aggregate.EventMeta) error
 	NextId(tenantVal.TenantId) (values.TenantArtifactId, error)
 }
 
@@ -171,7 +172,7 @@ type ArtifactDummyRepository struct {
 	IdFaker *values.TenantArtifactIdFaker
 }
 
-func (r ArtifactDummyRepository) Insert(agg *Artifact) error {
+func (r ArtifactDummyRepository) Insert(agg *Artifact, eventMeta aggregate.EventMeta) error {
 	return nil
 }
 

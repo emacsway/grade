@@ -8,6 +8,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/member"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
@@ -64,7 +65,7 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	factory.OwnerId.MemberId = repositoryOption.MemberId
 	agg, err := factory.Create()
 	require.NoError(t, err)
-	err = repositoryOption.Repository.Insert(agg)
+	err = repositoryOption.Repository.Insert(agg, aggregate.EventMeta{})
 	require.NoError(t, err)
 	agg.Export(&exporterActual)
 	assert.Greater(t, int(exporterActual.Id.ArtifactId), 0)

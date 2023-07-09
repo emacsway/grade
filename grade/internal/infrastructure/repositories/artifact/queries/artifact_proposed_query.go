@@ -7,6 +7,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
@@ -15,6 +16,7 @@ import (
 type ArtifactProposedQuery struct {
 	params  [8]any
 	payload ArtifactProposedPayload
+	meta    aggregate.EventMetaExporter
 }
 
 func (q ArtifactProposedQuery) sql() string {
@@ -42,7 +44,7 @@ func (q *ArtifactProposedQuery) SetStreamType(val string) {
 func (q *ArtifactProposedQuery) SetArtifactId(val values.ArtifactId) {
 	var v exporters.UintExporter
 	val.Export(&v)
-	q.params[2] = v
+	q.params[2] = val.String()
 }
 
 func (q *ArtifactProposedQuery) SetAggregateVersion(val uint) {
@@ -51,6 +53,10 @@ func (q *ArtifactProposedQuery) SetAggregateVersion(val uint) {
 
 func (q *ArtifactProposedQuery) SetEventType(val string) {
 	q.params[4] = val
+}
+
+func (q *ArtifactProposedQuery) SetEventMeta(val aggregate.EventMeta) {
+	val.Export(&q.meta)
 }
 
 func (q *ArtifactProposedQuery) SetEventVersion(val uint8) {
@@ -92,6 +98,11 @@ func (q *ArtifactProposedQuery) Evaluate(s infrastructure.DbSession) (infrastruc
 		return nil, err
 	}
 	q.params[6] = payload
+	meta, err := json.Marshal(q.meta)
+	if err != nil {
+		return nil, err
+	}
+	q.params[7] = meta
 	return s.Exec(q.sql(), q.params[:]...)
 }
 

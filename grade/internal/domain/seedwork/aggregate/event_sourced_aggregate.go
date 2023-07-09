@@ -53,6 +53,13 @@ type PersistentDomainEvent interface {
 	SetAggregateVersion(uint)
 }
 
+type PersistentDomainEventExporterSetter interface {
+	SetEventType(string)
+	SetEventVersion(uint8)
+	SetEventMeta(EventMeta)
+	SetAggregateVersion(uint)
+}
+
 // The source of this data is application layer.
 
 func NewEventMeta(
@@ -67,8 +74,8 @@ func NewEventMeta(
 ) EventMeta {
 	return EventMeta{
 		eventId:            eventId,
-		correlationID:      correlationId,
-		causationID:        causationId,
+		correlationId:      correlationId,
+		causationId:        causationId,
 		causalDependencies: causalDependencies,
 		occurredAt:         occurredAt,
 	}
@@ -76,8 +83,8 @@ func NewEventMeta(
 
 type EventMeta struct {
 	eventId            uuid.Uuid
-	correlationID      uuid.Uuid
-	causationID        uuid.Uuid
+	correlationId      uuid.Uuid
+	causationId        uuid.Uuid
 	causalDependencies []CausalDependency
 	occurredAt         time.Time
 }
@@ -87,11 +94,11 @@ func (m EventMeta) EventId() uuid.Uuid {
 }
 
 func (m EventMeta) CorrelationId() uuid.Uuid {
-	return m.correlationID
+	return m.correlationId
 }
 
 func (m EventMeta) CausationId() uuid.Uuid {
-	return m.causationID
+	return m.causationId
 }
 
 func (m EventMeta) CausalDependencies() []CausalDependency {
@@ -110,8 +117,8 @@ func (m EventMeta) Spawn(eventId uuid.Uuid) EventMeta {
 
 func (m EventMeta) Export(ex EventMetaExporterSetter) {
 	ex.SetEventId(m.eventId)
-	ex.SetCorrelationId(m.correlationID)
-	ex.SetCausationId(m.causationID)
+	ex.SetCorrelationId(m.correlationId)
+	ex.SetCausationId(m.causationId)
 	for i := range m.causalDependencies {
 		ex.AddCausalDependency(m.causalDependencies[i])
 	}
@@ -124,6 +131,36 @@ type EventMetaExporterSetter interface {
 	SetCausationId(uuid.Uuid)
 	AddCausalDependency(CausalDependency)
 	SetOccurredAt(time.Time)
+}
+
+type EventMetaExporter struct {
+	EventId            uuid.Uuid
+	CorrelationId      uuid.Uuid
+	CausationId        uuid.Uuid
+	CausalDependencies []CausalDependencyExporter
+	OccurredAt         time.Time
+}
+
+func (ex *EventMetaExporter) SetEventId(val uuid.Uuid) {
+	ex.EventId = val
+}
+
+func (ex *EventMetaExporter) SetCorrelationId(val uuid.Uuid) {
+	ex.CorrelationId = val
+}
+
+func (ex *EventMetaExporter) SetCausationId(val uuid.Uuid) {
+	ex.CausationId = val
+}
+
+func (ex *EventMetaExporter) AddCausalDependency(val CausalDependency) {
+	var causalDependencyExp CausalDependencyExporter
+	val.Export(&causalDependencyExp)
+	ex.CausalDependencies = append(ex.CausalDependencies, causalDependencyExp)
+}
+
+func (ex *EventMetaExporter) SetOccurredAt(val time.Time) {
+	ex.OccurredAt = val
 }
 
 func NewCausalDependency(
@@ -166,6 +203,22 @@ type CausalDependencyExporterSetter interface {
 	SetAggregateId(any)
 	SetAggregateType(string)
 	SetAggregateVersion(uint)
+}
+
+type CausalDependencyExporter struct {
+	AggregateId      any
+	AggregateType    string
+	AggregateVersion uint
+}
+
+func (ex *CausalDependencyExporter) SetAggregateId(val any) {
+	ex.AggregateId = val
+}
+func (ex *CausalDependencyExporter) SetAggregateType(val string) {
+	ex.AggregateType = val
+}
+func (ex *CausalDependencyExporter) SetAggregateVersion(val uint) {
+	ex.AggregateVersion = val
 }
 
 func BuildEventName(event DomainEvent) string {

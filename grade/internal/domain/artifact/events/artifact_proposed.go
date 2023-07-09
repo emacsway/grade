@@ -125,10 +125,12 @@ func (e ArtifactProposed) Export(ex ArtifactProposedExporterSetter) {
 	ex.SetCreatedAt(e.createdAt)
 	ex.SetEventType(e.EventType())
 	ex.SetEventVersion(e.EventVersion())
+	ex.SetEventMeta(e.EventMeta())
 	ex.SetAggregateVersion(e.AggregateVersion())
 }
 
 type ArtifactProposedExporterSetter interface {
+	aggregate.PersistentDomainEventExporterSetter
 	SetId(id values.TenantArtifactId)
 	SetStatus(values.Status)
 	SetName(values.Name)
@@ -138,7 +140,4 @@ type ArtifactProposedExporterSetter interface {
 	AddAuthorId(member.TenantMemberId)
 	SetOwnerId(member.TenantMemberId)
 	SetCreatedAt(time.Time)
-	SetEventType(string)
-	SetEventVersion(uint8)
-	SetAggregateVersion(uint)
 }

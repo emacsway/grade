@@ -1,6 +1,8 @@
 package infrastructure
 
-import "github.com/emacsway/grade/grade/internal/application"
+import (
+	"github.com/emacsway/grade/grade/internal/application"
+)
 
 type Result interface {
 	LastInsertId() (int64, error)
@@ -40,6 +42,11 @@ type DbSession interface {
 
 type QueryEvaluator interface {
 	Evaluate(s DbSession) (Result, error)
+}
+
+type EventSourcedQueryEvaluator interface {
+	QueryEvaluator
+	SetStreamType(string)
 }
 
 // Deferred
