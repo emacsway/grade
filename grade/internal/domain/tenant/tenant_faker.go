@@ -24,11 +24,14 @@ func WithRepository(repo TenantRepository) TenantFakerOption {
 func NewTenantFaker(opts ...TenantFakerOption) *TenantFaker {
 	aFaker := faker.NewFaker()
 	f := &TenantFaker{
-		Id:         values.TenantIdFakeValue,
-		Name:       aFaker.Company(),
-		CreatedAt:  time.Now().Truncate(time.Microsecond),
-		Repository: TenantDummyRepository{},
+		Id:        values.TenantIdFakeValue,
+		Name:      aFaker.Company(),
+		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
+	repo := &TenantDummyRepository{
+		TenantFaker: f,
+	}
+	f.Repository = repo
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -71,8 +74,11 @@ type TenantRepository interface {
 	Insert(*Tenant) error
 }
 
-type TenantDummyRepository struct{}
+type TenantDummyRepository struct {
+	TenantFaker *TenantFaker
+}
 
-func (r TenantDummyRepository) Insert(agg *Tenant) error {
+func (r *TenantDummyRepository) Insert(agg *Tenant) error {
+	r.TenantFaker.Id += 1
 	return nil
 }
