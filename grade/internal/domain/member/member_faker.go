@@ -35,11 +35,9 @@ func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
 
 func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 	f := &MemberFaker{
-		Id:        values.NewTenantMemberIdFaker(),
-		Status:    values.Active,
-		FullName:  values.NewFullNameFaker(),
-		CreatedAt: time.Now().Truncate(time.Microsecond),
+		Id: values.NewTenantMemberIdFaker(),
 	}
+	f.fake()
 	// f.SetTenantFaker(tenant.NewTenantFaker())
 	repo := &MemberDummyRepository{
 		Faker: f,
@@ -59,6 +57,7 @@ type MemberFaker struct {
 	// Repo and dependecies should be at Aggregate-level Faker, not at TenantMemberIdFaker
 	Repository  MemberRepository
 	TenantFaker *tenant.TenantFaker
+	agg         *Member
 }
 
 func (f *MemberFaker) CreateDependencies() (err error) {
@@ -75,8 +74,24 @@ func (f *MemberFaker) SetTenantFaker(tenantFaker *tenant.TenantFaker) {
 	f.Id.TenantId = f.TenantFaker.Id
 }
 
+func (f *MemberFaker) fake() {
+	f.Status = values.Active
+	f.FullName.Next()
+	f.CreatedAt = time.Now().Truncate(time.Microsecond)
+}
+
+func (f *MemberFaker) Next() {
+	f.fake()
+	f.Id.MemberId += 1
+	f.agg = nil
+}
+
 func (f *MemberFaker) Create() (*Member, error) {
 	var aggExp MemberExporter
+	if f.agg != nil {
+		return f.agg, nil
+	}
+
 	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
@@ -97,6 +112,7 @@ func (f *MemberFaker) Create() (*Member, error) {
 	}
 	agg.Export(&aggExp)
 	f.Id.MemberId = uint(aggExp.Id.MemberId)
+	f.agg = agg
 	return agg, nil
 }
 

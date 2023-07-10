@@ -47,9 +47,9 @@ func TestEndorserCanCompleteEndorsement(t *testing.T) {
 			return nil
 		}, ErrNoEndorsementReservation},
 	}
-	f := NewEndorserFaker()
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
+			f := NewEndorserFaker()
 			r, err := f.Create()
 			if err != nil {
 				t.Error(err)

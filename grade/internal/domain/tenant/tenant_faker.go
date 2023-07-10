@@ -22,12 +22,10 @@ func WithRepository(repo TenantRepository) TenantFakerOption {
 }
 
 func NewTenantFaker(opts ...TenantFakerOption) *TenantFaker {
-	aFaker := faker.NewFaker()
 	f := &TenantFaker{
-		Id:        values.TenantIdFakeValue,
-		Name:      aFaker.Company(),
-		CreatedAt: time.Now().Truncate(time.Microsecond),
+		Id: values.TenantIdFakeValue,
 	}
+	f.fake()
 	repo := &TenantDummyRepository{
 		TenantFaker: f,
 	}
@@ -43,10 +41,26 @@ type TenantFaker struct {
 	Name       string
 	CreatedAt  time.Time
 	Repository TenantRepository
+	agg        *Tenant
+}
+
+func (f *TenantFaker) fake() {
+	aFaker := faker.NewFaker()
+	f.Name = aFaker.Company()
+	f.CreatedAt = time.Now().Truncate(time.Microsecond)
+}
+
+func (f *TenantFaker) Next() {
+	f.fake()
+	f.Id += 1
+	f.agg = nil
 }
 
 func (f *TenantFaker) Create() (*Tenant, error) {
 	var aggExp TenantExporter
+	if f.agg != nil {
+		return f.agg, nil
+	}
 	id, err := values.NewTenantId(f.Id)
 	if err != nil {
 		return nil, err
@@ -67,6 +81,7 @@ func (f *TenantFaker) Create() (*Tenant, error) {
 	}
 	agg.Export(&aggExp)
 	f.Id = uint(aggExp.Id)
+	f.agg = agg
 	return agg, nil
 }
 

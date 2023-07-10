@@ -37,13 +37,11 @@ func WithMemberFaker(memberFaker *member.MemberFaker) EndorserFakerOption {
 }
 
 func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
-	idFactory := memberVal.NewTenantMemberIdFaker()
-	idFactory.MemberId = EndorserMemberIdFakeValue
 	f := &EndorserFaker{
-		Id:        idFactory,
-		Grade:     1,
-		CreatedAt: time.Now().Truncate(time.Microsecond),
+		Id: memberVal.NewTenantMemberIdFaker(),
 	}
+	f.Id.MemberId = EndorserMemberIdFakeValue
+	f.fake()
 	// f.SetMemberFaker(member.NewMemberFaker())
 	repo := &EndorserDummyRepository{
 		Faker: f,
@@ -61,6 +59,7 @@ type EndorserFaker struct {
 	CreatedAt   time.Time
 	Repository  EndorserRepository
 	MemberFaker *member.MemberFaker
+	agg         *Endorser
 }
 
 func (f *EndorserFaker) CreateDependencies() error {
@@ -78,7 +77,21 @@ func (f *EndorserFaker) SetMemberFaker(memberFaker *member.MemberFaker) {
 	f.Id = f.MemberFaker.Id
 }
 
-func (f EndorserFaker) Create() (*Endorser, error) {
+func (f *EndorserFaker) fake() {
+	f.Grade = 1
+	f.CreatedAt = time.Now().Truncate(time.Microsecond)
+}
+
+func (f *EndorserFaker) Next() {
+	f.fake()
+	f.agg = nil
+}
+
+func (f *EndorserFaker) Create() (*Endorser, error) {
+	if f.agg != nil {
+		return f.agg, nil
+	}
+
 	id, err := f.Id.Create()
 	if err != nil {
 		return nil, err
@@ -99,6 +112,7 @@ func (f EndorserFaker) Create() (*Endorser, error) {
 	if err != nil {
 		return nil, err
 	}
+	f.agg = agg
 	return agg, nil
 }
 
