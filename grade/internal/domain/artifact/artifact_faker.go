@@ -7,6 +7,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
+	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
@@ -40,6 +41,18 @@ func WithRepository(repo ArtifactRepository) ArtifactFakerOption {
 	}
 }
 
+func WithMemberFaker(memberFaker *member.MemberFaker) ArtifactFakerOption {
+	return func(f *ArtifactFaker) {
+		// TODO: f.SetMemberFaker(memberFaker)
+	}
+}
+
+func WithCompetenceFaker(competenceFaker *competence.CompetenceFaker) ArtifactFakerOption {
+	return func(f *ArtifactFaker) {
+		// TODO: f.SetCompetenceFaker(competenceFaker)
+	}
+}
+
 func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 	f := &ArtifactFaker{
 		Id:            values.NewTenantArtifactIdFaker(),
@@ -48,6 +61,8 @@ func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 		OwnerId:       memberVal.NewTenantMemberIdFaker(),
 	}
 	f.fake()
+	// TODO: f.SetMemberFaker(member.NewMemberFaker())
+	// TODO: f.SetCompetenceFaker(competence.NewCompetenceFaker())
 	repo := &ArtifactDummyRepository{
 		IdFaker: &f.Id,
 	}
@@ -59,16 +74,19 @@ func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 }
 
 type ArtifactFaker struct {
-	Id            values.TenantArtifactIdFaker
-	Status        values.Status
-	Name          string
-	Description   string
-	Url           string
-	CompetenceIds []competenceVal.TenantCompetenceIdFaker
-	AuthorIds     []memberVal.TenantMemberIdFaker
-	OwnerId       memberVal.TenantMemberIdFaker
-	CreatedAt     time.Time
-	Repository    ArtifactRepository
+	Id              values.TenantArtifactIdFaker
+	Status          values.Status
+	Name            string
+	Description     string
+	Url             string
+	CompetenceIds   []competenceVal.TenantCompetenceIdFaker
+	AuthorIds       []memberVal.TenantMemberIdFaker
+	OwnerId         memberVal.TenantMemberIdFaker
+	CreatedAt       time.Time
+	Repository      ArtifactRepository
+	MemberFaker     *member.MemberFaker
+	CompetenceFaker *competence.CompetenceFaker
+	agg             *Artifact
 }
 
 func (f *ArtifactFaker) fake() {
@@ -80,8 +98,12 @@ func (f *ArtifactFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *ArtifactFaker) Next() error {
-	return f.advanceId()
+func (f *ArtifactFaker) Next() {
+	err := f.advanceId()
+	if err != nil {
+		panic(err)
+	}
+	f.agg = nil
 }
 
 func (f *ArtifactFaker) advanceId() error {
@@ -99,19 +121,18 @@ func (f *ArtifactFaker) advanceId() error {
 	return nil
 }
 
-func (f *ArtifactFaker) AddAuthorId(authorId memberVal.TenantMemberIdFaker) error {
-	// FIXME: return a error if the authorId already present in the list.
+func (f *ArtifactFaker) AddAuthorId(authorId memberVal.TenantMemberIdFaker) {
 	f.AuthorIds = append(f.AuthorIds, authorId)
-	return nil
 }
 
-func (f *ArtifactFaker) AddCompetenceId(competenceId competenceVal.TenantCompetenceIdFaker) error {
-	// FIXME: return a error if the authorId already present in the list.
+func (f *ArtifactFaker) AddCompetenceId(competenceId competenceVal.TenantCompetenceIdFaker) {
 	f.CompetenceIds = append(f.CompetenceIds, competenceId)
-	return nil
 }
 
-func (f ArtifactFaker) Create() (*Artifact, error) {
+func (f *ArtifactFaker) Create() (*Artifact, error) {
+	if f.agg != nil {
+		return f.agg, nil
+	}
 	if f.Id.ArtifactId == 0 {
 		err := f.advanceId()
 		if err != nil {
@@ -165,7 +186,41 @@ func (f ArtifactFaker) Create() (*Artifact, error) {
 	if err != nil {
 		return nil, err
 	}
+	f.agg = agg
 	return agg, nil
+}
+
+func (f *ArtifactFaker) BuildDependencies() (err error) {
+	err = f.MemberFaker.BuildDependencies()
+	if err != nil {
+		return err
+	}
+	_, err = f.MemberFaker.Create()
+	if err != nil {
+		return err
+	}
+	f.SetMemberFaker(f.MemberFaker)
+
+	err = f.CompetenceFaker.BuildDependencies()
+	if err != nil {
+		return err
+	}
+	_, err = f.CompetenceFaker.Create()
+	if err != nil {
+		return err
+	}
+	f.SetCompetenceFaker(f.CompetenceFaker)
+	return err
+}
+
+func (f *ArtifactFaker) SetMemberFaker(memberFaker *member.MemberFaker) {
+	f.MemberFaker = memberFaker
+	f.OwnerId = f.MemberFaker.Id
+}
+
+func (f *ArtifactFaker) SetCompetenceFaker(competenceFaker *competence.CompetenceFaker) {
+	f.CompetenceFaker = competenceFaker
+	f.AddCompetenceId(f.CompetenceFaker.Id)
 }
 
 type ArtifactRepository interface {

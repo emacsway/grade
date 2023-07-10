@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
@@ -60,13 +59,9 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			}
 			aId := sf.Id
 			aId.MemberId = c.ArtifactAuthorId
-			if err := af.AddAuthorId(aId); err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			af.AddAuthorId(aId)
 			af.Id.TenantId = c.ArtifactTenantId
-			err = af.Next()
-			require.NoError(t, err)
+			af.Next()
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
@@ -125,10 +120,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 			sf := NewSpecialistFaker()
 			rf := endorser.NewEndorserFaker()
 			af := artifact.NewArtifactFaker()
-			if err := af.AddAuthorId(sf.Id); err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			af.AddAuthorId(sf.Id)
 			s, err := sf.Create()
 			if err != nil {
 				t.Error(err)
@@ -140,8 +132,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.FailNow()
 			}
 			af.Id.TenantId = sf.Id.TenantId
-			err = af.Next()
-			require.NoError(t, err)
+			af.Next()
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)

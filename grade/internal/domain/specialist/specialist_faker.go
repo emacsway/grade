@@ -99,14 +99,9 @@ func (f *SpecialistFaker) receiveEndorsement(e *endorser.EndorserFaker) error {
 	if len(f.ReceivedEndorsements) > 0 {
 		entf.Artifact.Id = f.ReceivedEndorsements[len(f.ReceivedEndorsements)-1].Artifact.Id
 	}
-	err := entf.Artifact.Next()
-	if err != nil {
-		return err
-	}
+	entf.Artifact.Next()
 	entf.CreatedAt = time.Now().Truncate(time.Microsecond)
-	if err := entf.Artifact.AddAuthorId(f.Id); err != nil {
-		return err
-	}
+	entf.Artifact.AddAuthorId(f.Id)
 	f.ReceivedEndorsements = append(f.ReceivedEndorsements, entf)
 	return nil
 }

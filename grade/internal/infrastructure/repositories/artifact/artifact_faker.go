@@ -3,6 +3,8 @@ package artifact
 import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
+	competenceRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/competence"
+	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
 )
 
 func NewArtifactFaker(
@@ -13,6 +15,8 @@ func NewArtifactFaker(
 		opts,
 		artifact.WithTransientId(),
 		artifact.WithRepository(NewArtifactRepository(session)),
+		artifact.WithMemberFaker(memberRepo.NewMemberFaker(session)),
+		artifact.WithCompetenceFaker(competenceRepo.NewCompetenceFaker(session)),
 	)
 	return artifact.NewArtifactFaker(opts...)
 }
