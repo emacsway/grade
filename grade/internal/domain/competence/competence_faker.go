@@ -32,7 +32,7 @@ func WithRepository(repo CompetenceRepository) CompetenceFakerOption {
 
 func WithMemberFaker(memberFaker *member.MemberFaker) CompetenceFakerOption {
 	return func(f *CompetenceFaker) {
-		// TODO: f.SetMemberFaker(memberFaker)
+		// TODO: f.MemberFaker = memberFaker
 	}
 }
 
@@ -43,7 +43,7 @@ func NewCompetenceFaker(opts ...CompetenceFakerOption) *CompetenceFaker {
 		Repository: CompetenceDummyRepository{},
 	}
 	f.fake()
-	// TODO: f.SetMemberFaker(member.NewMemberFaker())
+	// TODO: f.MemberFaker = member.NewMemberFaker()
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -115,13 +115,8 @@ func (f *CompetenceFaker) BuildDependencies() (err error) {
 	if err != nil {
 		return err
 	}
-	f.SetMemberFaker(f.MemberFaker)
-	return err
-}
-
-func (f *CompetenceFaker) SetMemberFaker(memberFaker *member.MemberFaker) {
-	f.MemberFaker = memberFaker
 	f.OwnerId = f.MemberFaker.Id
+	return err
 }
 
 type CompetenceRepository interface {

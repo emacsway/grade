@@ -43,13 +43,13 @@ func WithRepository(repo ArtifactRepository) ArtifactFakerOption {
 
 func WithMemberFaker(memberFaker *member.MemberFaker) ArtifactFakerOption {
 	return func(f *ArtifactFaker) {
-		// TODO: f.SetMemberFaker(memberFaker)
+		// TODO: f.MemberFaker = memberFaker
 	}
 }
 
 func WithCompetenceFaker(competenceFaker *competence.CompetenceFaker) ArtifactFakerOption {
 	return func(f *ArtifactFaker) {
-		// TODO: f.SetCompetenceFaker(competenceFaker)
+		// TODO: f.CompetenceFaker = competenceFaker
 	}
 }
 
@@ -61,8 +61,8 @@ func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 		OwnerId:       memberVal.NewTenantMemberIdFaker(),
 	}
 	f.fake()
-	// TODO: f.SetMemberFaker(member.NewMemberFaker())
-	// TODO: f.SetCompetenceFaker(competence.NewCompetenceFaker())
+	// TODO: f.MemberFaker = member.NewMemberFaker()
+	// TODO: f.CompetenceFaker = competence.NewCompetenceFaker()
 	repo := &ArtifactDummyRepository{
 		IdFaker: &f.Id,
 	}
@@ -199,7 +199,7 @@ func (f *ArtifactFaker) BuildDependencies() (err error) {
 	if err != nil {
 		return err
 	}
-	f.SetMemberFaker(f.MemberFaker)
+	f.OwnerId = f.MemberFaker.Id
 
 	err = f.CompetenceFaker.BuildDependencies()
 	if err != nil {
@@ -209,18 +209,8 @@ func (f *ArtifactFaker) BuildDependencies() (err error) {
 	if err != nil {
 		return err
 	}
-	f.SetCompetenceFaker(f.CompetenceFaker)
-	return err
-}
-
-func (f *ArtifactFaker) SetMemberFaker(memberFaker *member.MemberFaker) {
-	f.MemberFaker = memberFaker
-	f.OwnerId = f.MemberFaker.Id
-}
-
-func (f *ArtifactFaker) SetCompetenceFaker(competenceFaker *competence.CompetenceFaker) {
-	f.CompetenceFaker = competenceFaker
 	f.AddCompetenceId(f.CompetenceFaker.Id)
+	return err
 }
 
 type ArtifactRepository interface {

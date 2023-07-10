@@ -29,7 +29,7 @@ func WithRepository(repo MemberRepository) MemberFakerOption {
 
 func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
 	return func(f *MemberFaker) {
-		// TODO: f.SetTenantFaker(tenantFaker)
+		// TODO: f.TenantFaker = tenantFaker
 	}
 }
 
@@ -39,7 +39,7 @@ func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 		Repository: &MemberDummyRepository{},
 	}
 	f.fake()
-	// TODO: f.SetTenantFaker(tenant.NewTenantFaker())
+	// TODO: f.TenantFaker = tenant.NewTenantFaker()
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -104,13 +104,8 @@ func (f *MemberFaker) BuildDependencies() (err error) {
 	if err != nil {
 		return err
 	}
-	f.SetTenantFaker(f.TenantFaker)
-	return err
-}
-
-func (f *MemberFaker) SetTenantFaker(tenantFaker *tenant.TenantFaker) {
-	f.TenantFaker = tenantFaker
 	f.Id.TenantId = f.TenantFaker.Id
+	return err
 }
 
 type MemberRepository interface {

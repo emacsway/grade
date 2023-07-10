@@ -32,7 +32,7 @@ func WithRepository(repo EndorserRepository) EndorserFakerOption {
 
 func WithMemberFaker(memberFaker *member.MemberFaker) EndorserFakerOption {
 	return func(f *EndorserFaker) {
-		// TODO: f.SetMemberFaker(memberFaker)
+		// TODO: f.MemberFaker = memberFaker
 	}
 }
 
@@ -42,7 +42,7 @@ func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
 	}
 	f.Id.MemberId = EndorserMemberIdFakeValue
 	f.fake()
-	// TODO: f.SetMemberFaker(member.NewMemberFaker())
+	// TODO: f.MemberFaker = member.NewMemberFaker()
 	repo := &EndorserDummyRepository{
 		Faker: f,
 	}
@@ -110,13 +110,8 @@ func (f *EndorserFaker) BuildDependencies() (err error) {
 	if err != nil {
 		return err
 	}
-	f.SetMemberFaker(f.MemberFaker)
-	return err
-}
-
-func (f *EndorserFaker) SetMemberFaker(memberFaker *member.MemberFaker) {
-	f.MemberFaker = memberFaker
 	f.Id = f.MemberFaker.Id
+	return err
 }
 
 type EndorserRepository interface {
