@@ -106,8 +106,8 @@ func (f *CompetenceFaker) Create() (*Competence, error) {
 	return agg, nil
 }
 
-func (f *CompetenceFaker) CreateDependencies() (err error) {
-	err = f.MemberFaker.CreateDependencies()
+func (f *CompetenceFaker) BuildDependencies() (err error) {
+	err = f.MemberFaker.BuildDependencies()
 	if err != nil {
 		return err
 	}

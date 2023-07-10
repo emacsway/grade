@@ -80,6 +80,10 @@ func (f *ArtifactFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
+func (f *ArtifactFaker) Next() error {
+	return f.advanceId()
+}
+
 func (f *ArtifactFaker) advanceId() error {
 	var idExp values.TenantArtifactIdExporter
 	tenantId, err := tenantVal.NewTenantId(f.Id.TenantId)
@@ -162,10 +166,6 @@ func (f ArtifactFaker) Create() (*Artifact, error) {
 		return nil, err
 	}
 	return agg, nil
-}
-
-func (f *ArtifactFaker) Next() error {
-	return f.advanceId()
 }
 
 type ArtifactRepository interface {

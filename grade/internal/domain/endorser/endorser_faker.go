@@ -101,8 +101,8 @@ func (f *EndorserFaker) Create() (*Endorser, error) {
 	return agg, nil
 }
 
-func (f *EndorserFaker) CreateDependencies() (err error) {
-	err = f.MemberFaker.CreateDependencies()
+func (f *EndorserFaker) BuildDependencies() (err error) {
+	err = f.MemberFaker.BuildDependencies()
 	if err != nil {
 		return err
 	}
