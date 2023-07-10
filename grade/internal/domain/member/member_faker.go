@@ -29,7 +29,7 @@ func WithRepository(repo MemberRepository) MemberFakerOption {
 
 func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
 	return func(f *MemberFaker) {
-		f.Dependency.TenantFaker = tenantFaker
+		// f.SetTenantFaker(tenantFaker)
 	}
 }
 
@@ -39,10 +39,8 @@ func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 		Status:    values.Active,
 		FullName:  values.NewFullNameFaker(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
-		Dependency: &Dependency{
-			TenantFaker: tenant.NewTenantFaker(),
-		},
 	}
+	// f.SetTenantFaker(tenant.NewTenantFaker())
 	repo := &MemberDummyRepository{
 		Faker: f,
 	}
@@ -59,12 +57,22 @@ type MemberFaker struct {
 	FullName  values.FullNameFaker
 	CreatedAt time.Time
 	// Repo and dependecies should be at Aggregate-level Faker, not at TenantMemberIdFaker
-	Repository MemberRepository
-	Dependency *Dependency
+	Repository  MemberRepository
+	TenantFaker *tenant.TenantFaker
 }
 
-func (f *MemberFaker) CreateDependencies() error {
-	return f.Dependency.Create(f)
+func (f *MemberFaker) CreateDependencies() (err error) {
+	_, err = f.TenantFaker.Create()
+	if err != nil {
+		return err
+	}
+	f.SetTenantFaker(f.TenantFaker)
+	return err
+}
+
+func (f *MemberFaker) SetTenantFaker(tenantFaker *tenant.TenantFaker) {
+	f.TenantFaker = tenantFaker
+	f.Id.TenantId = f.TenantFaker.Id
 }
 
 func (f *MemberFaker) Create() (*Member, error) {
@@ -101,17 +109,8 @@ type MemberDummyRepository struct {
 }
 
 func (r *MemberDummyRepository) Insert(agg *Member) error {
-	r.Faker.Id.MemberId += 1
+	// r.Faker.Id.MemberId += 1  // Do not do this, since MemberFaker.Id.MemberId is an autoincrement PK accessor.
+	// This should be exactly as agg.id
+	// Also this value will be reseted by f.Id = uint(aggExp.Id)
 	return nil
-}
-
-type Dependency struct {
-	TenantFaker *tenant.TenantFaker
-	Tenant      *tenant.Tenant // Use Repo instead...
-}
-
-func (d *Dependency) Create(f *MemberFaker) (err error) {
-	d.Tenant, err = d.TenantFaker.Create()
-	f.Id.TenantId = d.TenantFaker.Id
-	return err
 }

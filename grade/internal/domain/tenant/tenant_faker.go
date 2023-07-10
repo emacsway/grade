@@ -79,6 +79,22 @@ type TenantDummyRepository struct {
 }
 
 func (r *TenantDummyRepository) Insert(agg *Tenant) error {
-	r.TenantFaker.Id += 1
+	// r.TenantFaker.Id += 1 // Do not do this, since TenantFaker.Id is an autoincrement PK accessor.
+	// This should be exactly as agg.id
+	// Also this value will be reseted by f.Id = uint(aggExp.Id)
 	return nil
+}
+
+type TenantInsertDummyQuery struct {
+	pkSetter func(any) error
+}
+
+func (q *TenantInsertDummyQuery) SetId(val values.TenantId) {
+	q.pkSetter = val.Scan
+}
+func (q *TenantInsertDummyQuery) SetName(val values.Name)    {}
+func (q *TenantInsertDummyQuery) SetCreatedAt(val time.Time) {}
+func (q *TenantInsertDummyQuery) SetVersion(val uint)        {}
+func (q *TenantInsertDummyQuery) Evaluate(f *TenantFaker) error {
+	return q.pkSetter(f.Id + 1)
 }
