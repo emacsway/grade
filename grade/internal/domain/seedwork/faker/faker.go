@@ -1,6 +1,10 @@
 package faker
 
-import "github.com/icrowley/fake"
+import (
+	faker2 "syreclabs.com/go/faker"
+
+	"github.com/icrowley/fake"
+)
 
 func NewFaker() Faker {
 	return Faker{}
@@ -23,4 +27,16 @@ func (f Faker) LastName() string {
 
 func (f Faker) Competence() string {
 	return fake.Industry()
+}
+
+func (f Faker) Artifact() string {
+	return fake.ProductName()
+}
+
+func (f Faker) Sentences() string {
+	return fake.Sentences()
+}
+
+func (f Faker) Url() string {
+	return faker2.Internet().Url()
 }

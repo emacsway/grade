@@ -10,6 +10,7 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/faker"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
@@ -42,16 +43,11 @@ func WithRepository(repo ArtifactRepository) ArtifactFakerOption {
 func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 	f := &ArtifactFaker{
 		Id:            values.NewTenantArtifactIdFaker(),
-		Status:        values.Accepted,
-		Name:          "Name1",
-		Description:   "Description1",
-		Url:           "https://github.com/emacsway/grade",
 		CompetenceIds: []competenceVal.TenantCompetenceIdFaker{competenceVal.NewTenantCompetenceIdFaker()},
 		AuthorIds:     []memberVal.TenantMemberIdFaker{},
 		OwnerId:       memberVal.NewTenantMemberIdFaker(),
-		CreatedAt:     time.Now().Truncate(time.Microsecond),
-		Repository:    nil,
 	}
+	f.fake()
 	repo := &ArtifactDummyRepository{
 		IdFaker: &f.Id,
 	}
@@ -73,6 +69,15 @@ type ArtifactFaker struct {
 	OwnerId       memberVal.TenantMemberIdFaker
 	CreatedAt     time.Time
 	Repository    ArtifactRepository
+}
+
+func (f *ArtifactFaker) fake() {
+	aFaker := faker.NewFaker()
+	f.Status = values.Accepted
+	f.Name = aFaker.Artifact()
+	f.Description = aFaker.Sentences()
+	f.Url = aFaker.Url()
+	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
 func (f *ArtifactFaker) advanceId() error {
