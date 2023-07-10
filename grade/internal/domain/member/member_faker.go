@@ -35,14 +35,11 @@ func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
 
 func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 	f := &MemberFaker{
-		Id: values.NewTenantMemberIdFaker(),
+		Id:         values.NewTenantMemberIdFaker(),
+		Repository: &MemberDummyRepository{},
 	}
 	f.fake()
 	// f.SetTenantFaker(tenant.NewTenantFaker())
-	repo := &MemberDummyRepository{
-		Faker: f,
-	}
-	f.Repository = repo
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -61,7 +58,7 @@ type MemberFaker struct {
 }
 
 func (f *MemberFaker) CreateDependencies() (err error) {
-	_, err = f.TenantFaker.Create()
+	_, err = f.TenantFaker.Create() // Use repo if it is needed to get an instance.
 	if err != nil {
 		return err
 	}
@@ -120,13 +117,8 @@ type MemberRepository interface {
 	Insert(*Member) error
 }
 
-type MemberDummyRepository struct {
-	Faker *MemberFaker
-}
+type MemberDummyRepository struct{}
 
 func (r *MemberDummyRepository) Insert(agg *Member) error {
-	// r.Faker.Id.MemberId += 1  // Do not do this, since MemberFaker.Id.MemberId is an autoincrement PK accessor.
-	// This should be exactly as agg.id
-	// Also this value will be reseted by f.Id = uint(aggExp.Id)
 	return nil
 }

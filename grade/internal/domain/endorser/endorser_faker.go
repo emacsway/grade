@@ -64,7 +64,7 @@ type EndorserFaker struct {
 
 func (f *EndorserFaker) CreateDependencies() error {
 	f.MemberFaker.CreateDependencies()
-	_, err := f.MemberFaker.Create()
+	_, err := f.MemberFaker.Create() // Use repo if it is needed to get an instance.
 	if err != nil {
 		return err
 	}
