@@ -29,7 +29,7 @@ func WithRepository(repo MemberRepository) MemberFakerOption {
 
 func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
 	return func(f *MemberFaker) {
-		// f.SetTenantFaker(tenantFaker)
+		// TODO: f.SetTenantFaker(tenantFaker)
 	}
 }
 
@@ -39,7 +39,7 @@ func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 		Repository: &MemberDummyRepository{},
 	}
 	f.fake()
-	// f.SetTenantFaker(tenant.NewTenantFaker())
+	// TODO: f.SetTenantFaker(tenant.NewTenantFaker())
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -55,20 +55,6 @@ type MemberFaker struct {
 	Repository  MemberRepository
 	TenantFaker *tenant.TenantFaker
 	agg         *Member
-}
-
-func (f *MemberFaker) CreateDependencies() (err error) {
-	_, err = f.TenantFaker.Create() // Use repo if it is needed to get an instance.
-	if err != nil {
-		return err
-	}
-	f.SetTenantFaker(f.TenantFaker)
-	return err
-}
-
-func (f *MemberFaker) SetTenantFaker(tenantFaker *tenant.TenantFaker) {
-	f.TenantFaker = tenantFaker
-	f.Id.TenantId = f.TenantFaker.Id
 }
 
 func (f *MemberFaker) fake() {
@@ -111,6 +97,20 @@ func (f *MemberFaker) Create() (*Member, error) {
 	f.Id.MemberId = uint(aggExp.Id.MemberId)
 	f.agg = agg
 	return agg, nil
+}
+
+func (f *MemberFaker) CreateDependencies() (err error) {
+	_, err = f.TenantFaker.Create() // Use repo if it is needed to get an instance.
+	if err != nil {
+		return err
+	}
+	f.SetTenantFaker(f.TenantFaker)
+	return err
+}
+
+func (f *MemberFaker) SetTenantFaker(tenantFaker *tenant.TenantFaker) {
+	f.TenantFaker = tenantFaker
+	f.Id.TenantId = f.TenantFaker.Id
 }
 
 type MemberRepository interface {

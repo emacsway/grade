@@ -32,7 +32,7 @@ func WithRepository(repo EndorserRepository) EndorserFakerOption {
 
 func WithMemberFaker(memberFaker *member.MemberFaker) EndorserFakerOption {
 	return func(f *EndorserFaker) {
-		// f.SetMemberFaker(memberFaker)
+		// TODO: f.SetMemberFaker(memberFaker)
 	}
 }
 
@@ -42,7 +42,7 @@ func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
 	}
 	f.Id.MemberId = EndorserMemberIdFakeValue
 	f.fake()
-	// f.SetMemberFaker(member.NewMemberFaker())
+	// TODO: f.SetMemberFaker(member.NewMemberFaker())
 	repo := &EndorserDummyRepository{
 		Faker: f,
 	}
@@ -60,21 +60,6 @@ type EndorserFaker struct {
 	Repository  EndorserRepository
 	MemberFaker *member.MemberFaker
 	agg         *Endorser
-}
-
-func (f *EndorserFaker) CreateDependencies() error {
-	f.MemberFaker.CreateDependencies()
-	_, err := f.MemberFaker.Create() // Use repo if it is needed to get an instance.
-	if err != nil {
-		return err
-	}
-	f.SetMemberFaker(f.MemberFaker)
-	return err
-}
-
-func (f *EndorserFaker) SetMemberFaker(memberFaker *member.MemberFaker) {
-	f.MemberFaker = memberFaker
-	f.Id = f.MemberFaker.Id
 }
 
 func (f *EndorserFaker) fake() {
@@ -114,6 +99,24 @@ func (f *EndorserFaker) Create() (*Endorser, error) {
 	}
 	f.agg = agg
 	return agg, nil
+}
+
+func (f *EndorserFaker) CreateDependencies() (err error) {
+	err = f.MemberFaker.CreateDependencies()
+	if err != nil {
+		return err
+	}
+	_, err = f.MemberFaker.Create() // Use repo if it is needed to get an instance.
+	if err != nil {
+		return err
+	}
+	f.SetMemberFaker(f.MemberFaker)
+	return err
+}
+
+func (f *EndorserFaker) SetMemberFaker(memberFaker *member.MemberFaker) {
+	f.MemberFaker = memberFaker
+	f.Id = f.MemberFaker.Id
 }
 
 type EndorserRepository interface {

@@ -68,11 +68,11 @@ func (e ArtifactProposed) Url() values.Url {
 }
 
 func (e ArtifactProposed) CompetenceIds() []competence.TenantCompetenceId {
-	return e.competenceIds[:]
+	return e.competenceIds
 }
 
 func (e ArtifactProposed) AuthorIds() []member.TenantMemberId {
-	return e.authorIds[:]
+	return e.authorIds
 }
 
 func (e ArtifactProposed) OwnerId() member.TenantMemberId {

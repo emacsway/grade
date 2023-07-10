@@ -20,3 +20,7 @@ func (f Faker) FirstName() string {
 func (f Faker) LastName() string {
 	return fake.LastName()
 }
+
+func (f Faker) Competence() string {
+	return fake.Industry()
+}
