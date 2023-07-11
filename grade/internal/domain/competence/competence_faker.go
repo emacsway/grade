@@ -115,6 +115,7 @@ func (f *CompetenceFaker) BuildDependencies() (err error) {
 	if err != nil {
 		return err
 	}
+	f.Id.TenantId = f.MemberFaker.Id.TenantId
 	f.OwnerId = f.MemberFaker.Id
 	return err
 }

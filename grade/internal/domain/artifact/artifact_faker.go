@@ -210,6 +210,7 @@ func (f *ArtifactFaker) BuildDependencies() (err error) {
 		return err
 	}
 	f.AddCompetenceId(f.CompetenceFaker.Id)
+	f.Id.TenantId = f.CompetenceFaker.Id.TenantId
 	return err
 }
 
