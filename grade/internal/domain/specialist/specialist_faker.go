@@ -83,6 +83,11 @@ func (f *SpecialistFaker) fake() {
 
 func (f *SpecialistFaker) Next() error {
 	f.fake()
+	f.MemberFaker.Next()
+	err := f.BuildDependencies()
+	if err != nil {
+		return err
+	}
 	f.agg = nil
 	return nil
 }
@@ -140,6 +145,9 @@ func (f *SpecialistFaker) receiveEndorsement(e *endorser.EndorserFaker) error {
 }
 
 func (f SpecialistFaker) Create() (*Specialist, error) {
+	if f.agg != nil {
+		return f.agg, nil
+	}
 	err := f.achieveGrade()
 	if err != nil {
 		return nil, err
@@ -175,7 +183,23 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 	if err != nil {
 		return nil, err
 	}
+	f.agg = agg
 	return agg, nil
+}
+
+func (f *SpecialistFaker) BuildDependencies() (err error) {
+	err = f.ArtifactFaker.BuildDependencies()
+	if err != nil {
+		return err
+	}
+	_, err = f.ArtifactFaker.Create()
+	if err != nil {
+		return err
+	}
+	*f.EndorserFaker.MemberFaker = *f.ArtifactFaker.MemberFaker
+	*f.MemberFaker = *f.ArtifactFaker.MemberFaker
+	f.Id = f.MemberFaker.Id
+	return err
 }
 
 type SpecialistDependencyFaker interface {
