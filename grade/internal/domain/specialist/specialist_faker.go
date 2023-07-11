@@ -50,7 +50,6 @@ func NewSpecialistFaker(opts ...SpecialistFakerOption) *SpecialistFaker {
 	idFactory.MemberId = SpecialistMemberIdFakeValue
 	f := &SpecialistFaker{
 		Id:            idFactory,
-		Dependency:    SpecialistDependencyFakerImp{},
 		Repository:    SpecialistDummyRepository{},
 		ArtifactFaker: artifact.NewArtifactFaker(),
 		EndorserFaker: endorser.NewEndorserFaker(),
@@ -68,7 +67,6 @@ type SpecialistFaker struct {
 	Grade                uint8
 	ReceivedEndorsements []ReceivedEndorsementFakeItem
 	CreatedAt            time.Time
-	Dependency           SpecialistDependencyFaker
 	Repository           SpecialistRepository
 	ArtifactFaker        *artifact.ArtifactFaker
 	EndorserFaker        *endorser.EndorserFaker
@@ -99,7 +97,7 @@ func (f *SpecialistFaker) achieveGrade() error {
 		return err
 	}
 	for currentGrade.LessThan(targetGrade) {
-		rf := f.Dependency.MakeEndorserFaker()
+		rf := f.MakeEndorserFaker()
 		rf.Id.TenantId = f.Id.TenantId
 		endorserGrade, _ := currentGrade.Next()
 		gradeExporter := exporters.Uint8Exporter(0)
@@ -129,7 +127,7 @@ func (f *SpecialistFaker) ReceiveEndorsement(e *endorser.EndorserFaker) error {
 }
 
 func (f *SpecialistFaker) receiveEndorsement(e *endorser.EndorserFaker) error {
-	entf := f.Dependency.MakeReceivedEndorsementFakeItem(e)
+	entf := f.MakeReceivedEndorsementFakeItem(e)
 	entf.Artifact.Id.TenantId = f.Id.TenantId
 	if len(f.ReceivedEndorsements) > 0 {
 		entf.Artifact.Id = f.ReceivedEndorsements[len(f.ReceivedEndorsements)-1].Artifact.Id
@@ -202,29 +200,21 @@ func (f *SpecialistFaker) BuildDependencies() (err error) {
 	return err
 }
 
-type SpecialistDependencyFaker interface {
-	MakeReceivedEndorsementFakeItem(*endorser.EndorserFaker) ReceivedEndorsementFakeItem
-	MakeArtifactFaker() *artifact.ArtifactFaker
-	MakeEndorserFaker() *endorser.EndorserFaker
-}
-
-type SpecialistDependencyFakerImp struct{}
-
-func (d SpecialistDependencyFakerImp) MakeReceivedEndorsementFakeItem(
+func (f SpecialistFaker) MakeReceivedEndorsementFakeItem(
 	e *endorser.EndorserFaker,
 ) ReceivedEndorsementFakeItem {
 	return ReceivedEndorsementFakeItem{
 		Endorser:  e,
-		Artifact:  d.MakeArtifactFaker(),
+		Artifact:  f.MakeArtifactFaker(),
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}
 }
 
-func (d SpecialistDependencyFakerImp) MakeArtifactFaker() *artifact.ArtifactFaker {
+func (f SpecialistFaker) MakeArtifactFaker() *artifact.ArtifactFaker {
 	return artifact.NewArtifactFaker()
 }
 
-func (d SpecialistDependencyFakerImp) MakeEndorserFaker() *endorser.EndorserFaker {
+func (f SpecialistFaker) MakeEndorserFaker() *endorser.EndorserFaker {
 	return endorser.NewEndorserFaker()
 }
 
