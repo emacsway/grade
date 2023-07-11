@@ -159,7 +159,7 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 		return nil, err
 	}
 	for i := range f.ReceivedEndorsements {
-		r, err := f.ReceivedEndorsements[i].Endorser.Create()
+		e, err := f.ReceivedEndorsements[i].Endorser.Create()
 		if err != nil {
 			return nil, err
 		}
@@ -167,11 +167,11 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 		if err != nil {
 			return nil, err
 		}
-		err = r.ReserveEndorsement()
+		err = e.ReserveEndorsement()
 		if err != nil {
 			return nil, err
 		}
-		err = agg.ReceiveEndorsement(*r, *art, f.ReceivedEndorsements[i].CreatedAt)
+		err = agg.ReceiveEndorsement(*e, *art, f.ReceivedEndorsements[i].CreatedAt)
 		if err != nil {
 			return nil, err
 		}
