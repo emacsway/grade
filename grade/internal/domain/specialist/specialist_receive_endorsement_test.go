@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
@@ -61,7 +62,8 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			aId.MemberId = c.ArtifactAuthorId
 			af.AddAuthorId(aId)
 			af.Id.TenantId = c.ArtifactTenantId
-			af.Next()
+			err = af.Next()
+			require.NoError(t, err)
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
@@ -132,7 +134,8 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.FailNow()
 			}
 			af.Id.TenantId = sf.Id.TenantId
-			af.Next()
+			err = af.Next()
+			require.NoError(t, err)
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)

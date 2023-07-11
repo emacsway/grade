@@ -97,12 +97,13 @@ func (f *ArtifactFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *ArtifactFaker) Next() {
+func (f *ArtifactFaker) Next() error {
 	err := f.advanceId()
 	if err != nil {
-		panic(err)
+		return err
 	}
 	f.agg = nil
+	return nil
 }
 
 func (f *ArtifactFaker) advanceId() error {
