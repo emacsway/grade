@@ -99,6 +99,8 @@ func (f *ArtifactFaker) fake() {
 }
 
 func (f *ArtifactFaker) Next() error {
+	f.fake()
+	f.AuthorIds = []memberVal.TenantMemberIdFaker{}
 	err := f.advanceId()
 	if err != nil {
 		return err

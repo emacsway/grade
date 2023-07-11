@@ -127,17 +127,17 @@ func (f *SpecialistFaker) ReceiveEndorsement(e *endorser.EndorserFaker) error {
 }
 
 func (f *SpecialistFaker) receiveEndorsement(e *endorser.EndorserFaker) error {
-	entf := f.MakeReceivedEndorsementFakeItem(e)
-	entf.Artifact.Id.TenantId = f.Id.TenantId
-	if len(f.ReceivedEndorsements) > 0 {
-		entf.Artifact.Id = f.ReceivedEndorsements[len(f.ReceivedEndorsements)-1].Artifact.Id
-	}
-	err := entf.Artifact.Next()
+	entf, err := f.MakeReceivedEndorsementFakeItem(e)
 	if err != nil {
 		return err
 	}
+	entf.Artifact.Id.TenantId = f.Id.TenantId
 	entf.CreatedAt = time.Now().Truncate(time.Microsecond)
 	entf.Artifact.AddAuthorId(f.Id)
+	_, err = entf.Artifact.Create()
+	if err != nil {
+		return err
+	}
 	f.ReceivedEndorsements = append(f.ReceivedEndorsements, entf)
 	return nil
 }
@@ -200,18 +200,18 @@ func (f *SpecialistFaker) BuildDependencies() (err error) {
 	return err
 }
 
-func (f SpecialistFaker) MakeReceivedEndorsementFakeItem(
+func (f *SpecialistFaker) MakeReceivedEndorsementFakeItem(
 	e *endorser.EndorserFaker,
-) ReceivedEndorsementFakeItem {
+) (ReceivedEndorsementFakeItem, error) {
+	err := f.ArtifactFaker.Next()
+	if err != nil {
+		return ReceivedEndorsementFakeItem{}, err
+	}
 	return ReceivedEndorsementFakeItem{
 		Endorser:  e,
-		Artifact:  f.MakeArtifactFaker(),
+		Artifact:  *f.ArtifactFaker,
 		CreatedAt: time.Now().Truncate(time.Microsecond),
-	}
-}
-
-func (f SpecialistFaker) MakeArtifactFaker() *artifact.ArtifactFaker {
-	return artifact.NewArtifactFaker()
+	}, nil
 }
 
 func (f SpecialistFaker) MakeEndorserFaker() *endorser.EndorserFaker {
@@ -220,7 +220,7 @@ func (f SpecialistFaker) MakeEndorserFaker() *endorser.EndorserFaker {
 
 type ReceivedEndorsementFakeItem struct {
 	Endorser  *endorser.EndorserFaker
-	Artifact  *artifact.ArtifactFaker
+	Artifact  artifact.ArtifactFaker
 	CreatedAt time.Time
 }
 

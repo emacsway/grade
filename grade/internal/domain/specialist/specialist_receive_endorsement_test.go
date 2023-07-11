@@ -64,8 +64,6 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			aId.MemberId = c.ArtifactAuthorId
 			af.AddAuthorId(aId)
 			af.Id.TenantId = c.ArtifactTenantId
-			err = af.Next()
-			require.NoError(t, err)
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
@@ -138,8 +136,6 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.FailNow()
 			}
 			af.Id.TenantId = sf.Id.TenantId
-			err = af.Next()
-			require.NoError(t, err)
 			a, err := af.Create()
 			if err != nil {
 				t.Error(err)
