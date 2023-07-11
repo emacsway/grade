@@ -32,7 +32,7 @@ func WithRepository(repo CompetenceRepository) CompetenceFakerOption {
 
 func WithMemberFaker(memberFaker *member.MemberFaker) CompetenceFakerOption {
 	return func(f *CompetenceFaker) {
-		// TODO: f.MemberFaker = memberFaker
+		f.MemberFaker = memberFaker
 	}
 }
 
@@ -43,7 +43,7 @@ func NewCompetenceFaker(opts ...CompetenceFakerOption) *CompetenceFaker {
 		Repository: CompetenceDummyRepository{},
 	}
 	f.fake()
-	// TODO: f.MemberFaker = member.NewMemberFaker()
+	f.MemberFaker = member.NewMemberFaker()
 	for _, opt := range opts {
 		opt(f)
 	}
