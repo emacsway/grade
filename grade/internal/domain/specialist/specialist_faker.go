@@ -97,15 +97,15 @@ func (f *SpecialistFaker) achieveGrade() error {
 		return err
 	}
 	for currentGrade.LessThan(targetGrade) {
-		rf := f.MakeEndorserFaker()
-		rf.Id.TenantId = f.Id.TenantId
+		ef := f.MakeEndorserFaker()
+		ef.Id.TenantId = f.Id.TenantId
 		endorserGrade, _ := currentGrade.Next()
 		gradeExporter := exporters.Uint8Exporter(0)
 		endorserGrade.Export(&gradeExporter)
-		rf.Grade = uint8(gradeExporter)
+		ef.Grade = uint8(gradeExporter)
 		var endorsementCount uint = 0
 		for !currentGrade.NextGradeAchieved(endorsementCount) {
-			if err := f.receiveEndorsement(rf); err != nil {
+			if err := f.receiveEndorsement(ef); err != nil {
 				return err
 			}
 			endorsementCount += 2

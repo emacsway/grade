@@ -40,20 +40,22 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			sf := NewSpecialistFaker()
-			rf := endorser.NewEndorserFaker()
+			err := sf.BuildDependencies()
+			require.NoError(t, err)
+			ef := endorser.NewEndorserFaker()
 			af := artifact.NewArtifactFaker()
 			sf.Id.TenantId = c.SpecialistTenantId
 			sf.Id.MemberId = c.SpecialistMemberId
 			sf.Grade = c.SpecialistGrade
-			rf.Id.TenantId = c.RecogniserTenantId
-			rf.Id.MemberId = c.RecogniserMemberId
-			rf.Grade = c.EndorserGrade
+			ef.Id.TenantId = c.RecogniserTenantId
+			ef.Id.MemberId = c.RecogniserMemberId
+			ef.Grade = c.EndorserGrade
 			s, err := sf.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
 			}
-			r, err := rf.Create()
+			r, err := ef.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -120,7 +122,9 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			sf := NewSpecialistFaker()
-			rf := endorser.NewEndorserFaker()
+			err := sf.BuildDependencies()
+			require.NoError(t, err)
+			ef := endorser.NewEndorserFaker()
 			af := artifact.NewArtifactFaker()
 			af.AddAuthorId(sf.Id)
 			s, err := sf.Create()
@@ -128,7 +132,7 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 				t.Error(err)
 				t.FailNow()
 			}
-			r, err := rf.Create()
+			r, err := ef.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
