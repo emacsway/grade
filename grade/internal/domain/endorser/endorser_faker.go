@@ -67,9 +67,15 @@ func (f *EndorserFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *EndorserFaker) Next() {
+func (f *EndorserFaker) Next() error {
 	f.fake()
+	f.MemberFaker.Next()
+	err := f.BuildDependencies()
+	if err != nil {
+		return err
+	}
 	f.agg = nil
+	return nil
 }
 
 func (f *EndorserFaker) Create() (*Endorser, error) {

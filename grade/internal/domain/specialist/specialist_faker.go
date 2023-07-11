@@ -81,9 +81,10 @@ func (f *SpecialistFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *SpecialistFaker) Next() {
+func (f *SpecialistFaker) Next() error {
 	f.fake()
 	f.agg = nil
+	return nil
 }
 
 func (f *SpecialistFaker) achieveGrade() error {

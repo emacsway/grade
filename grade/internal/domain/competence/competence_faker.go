@@ -66,10 +66,11 @@ func (f *CompetenceFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *CompetenceFaker) Next() {
+func (f *CompetenceFaker) Next() error {
 	f.fake()
 	f.Id.CompetenceId += 1
 	f.agg = nil
+	return nil
 }
 
 func (f *CompetenceFaker) Create() (*Competence, error) {

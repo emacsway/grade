@@ -50,10 +50,11 @@ func (f *TenantFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *TenantFaker) Next() {
+func (f *TenantFaker) Next() error {
 	f.fake()
 	f.Id += 1
 	f.agg = nil
+	return nil
 }
 
 func (f *TenantFaker) Create() (*Tenant, error) {
