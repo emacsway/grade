@@ -38,12 +38,12 @@ func WithMemberFaker(memberFaker *member.MemberFaker) CompetenceFakerOption {
 
 func NewCompetenceFaker(opts ...CompetenceFakerOption) *CompetenceFaker {
 	f := &CompetenceFaker{
-		Id:         values.NewTenantCompetenceIdFaker(),
-		OwnerId:    memberVal.NewTenantMemberIdFaker(),
-		Repository: CompetenceDummyRepository{},
+		Id:          values.NewTenantCompetenceIdFaker(),
+		OwnerId:     memberVal.NewTenantMemberIdFaker(),
+		Repository:  CompetenceDummyRepository{},
+		MemberFaker: member.NewMemberFaker(),
 	}
 	f.fake()
-	f.MemberFaker = member.NewMemberFaker()
 	for _, opt := range opts {
 		opt(f)
 	}

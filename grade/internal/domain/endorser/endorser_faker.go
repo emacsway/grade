@@ -38,15 +38,12 @@ func WithMemberFaker(memberFaker *member.MemberFaker) EndorserFakerOption {
 
 func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
 	f := &EndorserFaker{
-		Id: memberVal.NewTenantMemberIdFaker(),
+		Id:          memberVal.NewTenantMemberIdFaker(),
+		Repository:  EndorserDummyRepository{},
+		MemberFaker: member.NewMemberFaker(),
 	}
 	f.Id.MemberId = EndorserMemberIdFakeValue
 	f.fake()
-	f.MemberFaker = member.NewMemberFaker()
-	repo := &EndorserDummyRepository{
-		Faker: f,
-	}
-	f.Repository = repo
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -125,7 +122,6 @@ type EndorserRepository interface {
 }
 
 type EndorserDummyRepository struct {
-	Faker *EndorserFaker
 }
 
 func (r EndorserDummyRepository) Insert(agg *Endorser) error {

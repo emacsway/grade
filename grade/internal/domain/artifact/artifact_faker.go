@@ -55,13 +55,14 @@ func WithCompetenceFaker(competenceFaker *competence.CompetenceFaker) ArtifactFa
 
 func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 	f := &ArtifactFaker{
-		Id:            values.NewTenantArtifactIdFaker(),
-		CompetenceIds: []competenceVal.TenantCompetenceIdFaker{competenceVal.NewTenantCompetenceIdFaker()},
-		AuthorIds:     []memberVal.TenantMemberIdFaker{},
-		OwnerId:       memberVal.NewTenantMemberIdFaker(),
+		Id:              values.NewTenantArtifactIdFaker(),
+		CompetenceIds:   []competenceVal.TenantCompetenceIdFaker{competenceVal.NewTenantCompetenceIdFaker()},
+		AuthorIds:       []memberVal.TenantMemberIdFaker{},
+		OwnerId:         memberVal.NewTenantMemberIdFaker(),
+		MemberFaker:     member.NewMemberFaker(),
+		CompetenceFaker: competence.NewCompetenceFaker(),
 	}
 	f.fake()
-	f.CompetenceFaker = competence.NewCompetenceFaker()
 	repo := &ArtifactDummyRepository{
 		IdFaker: &f.Id,
 	}

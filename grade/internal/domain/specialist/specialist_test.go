@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	artifact "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
@@ -16,6 +17,8 @@ import (
 func TestSpecialistExport(t *testing.T) {
 	var actualExporter SpecialistExporter
 	sf := NewSpecialistFaker()
+	err := sf.BuildDependencies()
+	require.NoError(t, err)
 	rf := endorser.NewEndorserFaker()
 	for i := 0; i < 4; i++ {
 		err := sf.ReceiveEndorsement(rf)

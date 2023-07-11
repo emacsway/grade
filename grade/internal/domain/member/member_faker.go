@@ -35,11 +35,11 @@ func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
 
 func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 	f := &MemberFaker{
-		Id:         values.NewTenantMemberIdFaker(),
-		Repository: &MemberDummyRepository{},
+		Id:          values.NewTenantMemberIdFaker(),
+		Repository:  &MemberDummyRepository{},
+		TenantFaker: tenant.NewTenantFaker(),
 	}
 	f.fake()
-	f.TenantFaker = tenant.NewTenantFaker()
 	for _, opt := range opts {
 		opt(f)
 	}
