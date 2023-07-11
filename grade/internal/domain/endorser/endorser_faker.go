@@ -32,7 +32,7 @@ func WithRepository(repo EndorserRepository) EndorserFakerOption {
 
 func WithMemberFaker(memberFaker *member.MemberFaker) EndorserFakerOption {
 	return func(f *EndorserFaker) {
-		// TODO: f.MemberFaker = memberFaker
+		f.MemberFaker = memberFaker
 	}
 }
 
@@ -42,7 +42,7 @@ func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
 	}
 	f.Id.MemberId = EndorserMemberIdFakeValue
 	f.fake()
-	// TODO: f.MemberFaker = member.NewMemberFaker()
+	f.MemberFaker = member.NewMemberFaker()
 	repo := &EndorserDummyRepository{
 		Faker: f,
 	}

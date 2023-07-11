@@ -43,13 +43,13 @@ func WithRepository(repo ArtifactRepository) ArtifactFakerOption {
 
 func WithMemberFaker(memberFaker *member.MemberFaker) ArtifactFakerOption {
 	return func(f *ArtifactFaker) {
-		// TODO: f.MemberFaker = memberFaker
+		f.MemberFaker = memberFaker
 	}
 }
 
 func WithCompetenceFaker(competenceFaker *competence.CompetenceFaker) ArtifactFakerOption {
 	return func(f *ArtifactFaker) {
-		// TODO: f.CompetenceFaker = competenceFaker
+		f.CompetenceFaker = competenceFaker
 	}
 }
 
@@ -61,8 +61,7 @@ func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 		OwnerId:       memberVal.NewTenantMemberIdFaker(),
 	}
 	f.fake()
-	// TODO: f.MemberFaker = member.NewMemberFaker()
-	// TODO: f.CompetenceFaker = competence.NewCompetenceFaker()
+	f.CompetenceFaker = competence.NewCompetenceFaker()
 	repo := &ArtifactDummyRepository{
 		IdFaker: &f.Id,
 	}

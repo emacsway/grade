@@ -29,19 +29,19 @@ func WithMemberId(memberId uint) SpecialistFakerOption {
 
 func WithArtifactFaker(artifactFaker *artifact.ArtifactFaker) SpecialistFakerOption {
 	return func(f *SpecialistFaker) {
-		// TODO: f.ArtifactFaker = artifactFaker
+		f.ArtifactFaker = artifactFaker
 	}
 }
 
 func WithEndorserFaker(endorserFaker *endorser.EndorserFaker) SpecialistFakerOption {
 	return func(f *SpecialistFaker) {
-		// TODO: f.EndorserFaker = endorserFaker
+		f.EndorserFaker = endorserFaker
 	}
 }
 
 func WithMemberFaker(memberFaker *member.MemberFaker) SpecialistFakerOption {
 	return func(f *SpecialistFaker) {
-		// TODO: f.MemberFaker = memberFaker
+		f.MemberFaker = memberFaker
 	}
 }
 

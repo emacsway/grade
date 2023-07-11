@@ -29,7 +29,7 @@ func WithRepository(repo MemberRepository) MemberFakerOption {
 
 func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
 	return func(f *MemberFaker) {
-		// TODO: f.TenantFaker = tenantFaker
+		f.TenantFaker = tenantFaker
 	}
 }
 
@@ -39,7 +39,7 @@ func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 		Repository: &MemberDummyRepository{},
 	}
 	f.fake()
-	// TODO: f.TenantFaker = tenant.NewTenantFaker()
+	f.TenantFaker = tenant.NewTenantFaker()
 	for _, opt := range opts {
 		opt(f)
 	}
