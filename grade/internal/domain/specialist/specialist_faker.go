@@ -97,7 +97,11 @@ func (f *SpecialistFaker) achieveGrade() error {
 		return err
 	}
 	for currentGrade.LessThan(targetGrade) {
-		ef := f.MakeEndorserFaker()
+		err = f.EndorserFaker.Next()
+		if err != nil {
+			return err
+		}
+		ef := f.EndorserFaker
 		ef.Id.TenantId = f.Id.TenantId
 		endorserGrade, _ := currentGrade.Next()
 		gradeExporter := exporters.Uint8Exporter(0)
@@ -126,8 +130,12 @@ func (f *SpecialistFaker) ReceiveEndorsement(e *endorser.EndorserFaker) error {
 	return f.receiveEndorsement(e)
 }
 
-func (f *SpecialistFaker) receiveEndorsement(e *endorser.EndorserFaker) error {
-	entf, err := f.MakeReceivedEndorsementFakeItem(e)
+func (f *SpecialistFaker) receiveEndorsement(ef *endorser.EndorserFaker) error {
+	_, err := ef.Create()
+	if err != nil {
+		return err
+	}
+	entf, err := f.MakeReceivedEndorsementFakeItem(ef)
 	if err != nil {
 		return err
 	}
@@ -201,25 +209,21 @@ func (f *SpecialistFaker) BuildDependencies() (err error) {
 }
 
 func (f *SpecialistFaker) MakeReceivedEndorsementFakeItem(
-	e *endorser.EndorserFaker,
+	ef *endorser.EndorserFaker,
 ) (ReceivedEndorsementFakeItem, error) {
 	err := f.ArtifactFaker.Next()
 	if err != nil {
 		return ReceivedEndorsementFakeItem{}, err
 	}
 	return ReceivedEndorsementFakeItem{
-		Endorser:  e,
+		Endorser:  *ef,
 		Artifact:  *f.ArtifactFaker,
 		CreatedAt: time.Now().Truncate(time.Microsecond),
 	}, nil
 }
 
-func (f SpecialistFaker) MakeEndorserFaker() *endorser.EndorserFaker {
-	return endorser.NewEndorserFaker()
-}
-
 type ReceivedEndorsementFakeItem struct {
-	Endorser  *endorser.EndorserFaker
+	Endorser  endorser.EndorserFaker
 	Artifact  artifact.ArtifactFaker
 	CreatedAt time.Time
 }
