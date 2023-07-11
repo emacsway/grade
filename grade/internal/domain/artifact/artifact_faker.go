@@ -191,16 +191,6 @@ func (f *ArtifactFaker) Create() (*Artifact, error) {
 }
 
 func (f *ArtifactFaker) BuildDependencies() (err error) {
-	err = f.MemberFaker.BuildDependencies()
-	if err != nil {
-		return err
-	}
-	_, err = f.MemberFaker.Create()
-	if err != nil {
-		return err
-	}
-	f.OwnerId = f.MemberFaker.Id
-
 	err = f.CompetenceFaker.BuildDependencies()
 	if err != nil {
 		return err
@@ -211,6 +201,8 @@ func (f *ArtifactFaker) BuildDependencies() (err error) {
 	}
 	f.AddCompetenceId(f.CompetenceFaker.Id)
 	f.Id.TenantId = f.CompetenceFaker.Id.TenantId
+	f.OwnerId = f.CompetenceFaker.OwnerId
+	*f.MemberFaker = *f.CompetenceFaker.MemberFaker
 	return err
 }
 

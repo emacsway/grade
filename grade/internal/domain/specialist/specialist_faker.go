@@ -6,6 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
+	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
@@ -26,9 +27,21 @@ func WithMemberId(memberId uint) SpecialistFakerOption {
 	}
 }
 
-func WithRepository(repo SpecialistRepository) SpecialistFakerOption {
+func WithArtifactFaker(artifactFaker *artifact.ArtifactFaker) SpecialistFakerOption {
 	return func(f *SpecialistFaker) {
-		f.Repository = repo
+		// TODO: f.ArtifactFaker = artifactFaker
+	}
+}
+
+func WithEndorserFaker(endorserFaker *endorser.EndorserFaker) SpecialistFakerOption {
+	return func(f *SpecialistFaker) {
+		// TODO: f.EndorserFaker = endorserFaker
+	}
+}
+
+func WithMemberFaker(memberFaker *member.MemberFaker) SpecialistFakerOption {
+	return func(f *SpecialistFaker) {
+		// TODO: f.MemberFaker = memberFaker
 	}
 }
 
@@ -36,12 +49,14 @@ func NewSpecialistFaker(opts ...SpecialistFakerOption) *SpecialistFaker {
 	idFactory := memberVal.NewTenantMemberIdFaker()
 	idFactory.MemberId = SpecialistMemberIdFakeValue
 	f := &SpecialistFaker{
-		Id:         idFactory,
-		Grade:      0,
-		CreatedAt:  time.Now().Truncate(time.Microsecond),
-		Dependency: SpecialistDependencyFakerImp{},
-		Repository: SpecialistDummyRepository{},
+		Id:            idFactory,
+		Dependency:    SpecialistDependencyFakerImp{},
+		Repository:    SpecialistDummyRepository{},
+		ArtifactFaker: artifact.NewArtifactFaker(),
+		EndorserFaker: endorser.NewEndorserFaker(),
+		MemberFaker:   member.NewMemberFaker(),
 	}
+	f.fake()
 	for _, opt := range opts {
 		opt(f)
 	}
@@ -55,6 +70,20 @@ type SpecialistFaker struct {
 	CreatedAt            time.Time
 	Dependency           SpecialistDependencyFaker
 	Repository           SpecialistRepository
+	ArtifactFaker        *artifact.ArtifactFaker
+	EndorserFaker        *endorser.EndorserFaker
+	MemberFaker          *member.MemberFaker
+	agg                  *Specialist
+}
+
+func (f *SpecialistFaker) fake() {
+	f.Grade = 0
+	f.CreatedAt = time.Now().Truncate(time.Microsecond)
+}
+
+func (f *SpecialistFaker) Next() {
+	f.fake()
+	f.agg = nil
 }
 
 func (f *SpecialistFaker) achieveGrade() error {
