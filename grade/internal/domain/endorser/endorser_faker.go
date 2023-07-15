@@ -109,7 +109,7 @@ func (f *EndorserFaker) BuildDependencies() (err error) {
 	if err != nil {
 		return err
 	}
-	_, err = f.MemberFaker.Create() // Use repo if it is needed to get an instance.
+	_, err = f.MemberFaker.Create() // Use repo if it is needed to get the instance.
 	if err != nil {
 		return err
 	}

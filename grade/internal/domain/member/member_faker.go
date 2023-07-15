@@ -100,7 +100,7 @@ func (f *MemberFaker) Create() (*Member, error) {
 }
 
 func (f *MemberFaker) BuildDependencies() (err error) {
-	_, err = f.TenantFaker.Create() // Use repo if it is needed to get an instance.
+	_, err = f.TenantFaker.Create() // Use repo if it is needed to get the instance.
 	if err != nil {
 		return err
 	}
