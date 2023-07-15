@@ -40,12 +40,10 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			sf := NewSpecialistFaker()
-			// TODO: sf.ArtifactFaker.CompetenceFaker.MemberFaker.TenantFaker.Id = c.SpecialistTenantId
-			// TODO: sf.ArtifactFaker.CompetenceFaker.MemberFaker.Id.MemberId = c.SpecialistMemberId
+			sf.SetTenantId(c.SpecialistTenantId)
+			sf.SetMemberId(c.SpecialistMemberId)
 			err := sf.BuildDependencies()
 			require.NoError(t, err)
-			sf.Id.TenantId = c.SpecialistTenantId
-			sf.Id.MemberId = c.SpecialistMemberId
 			sf.Grade = c.SpecialistGrade
 			s, err := sf.Create()
 			require.NoError(t, err)

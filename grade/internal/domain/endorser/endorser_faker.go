@@ -104,6 +104,20 @@ func (f *EndorserFaker) Create() (*Endorser, error) {
 	return agg, nil
 }
 
+// unidirectional flow of changes
+func (f *EndorserFaker) SetTenantId(val uint) {
+	f.MemberFaker.TenantFaker.Id = val
+}
+
+func (f *EndorserFaker) SetMemberId(val uint) {
+	f.MemberFaker.Id.MemberId = val
+}
+
+func (f *EndorserFaker) SetId(id memberVal.TenantMemberIdFaker) {
+	f.SetTenantId(id.TenantId)
+	f.SetMemberId(id.MemberId)
+}
+
 func (f *EndorserFaker) BuildDependencies() (err error) {
 	err = f.MemberFaker.BuildDependencies()
 	if err != nil {

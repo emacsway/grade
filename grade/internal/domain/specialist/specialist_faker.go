@@ -110,7 +110,7 @@ func (f *SpecialistFaker) achieveGrade() error {
 			return err
 		}
 		ef := f.EndorserFaker
-		ef.Id.TenantId = f.Id.TenantId
+		// TODO: Remove me: ef.Id.TenantId = f.Id.TenantId
 		endorserGrade, _ := currentGrade.Next()
 		gradeExporter := exporters.Uint8Exporter(0)
 		endorserGrade.Export(&gradeExporter)
@@ -139,7 +139,7 @@ func (f *SpecialistFaker) receiveEndorsement(ef *endorser.EndorserFaker) error {
 		return err
 	}
 	af := f.ArtifactFaker
-	af.Id.TenantId = f.Id.TenantId
+	// TODO: Remove me: af.Id.TenantId = f.Id.TenantId
 	af.AddAuthorId(f.Id)
 	if _, err := af.Create(); err != nil {
 		return err
@@ -194,6 +194,20 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 	}
 	f.agg = agg
 	return agg, nil
+}
+
+// unidirectional flow of changes
+func (f *SpecialistFaker) SetTenantId(val uint) {
+	f.ArtifactFaker.CompetenceFaker.MemberFaker.TenantFaker.Id = val
+}
+
+func (f *SpecialistFaker) SetMemberId(val uint) {
+	f.ArtifactFaker.CompetenceFaker.MemberFaker.Id.MemberId = val
+}
+
+func (f *SpecialistFaker) SetId(id memberVal.TenantMemberIdFaker) {
+	f.SetTenantId(id.TenantId)
+	f.SetMemberId(id.MemberId)
 }
 
 func (f *SpecialistFaker) BuildDependencies() (err error) {
