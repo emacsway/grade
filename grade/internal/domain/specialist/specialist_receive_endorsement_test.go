@@ -56,7 +56,7 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			s, err := sf.Create()
 			require.NoError(t, err)
 
-			r, err := ef.Create()
+			e, err := ef.Create()
 			require.NoError(t, err)
 			aId := sf.Id
 			aId.MemberId = c.ArtifactAuthorId
@@ -66,10 +66,10 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			a, err := af.Create()
 			require.NoError(t, err)
 
-			err = r.ReserveEndorsement()
+			err = e.ReserveEndorsement()
 			require.NoError(t, err)
 
-			err = s.ReceiveEndorsement(*r, *a, time.Now().Truncate(time.Microsecond))
+			err = s.ReceiveEndorsement(*e, *a, time.Now().Truncate(time.Microsecond))
 			fmt.Println(err, c.ExpectedError)
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
@@ -126,17 +126,17 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 			s, err := sf.Create()
 			require.NoError(t, err)
 
-			r, err := ef.Create()
+			e, err := ef.Create()
 			require.NoError(t, err)
 
 			af.Id.TenantId = sf.Id.TenantId
 			a, err := af.Create()
 			require.NoError(t, err)
 
-			err = c.Prepare(r)
+			err = c.Prepare(e)
 			require.NoError(t, err)
 
-			err = s.ReceiveEndorsement(*r, *a, time.Now().Truncate(time.Microsecond))
+			err = s.ReceiveEndorsement(*e, *a, time.Now().Truncate(time.Microsecond))
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
 	}
