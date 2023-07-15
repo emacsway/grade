@@ -45,24 +45,21 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			sf.Id.TenantId = c.SpecialistTenantId
 			sf.Id.MemberId = c.SpecialistMemberId
 			sf.Grade = c.SpecialistGrade
+			s, err := sf.Create()
+			require.NoError(t, err)
 
 			ef := endorser.NewEndorserFaker()
 			ef.Id.TenantId = c.RecogniserTenantId
 			ef.Id.MemberId = c.RecogniserMemberId
 			ef.Grade = c.EndorserGrade
-
-			af := artifact.NewArtifactFaker()
-
-			s, err := sf.Create()
-			require.NoError(t, err)
-
 			e, err := ef.Create()
 			require.NoError(t, err)
-			aId := sf.Id
-			aId.MemberId = c.ArtifactAuthorId
-			af.AddAuthorId(aId)
-			af.Id.TenantId = c.ArtifactTenantId
 
+			af := artifact.NewArtifactFaker()
+			af.Id.TenantId = c.ArtifactTenantId
+			authorId := sf.Id
+			authorId.MemberId = c.ArtifactAuthorId
+			af.AddAuthorId(authorId)
 			a, err := af.Create()
 			require.NoError(t, err)
 
@@ -117,19 +114,16 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 			sf := NewSpecialistFaker()
 			err := sf.BuildDependencies()
 			require.NoError(t, err)
-
-			ef := endorser.NewEndorserFaker()
-
-			af := artifact.NewArtifactFaker()
-			af.AddAuthorId(sf.Id)
-
 			s, err := sf.Create()
 			require.NoError(t, err)
 
+			ef := endorser.NewEndorserFaker()
 			e, err := ef.Create()
 			require.NoError(t, err)
 
+			af := artifact.NewArtifactFaker()
 			af.Id.TenantId = sf.Id.TenantId
+			af.AddAuthorId(sf.Id)
 			a, err := af.Create()
 			require.NoError(t, err)
 
