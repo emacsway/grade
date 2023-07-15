@@ -193,6 +193,20 @@ func (f *ArtifactFaker) Create() (*Artifact, error) {
 	return agg, nil
 }
 
+// unidirectional flow of changes
+func (f *ArtifactFaker) SetTenantId(val uint) {
+	f.CompetenceFaker.SetTenantId(val)
+}
+
+func (f *ArtifactFaker) SetMemberId(val uint) {
+	f.CompetenceFaker.SetMemberId(val)
+}
+
+func (f *ArtifactFaker) SetId(id memberVal.TenantMemberIdFaker) {
+	f.SetTenantId(id.TenantId)
+	f.SetMemberId(id.MemberId)
+}
+
 func (f *ArtifactFaker) BuildDependencies() (err error) {
 	err = f.CompetenceFaker.BuildDependencies()
 	if err != nil {

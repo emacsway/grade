@@ -86,6 +86,15 @@ func (f *TenantFaker) Create() (*Tenant, error) {
 	return agg, nil
 }
 
+// unidirectional flow of changes
+func (f *TenantFaker) SetId(val uint) {
+	f.Id = val
+}
+
+func (f *TenantFaker) BuildDependencies() (err error) {
+	return nil
+}
+
 type TenantRepository interface {
 	Insert(*Tenant) error
 }

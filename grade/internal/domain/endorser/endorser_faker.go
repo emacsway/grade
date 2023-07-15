@@ -106,11 +106,11 @@ func (f *EndorserFaker) Create() (*Endorser, error) {
 
 // unidirectional flow of changes
 func (f *EndorserFaker) SetTenantId(val uint) {
-	f.MemberFaker.TenantFaker.Id = val
+	f.MemberFaker.SetTenantId(val)
 }
 
 func (f *EndorserFaker) SetMemberId(val uint) {
-	f.MemberFaker.Id.MemberId = val
+	f.MemberFaker.SetMemberId(val)
 }
 
 func (f *EndorserFaker) SetId(id memberVal.TenantMemberIdFaker) {

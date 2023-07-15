@@ -198,11 +198,11 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 
 // unidirectional flow of changes
 func (f *SpecialistFaker) SetTenantId(val uint) {
-	f.ArtifactFaker.CompetenceFaker.MemberFaker.TenantFaker.Id = val
+	f.ArtifactFaker.SetTenantId(val)
 }
 
 func (f *SpecialistFaker) SetMemberId(val uint) {
-	f.ArtifactFaker.CompetenceFaker.MemberFaker.Id.MemberId = val
+	f.ArtifactFaker.SetMemberId(val)
 }
 
 func (f *SpecialistFaker) SetId(id memberVal.TenantMemberIdFaker) {

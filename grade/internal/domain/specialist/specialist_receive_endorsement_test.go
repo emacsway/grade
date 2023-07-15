@@ -49,14 +49,18 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			require.NoError(t, err)
 
 			ef := endorser.NewEndorserFaker()
-			ef.Id.TenantId = c.RecogniserTenantId
-			ef.Id.MemberId = c.RecogniserMemberId
+			ef.SetTenantId(c.RecogniserTenantId)
+			ef.SetMemberId(c.RecogniserMemberId)
+			err = ef.BuildDependencies()
+			require.NoError(t, err)
 			ef.Grade = c.EndorserGrade
 			e, err := ef.Create()
 			require.NoError(t, err)
 
 			af := artifact.NewArtifactFaker()
-			af.Id.TenantId = c.ArtifactTenantId
+			af.SetTenantId(c.ArtifactTenantId)
+			err = af.BuildDependencies()
+			require.NoError(t, err)
 			authorId := sf.Id
 			authorId.MemberId = c.ArtifactAuthorId
 			af.AddAuthorId(authorId)

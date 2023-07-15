@@ -107,6 +107,20 @@ func (f *CompetenceFaker) Create() (*Competence, error) {
 	return agg, nil
 }
 
+// unidirectional flow of changes
+func (f *CompetenceFaker) SetTenantId(val uint) {
+	f.MemberFaker.SetTenantId(val)
+}
+
+func (f *CompetenceFaker) SetMemberId(val uint) {
+	f.MemberFaker.SetMemberId(val)
+}
+
+func (f *CompetenceFaker) SetId(id memberVal.TenantMemberIdFaker) {
+	f.SetTenantId(id.TenantId)
+	f.SetMemberId(id.MemberId)
+}
+
 func (f *CompetenceFaker) BuildDependencies() (err error) {
 	err = f.MemberFaker.BuildDependencies()
 	if err != nil {

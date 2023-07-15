@@ -99,6 +99,20 @@ func (f *MemberFaker) Create() (*Member, error) {
 	return agg, nil
 }
 
+// unidirectional flow of changes
+func (f *MemberFaker) SetTenantId(val uint) {
+	f.TenantFaker.SetId(val)
+}
+
+func (f *MemberFaker) SetMemberId(val uint) {
+	f.Id.MemberId = val
+}
+
+func (f *MemberFaker) SetId(id values.TenantMemberIdFaker) {
+	f.SetTenantId(id.TenantId)
+	f.SetMemberId(id.MemberId)
+}
+
 func (f *MemberFaker) BuildDependencies() (err error) {
 	_, err = f.TenantFaker.Create() // Use repo if it is needed to get the instance.
 	if err != nil {
