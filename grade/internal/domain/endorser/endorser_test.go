@@ -50,17 +50,17 @@ func TestEndorserCanCompleteEndorsement(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			f := NewEndorserFaker()
-			r, err := f.Create()
+			e, err := f.Create()
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = c.Prepare(r)
+			err = c.Prepare(e)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
 			}
-			err = r.CanCompleteEndorsement()
+			err = e.CanCompleteEndorsement()
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
 	}
