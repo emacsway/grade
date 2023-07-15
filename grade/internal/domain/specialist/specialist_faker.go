@@ -90,6 +90,14 @@ func (f *SpecialistFaker) Next() error {
 	return nil
 }
 
+func (f *SpecialistFaker) ReceiveEndorsement(ef *endorser.EndorserFaker) error {
+	err := f.achieveGrade()
+	if err != nil {
+		return err
+	}
+	return f.receiveEndorsement(ef)
+}
+
 func (f *SpecialistFaker) achieveGrade() error {
 	currentGrade, _ := grade.DefaultConstructor(0)
 	targetGrade, err := grade.DefaultConstructor(f.Grade)
@@ -120,14 +128,6 @@ func (f *SpecialistFaker) achieveGrade() error {
 		}
 	}
 	return nil
-}
-
-func (f *SpecialistFaker) ReceiveEndorsement(ef *endorser.EndorserFaker) error {
-	err := f.achieveGrade()
-	if err != nil {
-		return err
-	}
-	return f.receiveEndorsement(ef)
 }
 
 func (f *SpecialistFaker) receiveEndorsement(ef *endorser.EndorserFaker) error {

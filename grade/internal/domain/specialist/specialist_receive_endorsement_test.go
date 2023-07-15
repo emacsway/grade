@@ -42,7 +42,9 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			sf := NewSpecialistFaker()
 			err := sf.BuildDependencies()
 			require.NoError(t, err)
+
 			ef := endorser.NewEndorserFaker()
+
 			af := artifact.NewArtifactFaker()
 			sf.Id.TenantId = c.SpecialistTenantId
 			sf.Id.MemberId = c.SpecialistMemberId
@@ -50,30 +52,23 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			ef.Id.TenantId = c.RecogniserTenantId
 			ef.Id.MemberId = c.RecogniserMemberId
 			ef.Grade = c.EndorserGrade
+
 			s, err := sf.Create()
-			if err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			require.NoError(t, err)
+
 			r, err := ef.Create()
-			if err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			require.NoError(t, err)
 			aId := sf.Id
 			aId.MemberId = c.ArtifactAuthorId
 			af.AddAuthorId(aId)
 			af.Id.TenantId = c.ArtifactTenantId
+
 			a, err := af.Create()
-			if err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			require.NoError(t, err)
+
 			err = r.ReserveEndorsement()
-			if err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			require.NoError(t, err)
+
 			err = s.ReceiveEndorsement(*r, *a, time.Now().Truncate(time.Microsecond))
 			fmt.Println(err, c.ExpectedError)
 			assert.ErrorIs(t, err, c.ExpectedError)
@@ -122,30 +117,25 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 			sf := NewSpecialistFaker()
 			err := sf.BuildDependencies()
 			require.NoError(t, err)
+
 			ef := endorser.NewEndorserFaker()
+
 			af := artifact.NewArtifactFaker()
 			af.AddAuthorId(sf.Id)
+
 			s, err := sf.Create()
-			if err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			require.NoError(t, err)
+
 			r, err := ef.Create()
-			if err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			require.NoError(t, err)
+
 			af.Id.TenantId = sf.Id.TenantId
 			a, err := af.Create()
-			if err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			require.NoError(t, err)
+
 			err = c.Prepare(r)
-			if err != nil {
-				t.Error(err)
-				t.FailNow()
-			}
+			require.NoError(t, err)
+
 			err = s.ReceiveEndorsement(*r, *a, time.Now().Truncate(time.Microsecond))
 			assert.ErrorIs(t, err, c.ExpectedError)
 		})
