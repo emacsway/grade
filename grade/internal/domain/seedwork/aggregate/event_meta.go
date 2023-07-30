@@ -10,27 +10,27 @@ import (
 
 func NewEventMeta(
 	eventId uuid.Uuid,
-	correlationId uuid.Uuid,
 	causationId uuid.Uuid,
+	correlationId uuid.Uuid,
 	causalDependencies []CausalDependency,
 	// occurredAt is the time of taking a slice of the state of the streams,
 	// i.e. the time of obtaining the vector clock.
 	// Therefore, it is the same for all aggregate events at the time of saving.
 	occurredAt time.Time,
-) EventMeta {
+) (EventMeta, error) {
 	return EventMeta{
 		eventId:            eventId,
-		correlationId:      correlationId,
 		causationId:        causationId,
+		correlationId:      correlationId,
 		causalDependencies: causalDependencies,
 		occurredAt:         occurredAt,
-	}
+	}, nil
 }
 
 type EventMeta struct {
 	eventId            uuid.Uuid
-	correlationId      uuid.Uuid
-	causationId        uuid.Uuid
+	causationId        uuid.Uuid // CommandId or causation EventId
+	correlationId      uuid.Uuid // CommandId
 	causalDependencies []CausalDependency
 	occurredAt         time.Time
 }
@@ -63,8 +63,8 @@ func (m EventMeta) Spawn(eventId uuid.Uuid) EventMeta {
 
 func (m EventMeta) Export(ex EventMetaExporterSetter) {
 	ex.SetEventId(m.eventId)
-	ex.SetCorrelationId(m.correlationId)
 	ex.SetCausationId(m.causationId)
+	ex.SetCorrelationId(m.correlationId)
 	for i := range m.causalDependencies {
 		ex.AddCausalDependency(m.causalDependencies[i])
 	}
@@ -73,16 +73,16 @@ func (m EventMeta) Export(ex EventMetaExporterSetter) {
 
 type EventMetaExporterSetter interface {
 	SetEventId(uuid.Uuid)
-	SetCorrelationId(uuid.Uuid)
 	SetCausationId(uuid.Uuid)
+	SetCorrelationId(uuid.Uuid)
 	AddCausalDependency(CausalDependency)
 	SetOccurredAt(time.Time)
 }
 
 type EventMetaExporter struct {
 	EventId            uuid.Uuid
-	CorrelationId      uuid.Uuid
 	CausationId        uuid.Uuid
+	CorrelationId      uuid.Uuid
 	CausalDependencies []CausalDependencyExporter
 	OccurredAt         time.Time
 }
@@ -91,12 +91,12 @@ func (ex *EventMetaExporter) SetEventId(val uuid.Uuid) {
 	ex.EventId = val
 }
 
-func (ex *EventMetaExporter) SetCorrelationId(val uuid.Uuid) {
-	ex.CorrelationId = val
-}
-
 func (ex *EventMetaExporter) SetCausationId(val uuid.Uuid) {
 	ex.CausationId = val
+}
+
+func (ex *EventMetaExporter) SetCorrelationId(val uuid.Uuid) {
+	ex.CorrelationId = val
 }
 
 func (ex *EventMetaExporter) AddCausalDependency(val CausalDependency) {
@@ -107,4 +107,24 @@ func (ex *EventMetaExporter) AddCausalDependency(val CausalDependency) {
 
 func (ex *EventMetaExporter) SetOccurredAt(val time.Time) {
 	ex.OccurredAt = val
+}
+
+type EventMetaReconstitutor struct {
+	EventId            uuid.Uuid
+	CausationId        uuid.Uuid
+	CorrelationId      uuid.Uuid
+	CausalDependencies []CausalDependencyReconstitutor
+	OccurredAt         time.Time
+}
+
+func (r EventMetaReconstitutor) Reconstitute() (EventMeta, error) {
+	causalDependencies := []CausalDependency{}
+	for i := range r.CausalDependencies {
+		causalDependency, err := r.CausalDependencies[i].Reconstitute()
+		if err != nil {
+			return EventMeta{}, err
+		}
+		causalDependencies = append(causalDependencies, causalDependency)
+	}
+	return NewEventMeta(r.EventId, r.CausationId, r.CorrelationId, causalDependencies, r.OccurredAt)
 }
