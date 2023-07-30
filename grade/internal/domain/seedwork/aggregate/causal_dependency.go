@@ -4,12 +4,12 @@ func NewCausalDependency(
 	aggregateId any,
 	aggregateType string,
 	aggregateVersion uint,
-) CausalDependency {
+) (CausalDependency, error) {
 	return CausalDependency{
 		aggregateId:      aggregateId,
 		aggregateType:    aggregateType,
 		aggregateVersion: aggregateVersion,
-	}
+	}, nil
 }
 
 type CausalDependency struct {
@@ -56,4 +56,14 @@ func (ex *CausalDependencyExporter) SetAggregateType(val string) {
 }
 func (ex *CausalDependencyExporter) SetAggregateVersion(val uint) {
 	ex.AggregateVersion = val
+}
+
+type CausalDependencyReconstitutor struct {
+	AggregateId      any
+	AggregateType    string
+	AggregateVersion uint
+}
+
+func (r CausalDependencyReconstitutor) Reconstitute() (CausalDependency, error) {
+	return NewCausalDependency(r.AggregateId, r.AggregateType, r.AggregateVersion)
 }
