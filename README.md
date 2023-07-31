@@ -21,6 +21,8 @@
 
 В https://habr.com/ есть карма-движок.
 
+Karma bot for Slack: https://karmabot.chat/
+
 Большую популярность набирают социальные токены.
 
 Существует большое количество коробочных т.н. "карма-движков", например, [pinax-points](https://github.com/pinax/pinax-points), [pinax-badges](https://github.com/pinax/pinax-badges)...
