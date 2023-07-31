@@ -3,5 +3,5 @@ package aggregate
 import "errors"
 
 var ErrConcurrency = errors.New(
-	"aggregate modified concurrently",
+	"aggregate is modified concurrently",
 )

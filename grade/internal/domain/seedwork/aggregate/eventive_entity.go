@@ -1,8 +1,5 @@
 package aggregate
 
-type DomainEvent interface {
-}
-
 type EventiveEntityAccessor interface {
 	AddDomainEvent(...DomainEvent)
 	PendingDomainEvents() []DomainEvent
