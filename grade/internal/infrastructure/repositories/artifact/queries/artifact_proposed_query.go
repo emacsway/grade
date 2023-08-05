@@ -44,7 +44,7 @@ func (q *ArtifactProposedQuery) SetStreamType(val string) {
 func (q *ArtifactProposedQuery) SetArtifactId(val values.ArtifactId) {
 	var v exporters.UintExporter
 	val.Export(&v)
-	q.params[2] = val.String()
+	q.params[2] = v.String()
 }
 
 func (q *ArtifactProposedQuery) SetAggregateVersion(val uint) {

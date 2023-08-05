@@ -1,6 +1,8 @@
 package exporters
 
 import (
+	"fmt"
+
 	"database/sql/driver"
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
@@ -22,6 +24,9 @@ func (ex *Uint8Exporter) SetState(value uint8) {
 func (ex Uint8Exporter) Value() (driver.Value, error) {
 	return uint8(ex), nil
 }
+func (ex Uint8Exporter) String() string {
+	return fmt.Sprintf("%d", uint8(ex))
+}
 
 type UintExporter uint
 
@@ -30,6 +35,9 @@ func (ex *UintExporter) SetState(value uint) {
 }
 func (ex UintExporter) Value() (driver.Value, error) {
 	return uint(ex), nil
+}
+func (ex UintExporter) String() string {
+	return fmt.Sprintf("%d", uint(ex))
 }
 
 type UuidExporter uuid.Uuid

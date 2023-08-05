@@ -12,12 +12,14 @@ import (
 
 func NewArtifactRepository(session infrastructure.DbSession) *ArtifactRepository {
 	return &ArtifactRepository{
-		session: session,
+		session:    session,
+		streamType: "Artifact",
 	}
 }
 
 type ArtifactRepository struct {
-	session infrastructure.DbSession
+	session    infrastructure.DbSession
+	streamType string
 }
 
 func (r *ArtifactRepository) Insert(agg *artifact.Artifact, eventMeta aggregate.EventMeta) error {
@@ -37,7 +39,7 @@ func (r *ArtifactRepository) save(agg *artifact.Artifact, eventMeta aggregate.Ev
 			qt := q.(events.ArtifactProposedExporterSetter)
 			event.Export(qt)
 		}
-		q.SetStreamType("Artifact")
+		q.SetStreamType(r.streamType)
 		_, err := q.Evaluate(r.session)
 		if err != nil {
 			return err
