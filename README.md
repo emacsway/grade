@@ -25,7 +25,7 @@ Karma bot for Slack: https://karmabot.chat/
 
 Репутационные движки встроены в популярные Q&A системы экспертных сообществ, например, [Biostar](https://github.com/ialbert/biostar-central/blob/a051511350871dcd82bdf0b88ce5cda9fd9ef141/biostar/accounts/models.py#L122) ([и здесь](https://github.com/ialbert/biostar-central/blob/a051511350871dcd82bdf0b88ce5cda9fd9ef141/biostar/forum/models.py#L589)) и [Askbot](https://github.com/ASKBOT/askbot-devel/blob/5f27a57069401d9eb1f7fdb57b6055d5ba2e5a5b/askbot/models/repute.py), построенных по образу [StackOverflow](https://stackoverflow.com/), в котором тоже [есть](https://stackexchange.com/leagues/1/year/stackoverflow/2023-01-01/62937) свой карма-движок.
 
-Существует большое количество коробочных т.н. "карма-движков", например, [pinax-points](https://github.com/pinax/pinax-points), [pinax-badges](https://github.com/pinax/pinax-badges)...
+Существует большое количество коробочных т.н. "карма-движков", например, [pinax-points](https://github.com/pinax/pinax-points), [pinax-badges](https://github.com/pinax/pinax-badges), [Telegram KarmaBot](https://github.com/bomzheg/KarmaBot).
 
 Большую популярность набирают социальные токены.
 
