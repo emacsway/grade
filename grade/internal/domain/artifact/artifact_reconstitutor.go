@@ -4,8 +4,8 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
-	competence "github.com/emacsway/grade/grade/internal/domain/competence/values"
-	member "github.com/emacsway/grade/grade/internal/domain/member/values"
+	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
+	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 )
 
@@ -36,9 +36,9 @@ type ArtifactSnapshotReconstitutor struct {
 	Name          string
 	Description   string
 	Url           string
-	CompetenceIds []competence.TenantCompetenceIdReconstitutor
-	AuthorIds     []member.TenantMemberIdReconstitutor
-	OwnerId       member.TenantMemberIdReconstitutor
+	CompetenceIds []competenceVal.TenantCompetenceIdReconstitutor
+	AuthorIds     []memberVal.TenantMemberIdReconstitutor
+	OwnerId       memberVal.TenantMemberIdReconstitutor
 	CreatedAt     time.Time
 	Version       uint
 }
@@ -64,7 +64,7 @@ func (r ArtifactSnapshotReconstitutor) Reconstitute() (*Artifact, error) {
 	if err != nil {
 		return nil, err
 	}
-	competenceIds := []competence.TenantCompetenceId{}
+	competenceIds := []competenceVal.TenantCompetenceId{}
 	for i := range r.CompetenceIds {
 		competenceId, err := r.CompetenceIds[i].Reconstitute()
 		if err != nil {
@@ -72,7 +72,7 @@ func (r ArtifactSnapshotReconstitutor) Reconstitute() (*Artifact, error) {
 		}
 		competenceIds = append(competenceIds, competenceId)
 	}
-	authorIds := []member.TenantMemberId{}
+	authorIds := []memberVal.TenantMemberId{}
 	for i := range r.AuthorIds {
 		authorId, err := r.AuthorIds[i].Reconstitute()
 		if err != nil {
