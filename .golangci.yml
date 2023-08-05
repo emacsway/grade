@@ -182,6 +182,7 @@ linters-settings:
     disabled-checks:
       - hugeParam # does not work with generics
       - typeDefFirst # does not work with generics
+      - singleCaseSwitch # : should rewrite switch statement to if statement
 
   gocyclo:
     # Minimal code complexity to report.
