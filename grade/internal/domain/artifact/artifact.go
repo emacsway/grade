@@ -37,7 +37,7 @@ func NewArtifact(
 			ownerId:       ownerId,
 			createdAt:     createdAt,
 		*/
-		eventSourced: aggregate.NewEventSourcedAggregate(0),
+		eventSourced: aggregate.NewEventSourcedAggregate[aggregate.PersistentDomainEvent](0),
 	}
 	agg.eventSourced.AddHandler(&events.ArtifactProposed{}, agg.onArtifactProposed)
 	agg.eventSourced.Update(e)
@@ -55,7 +55,7 @@ type Artifact struct {
 	authorIds     []member.TenantMemberId
 	ownerId       member.TenantMemberId
 	createdAt     time.Time
-	eventSourced  aggregate.EventSourcedAggregate
+	eventSourced  aggregate.EventSourcedAggregate[aggregate.PersistentDomainEvent]
 }
 
 func (a Artifact) Id() values.TenantArtifactId {

@@ -94,6 +94,6 @@ func (r ArtifactSnapshotReconstitutor) Reconstitute() (*Artifact, error) {
 		authorIds:     authorIds,
 		ownerId:       ownerId,
 		createdAt:     r.CreatedAt,
-		eventSourced:  aggregate.NewEventSourcedAggregate(r.Version),
+		eventSourced:  aggregate.NewEventSourcedAggregate[aggregate.PersistentDomainEvent](r.Version),
 	}, nil
 }

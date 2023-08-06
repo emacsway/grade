@@ -2,36 +2,36 @@ package aggregate
 
 type PersistentDomainEventHandler func(event PersistentDomainEvent)
 
-func NewEventSourcedAggregate(version uint) EventSourcedAggregate {
-	return EventSourcedAggregate{
+func NewEventSourcedAggregate[T PersistentDomainEvent](version uint) EventSourcedAggregate[T] {
+	return EventSourcedAggregate[T]{
 		handlers:           make(map[string]PersistentDomainEventHandler),
-		EventiveEntity:     EventiveEntity[PersistentDomainEvent]{},
+		EventiveEntity:     EventiveEntity[T]{},
 		VersionedAggregate: NewVersionedAggregate(version),
 	}
 }
 
-type EventSourcedAggregate struct {
+type EventSourcedAggregate[T PersistentDomainEvent] struct {
 	handlers map[string]PersistentDomainEventHandler
-	EventiveEntity[PersistentDomainEvent]
+	EventiveEntity[T]
 	VersionedAggregate
 }
 
-func (a *EventSourcedAggregate) AddHandler(e PersistentDomainEvent, handler PersistentDomainEventHandler) {
+func (a *EventSourcedAggregate[T]) AddHandler(e T, handler PersistentDomainEventHandler) {
 	a.handlers[e.EventType()] = handler
 }
 
-func (a *EventSourcedAggregate) LoadFrom(pastEvents []PersistentDomainEvent) {
+func (a *EventSourcedAggregate[T]) LoadFrom(pastEvents []T) {
 	for i := range pastEvents {
 		a.SetVersion(pastEvents[i].AggregateVersion())
 		a.handlers[pastEvents[i].EventType()](pastEvents[i])
 	}
 }
 
-func (a *EventSourcedAggregate) Update(e PersistentDomainEvent) {
+func (a *EventSourcedAggregate[T]) Update(e T) {
 	e.SetAggregateVersion(a.NextVersion())
 	a.handlers[e.EventType()](e)
 	a.AddDomainEvent(e)
 }
-func (a EventSourcedAggregate) PendingDomainEvents() []PersistentDomainEvent {
+func (a EventSourcedAggregate[T]) PendingDomainEvents() []T {
 	return a.EventiveEntity.PendingDomainEvents()
 }
