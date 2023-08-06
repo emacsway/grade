@@ -29,16 +29,9 @@ func (r *ArtifactRepository) Insert(agg *artifact.Artifact, eventMeta aggregate.
 func (r *ArtifactRepository) save(agg *artifact.Artifact, eventMeta aggregate.EventMeta) error {
 	pendingEvents := agg.PendingDomainEvents()
 	for _, iEvent := range pendingEvents {
-		var q infrastructure.EventSourcedQueryEvaluator
 		pEvent := iEvent.(aggregate.PersistentDomainEvent)
 		pEvent.SetEventMeta(eventMeta)
-		switch event := iEvent.(type) {
-		case *events.ArtifactProposed:
-			event.SetEventMeta(eventMeta)
-			q = &queries.ArtifactProposedQuery{}
-			qt := q.(events.ArtifactProposedExporterSetter)
-			event.Export(qt)
-		}
+		q := r.getEventQuery(iEvent)
 		q.SetStreamType(r.streamType)
 		_, err := q.Evaluate(r.session)
 		if err != nil {
@@ -47,6 +40,15 @@ func (r *ArtifactRepository) save(agg *artifact.Artifact, eventMeta aggregate.Ev
 	}
 	agg.ClearPendingDomainEvents()
 	return nil
+}
+func (r *ArtifactRepository) getEventQuery(iEvent aggregate.DomainEvent) (q infrastructure.EventSourcedQueryEvaluator) {
+	switch event := iEvent.(type) {
+	case *events.ArtifactProposed:
+		q = &queries.ArtifactProposedQuery{}
+		qt := q.(events.ArtifactProposedExporterSetter)
+		event.Export(qt)
+	}
+	return q
 }
 
 func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.TenantArtifactId, error) {
