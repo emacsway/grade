@@ -51,7 +51,7 @@ type Endorser struct { // TODO: rename to Recognitory | Endorser | Originator | 
 	availableEndorsementCount values.EndorsementCount
 	pendingEndorsementCount   values.EndorsementCount
 	createdAt                 time.Time
-	eventive                  aggregate.EventiveEntity
+	eventive                  aggregate.EventiveEntity[aggregate.DomainEvent]
 	aggregate.VersionedAggregate
 }
 

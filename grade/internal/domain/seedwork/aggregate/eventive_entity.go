@@ -1,27 +1,31 @@
 package aggregate
 
-type EventiveEntityAccessor interface {
-	AddDomainEvent(...DomainEvent)
-	PendingDomainEvents() []DomainEvent
+type EventiveEntityAdder[T DomainEvent] interface {
+	AddDomainEvent(...T)
+}
+
+type EventiveEntityAccessor[T DomainEvent] interface {
+	EventiveEntityAdder[T]
+	PendingDomainEvents() []T
 	ClearPendingDomainEvents()
 }
 
-type EventiveEntityAdder interface {
-	AddDomainEvent(...DomainEvent)
+func NewEventiveEntity() EventiveEntity[DomainEvent] {
+	return EventiveEntity[DomainEvent]{}
 }
 
-type EventiveEntity struct {
-	pendingDomainEvents []DomainEvent
+type EventiveEntity[T DomainEvent] struct {
+	pendingDomainEvents []T
 }
 
-func (e *EventiveEntity) AddDomainEvent(domainEvents ...DomainEvent) {
+func (e *EventiveEntity[T]) AddDomainEvent(domainEvents ...T) {
 	e.pendingDomainEvents = append(e.pendingDomainEvents, domainEvents...)
 }
 
-func (e EventiveEntity) PendingDomainEvents() []DomainEvent {
+func (e EventiveEntity[T]) PendingDomainEvents() []T {
 	return e.pendingDomainEvents
 }
 
-func (e *EventiveEntity) ClearPendingDomainEvents() {
-	e.pendingDomainEvents = []DomainEvent{}
+func (e *EventiveEntity[T]) ClearPendingDomainEvents() {
+	e.pendingDomainEvents = []T{}
 }

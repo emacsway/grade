@@ -5,14 +5,14 @@ type PersistentDomainEventHandler func(event PersistentDomainEvent)
 func NewEventSourcedAggregate(version uint) EventSourcedAggregate {
 	return EventSourcedAggregate{
 		handlers:           make(map[string]PersistentDomainEventHandler),
-		EventiveEntity:     EventiveEntity{},
+		EventiveEntity:     EventiveEntity[PersistentDomainEvent]{},
 		VersionedAggregate: NewVersionedAggregate(version),
 	}
 }
 
 type EventSourcedAggregate struct {
 	handlers map[string]PersistentDomainEventHandler
-	EventiveEntity
+	EventiveEntity[PersistentDomainEvent]
 	VersionedAggregate
 }
 
@@ -31,4 +31,7 @@ func (a *EventSourcedAggregate) Update(e PersistentDomainEvent) {
 	e.SetAggregateVersion(a.NextVersion())
 	a.handlers[e.EventType()](e)
 	a.AddDomainEvent(e)
+}
+func (a EventSourcedAggregate) PendingDomainEvents() []PersistentDomainEvent {
+	return a.EventiveEntity.PendingDomainEvents()
 }

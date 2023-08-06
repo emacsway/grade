@@ -37,7 +37,7 @@ type Competence struct {
 	name      values.Name
 	ownerId   member.TenantMemberId
 	createdAt time.Time
-	eventive  aggregate.EventiveEntity
+	eventive  aggregate.EventiveEntity[aggregate.DomainEvent]
 	aggregate.VersionedAggregate
 }
 

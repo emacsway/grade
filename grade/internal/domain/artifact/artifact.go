@@ -74,7 +74,7 @@ func (a Artifact) HasAuthor(authorId member.TenantMemberId) bool {
 	return false
 }
 
-func (a Artifact) PendingDomainEvents() []aggregate.DomainEvent {
+func (a Artifact) PendingDomainEvents() []aggregate.PersistentDomainEvent {
 	return a.eventSourced.PendingDomainEvents()
 }
 

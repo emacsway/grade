@@ -57,7 +57,7 @@ type Specialist struct {
 	receivedEndorsements []endorsement.Endorsement
 	assignments          []assignment.Assignment
 	createdAt            time.Time
-	eventive             aggregate.EventiveEntity
+	eventive             aggregate.EventiveEntity[aggregate.DomainEvent]
 	aggregate.VersionedAggregate
 }
 
