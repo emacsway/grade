@@ -4,6 +4,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	"github.com/emacsway/grade/grade/internal/domain/competence/events"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/competence/queries"
 )
@@ -36,18 +37,7 @@ func (r *CompetenceRepository) Update(agg *competence.Competence) error {
 func (r *CompetenceRepository) save(agg *competence.Competence) error {
 	pendingEvents := agg.PendingDomainEvents()
 	for _, iEvent := range pendingEvents {
-		var q infrastructure.QueryEvaluator
-
-		switch event := iEvent.(type) {
-		case *events.CompetenceCreated:
-			q = &queries.CompetenceCreatedQuery{}
-			qt := q.(events.CompetenceCreatedExporterSetter)
-			event.Export(qt)
-		case *events.NameUpdated:
-			q = &queries.NameUpdatedQuery{}
-			qt := q.(events.NameUpdatedExporterSetter)
-			event.Export(qt)
-		}
+		q := r.eventQuery(iEvent)
 		_, err := q.Evaluate(r.session)
 		if err != nil {
 			return err
@@ -55,6 +45,19 @@ func (r *CompetenceRepository) save(agg *competence.Competence) error {
 	}
 	agg.ClearPendingDomainEvents()
 	return nil
+}
+func (r CompetenceRepository) eventQuery(iEvent aggregate.DomainEvent) (q infrastructure.QueryEvaluator) {
+	switch event := iEvent.(type) {
+	case *events.CompetenceCreated:
+		q = &queries.CompetenceCreatedQuery{}
+		qt := q.(events.CompetenceCreatedExporterSetter)
+		event.Export(qt)
+	case *events.NameUpdated:
+		q = &queries.NameUpdatedQuery{}
+		qt := q.(events.NameUpdatedExporterSetter)
+		event.Export(qt)
+	}
+	return q
 }
 
 func (r *CompetenceRepository) Get(id competenceVal.TenantCompetenceId) (*competence.Competence, error) {

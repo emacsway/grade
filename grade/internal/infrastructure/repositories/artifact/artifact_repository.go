@@ -29,9 +29,8 @@ func (r *ArtifactRepository) Insert(agg *artifact.Artifact, eventMeta aggregate.
 func (r *ArtifactRepository) save(agg *artifact.Artifact, eventMeta aggregate.EventMeta) error {
 	pendingEvents := agg.PendingDomainEvents()
 	for _, iEvent := range pendingEvents {
-		pEvent := iEvent.(aggregate.PersistentDomainEvent)
-		pEvent.SetEventMeta(eventMeta)
-		q := r.getEventQuery(iEvent)
+		iEvent.SetEventMeta(eventMeta)
+		q := r.eventQuery(iEvent)
 		q.SetStreamType(r.streamType)
 		_, err := q.Evaluate(r.session)
 		if err != nil {
@@ -41,7 +40,7 @@ func (r *ArtifactRepository) save(agg *artifact.Artifact, eventMeta aggregate.Ev
 	agg.ClearPendingDomainEvents()
 	return nil
 }
-func (r *ArtifactRepository) getEventQuery(iEvent aggregate.DomainEvent) (q infrastructure.EventSourcedQueryEvaluator) {
+func (r ArtifactRepository) eventQuery(iEvent aggregate.PersistentDomainEvent) (q infrastructure.EventSourcedQueryEvaluator) {
 	switch event := iEvent.(type) {
 	case *events.ArtifactProposed:
 		q = &queries.ArtifactProposedQuery{}
