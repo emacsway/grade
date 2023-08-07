@@ -5,12 +5,12 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-type PersistentEventGetQuery struct {
+type EventGetQuery struct {
 	StreamId      StreamId
 	SincePosition uint
 }
 
-func (q PersistentEventGetQuery) sql() string {
+func (q EventGetQuery) sql() string {
 	return `
 		SELECT
 		    tenant_id, stream_type, stream_id, stream_position, event_type, event_version, payload, metadata
@@ -21,10 +21,10 @@ func (q PersistentEventGetQuery) sql() string {
 		ORDER BY
 			tenant_id, stream_type, stream_id, stream_position`
 }
-func (q PersistentEventGetQuery) params() []any {
+func (q EventGetQuery) params() []any {
 	return []any{q.StreamId.TenantId(), q.StreamId.StreamType(), q.StreamId.StreamId(), q.SincePosition}
 }
-func (q *PersistentEventGetQuery) Stream(s infrastructure.DbSessionQuerier) ([]aggregate.PersistentDomainEvent, error) {
+func (q *EventGetQuery) Stream(s infrastructure.DbSessionQuerier) ([]aggregate.PersistentDomainEvent, error) {
 	stream := []aggregate.PersistentDomainEvent{}
 	rows, err := s.Query(q.sql(), q.params()...)
 	if err != nil {

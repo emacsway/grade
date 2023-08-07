@@ -7,7 +7,7 @@ import (
 )
 
 type ArtifactGetQuery struct {
-	repository.PersistentEventGetQuery
+	repository.EventGetQuery
 }
 
 func (q *ArtifactGetQuery) Get(s infrastructure.DbSessionQuerier) (*artifact.Artifact, error) {

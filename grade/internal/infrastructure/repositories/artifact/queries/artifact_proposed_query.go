@@ -12,7 +12,7 @@ import (
 )
 
 type ArtifactProposedQuery struct {
-	repository.PersistentEventInsertQuery
+	repository.EventInsertQuery
 	payload ArtifactProposedPayload
 }
 
@@ -57,8 +57,8 @@ func (q *ArtifactProposedQuery) SetCreatedAt(val time.Time) {
 }
 
 func (q *ArtifactProposedQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
-	q.PersistentEventInsertQuery.SetPayload(q.payload)
-	return q.PersistentEventInsertQuery.Evaluate(s)
+	q.EventInsertQuery.SetPayload(q.payload)
+	return q.EventInsertQuery.Evaluate(s)
 }
 
 type ArtifactProposedPayload struct {
