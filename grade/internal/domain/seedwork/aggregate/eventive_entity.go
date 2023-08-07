@@ -1,11 +1,10 @@
 package aggregate
 
-type EventiveEntityAdder[T DomainEvent] interface {
+type DomainEventAdder[T DomainEvent] interface {
 	AddDomainEvent(...T)
 }
 
-type EventiveEntityAccessor[T DomainEvent] interface {
-	EventiveEntityAdder[T]
+type DomainEventAccessor[T DomainEvent] interface {
 	PendingDomainEvents() []T
 	ClearPendingDomainEvents()
 }
