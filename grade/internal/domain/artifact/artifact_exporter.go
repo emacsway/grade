@@ -18,8 +18,8 @@ type ArtifactExporter struct {
 	CompetenceIds []competence.TenantCompetenceIdExporter
 	AuthorIds     []member.TenantMemberIdExporter
 	OwnerId       member.TenantMemberIdExporter
-	Version       uint
 	CreatedAt     time.Time
+	Version       uint
 }
 
 func (ex *ArtifactExporter) SetId(val values.TenantArtifactId) {

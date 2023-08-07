@@ -11,8 +11,8 @@ type MemberExporter struct {
 	Id        values.TenantMemberIdExporter
 	Status    exporters.Uint8Exporter
 	FullName  values.FullNameExporter
-	Version   uint
 	CreatedAt time.Time
+	Version   uint
 }
 
 func (ex *MemberExporter) SetId(val values.TenantMemberId) {

@@ -14,8 +14,8 @@ type EndorserExporter struct {
 	Grade                     exporters.Uint8Exporter
 	AvailableEndorsementCount exporters.UintExporter
 	PendingEndorsementCount   exporters.UintExporter
-	Version                   uint
 	CreatedAt                 time.Time
+	Version                   uint
 }
 
 func (ex *EndorserExporter) SetId(val member.TenantMemberId) {

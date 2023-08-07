@@ -15,8 +15,8 @@ type SpecialistExporter struct {
 	Grade                exporters.Uint8Exporter
 	ReceivedEndorsements []endorsement.EndorsementExporter
 	Assignments          []assignment.AssignmentExporter
-	Version              uint
 	CreatedAt            time.Time
+	Version              uint
 }
 
 func (ex *SpecialistExporter) SetId(val member.TenantMemberId) {

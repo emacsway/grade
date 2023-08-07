@@ -10,8 +10,8 @@ import (
 type TenantExporter struct {
 	Id        exporters.UintExporter
 	Name      exporters.StringExporter
-	Version   uint
 	CreatedAt time.Time
+	Version   uint
 }
 
 func (ex *TenantExporter) SetId(val values.TenantId) {

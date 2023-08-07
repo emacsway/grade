@@ -12,8 +12,8 @@ type CompetenceExporter struct {
 	Id        values.TenantCompetenceIdExporter
 	Name      exporters.StringExporter
 	OwnerId   member.TenantMemberIdExporter
-	Version   uint
 	CreatedAt time.Time
+	Version   uint
 }
 
 func (ex *CompetenceExporter) SetId(val values.TenantCompetenceId) {
