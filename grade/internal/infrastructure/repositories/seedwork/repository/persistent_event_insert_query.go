@@ -9,47 +9,47 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
-type PersistentEventQuery struct {
+type PersistentEventInsertQuery struct {
 	params  [8]any
 	payload any
 	meta    aggregate.EventMetaExporter
 }
 
-func (q PersistentEventQuery) sql() string {
+func (q PersistentEventInsertQuery) sql() string {
 	return `
 		INSERT INTO event_log
 		(tenant_id, stream_type, stream_id, stream_position, event_type, event_version, payload, metadata)
 		VALUES
 		($1, $2, $3, $4, $5, $6, $7, $8)`
 }
-func (q *PersistentEventQuery) SetTenantId(val tenantVal.TenantId) {
+func (q *PersistentEventInsertQuery) SetTenantId(val tenantVal.TenantId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[0] = v
 }
-func (q *PersistentEventQuery) SetStreamType(val string) {
+func (q *PersistentEventInsertQuery) SetStreamType(val string) {
 	q.params[1] = val
 }
-func (q *PersistentEventQuery) SetStreamId(val string) {
+func (q *PersistentEventInsertQuery) SetStreamId(val string) {
 	q.params[2] = val
 }
-func (q *PersistentEventQuery) SetAggregateVersion(val uint) {
+func (q *PersistentEventInsertQuery) SetAggregateVersion(val uint) {
 	q.params[3] = val
 }
-func (q *PersistentEventQuery) SetEventType(val string) {
+func (q *PersistentEventInsertQuery) SetEventType(val string) {
 	q.params[4] = val
 }
-func (q *PersistentEventQuery) SetEventMeta(val aggregate.EventMeta) {
+func (q *PersistentEventInsertQuery) SetEventMeta(val aggregate.EventMeta) {
 	val.Export(&q.meta)
 }
-func (q *PersistentEventQuery) SetPayload(val any) {
+func (q *PersistentEventInsertQuery) SetPayload(val any) {
 	q.payload = val
 }
-func (q *PersistentEventQuery) SetEventVersion(val uint8) {
+func (q *PersistentEventInsertQuery) SetEventVersion(val uint8) {
 	q.params[5] = val
 }
 
-func (q *PersistentEventQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (q *PersistentEventInsertQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
 	payload, err := json.Marshal(q.payload)
 	if err != nil {
 		return nil, err
