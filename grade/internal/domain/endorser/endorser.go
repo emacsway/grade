@@ -41,8 +41,11 @@ func NewEndorser(
 }
 
 // TODO: Use
-// - https://martinfowler.com/eaaDev/TemporalProperty.html
+// - https://martinfowler.com/eaaDev/timeNarrative.html
 // - https://martinfowler.com/eaaDev/TemporalObject.html
+// - https://martinfowler.com/eaaDev/TemporalProperty.html
+// - https://martinfowler.com/eaaDev/Effectivity.html
+// - https://martinfowler.com/eaaDev/Snapshot.html
 // to track grade by version?
 
 type Endorser struct { // TODO: rename to Recognitory | Endorser | Originator | Sender (to Receiver)
