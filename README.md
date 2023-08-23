@@ -97,6 +97,32 @@ Karma bot for Slack: https://karmabot.chat/
 Будет документация, ADR, архитектурная документация и трассировка требований - в общем, будет демонстрация всех SDLC-этапов разработки.
 
 
+## Что можно посмотреть?
+
+### Specification Pattern
+
+Specification Pattern с применением Abstract [Expression Tree](https://docs.microsoft.com/ru-ru/dotnet/csharp/programming-guide/concepts/expression-trees/).
+
+- [Абстрактная реализация + inMemory evaluator](./grade/internal/domain/seedwork/specification/)
+- [Конкретная реализация inMemory evaluator без использования рефлекции](./grade/internal/domain/endorser/specifications.go)
+- [Абстрактная реализация строителя PostgreSQL-запроса с учетом приоритетов операторов для исключения лишних скобочек](./grade/internal/infrastructure/specification/)
+- [Конкретная реализация строителя PostgreSQL-запроса с гибкой возможностью маппинга атрибутов](./grade/internal/infrastructure/repositories/endorser/endorser_specifications.go)
+
+Заложена (но до конца не продемонстрирована) возможность просмотра коллекций сущностей внутри агрегата и поиск удовлетворения условия хотя бы одним из элементов коллекции.
+
+Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/specification.html)
+
+
+
+### Aggregate Encapsulation
+
+Использование Mediator Pattern (часто ошибочно воспринимаемый за Memento Pattern) для гарантирования инкапсуляции агрегата:
+
+- [Endorser.Export()](./grade/internal/domain/endorser/endorser.go)
+
+Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/domain/aggregate-encapsulation.html)
+
+
 ## Документация
 
 Сопроводительная методическая информация проекта будет накапливаться [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/index.html).
@@ -108,4 +134,3 @@ Event Storming диаграмму можно посмотреть [здесь](h
 
 Присоединиться к разработке: https://t.me/emacsway
 
-Единственное требование - наличие теоретической базы DDD или способность прорабатывать теорию на ходу и принимать обоснованные и информированные решения.
