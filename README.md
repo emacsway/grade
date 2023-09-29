@@ -19,7 +19,13 @@
 
 В LinkedIn есть система Endorsement.
 
-В https://habr.com/ есть карма-движок.
+Карма-движок есть в проектах:
+
+- https://habr.com/
+- https://pravoved.ru/
+- https://tiqum.ru/
+- https://drooble.com/
+- и др.
 
 Karma bot for Slack: https://karmabot.chat/
 
