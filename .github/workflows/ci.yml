@@ -10,6 +10,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    container: "ubuntu:latest"
     strategy:
       matrix:
         go-version: [ '1.18', '1.19', '1.20', '1.21.x' ]
@@ -21,8 +22,7 @@ jobs:
           POSTGRES_PASSWORD: devel
           POSTGRES_DB: grade
         ports:
-          - 5432:5432 # exposing 5432 port for application to use
-        # needed because the postgres container does not provide a healthcheck
+          - 5432:5432 # exposing 5432 port for application to us
         options: >-
           --health-cmd pg_isready --health-interval 10s
           --health-timeout 5s --health-retries 5
