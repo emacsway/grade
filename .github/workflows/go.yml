@@ -14,8 +14,10 @@ jobs:
       matrix:
         go-version: [ '1.18' ] # , '1.19', '1.20', '1.21.x' ]
     services:
-      temp-postgres:
+      postgres:
         image: postgres:12
+        ports:
+          - 5432:5432
         env:
           POSTGRES_USER: devel
           POSTGRES_PASSWORD: devel
@@ -31,7 +33,7 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
       
-      - name: Tun tests
+      - name: Run tests
         run: go test -v ./...
         env:
-          DATABASE_URL: postgres://devel:devel@temp-postgres:5432/grade
+          DATABASE_URL: postgres://devel:devel@localhost:5432/grade
