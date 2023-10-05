@@ -1,5 +1,4 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
 
 name: Go
 
@@ -25,8 +24,8 @@ jobs:
       with:
         go-version: ${{ matrix.go-version }}
 
-    - name: Install dependencies
-      run: go get .
+#    - name: Install dependencies
+#      run: go get .
 
     - name: Test
       run: go test -v ./... -json > TestResults-${{ matrix.go-version }}.json
