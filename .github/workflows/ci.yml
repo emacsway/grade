@@ -19,7 +19,7 @@ jobs:
         env:
           POSTGRES_USER: devel
           POSTGRES_PASSWORD: devel
-          POSTGRES_DB: devel_grade
+          POSTGRES_DB: grade
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -35,3 +35,5 @@ jobs:
       
       - name: Test
         run: go test -v ./...
+        env:
+          DATABASE_URL: postgres://devel:devel@postgres:5432/grade
