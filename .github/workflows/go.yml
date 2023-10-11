@@ -1,0 +1,43 @@
+name: Go
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    name: Execute tests
+    strategy:
+      matrix:
+        go-version: [ '1.18', '1.19', '1.20', '1.21.x' ]
+    services:
+      postgres:
+        image: postgres:12
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: devel
+          POSTGRES_PASSWORD: devel
+          POSTGRES_DB: grade
+        options: >-
+          --health-cmd pg_isready --health-interval 10s
+          --health-timeout 5s --health-retries 5
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+          
+      - name: Run migrations
+        run: psql -f grade/internal/infrastructure/sql/init.sql postgres://devel:devel@localhost:5432/grade
+      
+      - name: Run tests
+        run: go test -v ./...
+        env:
+          DATABASE_URL: postgres://devel:devel@localhost:5432/grade
