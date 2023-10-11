@@ -32,6 +32,9 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: ${{ matrix.go-version }}
+          
+      - name: Run migrations
+        run: psql -f grade/internal/infrastructure/sql/init.sql postgres://devel:devel@localhost:5432/grade
       
       - name: Run tests
         run: go test -v ./...
