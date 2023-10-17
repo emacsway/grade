@@ -40,4 +40,8 @@ jobs:
       - name: Run tests
         run: go test -v ./...
         env:
-          DATABASE_URL: postgres://devel:devel@localhost:5432/grade
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_DATABASE: grade
+          DB_USERNAME: devel
+          DB_PASSWORD: devel
