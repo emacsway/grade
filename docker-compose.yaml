@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  app-grade:
+    build:
+      context: .
+    image: grade
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+    container_name: app-grade
+    restart: unless-stopped
+    working_dir: /app
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    networks:
+      - grade
+    entrypoint: /bin/sh
+
+  db-grade:
+    container_name: db-grade
+    image: postgres:15.3
+    environment:
+      POSTGRES_DB: "${DB_DATABASE}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      PGDATA: "${DB_PG_DATA}"
+    volumes:
+      - ./:/app
+      - ./docker-compose/postgresql/master/:/docker-entrypoint-initdb.d
+      - ./docker-compose/postgresql/master/grade.conf:/etc/postgresql/postgresql.conf
+      - ./db_data/master:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - grade
+
+  pgadmin-grade:
+    container_name: pgadmin-grade
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "${PGADMIN_DEFAULT_EMAIL}"
+      PGADMIN_DEFAULT_PASSWORD: "${PGADMIN_DEFAULT_PASSWORD}"
+      PGADMIN_CONFIG_SERVER_MODE: "${PGADMIN_CONFIG_SERVER_MODE}"
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+    ports:
+      - "5052:80"
+    restart: unless-stopped
+    networks:
+      - grade
+
+networks:
+  grade:
+      driver: bridge
