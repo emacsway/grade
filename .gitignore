@@ -1,1 +1,12 @@
 /coverage.out
+
+/.idea
+/.vscode
+/pgadmin
+/db_data
+
+*.crt
+
+# macOS
+.DS_Store
+**/.DS_Store
