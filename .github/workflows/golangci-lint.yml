@@ -54,12 +54,13 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
+        with:
+          ref: main
 
       - name: Deploy Archi report
         id: archi
         uses: WoozyMasta/archimate-ci-image@5.0.2-1.0.4
         with:
-          githubPagesBranch: main
           archiHtmlReportEnabled: true
           archiJasperReportEnabled: true
           archiJasperReportFormats: PDF,DOCX
