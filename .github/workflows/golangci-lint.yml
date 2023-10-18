@@ -1,4 +1,5 @@
 name: golangci-lint
+
 on:
   push:
     tags:
@@ -9,7 +10,7 @@ on:
       contents: read
       # Optional: allow read access to pull request. Use with `only-new-issues` option.
       # pull-requests: read
-      branches: [ "main" ]
+
 jobs:
   golangci:
     name: lint
@@ -52,7 +53,7 @@ jobs:
     name: Deploy Archi report HTML to GitHub Pages
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Deploy Archi report
         id: archi
