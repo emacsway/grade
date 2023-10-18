@@ -61,7 +61,7 @@ jobs:
         id: archi
         uses: WoozyMasta/archimate-ci-image@5.0.2-1.0.4
         env:
-          RELEVANT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GITHAB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         with:
           githubPagesBranch: main
           archiHtmlReportEnabled: true
