@@ -52,10 +52,10 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Archi report HTML to GitHub Pages
     steps:
-      - run: echo "Relevant commit SHA: $RELEVANT_SHA"
+      run: echo 'Relevant commit SHA: $RELEVANT_SHA'
         env:
           RELEVANT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-          
+
       - name: Check out the repo
         uses: actions/checkout@v4
         with:
