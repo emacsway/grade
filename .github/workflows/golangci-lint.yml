@@ -54,6 +54,8 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
+        env:
+          GITHAB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         with:
           ref: main
 
