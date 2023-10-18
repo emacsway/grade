@@ -52,10 +52,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Archi report HTML to GitHub Pages
     steps:
-      run: echo 'Relevant commit SHA: $RELEVANT_SHA'
-        env:
-          RELEVANT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-
       - name: Check out the repo
         uses: actions/checkout@v4
         with:
@@ -64,6 +60,9 @@ jobs:
       - name: Deploy Archi report
         id: archi
         uses: WoozyMasta/archimate-ci-image@5.0.2-1.0.4
+        run: echo 'Relevant commit SHA: $RELEVANT_SHA'
+        env:
+          RELEVANT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         with:
           githubPagesBranch: main
           archiHtmlReportEnabled: true
