@@ -53,9 +53,9 @@ jobs:
     name: Deploy Archi report HTML to GitHub Pages
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: main
 
       - name: Deploy Archi report
         id: archi
