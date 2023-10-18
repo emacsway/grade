@@ -55,7 +55,7 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v3
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Deploy Archi report
         id: archi
