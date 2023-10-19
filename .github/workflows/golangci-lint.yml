@@ -63,10 +63,7 @@ jobs:
       - name: Deploy Archi report
         id: archi
         uses: WoozyMasta/archimate-ci-image@5.0.2-1.0.4
-        env:
-          GITHAB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         with:
-          githubPagesBranch: main
           archiHtmlReportEnabled: true
           archiJasperReportEnabled: true
           archiJasperReportFormats: PDF,DOCX
