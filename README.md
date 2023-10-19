@@ -164,6 +164,6 @@ Event Storming диаграмму можно посмотреть [здесь](h
 ## Другие похожие проекты
 
 - [Golang DDD ES/CQRS Reference Application](https://github.com/EventStore/training-advanced-go) by EventStore contributors
-- [go-iddd - showcase project for implementing DDD in Go](https://github.com/AntonStoeckl/go-iddd) by Anton Stöckl (see more info [here](https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-1-292938c0a4d4) and [here](https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-2-efd432505554>`__) 
+- [go-iddd - showcase project for implementing DDD in Go](https://github.com/AntonStoeckl/go-iddd) by Anton Stöckl (see more info [here](https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-1-292938c0a4d4) and [here](https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-2-efd432505554>`__))
 - [Complete serverless application to show how to apply DDD, Clean Architecture, and CQRS by practical refactoring of a Go project](https://github.com/ThreeDotsLabs/wild-workouts-go-ddd-example) ([more info](https://threedots.tech/post/serverless-cloud-run-firebase-modern-go-application/)) by Robert Laszczak
 - [Clean Monolith Shop](https://github.com/ThreeDotsLabs/monolith-microservice-shop) by Robert Laszczak - Source code for article "[Why using Microservices or Monolith can be just a detail?](https://threedots.tech/post/microservices-or-monolith-its-detail/)"
