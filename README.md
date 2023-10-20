@@ -116,7 +116,7 @@ Specification Pattern с применением Abstract [Expression Tree](https
 
 Заложена (но до конца не продемонстрирована) возможность просмотра коллекций сущностей внутри агрегата и поиск удовлетворения условия хотя бы одним из элементов коллекции.
 
-Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/specification.html)
+Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/specification.html).
 
 
 
@@ -126,7 +126,27 @@ Specification Pattern с применением Abstract [Expression Tree](https
 
 - [Endorser.Export()](./grade/internal/domain/endorser/endorser.go)
 
-Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/domain/aggregate-encapsulation.html)
+Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/domain/aggregate-encapsulation.html).
+
+
+### Непрерывность автоинкрементальных первичных ключей внутри тенанта
+
+Решена проблема разряженности списка автоинкрементальных первичных ключей внутри тенанта, путем [обеспечения их непрерывности](https://github.com/emacsway/grade/blob/main/grade/internal/infrastructure/sql/init.sql).
+
+
+### Композитные первичные ключи
+
+При шардировании важно попадать в нужную партицию при запросе по первичному ключу, и здесь хорошо выручают [композитные первичные ключи](https://github.com/emacsway/grade/blob/main/grade/internal/domain/member/values/tenant_member_id.go).
+
+
+### Пакетирование SQL-запросов без ORM
+
+RDBMS устроена немного по другому, нежели агрегато-(документо-)ориентированные хранилища на LSM-tree, - чем больше записей сохраняется за один коммит, тем лучше Performance.
+Главное, чтоб не страдал уровень параллелизма, не возникали ожидания и взаимные блокировки.
+А как сказал Nick Tune, на операциях Insert взаимные блокировки и ожидания впринципе невозможны, и такие запросы можно пакетировать, что обычно в ORM выполняет UoW.
+В данном проекте [продемонстрировано, как этого можно достигнуть без ORM](https://github.com/emacsway/grade/tree/main/grade/internal/infrastructure/repositories/seedwork/batch), а заодно и решить проблему N+1 при загрузке агрегатов из БД.
+
+Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/tactical-design/domain-model/domain-events/domain-events-in-ddd.html#performance).
 
 
 ## Документация
@@ -140,3 +160,10 @@ Event Storming диаграмму можно посмотреть [здесь](h
 
 Присоединиться к разработке: https://t.me/emacsway
 
+
+## Другие похожие проекты
+
+- [Golang DDD ES/CQRS Reference Application](https://github.com/EventStore/training-advanced-go) by EventStore contributors
+- [go-iddd - showcase project for implementing DDD in Go](https://github.com/AntonStoeckl/go-iddd) by Anton Stöckl (see more info [here](https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-1-292938c0a4d4) and [here](https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-2-efd432505554>`__))
+- [Complete serverless application to show how to apply DDD, Clean Architecture, and CQRS by practical refactoring of a Go project](https://github.com/ThreeDotsLabs/wild-workouts-go-ddd-example) ([more info](https://threedots.tech/post/serverless-cloud-run-firebase-modern-go-application/)) by Robert Laszczak
+- [Clean Monolith Shop](https://github.com/ThreeDotsLabs/monolith-microservice-shop) by Robert Laszczak - Source code for article "[Why using Microservices or Monolith can be just a detail?](https://threedots.tech/post/microservices-or-monolith-its-detail/)"
