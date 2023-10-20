@@ -1,17 +1,15 @@
 name: golangci-lint
-
 on:
   push:
     tags:
       - v*
-    branches: [ "main" ]
+    branches:
+      - '**'
   pull_request:
-    branches: [ "main" ]
-    permissions:
-      contents: read
-      # Optional: allow read access to pull request. Use with `only-new-issues` option.
-      # pull-requests: read
-
+permissions:
+  contents: read
+  # Optional: allow read access to pull request. Use with `only-new-issues` option.
+  # pull-requests: read
 jobs:
   golangci:
     name: lint
@@ -54,16 +52,11 @@ jobs:
     name: Deploy Archi report HTML to GitHub Pages
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v4
-        env:
-          GITHAB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        with:
-          ref: main
+        uses: actions/checkout@v2
 
       - name: Deploy Archi report
         id: archi
         uses: WoozyMasta/archimate-ci-image@5.0.2-1.0.4
-        if: github.ref == 'refs/heads/main'
         with:
           archiHtmlReportEnabled: true
           archiJasperReportEnabled: true
