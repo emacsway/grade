@@ -116,7 +116,7 @@ Specification Pattern с применением Abstract [Expression Tree](https
 
 Заложена (но до конца не продемонстрирована) возможность просмотра коллекций сущностей внутри агрегата и поиск удовлетворения условия хотя бы одним из элементов коллекции.
 
-Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/specification.html).
+Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/grade/domain/specification.html).
 
 
 
