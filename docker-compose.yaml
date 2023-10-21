@@ -21,6 +21,7 @@ services:
   db-grade:
     container_name: db-grade
     image: postgres:15.3
+    working_dir: /app
     environment:
       POSTGRES_DB: "${DB_DATABASE}"
       POSTGRES_USER: "${DB_USERNAME}"

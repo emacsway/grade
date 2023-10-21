@@ -1,5 +1,5 @@
 # Развертывание проекта с помощью Docker
-1. Склонировав проект, нужно создать файл `.env` в корневой директории проекта
+1. Склонировав проект, нужно создать файл `.env` в корневой директории проекта, скопировать из `.env.example` параметры и установить новые значения (если требуется)
 2. Далее, из этой же корневой директории нужно выполнить ```docker compose build```  
 ![Alt text](readme_images/docker_readme/docker-compose-build-exmpl.png)  
 3. Если все успешно, то будет собран образ:
@@ -14,7 +14,7 @@
 ![Alt text](readme_images/docker_readme/db-grade-container-exmpl.png)   
 7. В данном контейнере выполнить `bash`  
 ![Alt text](readme_images/docker_readme/db-grade-bash-cmd-exmpl.png)  
-- и перейти в директорию в `app` - `cd app`  
+- и перейти в директорию в `app` - `cd app` (по умолчанию откроется сразу данная директория, но лучше убедиться) 
 8. После в этом же контейнере и директории `app` выполнить команду ```psql -U devel -p 5432 -d devel_grade < ./grade/internal/infrastructure/sql/init.sql```  
 ![Alt text](readme_images/docker_readme/db-grade-init-sql-exmpl.png)  
 - если все успешно, БД будет "поднята"
