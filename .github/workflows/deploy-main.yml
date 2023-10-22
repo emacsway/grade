@@ -1,0 +1,111 @@
+name: deploy-main
+
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - '**'
+  pull_request:
+
+permissions:
+  contents: read
+  # Optional: allow read access to pull request. Use with `only-new-issues` option.
+  # pull-requests: read
+
+jobs:
+
+  test:
+    runs-on: ubuntu-22.04
+    name: Execute tests
+    strategy:
+      matrix:
+        go-version: [ '1.18', '1.19', '1.20', '1.21.x' ]
+    services:
+      postgres:
+        image: postgres:12
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: devel
+          POSTGRES_PASSWORD: devel
+          POSTGRES_DB: grade
+        options: >-
+          --health-cmd pg_isready --health-interval 10s
+          --health-timeout 5s --health-retries 5
+    
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe
+        with:
+          go-version: ${{ matrix.go-version }}
+          
+      - name: Run migrations
+        run: psql -f grade/internal/infrastructure/sql/init.sql postgres://devel:devel@localhost:5432/grade
+      
+      - name: Run tests
+        run: go test -v ./...
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_DATABASE: grade
+          DB_USERNAME: devel
+          DB_PASSWORD: devel
+
+  golangci:
+    name: lint
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe
+      with:
+        go-version: 1.18
+    - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+    - name: golangci-lint
+      uses: golangci/golangci-lint-action@3a919529898de77ec3da873e3063ca4b10e7f5cc
+      with:
+        # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
+        version: v1.47.2
+
+        # Optional: working directory, useful for monorepos
+        # working-directory: somedir
+
+        # Optional: golangci-lint command line arguments.
+        # args: --issues-exit-code=0
+
+        # Optional: show only new issues if it's a pull request. The default value is `false`.
+        # only-new-issues: true
+
+        # Optional: if set to true then the all caching functionality will be complete disabled,
+        #           takes precedence over all other caching options.
+        # skip-cache: true
+
+        # Optional: if set to true then the action don't cache or restore ~/go/pkg.
+        # skip-pkg-cache: true
+
+        # Optional: if set to true then the action don't cache or restore ~/.cache/go-build.
+        # skip-build-cache: true
+  
+  archi_report:
+    permissions:
+      contents: write
+      pages: write
+    runs-on: ubuntu-22.04
+    name: Deploy Archi report HTML to GitHub Pages
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+
+      - name: Deploy Archi report
+        if: github.ref == 'refs/heads/main'
+        id: archi
+        uses: WoozyMasta/archimate-ci-image@646968862acc3ef20f268163da76a379420b2422
+        with:
+          archiHtmlReportEnabled: true
+          archiJasperReportEnabled: true
+          archiJasperReportFormats: PDF,DOCX
+          archiCsvReportEnabled: false
+          archiExportModelEnabled: true
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
