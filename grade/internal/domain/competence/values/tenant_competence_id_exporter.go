@@ -5,22 +5,22 @@ import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
-func NewTenantCompetenceIdExporter(tenantId, competenceId uint) TenantCompetenceIdExporter {
+func NewTenantCompetenceIdExporter(tenantId, competenceInTenantId uint) TenantCompetenceIdExporter {
 	return TenantCompetenceIdExporter{
-		TenantId:     exporters.UintExporter(tenantId),
-		CompetenceId: exporters.UintExporter(competenceId),
+		TenantId:             exporters.UintExporter(tenantId),
+		CompetenceInTenantId: exporters.UintExporter(competenceInTenantId),
 	}
 }
 
 type TenantCompetenceIdExporter struct {
-	TenantId     exporters.UintExporter
-	CompetenceId exporters.UintExporter
+	TenantId             exporters.UintExporter
+	CompetenceInTenantId exporters.UintExporter
 }
 
 func (ex *TenantCompetenceIdExporter) SetTenantId(val tenant.TenantId) {
 	val.Export(&ex.TenantId)
 }
 
-func (ex *TenantCompetenceIdExporter) SetCompetenceId(val CompetenceId) {
-	val.Export(&ex.CompetenceId)
+func (ex *TenantCompetenceIdExporter) SetCompetenceInTenantId(val CompetenceInTenantId) {
+	val.Export(&ex.CompetenceInTenantId)
 }

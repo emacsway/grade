@@ -29,7 +29,7 @@ func TestArtifactExport(t *testing.T) {
 		CompetenceIds: []competence.TenantCompetenceIdExporter{
 			competence.NewTenantCompetenceIdExporter(
 				f.CompetenceIds[0].TenantId,
-				f.CompetenceIds[0].CompetenceId,
+				f.CompetenceIds[0].CompetenceInTenantId,
 			),
 		},
 		OwnerId:   member.NewTenantMemberIdExporter(f.OwnerId.TenantId, f.OwnerId.MemberId),

@@ -21,13 +21,13 @@ func (q CompetenceGetQuery) sql() string {
 func (q CompetenceGetQuery) params() []any {
 	var idExp competenceVal.TenantCompetenceIdExporter
 	q.Id.Export(&idExp)
-	return []any{idExp.TenantId, idExp.CompetenceId}
+	return []any{idExp.TenantId, idExp.CompetenceInTenantId}
 }
 
 func (q *CompetenceGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (*competence.Competence, error) {
 	rec := &competence.CompetenceReconstitutor{}
 	err := s.QueryRow(q.sql(), q.params()...).Scan(
-		&rec.Id.TenantId, &rec.Id.CompetenceId, &rec.Name, &rec.OwnerId.MemberId,
+		&rec.Id.TenantId, &rec.Id.CompetenceInTenantId, &rec.Name, &rec.OwnerId.MemberId,
 		&rec.CreatedAt, &rec.Version,
 	)
 	// TODO: Find the right place???

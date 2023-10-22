@@ -31,7 +31,7 @@ func (q *NameUpdatedQuery) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *NameUpdatedQuery) SetCompetenceId(val values.CompetenceId) {
+func (q *NameUpdatedQuery) SetCompetenceInTenantId(val values.CompetenceInTenantId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v

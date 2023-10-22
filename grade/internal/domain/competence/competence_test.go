@@ -20,7 +20,7 @@ func TestCompetenceExport(t *testing.T) {
 	}
 	agg.Export(&actualExporter)
 	assert.Equal(t, CompetenceExporter{
-		Id:        values.NewTenantCompetenceIdExporter(f.Id.TenantId, f.Id.CompetenceId),
+		Id:        values.NewTenantCompetenceIdExporter(f.Id.TenantId, f.Id.CompetenceInTenantId),
 		Name:      exporters.StringExporter(f.Name),
 		OwnerId:   member.NewTenantMemberIdExporter(f.OwnerId.TenantId, f.OwnerId.MemberId),
 		CreatedAt: f.CreatedAt,

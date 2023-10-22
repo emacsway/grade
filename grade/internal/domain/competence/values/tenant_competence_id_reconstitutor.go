@@ -1,10 +1,10 @@
 package values
 
 type TenantCompetenceIdReconstitutor struct {
-	TenantId     uint
-	CompetenceId uint
+	TenantId             uint
+	CompetenceInTenantId uint
 }
 
 func (r TenantCompetenceIdReconstitutor) Reconstitute() (TenantCompetenceId, error) {
-	return NewTenantCompetenceId(r.TenantId, r.CompetenceId)
+	return NewTenantCompetenceId(r.TenantId, r.CompetenceInTenantId)
 }

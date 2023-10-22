@@ -49,7 +49,7 @@ func (q *NameUpdatedQueryWithLock) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *NameUpdatedQueryWithLock) SetCompetenceId(val values.CompetenceId) {
+func (q *NameUpdatedQueryWithLock) SetCompetenceInTenantId(val values.CompetenceInTenantId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v

@@ -20,7 +20,7 @@ func WithTenantId(tenantId uint) CompetenceFakerOption {
 
 func WithTransientId() CompetenceFakerOption {
 	return func(f *CompetenceFaker) {
-		f.Id.CompetenceId = 0
+		f.Id.CompetenceInTenantId = 0
 	}
 }
 
@@ -68,7 +68,7 @@ func (f *CompetenceFaker) fake() {
 
 func (f *CompetenceFaker) Next() error {
 	f.fake()
-	f.Id.CompetenceId += 1
+	f.Id.CompetenceInTenantId += 1
 	f.agg = nil
 	return nil
 }
@@ -102,7 +102,7 @@ func (f *CompetenceFaker) Create() (*Competence, error) {
 		return nil, err
 	}
 	agg.Export(&aggExp)
-	f.Id.CompetenceId = uint(aggExp.Id.CompetenceId)
+	f.Id.CompetenceInTenantId = uint(aggExp.Id.CompetenceInTenantId)
 	f.agg = agg
 	return agg, nil
 }

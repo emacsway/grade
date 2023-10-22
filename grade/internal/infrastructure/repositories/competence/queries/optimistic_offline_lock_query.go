@@ -33,7 +33,7 @@ func (q *OptimisticOfflineLockLockQuery) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *OptimisticOfflineLockLockQuery) SetCompetenceId(val values.CompetenceId) {
+func (q *OptimisticOfflineLockLockQuery) SetCompetenceInTenantId(val values.CompetenceInTenantId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v

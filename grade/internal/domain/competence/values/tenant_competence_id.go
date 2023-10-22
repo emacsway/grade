@@ -5,32 +5,32 @@ import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
-func NewTenantCompetenceId(tenantId, competenceId uint) (TenantCompetenceId, error) {
+func NewTenantCompetenceId(tenantId, competenceInTenantId uint) (TenantCompetenceId, error) {
 	tId, err := tenant.NewTenantId(tenantId)
 	if err != nil {
 		return TenantCompetenceId{}, err
 	}
-	mId, err := NewCompetenceId(competenceId)
+	mId, err := NewCompetenceInTenantId(competenceInTenantId)
 	if err != nil {
 		return TenantCompetenceId{}, err
 	}
 	return TenantCompetenceId{
-		tenantId:     tId,
-		competenceId: mId,
+		tenantId:             tId,
+		competenceInTenantId: mId,
 	}, nil
 }
 
 type TenantCompetenceId struct {
-	tenantId     tenant.TenantId
-	competenceId CompetenceId
+	tenantId             tenant.TenantId
+	competenceInTenantId CompetenceInTenantId
 }
 
 func (cid TenantCompetenceId) TenantId() tenant.TenantId {
 	return cid.tenantId
 }
 
-func (cid TenantCompetenceId) CompetenceId() CompetenceId {
-	return cid.competenceId
+func (cid TenantCompetenceId) CompetenceInTenantId() CompetenceInTenantId {
+	return cid.competenceInTenantId
 }
 
 func (cid TenantCompetenceId) Equal(other specification.EqualOperand) bool {
@@ -38,15 +38,15 @@ func (cid TenantCompetenceId) Equal(other specification.EqualOperand) bool {
 	if !ok {
 		return false
 	}
-	return cid.tenantId.Equal(otherTyped.TenantId()) && cid.competenceId.Equal(otherTyped.CompetenceId())
+	return cid.tenantId.Equal(otherTyped.TenantId()) && cid.competenceInTenantId.Equal(otherTyped.CompetenceInTenantId())
 }
 
 func (cid TenantCompetenceId) Export(ex TenantCompetenceIdExporterSetter) {
 	ex.SetTenantId(cid.tenantId)
-	ex.SetCompetenceId(cid.competenceId)
+	ex.SetCompetenceInTenantId(cid.competenceInTenantId)
 }
 
 type TenantCompetenceIdExporterSetter interface {
 	SetTenantId(tenant.TenantId)
-	SetCompetenceId(CompetenceId)
+	SetCompetenceInTenantId(CompetenceInTenantId)
 }

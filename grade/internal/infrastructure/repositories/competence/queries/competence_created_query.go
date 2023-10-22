@@ -34,7 +34,7 @@ func (q *CompetenceCreatedQuery) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *CompetenceCreatedQuery) SetCompetenceId(val values.CompetenceId) {
+func (q *CompetenceCreatedQuery) SetCompetenceInTenantId(val values.CompetenceInTenantId) {
 	q.pkSetter = val.Scan
 }
 

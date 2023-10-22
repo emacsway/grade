@@ -4,14 +4,14 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
 )
 
-func NewCompetenceId(value uint) (CompetenceId, error) {
+func NewCompetenceInTenantId(value uint) (CompetenceInTenantId, error) {
 	id, err := identity.NewIntIdentity(value)
 	if err != nil {
-		return CompetenceId{}, err
+		return CompetenceInTenantId{}, err
 	}
-	return CompetenceId{&id}, nil
+	return CompetenceInTenantId{&id}, nil
 }
 
-type CompetenceId struct {
+type CompetenceInTenantId struct {
 	*identity.IntIdentity
 }

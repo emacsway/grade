@@ -6,16 +6,16 @@ import (
 
 func NewTenantCompetenceIdFaker() TenantCompetenceIdFaker {
 	return TenantCompetenceIdFaker{
-		TenantId:     tenant.TenantIdFakeValue,
-		CompetenceId: uint(3),
+		TenantId:             tenant.TenantIdFakeValue,
+		CompetenceInTenantId: uint(3),
 	}
 }
 
 type TenantCompetenceIdFaker struct {
-	TenantId     uint
-	CompetenceId uint
+	TenantId             uint
+	CompetenceInTenantId uint
 }
 
 func (f TenantCompetenceIdFaker) Create() (TenantCompetenceId, error) {
-	return NewTenantCompetenceId(f.TenantId, f.CompetenceId)
+	return NewTenantCompetenceId(f.TenantId, f.CompetenceInTenantId)
 }

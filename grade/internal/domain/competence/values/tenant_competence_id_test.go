@@ -15,11 +15,11 @@ func TestTenantCompetenceIdEqual(t *testing.T) {
 	t2 := uint(11)
 	m2 := uint(4)
 	cases := []struct {
-		TenantId          uint
-		CompetenceId      uint
-		OtherTenantId     uint
-		OtherCompetenceId uint
-		ExpectedResult    bool
+		TenantId                  uint
+		CompetenceInTenantId      uint
+		OtherTenantId             uint
+		OtherCompetenceInTenantId uint
+		ExpectedResult            bool
 	}{
 		{t1, m2, t1, m2, true},
 		{t1, m1, t1, m2, false},
@@ -29,12 +29,12 @@ func TestTenantCompetenceIdEqual(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			id, err := NewTenantCompetenceId(c.TenantId, c.CompetenceId)
+			id, err := NewTenantCompetenceId(c.TenantId, c.CompetenceInTenantId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
 			}
-			otherId, err := NewTenantCompetenceId(c.OtherTenantId, c.OtherCompetenceId)
+			otherId, err := NewTenantCompetenceId(c.OtherTenantId, c.OtherCompetenceInTenantId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -55,7 +55,7 @@ func TestEndorserExport(t *testing.T) {
 	}
 	cid.Export(&actualExporter)
 	assert.Equal(t, TenantCompetenceIdExporter{
-		TenantId:     exporters.UintExporter(f.TenantId),
-		CompetenceId: exporters.UintExporter(f.CompetenceId),
+		TenantId:             exporters.UintExporter(f.TenantId),
+		CompetenceInTenantId: exporters.UintExporter(f.CompetenceInTenantId),
 	}, actualExporter)
 }

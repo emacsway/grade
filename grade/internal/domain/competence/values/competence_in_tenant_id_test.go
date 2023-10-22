@@ -6,9 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCompetenceIdConstructor(t *testing.T) {
+func TestCompetenceInTenantIdConstructor(t *testing.T) {
 	val := uint(3)
-	id, err := NewCompetenceId(val)
+	id, err := NewCompetenceInTenantId(val)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()

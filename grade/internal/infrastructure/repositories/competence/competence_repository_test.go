@@ -68,7 +68,7 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	err = repositoryOption.Repository.Insert(agg)
 	require.NoError(t, err)
 	agg.Export(&exporterActual)
-	assert.Greater(t, int(exporterActual.Id.CompetenceId), 0)
+	assert.Greater(t, int(exporterActual.Id.CompetenceInTenantId), 0)
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
@@ -82,11 +82,11 @@ func testGet(t *testing.T, repositoryOption RepositoryOption) {
 	agg, err := factory.Create()
 	require.NoError(t, err)
 	agg.Export(&exporterActual)
-	assert.Greater(t, int(exporterActual.Id.CompetenceId), 0)
+	assert.Greater(t, int(exporterActual.Id.CompetenceInTenantId), 0)
 
 	id, err := competenceVal.NewTenantCompetenceId(
 		uint(exporterActual.Id.TenantId),
-		uint(exporterActual.Id.CompetenceId),
+		uint(exporterActual.Id.CompetenceInTenantId),
 	)
 	require.NoError(t, err)
 	aggRead, err := repositoryOption.Repository.Get(id)
