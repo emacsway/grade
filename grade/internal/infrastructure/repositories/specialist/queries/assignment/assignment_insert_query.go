@@ -1,0 +1,54 @@
+package endorsement
+
+import (
+	"time"
+
+	"github.com/emacsway/grade/grade/internal/domain/grade"
+	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	gradeVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
+	"github.com/emacsway/grade/grade/internal/infrastructure"
+)
+
+type AssignmentInsertQuery struct {
+	params [6]any
+}
+
+func (q AssignmentInsertQuery) sql() string {
+	return `
+		INSERT INTO assignment (
+			tenant_id, specialist_id, specialist_version, assigned_grade, reason, created_at
+		) VALUES ($1, $2, $3, $4, $5, $6)
+		ON CONFLICT DO NOTHING`
+}
+
+func (q *AssignmentInsertQuery) SetSpecialistId(val memberVal.TenantMemberId) {
+	var v memberVal.TenantMemberIdExporter
+	val.Export(&v)
+	q.params[0] = v.TenantId
+	q.params[1] = v.MemberId
+}
+
+func (q *AssignmentInsertQuery) SetSpecialistVersion(val uint) {
+	q.params[2] = val
+}
+
+func (q *AssignmentInsertQuery) SetAssignedGrade(val grade.Grade) {
+	var v exporters.Uint8Exporter
+	val.Export(&v)
+	q.params[3] = v
+}
+
+func (q *AssignmentInsertQuery) SetReason(val gradeVal.Reason) {
+	var v exporters.StringExporter
+	val.Export(&v)
+	q.params[4] = v
+}
+
+func (q *AssignmentInsertQuery) SetCreatedAt(val time.Time) {
+	q.params[5] = val
+}
+
+func (q *AssignmentInsertQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+	return s.Exec(q.sql(), q.params[:]...)
+}

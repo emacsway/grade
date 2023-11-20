@@ -197,11 +197,11 @@ CREATE TABLE endorsement (
 CREATE TABLE assignment (
     tenant_id integer NOT NULL,
     specialist_id bigint NOT NULL,
+    specialist_version integer NOT NULL,
     assigned_grade smallint NOT NULL DEFAULT 0,
     reason text NOT NULL,
     created_at timestamp with time zone NOT NULL,
-    version integer NOT NULL,
     FOREIGN KEY (tenant_id, specialist_id) REFERENCES specialist (tenant_id, member_id) ON DELETE CASCADE,
-    CONSTRAINT assignment_pk PRIMARY KEY (tenant_id, specialist_id, version)
+    CONSTRAINT assignment_pk PRIMARY KEY (tenant_id, specialist_id, specialist_version)
 );
 
