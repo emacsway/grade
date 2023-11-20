@@ -136,7 +136,7 @@ Specification Pattern с применением Abstract [Expression Tree](https
 
 ### Композитные первичные ключи
 
-При шардировании важно попадать в нужную партицию при запросе по первичному ключу, и здесь хорошо выручают [композитные первичные ключи](https://github.com/emacsway/grade/blob/main/grade/internal/domain/member/values/tenant_member_id.go).
+При шардировании важно попадать в нужную партицию при запросе по первичному ключу, и здесь хорошо выручают [композитные первичные ключи](https://github.com/emacsway/grade/blob/main/grade/internal/domain/member/values/member_id.go).
 
 
 ### Пакетирование SQL-запросов без ORM
