@@ -6,6 +6,13 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
+func NewQueryCollector() *QueryCollector {
+	r := &QueryCollector{
+		multiQueryMap: make(map[string]MultiQuerier),
+	}
+	return r
+}
+
 type MultiQuerier interface {
 	infrastructure.QueryEvaluator
 	infrastructure.DeferredDbSessionExecutor
