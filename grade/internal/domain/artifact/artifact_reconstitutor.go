@@ -31,7 +31,7 @@ func (r ArtifactReconstitutor) Reconstitute() (agg *Artifact, err error) {
 // To load events use anArtifact.eventSourced.LoadFrom(pastEvents []PersistentDomainEvent)
 
 type ArtifactSnapshotReconstitutor struct {
-	Id            values.TenantArtifactIdReconstitutor
+	Id            values.ArtifactIdReconstitutor
 	Status        uint8
 	Name          string
 	Description   string

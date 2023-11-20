@@ -16,7 +16,7 @@ func NewEndorsementFaker() EndorsementFaker {
 		SpecialistId:      member.NewMemberIdFaker(),
 		SpecialistGrade:   1,
 		SpecialistVersion: 5,
-		ArtifactId:        artifact.NewTenantArtifactIdFaker(),
+		ArtifactId:        artifact.NewArtifactIdFaker(),
 		EndorserId:        endorserIdFactory,
 		EndorserGrade:     2,
 		EndorserVersion:   3,
@@ -28,7 +28,7 @@ type EndorsementFaker struct {
 	SpecialistId      member.MemberIdFaker
 	SpecialistGrade   uint8
 	SpecialistVersion uint
-	ArtifactId        artifact.TenantArtifactIdFaker
+	ArtifactId        artifact.ArtifactIdFaker
 	EndorserId        member.MemberIdFaker
 	EndorserGrade     uint8
 	EndorserVersion   uint

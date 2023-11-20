@@ -21,7 +21,7 @@ func TestArtifactExport(t *testing.T) {
 	}
 	agg.Export(&actualExporter)
 	assert.Equal(t, ArtifactExporter{
-		Id:          values.NewTenantArtifactIdExporter(f.Id.TenantId, f.Id.ArtifactId),
+		Id:          values.NewArtifactIdExporter(f.Id.TenantId, f.Id.ArtifactId),
 		Status:      exporters.Uint8Exporter(f.Status),
 		Name:        exporters.StringExporter(f.Name),
 		Description: exporters.StringExporter(f.Description),

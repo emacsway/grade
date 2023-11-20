@@ -16,12 +16,12 @@ type ArtifactProposedQuery struct {
 	payload ArtifactProposedPayload
 }
 
-func (q *ArtifactProposedQuery) SetId(val values.TenantArtifactId) {
+func (q *ArtifactProposedQuery) SetId(val values.ArtifactId) {
 	val.Export(&q.payload.Id)
 	val.Export(q)
 }
 
-func (q *ArtifactProposedQuery) SetArtifactId(val values.ArtifactId) {
+func (q *ArtifactProposedQuery) SetArtifactId(val values.InternalArtifactId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.SetStreamId(v.String())
@@ -62,7 +62,7 @@ func (q *ArtifactProposedQuery) Evaluate(s infrastructure.DbSession) (infrastruc
 }
 
 type ArtifactProposedPayload struct {
-	Id            values.TenantArtifactIdExporter // Remove?
+	Id            values.ArtifactIdExporter // Remove?
 	Status        exporters.Uint8Exporter
 	Name          exporters.StringExporter
 	Description   exporters.StringExporter

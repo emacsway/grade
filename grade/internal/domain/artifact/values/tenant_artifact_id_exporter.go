@@ -5,22 +5,22 @@ import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
-func NewTenantArtifactIdExporter(tenantId, artifactId uint) TenantArtifactIdExporter {
-	return TenantArtifactIdExporter{
+func NewArtifactIdExporter(tenantId, artifactId uint) ArtifactIdExporter {
+	return ArtifactIdExporter{
 		TenantId:   exporters.UintExporter(tenantId),
 		ArtifactId: exporters.UintExporter(artifactId),
 	}
 }
 
-type TenantArtifactIdExporter struct {
+type ArtifactIdExporter struct {
 	TenantId   exporters.UintExporter
 	ArtifactId exporters.UintExporter
 }
 
-func (ex *TenantArtifactIdExporter) SetTenantId(val tenant.TenantId) {
+func (ex *ArtifactIdExporter) SetTenantId(val tenant.TenantId) {
 	val.Export(&ex.TenantId)
 }
 
-func (ex *TenantArtifactIdExporter) SetArtifactId(val ArtifactId) {
+func (ex *ArtifactIdExporter) SetArtifactId(val InternalArtifactId) {
 	val.Export(&ex.ArtifactId)
 }

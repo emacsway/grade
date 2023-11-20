@@ -11,7 +11,7 @@ import (
 )
 
 func NewArtifact(
-	id values.TenantArtifactId,
+	id values.ArtifactId,
 	status values.Status,
 	name values.Name,
 	description values.Description,
@@ -46,7 +46,7 @@ func NewArtifact(
 
 // Artifact is a good candidate for EventSourcing
 type Artifact struct {
-	id            values.TenantArtifactId
+	id            values.ArtifactId
 	status        values.Status
 	name          values.Name
 	description   values.Description
@@ -58,7 +58,7 @@ type Artifact struct {
 	eventSourced  aggregate.EventSourcedAggregate[aggregate.PersistentDomainEvent]
 }
 
-func (a Artifact) Id() values.TenantArtifactId {
+func (a Artifact) Id() values.ArtifactId {
 	return a.id
 }
 
@@ -122,7 +122,7 @@ func (a *Artifact) onArtifactProposed(e aggregate.PersistentDomainEvent) {
 }
 
 type ArtifactExporterSetter interface {
-	SetId(id values.TenantArtifactId)
+	SetId(id values.ArtifactId)
 	SetStatus(values.Status)
 	SetName(values.Name)
 	SetDescription(values.Description)

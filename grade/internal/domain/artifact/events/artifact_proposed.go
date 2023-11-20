@@ -10,7 +10,7 @@ import (
 )
 
 func NewArtifactProposed(
-	id values.TenantArtifactId,
+	id values.ArtifactId,
 	status values.Status,
 	name values.Name,
 	description values.Description,
@@ -34,7 +34,7 @@ func NewArtifactProposed(
 }
 
 type ArtifactProposed struct {
-	id               values.TenantArtifactId
+	id               values.ArtifactId
 	status           values.Status
 	name             values.Name
 	description      values.Description
@@ -47,7 +47,7 @@ type ArtifactProposed struct {
 	eventMeta        aggregate.EventMeta
 }
 
-func (e ArtifactProposed) Id() values.TenantArtifactId {
+func (e ArtifactProposed) Id() values.ArtifactId {
 	return e.id
 }
 
@@ -131,7 +131,7 @@ func (e ArtifactProposed) Export(ex ArtifactProposedExporterSetter) {
 
 type ArtifactProposedExporterSetter interface {
 	aggregate.PersistentDomainEventExporterSetter
-	SetId(id values.TenantArtifactId)
+	SetId(id values.ArtifactId)
 	SetStatus(values.Status)
 	SetName(values.Name)
 	SetDescription(values.Description)

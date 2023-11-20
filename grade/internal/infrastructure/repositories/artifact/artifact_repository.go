@@ -27,7 +27,7 @@ func (r *ArtifactRepository) Insert(agg *artifact.Artifact, eventMeta aggregate.
 	return r.eventStore.Save(agg, eventMeta)
 }
 
-func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.TenantArtifactId, error) {
+func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.ArtifactId, error) {
 	q := queries.ArtifactNextIdGetQuery{TenantId: tenantId}
 	return q.Get(r.session)
 }

@@ -55,7 +55,7 @@ func WithCompetenceFaker(competenceFaker *competence.CompetenceFaker) ArtifactFa
 
 func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 	f := &ArtifactFaker{
-		Id:              values.NewTenantArtifactIdFaker(),
+		Id:              values.NewArtifactIdFaker(),
 		CompetenceIds:   []competenceVal.CompetenceIdFaker{competenceVal.NewCompetenceIdFaker()},
 		AuthorIds:       []memberVal.MemberIdFaker{},
 		OwnerId:         memberVal.NewMemberIdFaker(),
@@ -74,7 +74,7 @@ func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 }
 
 type ArtifactFaker struct {
-	Id              values.TenantArtifactIdFaker
+	Id              values.ArtifactIdFaker
 	Status          values.Status
 	Name            string
 	Description     string
@@ -110,7 +110,7 @@ func (f *ArtifactFaker) Next() error {
 }
 
 func (f *ArtifactFaker) advanceId() error {
-	var idExp values.TenantArtifactIdExporter
+	var idExp values.ArtifactIdExporter
 	tenantId, err := tenantVal.NewTenantId(f.Id.TenantId)
 	if err != nil {
 		return err
@@ -225,18 +225,18 @@ func (f *ArtifactFaker) BuildDependencies() (err error) {
 
 type ArtifactRepository interface {
 	Insert(*Artifact, aggregate.EventMeta) error
-	NextId(tenantVal.TenantId) (values.TenantArtifactId, error)
+	NextId(tenantVal.TenantId) (values.ArtifactId, error)
 }
 
 type ArtifactDummyRepository struct {
-	IdFaker *values.TenantArtifactIdFaker
+	IdFaker *values.ArtifactIdFaker
 }
 
 func (r ArtifactDummyRepository) Insert(agg *Artifact, eventMeta aggregate.EventMeta) error {
 	return nil
 }
 
-func (r *ArtifactDummyRepository) NextId(tenantId tenantVal.TenantId) (values.TenantArtifactId, error) {
+func (r *ArtifactDummyRepository) NextId(tenantId tenantVal.TenantId) (values.ArtifactId, error) {
 	var tenantIdExp exporters.UintExporter
 	tenantId.Export(&tenantIdExp)
 	r.IdFaker.TenantId = uint(tenantIdExp)

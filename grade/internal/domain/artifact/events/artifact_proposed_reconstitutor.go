@@ -10,7 +10,7 @@ import (
 )
 
 type ArtifactProposedReconstitutor struct {
-	Id               values.TenantArtifactIdReconstitutor
+	Id               values.ArtifactIdReconstitutor
 	Status           uint8
 	Name             string
 	Description      string

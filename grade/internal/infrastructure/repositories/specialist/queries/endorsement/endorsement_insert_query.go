@@ -40,8 +40,8 @@ func (q *EndorsementInsertQuery) SetSpecialistVersion(val uint) {
 	q.params[3] = val
 }
 
-func (q *EndorsementInsertQuery) SetArtifactId(val artifactVal.TenantArtifactId) {
-	var v artifactVal.TenantArtifactIdExporter
+func (q *EndorsementInsertQuery) SetArtifactId(val artifactVal.ArtifactId) {
+	var v artifactVal.ArtifactIdExporter
 	val.Export(&v)
 	q.params[4] = v.ArtifactId
 }

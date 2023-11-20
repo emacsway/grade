@@ -9,7 +9,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 )
 
-func TestTenantArtifactIdEqual(t *testing.T) {
+func TestArtifactIdEqual(t *testing.T) {
 	t1 := uint(10)
 	m1 := uint(3)
 	t2 := uint(11)
@@ -29,12 +29,12 @@ func TestTenantArtifactIdEqual(t *testing.T) {
 	}
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
-			id, err := NewTenantArtifactId(c.TenantId, c.ArtifactId)
+			id, err := NewArtifactId(c.TenantId, c.ArtifactId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
 			}
-			otherId, err := NewTenantArtifactId(c.OtherTenantId, c.OtherArtifactId)
+			otherId, err := NewArtifactId(c.OtherTenantId, c.OtherArtifactId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -46,15 +46,15 @@ func TestTenantArtifactIdEqual(t *testing.T) {
 }
 
 func TestEndorserExport(t *testing.T) {
-	var actualExporter TenantArtifactIdExporter
-	f := NewTenantArtifactIdFaker()
+	var actualExporter ArtifactIdExporter
+	f := NewArtifactIdFaker()
 	cid, err := f.Create()
 	if err != nil {
 		t.Error(err)
 		t.FailNow()
 	}
 	cid.Export(&actualExporter)
-	assert.Equal(t, TenantArtifactIdExporter{
+	assert.Equal(t, ArtifactIdExporter{
 		TenantId:   exporters.UintExporter(f.TenantId),
 		ArtifactId: exporters.UintExporter(f.ArtifactId),
 	}, actualExporter)

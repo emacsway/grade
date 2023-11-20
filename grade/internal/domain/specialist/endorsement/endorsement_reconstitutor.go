@@ -12,7 +12,7 @@ type EndorsementReconstitutor struct {
 	SpecialistId      member.MemberIdReconstitutor
 	SpecialistGrade   uint8
 	SpecialistVersion uint
-	ArtifactId        artifact.TenantArtifactIdReconstitutor
+	ArtifactId        artifact.ArtifactIdReconstitutor
 	EndorserId        member.MemberIdReconstitutor
 	EndorserGrade     uint8
 	EndorserVersion   uint

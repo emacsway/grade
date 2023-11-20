@@ -38,7 +38,7 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 				t.FailNow()
 			}
 			f.ArtifactId.ArtifactId = c.ArtifactId
-			aId, err := artifact.NewTenantArtifactId(f.ArtifactId.TenantId, c.TestArtifactId)
+			aId, err := artifact.NewArtifactId(f.ArtifactId.TenantId, c.TestArtifactId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -84,7 +84,7 @@ func TestEndorsementExport(t *testing.T) {
 		SpecialistId:      member.NewMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
 		SpecialistGrade:   exporters.Uint8Exporter(f.SpecialistGrade),
 		SpecialistVersion: f.SpecialistVersion,
-		ArtifactId:        artifact.NewTenantArtifactIdExporter(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId),
+		ArtifactId:        artifact.NewArtifactIdExporter(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId),
 		EndorserId:        member.NewMemberIdExporter(f.EndorserId.TenantId, f.EndorserId.MemberId),
 		EndorserGrade:     exporters.Uint8Exporter(f.EndorserGrade),
 		EndorserVersion:   f.EndorserVersion,

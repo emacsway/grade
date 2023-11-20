@@ -41,7 +41,7 @@ func TestSpecialistExport(t *testing.T) {
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 0,
-				ArtifactId: artifact.NewTenantArtifactIdExporter(
+				ArtifactId: artifact.NewArtifactIdExporter(
 					sf.ReceivedEndorsements[0].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[0].Artifact.Id.ArtifactId,
 				),
@@ -54,7 +54,7 @@ func TestSpecialistExport(t *testing.T) {
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 1,
-				ArtifactId: artifact.NewTenantArtifactIdExporter(
+				ArtifactId: artifact.NewArtifactIdExporter(
 					sf.ReceivedEndorsements[1].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[1].Artifact.Id.ArtifactId,
 				),
@@ -67,7 +67,7 @@ func TestSpecialistExport(t *testing.T) {
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 2,
-				ArtifactId: artifact.NewTenantArtifactIdExporter(
+				ArtifactId: artifact.NewArtifactIdExporter(
 					sf.ReceivedEndorsements[2].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[2].Artifact.Id.ArtifactId,
 				),
@@ -80,7 +80,7 @@ func TestSpecialistExport(t *testing.T) {
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade + 1),
 				SpecialistVersion: 3,
-				ArtifactId: artifact.NewTenantArtifactIdExporter(
+				ArtifactId: artifact.NewArtifactIdExporter(
 					sf.ReceivedEndorsements[3].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[3].Artifact.Id.ArtifactId,
 				),

@@ -1,10 +1,10 @@
 package values
 
-type TenantArtifactIdReconstitutor struct {
+type ArtifactIdReconstitutor struct {
 	TenantId   uint
 	ArtifactId uint
 }
 
-func (r TenantArtifactIdReconstitutor) Reconstitute() (TenantArtifactId, error) {
-	return NewTenantArtifactId(r.TenantId, r.ArtifactId)
+func (r ArtifactIdReconstitutor) Reconstitute() (ArtifactId, error) {
+	return NewArtifactId(r.TenantId, r.ArtifactId)
 }

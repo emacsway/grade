@@ -5,48 +5,48 @@ import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 )
 
-func NewTenantArtifactId(tenantId, artifactId uint) (TenantArtifactId, error) {
+func NewArtifactId(tenantId, artifactId uint) (ArtifactId, error) {
 	tId, err := tenant.NewTenantId(tenantId)
 	if err != nil {
-		return TenantArtifactId{}, err
+		return ArtifactId{}, err
 	}
-	mId, err := NewArtifactId(artifactId)
+	mId, err := NewInternalArtifactId(artifactId)
 	if err != nil {
-		return TenantArtifactId{}, err
+		return ArtifactId{}, err
 	}
-	return TenantArtifactId{
+	return ArtifactId{
 		tenantId:   tId,
 		artifactId: mId,
 	}, nil
 }
 
-type TenantArtifactId struct {
+type ArtifactId struct {
 	tenantId   tenant.TenantId
-	artifactId ArtifactId
+	artifactId InternalArtifactId
 }
 
-func (cid TenantArtifactId) TenantId() tenant.TenantId {
+func (cid ArtifactId) TenantId() tenant.TenantId {
 	return cid.tenantId
 }
 
-func (cid TenantArtifactId) ArtifactId() ArtifactId {
+func (cid ArtifactId) ArtifactId() InternalArtifactId {
 	return cid.artifactId
 }
 
-func (cid TenantArtifactId) Equal(other specification.EqualOperand) bool {
-	otherTyped, ok := other.(TenantArtifactId)
+func (cid ArtifactId) Equal(other specification.EqualOperand) bool {
+	otherTyped, ok := other.(ArtifactId)
 	if !ok {
 		return false
 	}
 	return cid.tenantId.Equal(otherTyped.TenantId()) && cid.artifactId.Equal(otherTyped.ArtifactId())
 }
 
-func (cid TenantArtifactId) Export(ex TenantArtifactIdExporterSetter) {
+func (cid ArtifactId) Export(ex ArtifactIdExporterSetter) {
 	ex.SetTenantId(cid.tenantId)
 	ex.SetArtifactId(cid.artifactId)
 }
 
-type TenantArtifactIdExporterSetter interface {
+type ArtifactIdExporterSetter interface {
 	SetTenantId(tenant.TenantId)
-	SetArtifactId(ArtifactId)
+	SetArtifactId(InternalArtifactId)
 }

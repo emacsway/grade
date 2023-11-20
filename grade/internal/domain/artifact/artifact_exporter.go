@@ -10,7 +10,7 @@ import (
 )
 
 type ArtifactExporter struct {
-	Id            values.TenantArtifactIdExporter
+	Id            values.ArtifactIdExporter
 	Status        exporters.Uint8Exporter
 	Name          exporters.StringExporter
 	Description   exporters.StringExporter
@@ -22,7 +22,7 @@ type ArtifactExporter struct {
 	Version       uint
 }
 
-func (ex *ArtifactExporter) SetId(val values.TenantArtifactId) {
+func (ex *ArtifactExporter) SetId(val values.ArtifactId) {
 	val.Export(&ex.Id)
 }
 
