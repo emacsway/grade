@@ -51,7 +51,7 @@ type MemberFaker struct {
 	Status    values.Status
 	FullName  values.FullNameFaker
 	CreatedAt time.Time
-	// Repo and dependecies should be at Aggregate-level Faker, not at TenantMemberIdFaker
+	// Repo and dependecies should be at Aggregate-level Faker, not at MemberIdFaker
 	Repository  MemberRepository
 	TenantFaker *tenant.TenantFaker
 	agg         *Member

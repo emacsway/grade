@@ -79,7 +79,7 @@ func (c Context) Extract(val any) (driver.Valuer, error) {
 		valTyped.Export(&ex)
 		return nil, nil
 	case member.MemberId:
-		var ex TenantMemberIdExporter
+		var ex MemberIdExporter
 		valTyped.Export(&ex)
 		return nil, s.NewMissingValuesError(ex.Values()...)
 	default:
@@ -87,18 +87,18 @@ func (c Context) Extract(val any) (driver.Valuer, error) {
 	}
 }
 
-type TenantMemberIdExporter struct {
+type MemberIdExporter struct {
 	values [2]any
 }
 
-func (ex TenantMemberIdExporter) Values() []any {
+func (ex MemberIdExporter) Values() []any {
 	return ex.values[:]
 }
 
-func (ex *TenantMemberIdExporter) SetTenantId(val tenant.TenantId) {
+func (ex *MemberIdExporter) SetTenantId(val tenant.TenantId) {
 	ex.values[0] = val
 }
 
-func (ex *TenantMemberIdExporter) SetMemberId(val member.InternalMemberId) {
+func (ex *MemberIdExporter) SetMemberId(val member.InternalMemberId) {
 	ex.values[1] = val
 }

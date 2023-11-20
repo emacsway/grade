@@ -53,12 +53,12 @@ func (cid MemberId) Equal(other specification.EqualOperand) bool {
 	return cid.tenantId.Equal(otherTyped.TenantId()) && cid.memberId.Equal(otherTyped.MemberId())
 }
 
-func (cid MemberId) Export(ex TenantMemberIdExporterSetter) {
+func (cid MemberId) Export(ex MemberIdExporterSetter) {
 	ex.SetTenantId(cid.tenantId)
 	ex.SetMemberId(cid.memberId)
 }
 
-type TenantMemberIdExporterSetter interface {
+type MemberIdExporterSetter interface {
 	SetTenantId(tenant.TenantId)
 	SetMemberId(InternalMemberId)
 }

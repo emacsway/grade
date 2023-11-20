@@ -35,9 +35,9 @@ func (ss SomethingSpecification) Expression() s.Visitable {
 	return s.Equal(
 		something.Id(),
 		s.Value(MemberSomethingId{
-			TenantMemberId{
+			MemberId{
 				TenantId{tId},
-				MemberId{mId},
+				InternalMemberId{mId},
 			},
 			SomethingId{
 				sId,
@@ -73,7 +73,7 @@ func (ss SomethingSpecification) Evaluate( /* session infrastructure.PgxSession 
 }
 
 type MemberSomethingId struct {
-	memberId    TenantMemberId
+	memberId    MemberId
 	somethingId SomethingId
 }
 
@@ -83,30 +83,30 @@ func (cid MemberSomethingId) Export(ex MemberSomethingIdExporterSetter) {
 }
 
 type MemberSomethingIdExporterSetter interface {
-	SetMemberId(TenantMemberId)
+	SetMemberId(MemberId)
 	SetSomethingId(SomethingId)
 }
 
-type TenantMemberId struct {
+type MemberId struct {
 	tenantId TenantId
-	memberId MemberId
+	memberId InternalMemberId
 }
 
-func (cid TenantMemberId) Export(ex TenantMemberIdExporterSetter) {
+func (cid MemberId) Export(ex MemberIdExporterSetter) {
 	ex.SetTenantId(cid.tenantId)
 	ex.SetMemberId(cid.memberId)
 }
 
-type TenantMemberIdExporterSetter interface {
+type MemberIdExporterSetter interface {
 	SetTenantId(TenantId)
-	SetMemberId(MemberId)
+	SetMemberId(InternalMemberId)
 }
 
 type TenantId struct {
 	identity.IntIdentity
 }
 
-type MemberId struct {
+type InternalMemberId struct {
 	identity.IntIdentity
 }
 
@@ -165,7 +165,7 @@ func (c TestContext) somethingIdMemberIdPath(prefix string, path ...string) (str
 
 func (c TestContext) Extract(val any) (driver.Valuer, error) {
 	switch valTyped := val.(type) {
-	case MemberId:
+	case InternalMemberId:
 		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return ex, nil
@@ -177,8 +177,8 @@ func (c TestContext) Extract(val any) (driver.Valuer, error) {
 		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return ex, nil
-	case TenantMemberId:
-		var ex TenantMemberIdExporter
+	case MemberId:
+		var ex MemberIdExporter
 		valTyped.Export(&ex)
 		return nil, NewMissingValuesError(ex.Values()...)
 	case MemberSomethingId:
@@ -190,19 +190,19 @@ func (c TestContext) Extract(val any) (driver.Valuer, error) {
 	}
 }
 
-type TenantMemberIdExporter struct {
+type MemberIdExporter struct {
 	values [2]any
 }
 
-func (ex TenantMemberIdExporter) Values() []any {
+func (ex MemberIdExporter) Values() []any {
 	return ex.values[:]
 }
 
-func (ex *TenantMemberIdExporter) SetTenantId(val TenantId) {
+func (ex *MemberIdExporter) SetTenantId(val TenantId) {
 	ex.values[0] = val
 }
 
-func (ex *TenantMemberIdExporter) SetMemberId(val MemberId) {
+func (ex *MemberIdExporter) SetMemberId(val InternalMemberId) {
 	ex.values[1] = val
 }
 
@@ -214,7 +214,7 @@ func (ex MemberSomethingIdExporter) Values() []any {
 	return ex.values[:]
 }
 
-func (ex *MemberSomethingIdExporter) SetMemberId(val TenantMemberId) {
+func (ex *MemberSomethingIdExporter) SetMemberId(val MemberId) {
 	ex.values[0] = val
 }
 
