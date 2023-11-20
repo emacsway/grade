@@ -35,7 +35,7 @@ func WithTenantFaker(tenantFaker *tenant.TenantFaker) MemberFakerOption {
 
 func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 	f := &MemberFaker{
-		Id:          values.NewTenantMemberIdFaker(),
+		Id:          values.NewMemberIdFaker(),
 		Repository:  &MemberDummyRepository{},
 		TenantFaker: tenant.NewTenantFaker(),
 	}
@@ -47,7 +47,7 @@ func NewMemberFaker(opts ...MemberFakerOption) *MemberFaker {
 }
 
 type MemberFaker struct {
-	Id        values.TenantMemberIdFaker
+	Id        values.MemberIdFaker
 	Status    values.Status
 	FullName  values.FullNameFaker
 	CreatedAt time.Time
@@ -108,7 +108,7 @@ func (f *MemberFaker) SetMemberId(val uint) {
 	f.Id.MemberId = val
 }
 
-func (f *MemberFaker) SetId(id values.TenantMemberIdFaker) {
+func (f *MemberFaker) SetId(id values.MemberIdFaker) {
 	f.SetTenantId(id.TenantId)
 	f.SetMemberId(id.MemberId)
 }

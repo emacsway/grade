@@ -16,8 +16,8 @@ type ArtifactProposedReconstitutor struct {
 	Description      string
 	Url              string
 	CompetenceIds    []competenceVal.TenantCompetenceIdReconstitutor
-	AuthorIds        []memberVal.TenantMemberIdReconstitutor
-	OwnerId          memberVal.TenantMemberIdReconstitutor
+	AuthorIds        []memberVal.MemberIdReconstitutor
+	OwnerId          memberVal.MemberIdReconstitutor
 	CreatedAt        time.Time
 	AggregateVersion uint
 	EventMeta        aggregate.EventMetaReconstitutor
@@ -52,7 +52,7 @@ func (r ArtifactProposedReconstitutor) Reconstitute() (*ArtifactProposed, error)
 		}
 		competenceIds = append(competenceIds, competenceId)
 	}
-	authorIds := []memberVal.TenantMemberId{}
+	authorIds := []memberVal.MemberId{}
 	for i := range r.AuthorIds {
 		authorId, err := r.AuthorIds[i].Reconstitute()
 		if err != nil {

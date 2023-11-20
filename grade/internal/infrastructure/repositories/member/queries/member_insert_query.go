@@ -23,7 +23,7 @@ func (q MemberInsertQuery) sql() string {
 		RETURNING member_id`
 }
 
-func (q *MemberInsertQuery) SetId(val memberVal.TenantMemberId) {
+func (q *MemberInsertQuery) SetId(val memberVal.MemberId) {
 	val.Export(q)
 }
 
@@ -33,7 +33,7 @@ func (q *MemberInsertQuery) SetTenantId(val tenant.TenantId) {
 	q.params[0] = v
 }
 
-func (q *MemberInsertQuery) SetMemberId(val memberVal.MemberId) {
+func (q *MemberInsertQuery) SetMemberId(val memberVal.InternalMemberId) {
 	q.pkSetter = val.Scan
 }
 

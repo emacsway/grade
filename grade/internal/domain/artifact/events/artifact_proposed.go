@@ -16,8 +16,8 @@ func NewArtifactProposed(
 	description values.Description,
 	url values.Url,
 	competenceIds []competence.TenantCompetenceId,
-	authorIds []member.TenantMemberId,
-	ownerId member.TenantMemberId,
+	authorIds []member.MemberId,
+	ownerId member.MemberId,
 	createdAt time.Time,
 ) *ArtifactProposed {
 	return &ArtifactProposed{
@@ -40,8 +40,8 @@ type ArtifactProposed struct {
 	description      values.Description
 	url              values.Url
 	competenceIds    []competence.TenantCompetenceId
-	authorIds        []member.TenantMemberId
-	ownerId          member.TenantMemberId
+	authorIds        []member.MemberId
+	ownerId          member.MemberId
 	createdAt        time.Time
 	aggregateVersion uint
 	eventMeta        aggregate.EventMeta
@@ -71,11 +71,11 @@ func (e ArtifactProposed) CompetenceIds() []competence.TenantCompetenceId {
 	return e.competenceIds
 }
 
-func (e ArtifactProposed) AuthorIds() []member.TenantMemberId {
+func (e ArtifactProposed) AuthorIds() []member.MemberId {
 	return e.authorIds
 }
 
-func (e ArtifactProposed) OwnerId() member.TenantMemberId {
+func (e ArtifactProposed) OwnerId() member.MemberId {
 	return e.ownerId
 }
 
@@ -137,7 +137,7 @@ type ArtifactProposedExporterSetter interface {
 	SetDescription(values.Description)
 	SetUrl(values.Url)
 	AddCompetenceId(competence.TenantCompetenceId)
-	AddAuthorId(member.TenantMemberId)
-	SetOwnerId(member.TenantMemberId)
+	AddAuthorId(member.MemberId)
+	SetOwnerId(member.MemberId)
 	SetCreatedAt(time.Time)
 }

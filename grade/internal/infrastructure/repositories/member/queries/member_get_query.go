@@ -7,7 +7,7 @@ import (
 )
 
 type MemberGetQuery struct {
-	Id memberVal.TenantMemberId
+	Id memberVal.MemberId
 }
 
 func (q MemberGetQuery) sql() string {
@@ -19,7 +19,7 @@ func (q MemberGetQuery) sql() string {
 }
 
 func (q MemberGetQuery) params() []any {
-	var idExp memberVal.TenantMemberIdExporter
+	var idExp memberVal.MemberIdExporter
 	q.Id.Export(&idExp)
 	return []any{idExp.TenantId, idExp.MemberId}
 }

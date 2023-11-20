@@ -46,7 +46,7 @@ func WithMemberFaker(memberFaker *member.MemberFaker) SpecialistFakerOption {
 }
 
 func NewSpecialistFaker(opts ...SpecialistFakerOption) *SpecialistFaker {
-	idFactory := memberVal.NewTenantMemberIdFaker()
+	idFactory := memberVal.NewMemberIdFaker()
 	idFactory.MemberId = SpecialistMemberIdFakeValue
 	f := &SpecialistFaker{
 		Id:            idFactory,
@@ -63,7 +63,7 @@ func NewSpecialistFaker(opts ...SpecialistFakerOption) *SpecialistFaker {
 }
 
 type SpecialistFaker struct {
-	Id                   memberVal.TenantMemberIdFaker
+	Id                   memberVal.MemberIdFaker
 	Grade                uint8
 	ReceivedEndorsements []ReceivedEndorsementFakeItem
 	CreatedAt            time.Time
@@ -205,7 +205,7 @@ func (f *SpecialistFaker) SetMemberId(val uint) {
 	f.ArtifactFaker.SetMemberId(val)
 }
 
-func (f *SpecialistFaker) SetId(id memberVal.TenantMemberIdFaker) {
+func (f *SpecialistFaker) SetId(id memberVal.MemberIdFaker) {
 	f.SetTenantId(id.TenantId)
 	f.SetMemberId(id.MemberId)
 }

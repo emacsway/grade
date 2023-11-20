@@ -36,7 +36,7 @@ func (r EndorserRepository) Insert(agg *endorser.Endorser) error {
 	return nil
 }
 
-func (r *EndorserRepository) Get(id memberVal.TenantMemberId) (*endorser.Endorser, error) {
+func (r *EndorserRepository) Get(id memberVal.MemberId) (*endorser.Endorser, error) {
 	q := queries.EndorserGetQuery{Id: id}
 	return q.Get(r.session)
 }

@@ -38,7 +38,7 @@ func WithMemberFaker(memberFaker *member.MemberFaker) EndorserFakerOption {
 
 func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
 	f := &EndorserFaker{
-		Id:          memberVal.NewTenantMemberIdFaker(),
+		Id:          memberVal.NewMemberIdFaker(),
 		Repository:  EndorserDummyRepository{},
 		MemberFaker: member.NewMemberFaker(),
 	}
@@ -51,7 +51,7 @@ func NewEndorserFaker(opts ...EndorserFakerOption) *EndorserFaker {
 }
 
 type EndorserFaker struct {
-	Id          memberVal.TenantMemberIdFaker
+	Id          memberVal.MemberIdFaker
 	Grade       uint8
 	CreatedAt   time.Time
 	Repository  EndorserRepository
@@ -113,7 +113,7 @@ func (f *EndorserFaker) SetMemberId(val uint) {
 	f.MemberFaker.SetMemberId(val)
 }
 
-func (f *EndorserFaker) SetId(id memberVal.TenantMemberIdFaker) {
+func (f *EndorserFaker) SetId(id memberVal.MemberIdFaker) {
 	f.SetTenantId(id.TenantId)
 	f.SetMemberId(id.MemberId)
 }

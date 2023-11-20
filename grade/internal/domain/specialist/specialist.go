@@ -40,7 +40,7 @@ var (
 
 // FIXME: Move this constructor to tenant aggregate
 func NewSpecialist(
-	id member.TenantMemberId,
+	id member.MemberId,
 	createdAt time.Time,
 ) (*Specialist, error) {
 	zeroGrade, _ := grade.DefaultConstructor(0)
@@ -52,7 +52,7 @@ func NewSpecialist(
 }
 
 type Specialist struct {
-	id                   member.TenantMemberId
+	id                   member.MemberId
 	grade                grade.Grade
 	receivedEndorsements []endorsement.Endorsement
 	assignments          []assignment.Assignment
@@ -191,7 +191,7 @@ func (s Specialist) Export(ex SpecialistExporterSetter) {
 }
 
 type SpecialistExporterSetter interface {
-	SetId(member.TenantMemberId)
+	SetId(member.MemberId)
 	SetGrade(grade.Grade)
 	AddEndorsement(endorsement.Endorsement)
 	AddAssignment(assignment.Assignment)

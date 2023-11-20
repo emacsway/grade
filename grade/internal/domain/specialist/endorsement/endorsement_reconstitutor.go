@@ -9,11 +9,11 @@ import (
 )
 
 type EndorsementReconstitutor struct {
-	SpecialistId      member.TenantMemberIdReconstitutor
+	SpecialistId      member.MemberIdReconstitutor
 	SpecialistGrade   uint8
 	SpecialistVersion uint
 	ArtifactId        artifact.TenantArtifactIdReconstitutor
-	EndorserId        member.TenantMemberIdReconstitutor
+	EndorserId        member.MemberIdReconstitutor
 	EndorserGrade     uint8
 	EndorserVersion   uint
 	CreatedAt         time.Time

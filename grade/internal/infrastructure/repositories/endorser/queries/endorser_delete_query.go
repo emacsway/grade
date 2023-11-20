@@ -23,7 +23,7 @@ func (q *EndorserDeleteQuery) SetTenantId(val tenant.TenantId) {
 	q.params[0] = v
 }
 
-func (q *EndorserDeleteQuery) SetMemberId(val member.MemberId) {
+func (q *EndorserDeleteQuery) SetMemberId(val member.InternalMemberId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v

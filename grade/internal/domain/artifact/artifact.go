@@ -17,8 +17,8 @@ func NewArtifact(
 	description values.Description,
 	url values.Url,
 	competenceIds []competence.TenantCompetenceId,
-	authorIds []member.TenantMemberId,
-	ownerId member.TenantMemberId,
+	authorIds []member.MemberId,
+	ownerId member.MemberId,
 	createdAt time.Time,
 ) (*Artifact, error) {
 	e := events.NewArtifactProposed(
@@ -52,8 +52,8 @@ type Artifact struct {
 	description   values.Description
 	url           values.Url
 	competenceIds []competence.TenantCompetenceId
-	authorIds     []member.TenantMemberId
-	ownerId       member.TenantMemberId
+	authorIds     []member.MemberId
+	ownerId       member.MemberId
 	createdAt     time.Time
 	eventSourced  aggregate.EventSourcedAggregate[aggregate.PersistentDomainEvent]
 }
@@ -65,7 +65,7 @@ func (a Artifact) Id() values.TenantArtifactId {
 // TODO: Use Specification pattern instead?
 // https://enterprisecraftsmanship.com/posts/specification-pattern-always-valid-domain-model/
 
-func (a Artifact) HasAuthor(authorId member.TenantMemberId) bool {
+func (a Artifact) HasAuthor(authorId member.MemberId) bool {
 	for i := range a.authorIds {
 		if a.authorIds[i].Equal(authorId) {
 			return true
@@ -128,8 +128,8 @@ type ArtifactExporterSetter interface {
 	SetDescription(values.Description)
 	SetUrl(values.Url)
 	AddCompetenceId(competence.TenantCompetenceId)
-	AddAuthorId(member.TenantMemberId)
-	SetOwnerId(member.TenantMemberId)
+	AddAuthorId(member.MemberId)
+	SetOwnerId(member.MemberId)
 	SetCreatedAt(time.Time)
 	SetVersion(uint)
 }

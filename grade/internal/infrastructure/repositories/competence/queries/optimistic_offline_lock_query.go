@@ -42,7 +42,7 @@ func (q *OptimisticOfflineLockLockQuery) SetCompetenceId(val values.CompetenceId
 func (q *OptimisticOfflineLockLockQuery) SetName(val values.Name) {
 }
 
-func (q *OptimisticOfflineLockLockQuery) SetOwnerId(val memberVal.TenantMemberId) {
+func (q *OptimisticOfflineLockLockQuery) SetOwnerId(val memberVal.MemberId) {
 }
 
 func (q *OptimisticOfflineLockLockQuery) SetCreatedAt(val time.Time) {

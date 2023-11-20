@@ -12,7 +12,7 @@ import (
 func NewCompetence(
 	id values.TenantCompetenceId,
 	name values.Name,
-	ownerId member.TenantMemberId,
+	ownerId member.MemberId,
 	createdAt time.Time,
 ) (*Competence, error) {
 	agg := &Competence{
@@ -35,7 +35,7 @@ func NewCompetence(
 type Competence struct {
 	id        values.TenantCompetenceId
 	name      values.Name
-	ownerId   member.TenantMemberId
+	ownerId   member.MemberId
 	createdAt time.Time
 	eventive  aggregate.EventiveEntity[aggregate.DomainEvent]
 	aggregate.VersionedAggregate
@@ -71,7 +71,7 @@ func (c Competence) Export(ex CompetenceExporterSetter) {
 type CompetenceExporterSetter interface {
 	SetId(id values.TenantCompetenceId)
 	SetName(values.Name)
-	SetOwnerId(member.TenantMemberId)
+	SetOwnerId(member.MemberId)
 	SetCreatedAt(time.Time)
 	SetVersion(uint)
 }

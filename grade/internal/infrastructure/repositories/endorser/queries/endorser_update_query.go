@@ -26,7 +26,7 @@ func (q EndorserUpdateQuery) sql() string {
 			tenant_id = $1 AND member_id = $2 AND version = $3`
 }
 
-func (q *EndorserUpdateQuery) SetId(val member.TenantMemberId) {
+func (q *EndorserUpdateQuery) SetId(val member.MemberId) {
 	val.Export(q)
 }
 
@@ -36,7 +36,7 @@ func (q *EndorserUpdateQuery) SetTenantId(val tenant.TenantId) {
 	q.params[0] = v
 }
 
-func (q *EndorserUpdateQuery) SetMemberId(val member.MemberId) {
+func (q *EndorserUpdateQuery) SetMemberId(val member.InternalMemberId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v

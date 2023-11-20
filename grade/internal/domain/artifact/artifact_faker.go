@@ -57,8 +57,8 @@ func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 	f := &ArtifactFaker{
 		Id:              values.NewTenantArtifactIdFaker(),
 		CompetenceIds:   []competenceVal.TenantCompetenceIdFaker{competenceVal.NewTenantCompetenceIdFaker()},
-		AuthorIds:       []memberVal.TenantMemberIdFaker{},
-		OwnerId:         memberVal.NewTenantMemberIdFaker(),
+		AuthorIds:       []memberVal.MemberIdFaker{},
+		OwnerId:         memberVal.NewMemberIdFaker(),
 		MemberFaker:     member.NewMemberFaker(),
 		CompetenceFaker: competence.NewCompetenceFaker(),
 	}
@@ -80,8 +80,8 @@ type ArtifactFaker struct {
 	Description     string
 	Url             string
 	CompetenceIds   []competenceVal.TenantCompetenceIdFaker
-	AuthorIds       []memberVal.TenantMemberIdFaker
-	OwnerId         memberVal.TenantMemberIdFaker
+	AuthorIds       []memberVal.MemberIdFaker
+	OwnerId         memberVal.MemberIdFaker
 	CreatedAt       time.Time
 	Repository      ArtifactRepository
 	MemberFaker     *member.MemberFaker
@@ -100,7 +100,7 @@ func (f *ArtifactFaker) fake() {
 
 func (f *ArtifactFaker) Next() error {
 	f.fake()
-	f.AuthorIds = []memberVal.TenantMemberIdFaker{}
+	f.AuthorIds = []memberVal.MemberIdFaker{}
 	err := f.advanceId()
 	if err != nil {
 		return err
@@ -124,7 +124,7 @@ func (f *ArtifactFaker) advanceId() error {
 	return nil
 }
 
-func (f *ArtifactFaker) AddAuthorId(authorId memberVal.TenantMemberIdFaker) {
+func (f *ArtifactFaker) AddAuthorId(authorId memberVal.MemberIdFaker) {
 	f.AuthorIds = append(f.AuthorIds, authorId)
 }
 
@@ -166,7 +166,7 @@ func (f *ArtifactFaker) Create() (*Artifact, error) {
 		}
 		competenceIds = append(competenceIds, competenceId)
 	}
-	var authorIds []memberVal.TenantMemberId
+	var authorIds []memberVal.MemberId
 	for i := range f.AuthorIds {
 		authorId, err := f.AuthorIds[i].Create()
 		if err != nil {
@@ -202,7 +202,7 @@ func (f *ArtifactFaker) SetMemberId(val uint) {
 	f.CompetenceFaker.SetMemberId(val)
 }
 
-func (f *ArtifactFaker) SetId(id memberVal.TenantMemberIdFaker) {
+func (f *ArtifactFaker) SetId(id memberVal.MemberIdFaker) {
 	f.SetTenantId(id.TenantId)
 	f.SetMemberId(id.MemberId)
 }

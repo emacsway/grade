@@ -32,7 +32,7 @@ func TestEndorsementIsEndorsedBy(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			f.EndorserId.MemberId = c.RecogniserId
-			rId, err := member.NewTenantMemberId(f.EndorserId.TenantId, c.TestRecogniserId)
+			rId, err := member.NewMemberId(f.EndorserId.TenantId, c.TestRecogniserId)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -81,11 +81,11 @@ func TestEndorsementExport(t *testing.T) {
 	agg, _ := f.Create()
 	agg.Export(&actualExporter)
 	assert.Equal(t, EndorsementExporter{
-		SpecialistId:      member.NewTenantMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
+		SpecialistId:      member.NewMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
 		SpecialistGrade:   exporters.Uint8Exporter(f.SpecialistGrade),
 		SpecialistVersion: f.SpecialistVersion,
 		ArtifactId:        artifact.NewTenantArtifactIdExporter(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId),
-		EndorserId:        member.NewTenantMemberIdExporter(f.EndorserId.TenantId, f.EndorserId.MemberId),
+		EndorserId:        member.NewMemberIdExporter(f.EndorserId.TenantId, f.EndorserId.MemberId),
 		EndorserGrade:     exporters.Uint8Exporter(f.EndorserGrade),
 		EndorserVersion:   f.EndorserVersion,
 		CreatedAt:         f.CreatedAt,

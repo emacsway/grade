@@ -10,17 +10,17 @@ import (
 )
 
 type EndorsementExporter struct {
-	EndorserId        member.TenantMemberIdExporter
+	EndorserId        member.MemberIdExporter
 	EndorserGrade     exporters.Uint8Exporter
 	EndorserVersion   uint
-	SpecialistId      member.TenantMemberIdExporter
+	SpecialistId      member.MemberIdExporter
 	SpecialistGrade   exporters.Uint8Exporter
 	SpecialistVersion uint
 	ArtifactId        artifact.TenantArtifactIdExporter
 	CreatedAt         time.Time
 }
 
-func (ex *EndorsementExporter) SetSpecialistId(val member.TenantMemberId) {
+func (ex *EndorsementExporter) SetSpecialistId(val member.MemberId) {
 	val.Export(&ex.SpecialistId)
 }
 
@@ -36,7 +36,7 @@ func (ex *EndorsementExporter) SetArtifactId(val artifact.TenantArtifactId) {
 	val.Export(&ex.ArtifactId)
 }
 
-func (ex *EndorsementExporter) SetEndorserId(val member.TenantMemberId) {
+func (ex *EndorsementExporter) SetEndorserId(val member.MemberId) {
 	val.Export(&ex.EndorserId)
 }
 

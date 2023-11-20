@@ -9,10 +9,10 @@ import (
 )
 
 func NewEndorsementReceived(
-	endorserId member.TenantMemberId,
+	endorserId member.MemberId,
 	endorserGrade grade.Grade,
 	endorserVersion uint,
-	specialistId member.TenantMemberId,
+	specialistId member.MemberId,
 	specialistGrade grade.Grade,
 	specialistVersion uint,
 	artifactId artifact.TenantArtifactId,
@@ -31,17 +31,17 @@ func NewEndorsementReceived(
 }
 
 type EndorsementReceived struct {
-	endorserId        member.TenantMemberId
+	endorserId        member.MemberId
 	endorserGrade     grade.Grade
 	endorserVersion   uint
-	specialistId      member.TenantMemberId
+	specialistId      member.MemberId
 	specialistGrade   grade.Grade
 	specialistVersion uint
 	artifactId        artifact.TenantArtifactId
 	createdAt         time.Time
 }
 
-func (e EndorsementReceived) EndorserId() member.TenantMemberId {
+func (e EndorsementReceived) EndorserId() member.MemberId {
 	return e.endorserId
 }
 
@@ -53,7 +53,7 @@ func (e EndorsementReceived) EndorserVersion() uint {
 	return e.endorserVersion
 }
 
-func (e EndorsementReceived) SpecialistId() member.TenantMemberId {
+func (e EndorsementReceived) SpecialistId() member.MemberId {
 	return e.specialistId
 }
 

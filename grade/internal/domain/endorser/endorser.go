@@ -19,7 +19,7 @@ var (
 // FIXME: Move this constructor to tenant aggregate
 
 func NewEndorser(
-	id member.TenantMemberId,
+	id member.MemberId,
 	createdAt time.Time,
 ) (*Endorser, error) {
 	availableCount, err := values.NewEndorsementCount(values.YearlyEndorsementCount)
@@ -49,7 +49,7 @@ func NewEndorser(
 // to track grade by version?
 
 type Endorser struct { // TODO: rename to Recognitory | Endorser | Originator | Sender (to Receiver)
-	id                        member.TenantMemberId
+	id                        member.MemberId
 	grade                     grade.Grade
 	availableEndorsementCount values.EndorsementCount
 	pendingEndorsementCount   values.EndorsementCount
@@ -58,7 +58,7 @@ type Endorser struct { // TODO: rename to Recognitory | Endorser | Originator | 
 	aggregate.VersionedAggregate
 }
 
-func (e Endorser) Id() member.TenantMemberId {
+func (e Endorser) Id() member.MemberId {
 	return e.id
 }
 
@@ -139,7 +139,7 @@ func (e Endorser) Export(ex EndorserExporterSetter) {
 }
 
 type EndorserExporterSetter interface {
-	SetId(member.TenantMemberId)
+	SetId(member.MemberId)
 	SetGrade(grade.Grade)
 	SetAvailableEndorsementCount(values.EndorsementCount)
 	SetPendingEndorsementCount(values.EndorsementCount)

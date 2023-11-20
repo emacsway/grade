@@ -8,7 +8,7 @@ import (
 )
 
 func NewMember(
-	id values.TenantMemberId,
+	id values.MemberId,
 	status values.Status,
 	fullName values.FullName,
 	createdAt time.Time,
@@ -22,7 +22,7 @@ func NewMember(
 }
 
 type Member struct {
-	id        values.TenantMemberId
+	id        values.MemberId
 	status    values.Status
 	fullName  values.FullName
 	createdAt time.Time
@@ -30,7 +30,7 @@ type Member struct {
 	aggregate.VersionedAggregate
 }
 
-func (m Member) Id() values.TenantMemberId {
+func (m Member) Id() values.MemberId {
 	return m.id
 }
 
@@ -51,7 +51,7 @@ func (m Member) Export(ex MemberExporterSetter) {
 }
 
 type MemberExporterSetter interface {
-	SetId(id values.TenantMemberId)
+	SetId(id values.MemberId)
 	SetStatus(values.Status)
 	SetFullName(values.FullName)
 	SetCreatedAt(time.Time)

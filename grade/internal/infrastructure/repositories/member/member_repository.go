@@ -36,7 +36,7 @@ func (r *MemberRepository) Insert(agg *member.Member) error {
 	return nil
 }
 
-func (r *MemberRepository) Get(id memberVal.TenantMemberId) (*member.Member, error) {
+func (r *MemberRepository) Get(id memberVal.MemberId) (*member.Member, error) {
 	q := queries.MemberGetQuery{Id: id}
 	return q.Get(r.session)
 }

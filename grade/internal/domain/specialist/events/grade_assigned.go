@@ -9,7 +9,7 @@ import (
 )
 
 func NewGradeAssigned(
-	specialistId member.TenantMemberId,
+	specialistId member.MemberId,
 	specialistVersion uint,
 	assignedGrade grade.Grade,
 	reason assignment.Reason,
@@ -25,14 +25,14 @@ func NewGradeAssigned(
 }
 
 type GradeAssigned struct {
-	specialistId      member.TenantMemberId
+	specialistId      member.MemberId
 	specialistVersion uint
 	assignedGrade     grade.Grade
 	reason            assignment.Reason
 	createdAt         time.Time
 }
 
-func (e GradeAssigned) SpecialistId() member.TenantMemberId {
+func (e GradeAssigned) SpecialistId() member.MemberId {
 	return e.specialistId
 }
 

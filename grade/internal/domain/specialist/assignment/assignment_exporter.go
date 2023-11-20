@@ -10,14 +10,14 @@ import (
 )
 
 type AssignmentExporter struct {
-	SpecialistId      member.TenantMemberIdExporter
+	SpecialistId      member.MemberIdExporter
 	SpecialistVersion uint
 	AssignedGrade     exporters.Uint8Exporter
 	Reason            exporters.StringExporter
 	CreatedAt         time.Time
 }
 
-func (ex *AssignmentExporter) SetSpecialistId(val member.TenantMemberId) {
+func (ex *AssignmentExporter) SetSpecialistId(val member.MemberId) {
 	val.Export(&ex.SpecialistId)
 }
 

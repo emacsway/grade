@@ -9,7 +9,7 @@ import (
 )
 
 func NewAssignment(
-	specialistId member.TenantMemberId,
+	specialistId member.MemberId,
 	specialistVersion uint,
 	assignedGrade grade.Grade,
 	reason values.Reason,
@@ -25,7 +25,7 @@ func NewAssignment(
 }
 
 type Assignment struct {
-	specialistId      member.TenantMemberId
+	specialistId      member.MemberId
 	specialistVersion uint
 	assignedGrade     grade.Grade
 	reason            values.Reason
@@ -41,7 +41,7 @@ func (a Assignment) Export(ex AssignmentExporterSetter) {
 }
 
 type AssignmentExporterSetter interface {
-	SetSpecialistId(member.TenantMemberId)
+	SetSpecialistId(member.MemberId)
 	SetSpecialistVersion(uint)
 	SetAssignedGrade(grade.Grade)
 	SetReason(values.Reason)

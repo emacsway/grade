@@ -64,7 +64,7 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	require.NoError(t, err)
 	agg.Export(&exporterActual)
 
-	id, err := memberVal.NewTenantMemberId(
+	id, err := memberVal.NewMemberId(
 		uint(exporterActual.Id.TenantId),
 		uint(exporterActual.Id.MemberId),
 	)

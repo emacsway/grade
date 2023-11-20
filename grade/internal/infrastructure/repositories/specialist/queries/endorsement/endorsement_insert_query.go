@@ -23,8 +23,8 @@ func (q EndorsementInsertQuery) sql() string {
 		ON CONFLICT DO NOTHING`
 }
 
-func (q *EndorsementInsertQuery) SetSpecialistId(val memberVal.TenantMemberId) {
-	var v memberVal.TenantMemberIdExporter
+func (q *EndorsementInsertQuery) SetSpecialistId(val memberVal.MemberId) {
+	var v memberVal.MemberIdExporter
 	val.Export(&v)
 	q.params[0] = v.TenantId
 	q.params[1] = v.MemberId
@@ -46,8 +46,8 @@ func (q *EndorsementInsertQuery) SetArtifactId(val artifactVal.TenantArtifactId)
 	q.params[4] = v.ArtifactId
 }
 
-func (q *EndorsementInsertQuery) SetEndorserId(val memberVal.TenantMemberId) {
-	var v memberVal.TenantMemberIdExporter
+func (q *EndorsementInsertQuery) SetEndorserId(val memberVal.MemberId) {
+	var v memberVal.MemberIdExporter
 	val.Export(&v)
 	q.params[5] = v.MemberId
 }

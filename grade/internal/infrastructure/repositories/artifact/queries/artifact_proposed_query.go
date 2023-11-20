@@ -44,12 +44,12 @@ func (q *ArtifactProposedQuery) AddCompetenceId(val competenceVal.TenantCompeten
 	val.Export(&competenceExporter)
 	q.payload.CompetenceIds = append(q.payload.CompetenceIds, competenceExporter)
 }
-func (q *ArtifactProposedQuery) AddAuthorId(val memberVal.TenantMemberId) {
-	var authorExporter memberVal.TenantMemberIdExporter
+func (q *ArtifactProposedQuery) AddAuthorId(val memberVal.MemberId) {
+	var authorExporter memberVal.MemberIdExporter
 	val.Export(&authorExporter)
 	q.payload.AuthorIds = append(q.payload.AuthorIds, authorExporter)
 }
-func (q *ArtifactProposedQuery) SetOwnerId(val memberVal.TenantMemberId) {
+func (q *ArtifactProposedQuery) SetOwnerId(val memberVal.MemberId) {
 	val.Export(&q.payload.OwnerId)
 }
 func (q *ArtifactProposedQuery) SetCreatedAt(val time.Time) {
@@ -68,7 +68,7 @@ type ArtifactProposedPayload struct {
 	Description   exporters.StringExporter
 	Url           exporters.StringExporter
 	CompetenceIds []competenceVal.TenantCompetenceIdExporter
-	AuthorIds     []memberVal.TenantMemberIdExporter
-	OwnerId       memberVal.TenantMemberIdExporter
+	AuthorIds     []memberVal.MemberIdExporter
+	OwnerId       memberVal.MemberIdExporter
 	CreatedAt     time.Time
 }

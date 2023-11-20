@@ -34,57 +34,57 @@ func TestSpecialistExport(t *testing.T) {
 	}
 	s.Export(&actualExporter)
 	assert.Equal(t, SpecialistExporter{
-		Id:    member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+		Id:    member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 		Grade: exporters.Uint8Exporter(sf.Grade + 1),
 		ReceivedEndorsements: []endorsement.EndorsementExporter{
 			{
-				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 0,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
 					sf.ReceivedEndorsements[0].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[0].Artifact.Id.ArtifactId,
 				),
-				EndorserId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
+				EndorserId:      member.NewMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorserGrade:   exporters.Uint8Exporter(ef.Grade),
 				EndorserVersion: 0,
 				CreatedAt:       sf.ReceivedEndorsements[0].CreatedAt,
 			},
 			{
-				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 1,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
 					sf.ReceivedEndorsements[1].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[1].Artifact.Id.ArtifactId,
 				),
-				EndorserId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
+				EndorserId:      member.NewMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorserGrade:   exporters.Uint8Exporter(ef.Grade),
 				EndorserVersion: 0,
 				CreatedAt:       sf.ReceivedEndorsements[1].CreatedAt,
 			},
 			{
-				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
 				SpecialistVersion: 2,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
 					sf.ReceivedEndorsements[2].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[2].Artifact.Id.ArtifactId,
 				),
-				EndorserId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
+				EndorserId:      member.NewMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorserGrade:   exporters.Uint8Exporter(ef.Grade),
 				EndorserVersion: 0,
 				CreatedAt:       sf.ReceivedEndorsements[2].CreatedAt,
 			},
 			{
-				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade + 1),
 				SpecialistVersion: 3,
 				ArtifactId: artifact.NewTenantArtifactIdExporter(
 					sf.ReceivedEndorsements[3].Artifact.Id.TenantId,
 					sf.ReceivedEndorsements[3].Artifact.Id.ArtifactId,
 				),
-				EndorserId:      member.NewTenantMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
+				EndorserId:      member.NewMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
 				EndorserGrade:   exporters.Uint8Exporter(ef.Grade),
 				EndorserVersion: 0,
 				CreatedAt:       sf.ReceivedEndorsements[3].CreatedAt,
@@ -92,7 +92,7 @@ func TestSpecialistExport(t *testing.T) {
 		},
 		Assignments: []assignment.AssignmentExporter{
 			{
-				SpecialistId:      member.NewTenantMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
+				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistVersion: 2,
 				AssignedGrade:     exporters.Uint8Exporter(sf.Grade + 1),
 				Reason:            exporters.StringExporter("Achieved"),

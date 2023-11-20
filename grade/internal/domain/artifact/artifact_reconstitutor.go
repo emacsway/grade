@@ -37,8 +37,8 @@ type ArtifactSnapshotReconstitutor struct {
 	Description   string
 	Url           string
 	CompetenceIds []competenceVal.TenantCompetenceIdReconstitutor
-	AuthorIds     []memberVal.TenantMemberIdReconstitutor
-	OwnerId       memberVal.TenantMemberIdReconstitutor
+	AuthorIds     []memberVal.MemberIdReconstitutor
+	OwnerId       memberVal.MemberIdReconstitutor
 	CreatedAt     time.Time
 	Version       uint
 }
@@ -72,7 +72,7 @@ func (r ArtifactSnapshotReconstitutor) Reconstitute() (*Artifact, error) {
 		}
 		competenceIds = append(competenceIds, competenceId)
 	}
-	authorIds := []memberVal.TenantMemberId{}
+	authorIds := []memberVal.MemberId{}
 	for i := range r.AuthorIds {
 		authorId, err := r.AuthorIds[i].Reconstitute()
 		if err != nil {

@@ -8,14 +8,14 @@ import (
 )
 
 type MemberExporter struct {
-	Id        values.TenantMemberIdExporter
+	Id        values.MemberIdExporter
 	Status    exporters.Uint8Exporter
 	FullName  values.FullNameExporter
 	CreatedAt time.Time
 	Version   uint
 }
 
-func (ex *MemberExporter) SetId(val values.TenantMemberId) {
+func (ex *MemberExporter) SetId(val values.MemberId) {
 	val.Export(&ex.Id)
 }
 

@@ -76,7 +76,7 @@ func TestEndorserExport(t *testing.T) {
 	}
 	agg.Export(&actualExporter)
 	assert.Equal(t, EndorserExporter{
-		Id:                        member.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
+		Id:                        member.NewMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Grade:                     exporters.Uint8Exporter(f.Grade),
 		AvailableEndorsementCount: exporters.UintExporter(values.YearlyEndorsementCount),
 		PendingEndorsementCount:   exporters.UintExporter(0),

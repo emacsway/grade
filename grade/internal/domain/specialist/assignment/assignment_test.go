@@ -15,7 +15,7 @@ func TestAssignmentExport(t *testing.T) {
 	agg, _ := f.Create()
 	agg.Export(&actualExporter)
 	assert.Equal(t, AssignmentExporter{
-		SpecialistId:      member.NewTenantMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
+		SpecialistId:      member.NewMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
 		SpecialistVersion: f.SpecialistVersion,
 		AssignedGrade:     exporters.Uint8Exporter(f.AssignedGrade),
 		Reason:            exporters.StringExporter(f.Reason),

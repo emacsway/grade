@@ -11,7 +11,7 @@ import (
 )
 
 type SpecialistReconstitutor struct {
-	Id                   member.TenantMemberIdReconstitutor
+	Id                   member.MemberIdReconstitutor
 	Grade                uint8
 	ReceivedEndorsements []endorsement.EndorsementReconstitutor
 	Assignments          []assignment.AssignmentReconstitutor

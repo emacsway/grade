@@ -11,7 +11,7 @@ import (
 type CompetenceExporter struct {
 	Id        values.TenantCompetenceIdExporter
 	Name      exporters.StringExporter
-	OwnerId   member.TenantMemberIdExporter
+	OwnerId   member.MemberIdExporter
 	CreatedAt time.Time
 	Version   uint
 }
@@ -24,7 +24,7 @@ func (ex *CompetenceExporter) SetName(val values.Name) {
 	val.Export(&ex.Name)
 }
 
-func (ex *CompetenceExporter) SetOwnerId(val member.TenantMemberId) {
+func (ex *CompetenceExporter) SetOwnerId(val member.MemberId) {
 	val.Export(&ex.OwnerId)
 }
 

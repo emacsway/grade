@@ -10,7 +10,7 @@ import (
 )
 
 type EndorserReconstitutor struct {
-	Id                        member.TenantMemberIdReconstitutor
+	Id                        member.MemberIdReconstitutor
 	Grade                     uint8
 	AvailableEndorsementCount uint
 	PendingEndorsementCount   uint

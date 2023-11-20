@@ -9,7 +9,7 @@ import (
 )
 
 type AssignmentReconstitutor struct {
-	SpecialistId      member.TenantMemberIdReconstitutor
+	SpecialistId      member.MemberIdReconstitutor
 	SpecialistVersion uint
 	AssignedGrade     uint8
 	Reason            string

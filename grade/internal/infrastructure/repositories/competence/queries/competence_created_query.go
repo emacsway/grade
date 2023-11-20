@@ -44,8 +44,8 @@ func (q *CompetenceCreatedQuery) SetName(val values.Name) {
 	q.params[1] = v
 }
 
-func (q *CompetenceCreatedQuery) SetOwnerId(val memberVal.TenantMemberId) {
-	var v memberVal.TenantMemberIdExporter
+func (q *CompetenceCreatedQuery) SetOwnerId(val memberVal.MemberId) {
+	var v memberVal.MemberIdExporter
 	val.Export(&v)
 	q.params[2] = v.MemberId
 }

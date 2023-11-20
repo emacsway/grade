@@ -22,8 +22,8 @@ func (q AssignmentInsertQuery) sql() string {
 		ON CONFLICT DO NOTHING`
 }
 
-func (q *AssignmentInsertQuery) SetSpecialistId(val memberVal.TenantMemberId) {
-	var v memberVal.TenantMemberIdExporter
+func (q *AssignmentInsertQuery) SetSpecialistId(val memberVal.MemberId) {
+	var v memberVal.MemberIdExporter
 	val.Export(&v)
 	q.params[0] = v.TenantId
 	q.params[1] = v.MemberId

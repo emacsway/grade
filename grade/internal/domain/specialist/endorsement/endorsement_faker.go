@@ -10,10 +10,10 @@ import (
 )
 
 func NewEndorsementFaker() EndorsementFaker {
-	endorserIdFactory := member.NewTenantMemberIdFaker()
+	endorserIdFactory := member.NewMemberIdFaker()
 	endorserIdFactory.MemberId = endorser.EndorserMemberIdFakeValue
 	return EndorsementFaker{
-		SpecialistId:      member.NewTenantMemberIdFaker(),
+		SpecialistId:      member.NewMemberIdFaker(),
 		SpecialistGrade:   1,
 		SpecialistVersion: 5,
 		ArtifactId:        artifact.NewTenantArtifactIdFaker(),
@@ -25,11 +25,11 @@ func NewEndorsementFaker() EndorsementFaker {
 }
 
 type EndorsementFaker struct {
-	SpecialistId      member.TenantMemberIdFaker
+	SpecialistId      member.MemberIdFaker
 	SpecialistGrade   uint8
 	SpecialistVersion uint
 	ArtifactId        artifact.TenantArtifactIdFaker
-	EndorserId        member.TenantMemberIdFaker
+	EndorserId        member.MemberIdFaker
 	EndorserGrade     uint8
 	EndorserVersion   uint
 	CreatedAt         time.Time

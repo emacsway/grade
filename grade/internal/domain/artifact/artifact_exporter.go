@@ -16,8 +16,8 @@ type ArtifactExporter struct {
 	Description   exporters.StringExporter
 	Url           exporters.StringExporter
 	CompetenceIds []competence.TenantCompetenceIdExporter
-	AuthorIds     []member.TenantMemberIdExporter
-	OwnerId       member.TenantMemberIdExporter
+	AuthorIds     []member.MemberIdExporter
+	OwnerId       member.MemberIdExporter
 	CreatedAt     time.Time
 	Version       uint
 }
@@ -48,13 +48,13 @@ func (ex *ArtifactExporter) AddCompetenceId(val competence.TenantCompetenceId) {
 	ex.CompetenceIds = append(ex.CompetenceIds, competenceExporter)
 }
 
-func (ex *ArtifactExporter) AddAuthorId(val member.TenantMemberId) {
-	var authorExporter member.TenantMemberIdExporter
+func (ex *ArtifactExporter) AddAuthorId(val member.MemberId) {
+	var authorExporter member.MemberIdExporter
 	val.Export(&authorExporter)
 	ex.AuthorIds = append(ex.AuthorIds, authorExporter)
 }
 
-func (ex *ArtifactExporter) SetOwnerId(val member.TenantMemberId) {
+func (ex *ArtifactExporter) SetOwnerId(val member.MemberId) {
 	val.Export(&ex.OwnerId)
 }
 

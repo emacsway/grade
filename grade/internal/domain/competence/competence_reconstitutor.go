@@ -11,7 +11,7 @@ import (
 type CompetenceReconstitutor struct {
 	Id        values.TenantCompetenceIdReconstitutor
 	Name      string
-	OwnerId   member.TenantMemberIdReconstitutor
+	OwnerId   member.MemberIdReconstitutor
 	CreatedAt time.Time
 	Version   uint
 }

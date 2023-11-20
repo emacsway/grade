@@ -70,7 +70,7 @@ func (c Context) Extract(val any) (driver.Valuer, error) {
 		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return ex, nil
-	case member.MemberId:
+	case member.InternalMemberId:
 		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return nil, nil
@@ -78,7 +78,7 @@ func (c Context) Extract(val any) (driver.Valuer, error) {
 		var ex exporters.UintExporter
 		valTyped.Export(&ex)
 		return nil, nil
-	case member.TenantMemberId:
+	case member.MemberId:
 		var ex TenantMemberIdExporter
 		valTyped.Export(&ex)
 		return nil, s.NewMissingValuesError(ex.Values()...)
@@ -99,6 +99,6 @@ func (ex *TenantMemberIdExporter) SetTenantId(val tenant.TenantId) {
 	ex.values[0] = val
 }
 
-func (ex *TenantMemberIdExporter) SetMemberId(val member.MemberId) {
+func (ex *TenantMemberIdExporter) SetMemberId(val member.InternalMemberId) {
 	ex.values[1] = val
 }

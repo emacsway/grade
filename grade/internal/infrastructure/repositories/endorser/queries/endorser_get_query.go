@@ -7,7 +7,7 @@ import (
 )
 
 type EndorserGetQuery struct {
-	Id memberVal.TenantMemberId
+	Id memberVal.MemberId
 }
 
 func (q EndorserGetQuery) sql() string {
@@ -20,7 +20,7 @@ func (q EndorserGetQuery) sql() string {
 }
 
 func (q EndorserGetQuery) params() []any {
-	var idExp memberVal.TenantMemberIdExporter
+	var idExp memberVal.MemberIdExporter
 	q.Id.Export(&idExp)
 	return []any{idExp.TenantId, idExp.MemberId}
 }

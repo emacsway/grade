@@ -17,7 +17,7 @@ func TestMemberExport(t *testing.T) {
 	require.NoError(t, err)
 	agg.Export(&actualExporter)
 	assert.Equal(t, MemberExporter{
-		Id:     values.NewTenantMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
+		Id:     values.NewMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
 		Status: exporters.Uint8Exporter(f.Status),
 		FullName: values.FullNameExporter{
 			FirstName: exporters.StringExporter(f.FullName.FirstName),

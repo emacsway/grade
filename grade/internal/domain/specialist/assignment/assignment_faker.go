@@ -10,7 +10,7 @@ import (
 
 func NewAssignmentFaker() AssignmentFaker {
 	return AssignmentFaker{
-		SpecialistId:      member.NewTenantMemberIdFaker(),
+		SpecialistId:      member.NewMemberIdFaker(),
 		SpecialistVersion: 2,
 		AssignedGrade:     1,
 		Reason:            "Any",
@@ -19,7 +19,7 @@ func NewAssignmentFaker() AssignmentFaker {
 }
 
 type AssignmentFaker struct {
-	SpecialistId      member.TenantMemberIdFaker
+	SpecialistId      member.MemberIdFaker
 	SpecialistVersion uint
 	AssignedGrade     uint8
 	Reason            string

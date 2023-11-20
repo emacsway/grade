@@ -8,7 +8,7 @@ import (
 )
 
 type MemberReconstitutor struct {
-	Id        values.TenantMemberIdReconstitutor
+	Id        values.MemberIdReconstitutor
 	Status    uint8
 	FullName  values.FullNameReconstitutor
 	CreatedAt time.Time

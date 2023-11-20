@@ -10,7 +10,7 @@ import (
 )
 
 type EndorserExporter struct {
-	Id                        member.TenantMemberIdExporter
+	Id                        member.MemberIdExporter
 	Grade                     exporters.Uint8Exporter
 	AvailableEndorsementCount exporters.UintExporter
 	PendingEndorsementCount   exporters.UintExporter
@@ -18,7 +18,7 @@ type EndorserExporter struct {
 	Version                   uint
 }
 
-func (ex *EndorserExporter) SetId(val member.TenantMemberId) {
+func (ex *EndorserExporter) SetId(val member.MemberId) {
 	val.Export(&ex.Id)
 }
 

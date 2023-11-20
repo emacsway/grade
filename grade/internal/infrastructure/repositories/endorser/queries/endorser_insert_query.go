@@ -23,7 +23,7 @@ func (q EndorserInsertQuery) sql() string {
 		($1, $2, $3, $4, $5, $6, $7)`
 }
 
-func (q *EndorserInsertQuery) SetId(val memberVal.TenantMemberId) {
+func (q *EndorserInsertQuery) SetId(val memberVal.MemberId) {
 	val.Export(q)
 }
 
@@ -33,7 +33,7 @@ func (q *EndorserInsertQuery) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *EndorserInsertQuery) SetMemberId(val memberVal.MemberId) {
+func (q *EndorserInsertQuery) SetMemberId(val memberVal.InternalMemberId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v
