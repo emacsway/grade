@@ -5,9 +5,9 @@ import (
 
 	endorserVal "github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
-	member "github.com/emacsway/grade/grade/internal/domain/member/values"
+	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
+	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 )
 
@@ -23,17 +23,17 @@ func (q EndorserInsertQuery) sql() string {
 		($1, $2, $3, $4, $5, $6, $7)`
 }
 
-func (q *EndorserInsertQuery) SetId(val member.TenantMemberId) {
+func (q *EndorserInsertQuery) SetId(val memberVal.TenantMemberId) {
 	val.Export(q)
 }
 
-func (q *EndorserInsertQuery) SetTenantId(val tenant.TenantId) {
+func (q *EndorserInsertQuery) SetTenantId(val tenantVal.TenantId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[0] = v
 }
 
-func (q *EndorserInsertQuery) SetMemberId(val member.MemberId) {
+func (q *EndorserInsertQuery) SetMemberId(val memberVal.MemberId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v
