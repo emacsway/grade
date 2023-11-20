@@ -5,7 +5,7 @@ import (
 )
 
 func NewNameUpdated(
-	id values.TenantCompetenceId,
+	id values.CompetenceId,
 	name values.Name,
 ) *NameUpdated {
 	return &NameUpdated{
@@ -15,7 +15,7 @@ func NewNameUpdated(
 }
 
 type NameUpdated struct {
-	id               values.TenantCompetenceId
+	id               values.CompetenceId
 	name             values.Name
 	aggregateVersion uint
 }
@@ -44,7 +44,7 @@ func (e NameUpdated) Export(ex NameUpdatedExporterSetter) {
 }
 
 type NameUpdatedExporterSetter interface {
-	SetId(id values.TenantCompetenceId)
+	SetId(id values.CompetenceId)
 	SetName(values.Name)
 	SetEventType(string)
 	SetAggregateVersion(uint)

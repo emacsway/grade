@@ -26,8 +26,8 @@ func TestArtifactExport(t *testing.T) {
 		Name:        exporters.StringExporter(f.Name),
 		Description: exporters.StringExporter(f.Description),
 		Url:         exporters.StringExporter(f.Url),
-		CompetenceIds: []competence.TenantCompetenceIdExporter{
-			competence.NewTenantCompetenceIdExporter(
+		CompetenceIds: []competence.CompetenceIdExporter{
+			competence.NewCompetenceIdExporter(
 				f.CompetenceIds[0].TenantId,
 				f.CompetenceIds[0].CompetenceId,
 			),

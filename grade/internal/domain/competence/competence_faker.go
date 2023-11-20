@@ -38,7 +38,7 @@ func WithMemberFaker(memberFaker *member.MemberFaker) CompetenceFakerOption {
 
 func NewCompetenceFaker(opts ...CompetenceFakerOption) *CompetenceFaker {
 	f := &CompetenceFaker{
-		Id:          values.NewTenantCompetenceIdFaker(),
+		Id:          values.NewCompetenceIdFaker(),
 		OwnerId:     memberVal.NewMemberIdFaker(),
 		Repository:  CompetenceDummyRepository{},
 		MemberFaker: member.NewMemberFaker(),
@@ -51,7 +51,7 @@ func NewCompetenceFaker(opts ...CompetenceFakerOption) *CompetenceFaker {
 }
 
 type CompetenceFaker struct {
-	Id          values.TenantCompetenceIdFaker
+	Id          values.CompetenceIdFaker
 	Name        string
 	OwnerId     memberVal.MemberIdFaker
 	CreatedAt   time.Time

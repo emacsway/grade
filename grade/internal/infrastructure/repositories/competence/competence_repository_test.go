@@ -84,7 +84,7 @@ func testGet(t *testing.T, repositoryOption RepositoryOption) {
 	agg.Export(&exporterActual)
 	assert.Greater(t, int(exporterActual.Id.CompetenceId), 0)
 
-	id, err := competenceVal.NewTenantCompetenceId(
+	id, err := competenceVal.NewCompetenceId(
 		uint(exporterActual.Id.TenantId),
 		uint(exporterActual.Id.CompetenceId),
 	)

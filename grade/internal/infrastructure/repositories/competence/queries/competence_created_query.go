@@ -24,7 +24,7 @@ func (q CompetenceCreatedQuery) sql() string {
 		RETURNING competence_id`
 }
 
-func (q *CompetenceCreatedQuery) SetId(val values.TenantCompetenceId) {
+func (q *CompetenceCreatedQuery) SetId(val values.CompetenceId) {
 	val.Export(q)
 }
 
@@ -34,7 +34,7 @@ func (q *CompetenceCreatedQuery) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *CompetenceCreatedQuery) SetCompetenceId(val values.CompetenceId) {
+func (q *CompetenceCreatedQuery) SetCompetenceId(val values.InternalCompetenceId) {
 	q.pkSetter = val.Scan
 }
 

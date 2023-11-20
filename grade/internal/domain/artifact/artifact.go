@@ -16,7 +16,7 @@ func NewArtifact(
 	name values.Name,
 	description values.Description,
 	url values.Url,
-	competenceIds []competence.TenantCompetenceId,
+	competenceIds []competence.CompetenceId,
 	authorIds []member.MemberId,
 	ownerId member.MemberId,
 	createdAt time.Time,
@@ -51,7 +51,7 @@ type Artifact struct {
 	name          values.Name
 	description   values.Description
 	url           values.Url
-	competenceIds []competence.TenantCompetenceId
+	competenceIds []competence.CompetenceId
 	authorIds     []member.MemberId
 	ownerId       member.MemberId
 	createdAt     time.Time
@@ -127,7 +127,7 @@ type ArtifactExporterSetter interface {
 	SetName(values.Name)
 	SetDescription(values.Description)
 	SetUrl(values.Url)
-	AddCompetenceId(competence.TenantCompetenceId)
+	AddCompetenceId(competence.CompetenceId)
 	AddAuthorId(member.MemberId)
 	SetOwnerId(member.MemberId)
 	SetCreatedAt(time.Time)

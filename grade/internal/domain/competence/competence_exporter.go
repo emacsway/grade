@@ -9,14 +9,14 @@ import (
 )
 
 type CompetenceExporter struct {
-	Id        values.TenantCompetenceIdExporter
+	Id        values.CompetenceIdExporter
 	Name      exporters.StringExporter
 	OwnerId   member.MemberIdExporter
 	CreatedAt time.Time
 	Version   uint
 }
 
-func (ex *CompetenceExporter) SetId(val values.TenantCompetenceId) {
+func (ex *CompetenceExporter) SetId(val values.CompetenceId) {
 	val.Export(&ex.Id)
 }
 

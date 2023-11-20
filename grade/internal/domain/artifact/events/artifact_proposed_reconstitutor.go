@@ -15,7 +15,7 @@ type ArtifactProposedReconstitutor struct {
 	Name             string
 	Description      string
 	Url              string
-	CompetenceIds    []competenceVal.TenantCompetenceIdReconstitutor
+	CompetenceIds    []competenceVal.CompetenceIdReconstitutor
 	AuthorIds        []memberVal.MemberIdReconstitutor
 	OwnerId          memberVal.MemberIdReconstitutor
 	CreatedAt        time.Time
@@ -44,7 +44,7 @@ func (r ArtifactProposedReconstitutor) Reconstitute() (*ArtifactProposed, error)
 	if err != nil {
 		return nil, err
 	}
-	competenceIds := []competenceVal.TenantCompetenceId{}
+	competenceIds := []competenceVal.CompetenceId{}
 	for i := range r.CompetenceIds {
 		competenceId, err := r.CompetenceIds[i].Reconstitute()
 		if err != nil {

@@ -39,7 +39,7 @@ func (q NameUpdatedQueryWithLock) sql() string {
 			tenant_id = $1 AND competence_id = $2 AND version = $3-1`
 }
 
-func (q *NameUpdatedQueryWithLock) SetId(val values.TenantCompetenceId) {
+func (q *NameUpdatedQueryWithLock) SetId(val values.CompetenceId) {
 	val.Export(q)
 }
 
@@ -49,7 +49,7 @@ func (q *NameUpdatedQueryWithLock) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *NameUpdatedQueryWithLock) SetCompetenceId(val values.CompetenceId) {
+func (q *NameUpdatedQueryWithLock) SetCompetenceId(val values.InternalCompetenceId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v

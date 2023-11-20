@@ -15,7 +15,7 @@ func NewArtifactProposed(
 	name values.Name,
 	description values.Description,
 	url values.Url,
-	competenceIds []competence.TenantCompetenceId,
+	competenceIds []competence.CompetenceId,
 	authorIds []member.MemberId,
 	ownerId member.MemberId,
 	createdAt time.Time,
@@ -39,7 +39,7 @@ type ArtifactProposed struct {
 	name             values.Name
 	description      values.Description
 	url              values.Url
-	competenceIds    []competence.TenantCompetenceId
+	competenceIds    []competence.CompetenceId
 	authorIds        []member.MemberId
 	ownerId          member.MemberId
 	createdAt        time.Time
@@ -67,7 +67,7 @@ func (e ArtifactProposed) Url() values.Url {
 	return e.url
 }
 
-func (e ArtifactProposed) CompetenceIds() []competence.TenantCompetenceId {
+func (e ArtifactProposed) CompetenceIds() []competence.CompetenceId {
 	return e.competenceIds
 }
 
@@ -136,7 +136,7 @@ type ArtifactProposedExporterSetter interface {
 	SetName(values.Name)
 	SetDescription(values.Description)
 	SetUrl(values.Url)
-	AddCompetenceId(competence.TenantCompetenceId)
+	AddCompetenceId(competence.CompetenceId)
 	AddAuthorId(member.MemberId)
 	SetOwnerId(member.MemberId)
 	SetCreatedAt(time.Time)

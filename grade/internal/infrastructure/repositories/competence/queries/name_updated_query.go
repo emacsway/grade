@@ -21,7 +21,7 @@ func (q NameUpdatedQuery) sql() string {
 			tenant_id = $1 AND competence_id = $2`
 }
 
-func (q *NameUpdatedQuery) SetId(val values.TenantCompetenceId) {
+func (q *NameUpdatedQuery) SetId(val values.CompetenceId) {
 	val.Export(q)
 }
 
@@ -31,7 +31,7 @@ func (q *NameUpdatedQuery) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *NameUpdatedQuery) SetCompetenceId(val values.CompetenceId) {
+func (q *NameUpdatedQuery) SetCompetenceId(val values.InternalCompetenceId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v

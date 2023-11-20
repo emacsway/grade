@@ -8,7 +8,7 @@ import (
 )
 
 func NewCompetenceCreated(
-	id values.TenantCompetenceId,
+	id values.CompetenceId,
 	name values.Name,
 	ownerId memberVal.MemberId,
 	createdAt time.Time,
@@ -22,7 +22,7 @@ func NewCompetenceCreated(
 }
 
 type CompetenceCreated struct {
-	id               values.TenantCompetenceId
+	id               values.CompetenceId
 	name             values.Name
 	ownerId          memberVal.MemberId
 	createdAt        time.Time
@@ -55,7 +55,7 @@ func (e CompetenceCreated) Export(ex CompetenceCreatedExporterSetter) {
 }
 
 type CompetenceCreatedExporterSetter interface {
-	SetId(id values.TenantCompetenceId)
+	SetId(id values.CompetenceId)
 	SetName(values.Name)
 	SetOwnerId(memberVal.MemberId)
 	SetCreatedAt(time.Time)

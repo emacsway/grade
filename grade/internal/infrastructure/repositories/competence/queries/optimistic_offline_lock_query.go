@@ -23,7 +23,7 @@ func (q OptimisticOfflineLockLockQuery) sql() string {
 			tenant_id=$1 AND competence_id=$2 AND version=$3`
 }
 
-func (q *OptimisticOfflineLockLockQuery) SetId(val values.TenantCompetenceId) {
+func (q *OptimisticOfflineLockLockQuery) SetId(val values.CompetenceId) {
 	val.Export(q)
 }
 
@@ -33,7 +33,7 @@ func (q *OptimisticOfflineLockLockQuery) SetTenantId(val tenantVal.TenantId) {
 	q.params[0] = v
 }
 
-func (q *OptimisticOfflineLockLockQuery) SetCompetenceId(val values.CompetenceId) {
+func (q *OptimisticOfflineLockLockQuery) SetCompetenceId(val values.InternalCompetenceId) {
 	var v exporters.UintExporter
 	val.Export(&v)
 	q.params[1] = v

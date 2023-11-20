@@ -56,7 +56,7 @@ func WithCompetenceFaker(competenceFaker *competence.CompetenceFaker) ArtifactFa
 func NewArtifactFaker(opts ...ArtifactFakerOption) *ArtifactFaker {
 	f := &ArtifactFaker{
 		Id:              values.NewTenantArtifactIdFaker(),
-		CompetenceIds:   []competenceVal.TenantCompetenceIdFaker{competenceVal.NewTenantCompetenceIdFaker()},
+		CompetenceIds:   []competenceVal.CompetenceIdFaker{competenceVal.NewCompetenceIdFaker()},
 		AuthorIds:       []memberVal.MemberIdFaker{},
 		OwnerId:         memberVal.NewMemberIdFaker(),
 		MemberFaker:     member.NewMemberFaker(),
@@ -79,7 +79,7 @@ type ArtifactFaker struct {
 	Name            string
 	Description     string
 	Url             string
-	CompetenceIds   []competenceVal.TenantCompetenceIdFaker
+	CompetenceIds   []competenceVal.CompetenceIdFaker
 	AuthorIds       []memberVal.MemberIdFaker
 	OwnerId         memberVal.MemberIdFaker
 	CreatedAt       time.Time
@@ -128,7 +128,7 @@ func (f *ArtifactFaker) AddAuthorId(authorId memberVal.MemberIdFaker) {
 	f.AuthorIds = append(f.AuthorIds, authorId)
 }
 
-func (f *ArtifactFaker) AddCompetenceId(competenceId competenceVal.TenantCompetenceIdFaker) {
+func (f *ArtifactFaker) AddCompetenceId(competenceId competenceVal.CompetenceIdFaker) {
 	f.CompetenceIds = append(f.CompetenceIds, competenceId)
 }
 
@@ -158,7 +158,7 @@ func (f *ArtifactFaker) Create() (*Artifact, error) {
 	if err != nil {
 		return nil, err
 	}
-	var competenceIds []competenceVal.TenantCompetenceId
+	var competenceIds []competenceVal.CompetenceId
 	for i := range f.CompetenceIds {
 		competenceId, err := f.CompetenceIds[i].Create()
 		if err != nil {

@@ -60,7 +60,7 @@ func (r CompetenceRepository) eventQuery(iEvent aggregate.DomainEvent) (q infras
 	return q
 }
 
-func (r *CompetenceRepository) Get(id competenceVal.TenantCompetenceId) (*competence.Competence, error) {
+func (r *CompetenceRepository) Get(id competenceVal.CompetenceId) (*competence.Competence, error) {
 	q := queries.CompetenceGetQuery{Id: id}
 	return q.Get(r.session)
 }

@@ -9,7 +9,7 @@ import (
 )
 
 type CompetenceReconstitutor struct {
-	Id        values.TenantCompetenceIdReconstitutor
+	Id        values.CompetenceIdReconstitutor
 	Name      string
 	OwnerId   member.MemberIdReconstitutor
 	CreatedAt time.Time

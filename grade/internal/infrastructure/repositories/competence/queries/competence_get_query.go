@@ -7,7 +7,7 @@ import (
 )
 
 type CompetenceGetQuery struct {
-	Id competenceVal.TenantCompetenceId
+	Id competenceVal.CompetenceId
 }
 
 func (q CompetenceGetQuery) sql() string {
@@ -19,7 +19,7 @@ func (q CompetenceGetQuery) sql() string {
 }
 
 func (q CompetenceGetQuery) params() []any {
-	var idExp competenceVal.TenantCompetenceIdExporter
+	var idExp competenceVal.CompetenceIdExporter
 	q.Id.Export(&idExp)
 	return []any{idExp.TenantId, idExp.CompetenceId}
 }
