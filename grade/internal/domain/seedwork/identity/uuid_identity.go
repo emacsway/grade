@@ -15,7 +15,7 @@ type UuidIdentity struct {
 }
 
 func (id UuidIdentity) Equal(other specification.EqualOperand) bool {
-	exportableOther := other.(Accessable[uuid.Uuid])
+	exportableOther := other.(Accessible[uuid.Uuid])
 	return id.value == exportableOther.Value()
 }
 

@@ -1,5 +1,5 @@
 package identity
 
-type Accessable[T any] interface {
+type Accessible[T any] interface {
 	Value() T
 }

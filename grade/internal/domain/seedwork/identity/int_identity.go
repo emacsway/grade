@@ -25,7 +25,7 @@ type IntIdentity struct {
 }
 
 func (id IntIdentity) Equal(other specification.EqualOperand) bool {
-	exportableOther := other.(Accessable[uint])
+	exportableOther := other.(Accessible[uint])
 	return !id.IsTransient() && id.value == exportableOther.Value()
 }
 
