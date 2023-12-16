@@ -16,8 +16,8 @@ type ArtifactProposedQuery struct {
 	payload ArtifactProposedPayload
 }
 
-func (q *ArtifactProposedQuery) SetId(val values.ArtifactId) {
-	val.Export(&q.payload.Id)
+func (q *ArtifactProposedQuery) SetAggregateId(val values.ArtifactId) {
+	val.Export(&q.payload.AggregateId)
 	val.Export(q)
 }
 
@@ -62,7 +62,7 @@ func (q *ArtifactProposedQuery) Evaluate(s infrastructure.DbSession) (infrastruc
 }
 
 type ArtifactProposedPayload struct {
-	Id            values.ArtifactIdExporter // Remove?
+	AggregateId   values.ArtifactIdExporter // Remove?
 	Status        exporters.Uint8Exporter
 	Name          exporters.StringExporter
 	Description   exporters.StringExporter

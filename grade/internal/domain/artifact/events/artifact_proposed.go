@@ -10,7 +10,7 @@ import (
 )
 
 func NewArtifactProposed(
-	id values.ArtifactId,
+	aggregateId values.ArtifactId,
 	status values.Status,
 	name values.Name,
 	description values.Description,
@@ -21,7 +21,7 @@ func NewArtifactProposed(
 	createdAt time.Time,
 ) *ArtifactProposed {
 	return &ArtifactProposed{
-		id:            id,
+		aggregateId:   aggregateId,
 		status:        status,
 		name:          name,
 		description:   description,
@@ -34,7 +34,7 @@ func NewArtifactProposed(
 }
 
 type ArtifactProposed struct {
-	id               values.ArtifactId
+	aggregateId      values.ArtifactId
 	status           values.Status
 	name             values.Name
 	description      values.Description
@@ -47,8 +47,8 @@ type ArtifactProposed struct {
 	eventMeta        aggregate.EventMeta
 }
 
-func (e ArtifactProposed) Id() values.ArtifactId {
-	return e.id
+func (e ArtifactProposed) AggregateId() values.ArtifactId {
+	return e.aggregateId
 }
 
 func (e ArtifactProposed) Status() values.Status {
@@ -109,7 +109,7 @@ func (e *ArtifactProposed) SetEventMeta(val aggregate.EventMeta) {
 }
 
 func (e ArtifactProposed) Export(ex ArtifactProposedExporterSetter) {
-	ex.SetId(e.id)
+	ex.SetAggregateId(e.aggregateId)
 	ex.SetStatus(e.status)
 	ex.SetName(e.name)
 	ex.SetDescription(e.description)
@@ -131,7 +131,7 @@ func (e ArtifactProposed) Export(ex ArtifactProposedExporterSetter) {
 
 type ArtifactProposedExporterSetter interface {
 	aggregate.PersistentDomainEventExporterSetter
-	SetId(id values.ArtifactId)
+	SetAggregateId(id values.ArtifactId)
 	SetStatus(values.Status)
 	SetName(values.Name)
 	SetDescription(values.Description)

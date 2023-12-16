@@ -110,7 +110,7 @@ func (a Artifact) Export(ex ArtifactExporterSetter) {
 
 func (a *Artifact) onArtifactProposed(e aggregate.PersistentDomainEvent) {
 	et := e.(*events.ArtifactProposed)
-	a.id = et.Id()
+	a.id = et.AggregateId()
 	a.status = et.Status()
 	a.name = et.Name()
 	a.description = et.Description()

@@ -10,7 +10,7 @@ import (
 )
 
 type ArtifactProposedReconstitutor struct {
-	Id               values.ArtifactIdReconstitutor
+	AggregateId      values.ArtifactIdReconstitutor
 	Status           uint8
 	Name             string
 	Description      string
@@ -24,7 +24,7 @@ type ArtifactProposedReconstitutor struct {
 }
 
 func (r ArtifactProposedReconstitutor) Reconstitute() (*ArtifactProposed, error) {
-	id, err := r.Id.Reconstitute()
+	id, err := r.AggregateId.Reconstitute()
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (r ArtifactProposedReconstitutor) Reconstitute() (*ArtifactProposed, error)
 		return nil, err
 	}
 	return &ArtifactProposed{
-		id:               id,
+		aggregateId:      id,
 		status:           status,
 		name:             name,
 		description:      description,
