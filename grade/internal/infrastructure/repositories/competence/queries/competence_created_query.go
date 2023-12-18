@@ -7,7 +7,7 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type CompetenceCreatedQuery struct {
@@ -61,7 +61,7 @@ func (q *CompetenceCreatedQuery) SetAggregateVersion(val uint) {
 func (q *CompetenceCreatedQuery) SetEventType(val string) {
 }
 
-func (q *CompetenceCreatedQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (q *CompetenceCreatedQuery) Evaluate(s session.DbSession) (session.Result, error) {
 	result, err := s.Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err

@@ -2,12 +2,12 @@ package member
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 func NewMemberFaker(
-	session infrastructure.DbSession,
+	session session.DbSession,
 	opts ...member.MemberFakerOption,
 ) *member.MemberFaker {
 	opts = append(

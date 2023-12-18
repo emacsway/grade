@@ -3,13 +3,13 @@ package batch
 import (
 	"errors"
 
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type DeferredResult struct {
 	lastInsertId int64
 	rowsAffected int64
-	callbacks    []infrastructure.DeferredResultCallback
+	callbacks    []session.DeferredResultCallback
 }
 
 func (r *DeferredResult) Resolve(lastInsertId, rowsAffected int64) {
@@ -24,7 +24,7 @@ func (r *DeferredResult) SetRowsAffected(v int64) {
 	r.rowsAffected = v
 }
 
-func (r *DeferredResult) AddCallback(callback infrastructure.DeferredResultCallback) {
+func (r *DeferredResult) AddCallback(callback session.DeferredResultCallback) {
 	r.callbacks = append(r.callbacks, callback)
 }
 

@@ -4,7 +4,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type TenantGetQuery struct {
@@ -25,7 +25,7 @@ func (q TenantGetQuery) params() []any {
 	return []any{id}
 }
 
-func (q *TenantGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (*tenant.Tenant, error) {
+func (q *TenantGetQuery) Get(s session.DbSessionSingleQuerier) (*tenant.Tenant, error) {
 	rec := &tenant.TenantReconstitutor{}
 	err := s.QueryRow(q.sql(), q.params()...).Scan(
 		&rec.Id, &rec.Name, &rec.CreatedAt, &rec.Version,

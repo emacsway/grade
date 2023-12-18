@@ -1,4 +1,4 @@
-package infrastructure
+package session
 
 /*
  * Some parts of the code based on

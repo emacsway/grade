@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/emacsway/grade/grade/internal/application"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 func NewDbSessionStub(rows *RowsStub) *DbSessionStub {
@@ -24,19 +24,19 @@ func (s DbSessionStub) Atomic(callback application.SessionCallback) error {
 	return callback(s)
 }
 
-func (s *DbSessionStub) Exec(query string, args ...any) (infrastructure.Result, error) {
+func (s *DbSessionStub) Exec(query string, args ...any) (session.Result, error) {
 	s.ActualQuery = query
 	s.ActualParams = args
 	return &ResultStub{}, nil
 }
 
-func (s *DbSessionStub) Query(query string, args ...any) (infrastructure.Rows, error) {
+func (s *DbSessionStub) Query(query string, args ...any) (session.Rows, error) {
 	s.ActualQuery = query
 	s.ActualParams = args
 	return s.Rows, nil
 }
 
-func (s *DbSessionStub) QueryRow(query string, args ...any) infrastructure.Row {
+func (s *DbSessionStub) QueryRow(query string, args ...any) session.Row {
 	s.ActualQuery = query
 	s.ActualParams = args
 	return s.Rows
@@ -97,7 +97,7 @@ func (r *RowStub) Scan(dest ...any) error {
 type ResultStub struct {
 	lastInsertId int64
 	rowsAffected int64
-	callbacks    []infrastructure.DeferredResultCallback
+	callbacks    []session.DeferredResultCallback
 }
 
 func (r *ResultStub) Resolve(lastInsertId, rowsAffected int64) {
@@ -112,7 +112,7 @@ func (r *ResultStub) SetRowsAffected(v int64) {
 	r.rowsAffected = v
 }
 
-func (r *ResultStub) AddCallback(callback infrastructure.DeferredResultCallback) {
+func (r *ResultStub) AddCallback(callback session.DeferredResultCallback) {
 	r.callbacks = append(r.callbacks, callback)
 }
 

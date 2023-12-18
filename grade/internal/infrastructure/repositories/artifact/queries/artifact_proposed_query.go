@@ -7,8 +7,8 @@ import (
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/repository"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type ArtifactProposedQuery struct {
@@ -56,7 +56,7 @@ func (q *ArtifactProposedQuery) SetCreatedAt(val time.Time) {
 	q.payload.CreatedAt = val
 }
 
-func (q *ArtifactProposedQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (q *ArtifactProposedQuery) Evaluate(s session.DbSession) (session.Result, error) {
 	q.EventInsertQuery.SetPayload(q.payload)
 	return q.EventInsertQuery.Evaluate(s)
 }

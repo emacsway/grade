@@ -5,18 +5,18 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/endorser/queries"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewEndorserRepository(session infrastructure.DbSession) *EndorserRepository {
+func NewEndorserRepository(session session.DbSession) *EndorserRepository {
 	return &EndorserRepository{
 		session: session,
 	}
 }
 
 type EndorserRepository struct {
-	session infrastructure.DbSession
+	session session.DbSession
 }
 
 func (r EndorserRepository) Insert(agg *endorser.Endorser) error {

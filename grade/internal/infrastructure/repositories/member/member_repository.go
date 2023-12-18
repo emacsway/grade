@@ -5,18 +5,18 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/member/queries"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewMemberRepository(session infrastructure.DbSession) *MemberRepository {
+func NewMemberRepository(session session.DbSession) *MemberRepository {
 	return &MemberRepository{
 		session: session,
 	}
 }
 
 type MemberRepository struct {
-	session infrastructure.DbSession
+	session session.DbSession
 }
 
 func (r *MemberRepository) Insert(agg *member.Member) error {

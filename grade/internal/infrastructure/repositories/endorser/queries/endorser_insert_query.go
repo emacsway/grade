@@ -8,7 +8,7 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type EndorserInsertQuery struct {
@@ -65,6 +65,6 @@ func (q *EndorserInsertQuery) SetVersion(val uint) {
 	q.params[6] = val
 }
 
-func (q *EndorserInsertQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *EndorserInsertQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

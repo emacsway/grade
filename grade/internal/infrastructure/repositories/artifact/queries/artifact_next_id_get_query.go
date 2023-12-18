@@ -6,7 +6,7 @@ import (
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type ArtifactNextIdGetQuery struct {
@@ -23,7 +23,7 @@ func (q ArtifactNextIdGetQuery) tenantIdValue() uint {
 	return uint(tenantIdExp)
 }
 
-func (q *ArtifactNextIdGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (artifactVal.ArtifactId, error) {
+func (q *ArtifactNextIdGetQuery) Get(s session.DbSessionSingleQuerier) (artifactVal.ArtifactId, error) {
 	rec := &artifactVal.ArtifactIdReconstitutor{}
 	rec.TenantId = q.tenantIdValue()
 	err := s.QueryRow(q.sql()).Scan(&rec.ArtifactId)

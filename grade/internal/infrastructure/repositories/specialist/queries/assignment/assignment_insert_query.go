@@ -7,7 +7,7 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	gradeVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type AssignmentInsertQuery struct {
@@ -49,6 +49,6 @@ func (q *AssignmentInsertQuery) SetCreatedAt(val time.Time) {
 	q.params[5] = val
 }
 
-func (q *AssignmentInsertQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *AssignmentInsertQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

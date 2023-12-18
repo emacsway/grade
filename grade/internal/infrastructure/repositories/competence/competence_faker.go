@@ -2,12 +2,12 @@ package competence
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/competence"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 func NewCompetenceFaker(
-	session infrastructure.DbSession,
+	session session.DbSession,
 	opts ...competence.CompetenceFakerOption,
 ) *competence.CompetenceFaker {
 	opts = append(

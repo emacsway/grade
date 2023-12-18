@@ -1,4 +1,4 @@
-package infrastructure
+package session
 
 import (
 	"github.com/emacsway/grade/grade/internal/application"

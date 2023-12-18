@@ -2,11 +2,11 @@ package tenant
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 func NewTenantFaker(
-	session infrastructure.DbSession,
+	session session.DbSession,
 	opts ...tenant.TenantFakerOption,
 ) *tenant.TenantFaker {
 	opts = append(

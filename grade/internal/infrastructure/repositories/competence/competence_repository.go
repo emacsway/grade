@@ -5,18 +5,18 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence/events"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/competence/queries"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewCompetenceRepository(session infrastructure.DbSession) *CompetenceRepository {
+func NewCompetenceRepository(session session.DbSession) *CompetenceRepository {
 	return &CompetenceRepository{
 		session: session,
 	}
 }
 
 type CompetenceRepository struct {
-	session infrastructure.DbSession
+	session session.DbSession
 }
 
 func (r *CompetenceRepository) Insert(agg *competence.Competence) error {
@@ -46,7 +46,7 @@ func (r *CompetenceRepository) save(agg *competence.Competence) error {
 	agg.ClearPendingDomainEvents()
 	return nil
 }
-func (r CompetenceRepository) eventQuery(iEvent aggregate.DomainEvent) (q infrastructure.QueryEvaluator) {
+func (r CompetenceRepository) eventQuery(iEvent aggregate.DomainEvent) (q session.QueryEvaluator) {
 	switch event := iEvent.(type) {
 	case *events.CompetenceCreated:
 		q = &queries.CompetenceCreatedQuery{}

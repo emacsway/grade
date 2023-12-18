@@ -8,7 +8,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/testutils"
 )
 
@@ -90,7 +90,7 @@ func testGet(t *testing.T, repositoryOption RepositoryOption) {
 type RepositoryOption struct {
 	Name       string
 	Repository *TenantRepository
-	Session    infrastructure.DbSession
+	Session    session.DbSession
 }
 
 func createRepositories(t *testing.T) []RepositoryOption {
@@ -102,7 +102,7 @@ func createRepositories(t *testing.T) []RepositoryOption {
 func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	db, err := testutils.NewTestDb()
 	require.NoError(t, err)
-	session := infrastructure.NewPgxSession(db)
+	session := session.NewPgxSession(db)
 	return RepositoryOption{
 		Name:       "PostgreSQL",
 		Repository: NewTenantRepository(session),

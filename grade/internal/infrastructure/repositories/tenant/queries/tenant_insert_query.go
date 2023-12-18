@@ -5,7 +5,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type TenantInsertQuery struct {
@@ -40,7 +40,7 @@ func (q *TenantInsertQuery) SetVersion(val uint) {
 	q.params[2] = val
 }
 
-func (q *TenantInsertQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *TenantInsertQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
 	result, err := s.Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err

@@ -3,7 +3,7 @@ package queries
 import (
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type CompetenceGetQuery struct {
@@ -24,7 +24,7 @@ func (q CompetenceGetQuery) params() []any {
 	return []any{idExp.TenantId, idExp.CompetenceId}
 }
 
-func (q *CompetenceGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (*competence.Competence, error) {
+func (q *CompetenceGetQuery) Get(s session.DbSessionSingleQuerier) (*competence.Competence, error) {
 	rec := &competence.CompetenceReconstitutor{}
 	err := s.QueryRow(q.sql(), q.params()...).Scan(
 		&rec.Id.TenantId, &rec.Id.CompetenceId, &rec.Name, &rec.OwnerId.MemberId,

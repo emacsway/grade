@@ -6,12 +6,12 @@ import (
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/artifact/queries"
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/repository"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewArtifactRepository(session infrastructure.DbSession) *ArtifactRepository {
+func NewArtifactRepository(session session.DbSession) *ArtifactRepository {
 	return &ArtifactRepository{
 		session:    session,
 		eventStore: repository.NewEventStore(session, "Artifact", eventQuery),
@@ -19,7 +19,7 @@ func NewArtifactRepository(session infrastructure.DbSession) *ArtifactRepository
 }
 
 type ArtifactRepository struct {
-	session    infrastructure.DbSession
+	session    session.DbSession
 	eventStore *repository.EventStore
 }
 
@@ -32,7 +32,7 @@ func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.Ar
 	return q.Get(r.session)
 }
 
-func eventQuery(iEvent aggregate.PersistentDomainEvent) (q infrastructure.EventSourcedQueryEvaluator) {
+func eventQuery(iEvent aggregate.PersistentDomainEvent) (q session.EventSourcedQueryEvaluator) {
 	switch event := iEvent.(type) {
 	case *events.ArtifactProposed:
 		q = &queries.ArtifactProposedQuery{}

@@ -46,7 +46,7 @@ func (ss SomethingSpecification) Expression() s.Visitable {
 	)
 }
 
-func (ss SomethingSpecification) Evaluate( /* session infrastructure.PgxSession */ ) (
+func (ss SomethingSpecification) Evaluate( /* session session.PgxSession */ ) (
 	sql string, params []driver.Valuer, err error,
 ) {
 	exp := ss.Expression()

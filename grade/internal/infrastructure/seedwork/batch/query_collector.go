@@ -3,7 +3,7 @@ package batch
 import (
 	"errors"
 
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 func NewQueryCollector() *QueryCollector {
@@ -14,19 +14,19 @@ func NewQueryCollector() *QueryCollector {
 }
 
 type MultiQuerier interface {
-	infrastructure.QueryEvaluator
-	infrastructure.DeferredDbSessionExecutor
+	session.QueryEvaluator
+	session.DeferredDbSessionExecutor
 }
 
 type QueryCollector struct {
 	multiQueryMap map[string]MultiQuerier
 }
 
-func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.DeferredResult, error) {
+func (c *QueryCollector) Exec(query string, args ...any) (session.DeferredResult, error) {
 	if _, found := c.multiQueryMap[query]; !found {
-		if infrastructure.IsAutoincrementInsertQuery(query) {
+		if session.IsAutoincrementInsertQuery(query) {
 			c.multiQueryMap[query] = NewAutoincrementMultiInsertQuery()
-		} else if infrastructure.IsInsertQuery(query) {
+		} else if session.IsInsertQuery(query) {
 			c.multiQueryMap[query] = NewMultiInsertQuery()
 		}
 	}
@@ -36,7 +36,7 @@ func (c *QueryCollector) Exec(query string, args ...any) (infrastructure.Deferre
 	return nil, errors.New("unknown SQL command")
 }
 
-func (c *QueryCollector) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (c *QueryCollector) Evaluate(s session.DbSession) (session.Result, error) {
 	var rowsAffected int64
 	for len(c.multiQueryMap) > 0 {
 		// Resolve N+1 query problem with auto-increment primary key.
@@ -54,5 +54,5 @@ func (c *QueryCollector) Evaluate(s infrastructure.DbSession) (infrastructure.Re
 			}
 		}
 	}
-	return infrastructure.RowsAffected(rowsAffected), nil
+	return session.RowsAffected(rowsAffected), nil
 }

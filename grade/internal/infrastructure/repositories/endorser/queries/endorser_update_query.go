@@ -8,7 +8,7 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type EndorserUpdateQuery struct {
@@ -68,7 +68,7 @@ func (q *EndorserUpdateQuery) SetCreatedAt(val time.Time) {
 	q.params[6] = val
 }
 
-func (q *EndorserUpdateQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *EndorserUpdateQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
 	// TODO: Optimistic lock
 	return s.Exec(q.sql(), q.params[:]...)
 }

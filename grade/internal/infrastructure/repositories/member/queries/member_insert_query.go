@@ -6,7 +6,7 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type MemberInsertQuery struct {
@@ -67,7 +67,7 @@ func (q *MemberInsertQuery) SetVersion(val uint) {
 	q.params[5] = val
 }
 
-func (q *MemberInsertQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *MemberInsertQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
 	result, err := s.Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err

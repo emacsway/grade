@@ -5,7 +5,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 /**
@@ -68,7 +68,7 @@ func (q *NameUpdatedQueryWithLock) SetName(val values.Name) {
 func (q *NameUpdatedQueryWithLock) SetEventType(val string) {
 }
 
-func (q *NameUpdatedQueryWithLock) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (q *NameUpdatedQueryWithLock) Evaluate(s session.DbSession) (session.Result, error) {
 	result, err := s.Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err

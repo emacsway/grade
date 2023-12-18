@@ -2,12 +2,12 @@ package repository
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-type EventQueryFactory func(aggregate.PersistentDomainEvent) infrastructure.EventSourcedQueryEvaluator
+type EventQueryFactory func(aggregate.PersistentDomainEvent) session.EventSourcedQueryEvaluator
 
-func NewEventStore(session infrastructure.DbSession, streamType string, eventQuery EventQueryFactory) *EventStore {
+func NewEventStore(session session.DbSession, streamType string, eventQuery EventQueryFactory) *EventStore {
 	return &EventStore{
 		session:    session,
 		streamType: streamType,
@@ -16,7 +16,7 @@ func NewEventStore(session infrastructure.DbSession, streamType string, eventQue
 }
 
 type EventStore struct {
-	session    infrastructure.DbSession
+	session    session.DbSession
 	streamType string
 	eventQuery EventQueryFactory
 }

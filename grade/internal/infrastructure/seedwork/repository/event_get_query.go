@@ -2,7 +2,7 @@ package repository
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type EventGetQuery struct {
@@ -24,7 +24,7 @@ func (q EventGetQuery) sql() string {
 func (q EventGetQuery) params() []any {
 	return []any{q.StreamId.TenantId(), q.StreamId.StreamType(), q.StreamId.StreamId(), q.SincePosition}
 }
-func (q *EventGetQuery) Stream(s infrastructure.DbSessionQuerier) ([]aggregate.PersistentDomainEvent, error) {
+func (q *EventGetQuery) Stream(s session.DbSessionQuerier) ([]aggregate.PersistentDomainEvent, error) {
 	stream := []aggregate.PersistentDomainEvent{}
 	rows, err := s.Query(q.sql(), q.params()...)
 	if err != nil {

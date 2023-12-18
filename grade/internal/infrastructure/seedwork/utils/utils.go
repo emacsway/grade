@@ -1,4 +1,4 @@
-package seedwork
+package utils
 
 import (
 	"fmt"

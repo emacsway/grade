@@ -6,7 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type EventInsertQuery struct {
@@ -49,7 +49,7 @@ func (q *EventInsertQuery) SetEventVersion(val uint8) {
 	q.params[5] = val
 }
 
-func (q *EventInsertQuery) Evaluate(s infrastructure.DbSession) (infrastructure.Result, error) {
+func (q *EventInsertQuery) Evaluate(s session.DbSession) (session.Result, error) {
 	payload, err := json.Marshal(q.payload)
 	if err != nil {
 		return nil, err

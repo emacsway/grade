@@ -4,7 +4,7 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type EndorserDeleteQuery struct {
@@ -29,6 +29,6 @@ func (q *EndorserDeleteQuery) SetMemberId(val member.InternalMemberId) {
 	q.params[1] = v
 }
 
-func (q *EndorserDeleteQuery) Evaluate(s infrastructure.DbSessionExecutor) (infrastructure.Result, error) {
+func (q *EndorserDeleteQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
 	return s.Exec(q.sql(), q.params[:]...)
 }

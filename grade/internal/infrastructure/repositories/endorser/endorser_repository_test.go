@@ -10,9 +10,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/testutils"
 )
 
@@ -78,7 +78,7 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 type RepositoryOption struct {
 	Name       string
 	Repository *EndorserRepository
-	Session    infrastructure.DbSession
+	Session    session.DbSession
 	TenantId   uint
 	MemberId   uint
 }
@@ -93,7 +93,7 @@ func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	var tenantExp tenant.TenantExporter
 	db, err := testutils.NewTestDb()
 	require.NoError(t, err)
-	session := infrastructure.NewPgxSession(db)
+	session := session.NewPgxSession(db)
 	tenantFaker := tenantRepo.NewTenantFaker(session)
 	aTenant, err := tenantFaker.Create()
 	require.NoError(t, err)

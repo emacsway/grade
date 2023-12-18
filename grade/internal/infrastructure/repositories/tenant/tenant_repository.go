@@ -5,18 +5,18 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant/queries"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewTenantRepository(session infrastructure.DbSession) *TenantRepository {
+func NewTenantRepository(session session.DbSession) *TenantRepository {
 	return &TenantRepository{
 		session: session,
 	}
 }
 
 type TenantRepository struct {
-	session infrastructure.DbSession
+	session session.DbSession
 }
 
 func (r *TenantRepository) Insert(agg *tenant.Tenant) error {

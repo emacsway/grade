@@ -3,7 +3,7 @@ package queries
 import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 type MemberGetQuery struct {
@@ -24,7 +24,7 @@ func (q MemberGetQuery) params() []any {
 	return []any{idExp.TenantId, idExp.MemberId}
 }
 
-func (q *MemberGetQuery) Get(s infrastructure.DbSessionSingleQuerier) (*member.Member, error) {
+func (q *MemberGetQuery) Get(s session.DbSessionSingleQuerier) (*member.Member, error) {
 	rec := &member.MemberReconstitutor{}
 	err := s.QueryRow(q.sql(), q.params()...).Scan(
 		&rec.Id.TenantId, &rec.Id.MemberId, &rec.Status, &rec.FullName.FirstName, &rec.FullName.LastName,

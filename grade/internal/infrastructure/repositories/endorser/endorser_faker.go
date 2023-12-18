@@ -2,12 +2,12 @@ package endorser
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
-	"github.com/emacsway/grade/grade/internal/infrastructure"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
 func NewEndorserFaker(
-	session infrastructure.DbSession,
+	session session.DbSession,
 	opts ...endorser.EndorserFakerOption,
 ) *endorser.EndorserFaker {
 	opts = append(
