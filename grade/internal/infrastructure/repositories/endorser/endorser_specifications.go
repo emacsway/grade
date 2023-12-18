@@ -9,7 +9,7 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	s "github.com/emacsway/grade/grade/internal/infrastructure/specification"
+	s "github.com/emacsway/grade/grade/internal/infrastructure/seedwork/specification"
 )
 
 type EndorserCanCompleteEndorsementSpecification struct {
