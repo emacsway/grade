@@ -10,8 +10,8 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
-	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/testutils"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/testutils"
 )
 
 type testCase func(t *testing.T, repositoryOption RepositoryOption)

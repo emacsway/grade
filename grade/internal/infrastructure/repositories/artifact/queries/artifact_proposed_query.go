@@ -8,7 +8,7 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
-	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/repository"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/repository"
 )
 
 type ArtifactProposedQuery struct {

@@ -3,7 +3,7 @@ package queries
 import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
-	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/repository"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/repository"
 )
 
 type ArtifactGetQuery struct {

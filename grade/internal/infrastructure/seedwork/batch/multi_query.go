@@ -5,7 +5,7 @@ import (
 	"regexp"
 
 	"github.com/emacsway/grade/grade/internal/infrastructure"
-	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork"
 )
 
 var reInsert = regexp.MustCompile(`VALUES\s*(\((?:'(?:[^']|'')*'|[^)])+\))`)

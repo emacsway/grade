@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/testutils"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/testutils"
 )
 
-func TestQueryCollectorMultiInsertQuery(t *testing.T) {
+func TestMultiInsertQuery(t *testing.T) {
 	cases := []struct {
 		sql            string
 		params         [][]any
@@ -39,7 +39,7 @@ func TestQueryCollectorMultiInsertQuery(t *testing.T) {
                     f1, f2, f3
                 ) VALUES %s
                 ON CONFLICT DO NOTHING`
-			q := NewQueryCollector()
+			q := NewMultiInsertQuery()
 			for _, v := range c.params {
 				_, err := q.Exec(fmt.Sprintf(sqlTemplate, c.sql), v...)
 				assert.Nil(t, err)
@@ -53,7 +53,7 @@ func TestQueryCollectorMultiInsertQuery(t *testing.T) {
 	}
 }
 
-func TestQueryCollectorAutoincrementMultiInsertQuery(t *testing.T) {
+func TestAutoincrementMultiInsertQuery(t *testing.T) {
 	cases := []struct {
 		sql            string
 		params         [][]any
@@ -83,7 +83,7 @@ func TestQueryCollectorAutoincrementMultiInsertQuery(t *testing.T) {
                     f1, f2, f3
                 ) VALUES %s
                 RETURNING id`
-			q := NewQueryCollector()
+			q := NewAutoincrementMultiInsertQuery()
 			for _, v := range c.params {
 				_, err := q.Exec(fmt.Sprintf(sqlTemplate, c.sql), v...)
 				assert.Nil(t, err)

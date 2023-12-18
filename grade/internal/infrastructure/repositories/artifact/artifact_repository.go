@@ -8,7 +8,7 @@ import (
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/artifact/queries"
-	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/seedwork/repository"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/repository"
 )
 
 func NewArtifactRepository(session infrastructure.DbSession) *ArtifactRepository {
