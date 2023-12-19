@@ -17,6 +17,7 @@ func NewEventMeta(
 	// i.e. the time of obtaining the vector clock.
 	// Therefore, it is the same for all aggregate events at the time of saving.
 	occurredAt time.Time,
+	reason string,
 ) (EventMeta, error) {
 	return EventMeta{
 		eventId:            eventId,
@@ -24,6 +25,7 @@ func NewEventMeta(
 		correlationId:      correlationId,
 		causalDependencies: causalDependencies,
 		occurredAt:         occurredAt,
+		reason:             reason,
 	}, nil
 }
 
@@ -33,6 +35,7 @@ type EventMeta struct {
 	correlationId      uuid.Uuid // CommandId
 	causalDependencies []CausalDependency
 	occurredAt         time.Time
+	reason             string
 }
 
 func (m EventMeta) EventId() uuid.Uuid {
@@ -53,6 +56,10 @@ func (m EventMeta) CausalDependencies() []CausalDependency {
 
 func (m EventMeta) OccurredAt() time.Time {
 	return m.occurredAt
+}
+
+func (m EventMeta) Reason() string {
+	return m.reason
 }
 
 func (m EventMeta) Spawn(eventId uuid.Uuid) EventMeta {
@@ -77,6 +84,7 @@ type EventMetaExporterSetter interface {
 	SetCorrelationId(uuid.Uuid)
 	AddCausalDependency(CausalDependency)
 	SetOccurredAt(time.Time)
+	SetReason(string)
 }
 
 type EventMetaExporter struct {
@@ -85,6 +93,7 @@ type EventMetaExporter struct {
 	CorrelationId      uuid.Uuid
 	CausalDependencies []CausalDependencyExporter
 	OccurredAt         time.Time
+	Reason             string
 }
 
 func (ex *EventMetaExporter) SetEventId(val uuid.Uuid) {
@@ -109,12 +118,17 @@ func (ex *EventMetaExporter) SetOccurredAt(val time.Time) {
 	ex.OccurredAt = val
 }
 
+func (ex *EventMetaExporter) SetReason(val string) {
+	ex.Reason = val
+}
+
 type EventMetaReconstitutor struct {
 	EventId            uuid.Uuid
 	CausationId        uuid.Uuid
 	CorrelationId      uuid.Uuid
 	CausalDependencies []CausalDependencyReconstitutor
 	OccurredAt         time.Time
+	Reason             string
 }
 
 func (r EventMetaReconstitutor) Reconstitute() (EventMeta, error) {
@@ -126,5 +140,5 @@ func (r EventMetaReconstitutor) Reconstitute() (EventMeta, error) {
 		}
 		causalDependencies = append(causalDependencies, causalDependency)
 	}
-	return NewEventMeta(r.EventId, r.CausationId, r.CorrelationId, causalDependencies, r.OccurredAt)
+	return NewEventMeta(r.EventId, r.CausationId, r.CorrelationId, causalDependencies, r.OccurredAt, r.Reason)
 }
