@@ -176,7 +176,7 @@ CREATE TABLE specialist (
 );
 
 
-CREATE TABLE endorsement (
+CREATE TABLE specialist_endorsement (
     tenant_id integer NOT NULL,
     specialist_id bigint NOT NULL,
     specialist_grade smallint NOT NULL DEFAULT 0,
@@ -194,7 +194,7 @@ CREATE TABLE endorsement (
 );
 
 
-CREATE TABLE assignment (
+CREATE TABLE specialist_assignment (
     tenant_id integer NOT NULL,
     specialist_id bigint NOT NULL,
     specialist_version integer NOT NULL,

@@ -16,7 +16,7 @@ type AssignmentInsertQuery struct {
 
 func (q AssignmentInsertQuery) sql() string {
 	return `
-		INSERT INTO assignment (
+		INSERT INTO specialist_assignment (
 			tenant_id, specialist_id, specialist_version, assigned_grade, reason, created_at
 		) VALUES ($1, $2, $3, $4, $5, $6)
 		ON CONFLICT DO NOTHING`

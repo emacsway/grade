@@ -16,7 +16,7 @@ type EndorsementInsertQuery struct {
 
 func (q EndorsementInsertQuery) sql() string {
 	return `
-		INSERT INTO endorsement (
+		INSERT INTO specialist_endorsement (
 			tenant_id, specialist_id, specialist_grade, specialist_version,
 			artifact_id, endorser_id, endorser_grade, endorser_version, created_at
 		) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
