@@ -25,3 +25,11 @@ func (a *VersionedAggregate) NextVersion() uint {
 func (a *VersionedAggregate) SetVersion(val uint) {
 	a.version = val
 }
+
+func (a VersionedAggregate) Export(ex VersionedAggregateExporterSetter) {
+	ex.SetVersion(a.Version())
+}
+
+type VersionedAggregateExporterSetter interface {
+	SetVersion(uint)
+}
