@@ -8,15 +8,15 @@ import (
 )
 
 func NewArtifactFaker(
-	session session.DbSession,
+	currentSession session.DbSession,
 	opts ...artifact.ArtifactFakerOption,
 ) *artifact.ArtifactFaker {
 	opts = append(
 		opts,
 		artifact.WithTransientId(),
-		artifact.WithRepository(NewArtifactRepository(session)),
-		artifact.WithMemberFaker(memberRepo.NewMemberFaker(session)),
-		artifact.WithCompetenceFaker(competenceRepo.NewCompetenceFaker(session)),
+		artifact.WithRepository(NewArtifactRepository(currentSession)),
+		artifact.WithMemberFaker(memberRepo.NewMemberFaker(currentSession)),
+		artifact.WithCompetenceFaker(competenceRepo.NewCompetenceFaker(currentSession)),
 	)
 	return artifact.NewArtifactFaker(opts...)
 }

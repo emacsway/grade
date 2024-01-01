@@ -9,9 +9,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewMemberRepository(session session.DbSession) *MemberRepository {
+func NewMemberRepository(currentSession session.DbSession) *MemberRepository {
 	return &MemberRepository{
-		session: session,
+		session: currentSession,
 	}
 }
 

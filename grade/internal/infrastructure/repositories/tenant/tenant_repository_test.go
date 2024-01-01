@@ -102,10 +102,10 @@ func createRepositories(t *testing.T) []RepositoryOption {
 func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	db, err := testutils.NewTestDb()
 	require.NoError(t, err)
-	session := session.NewPgxSession(db)
+	currentSession := session.NewPgxSession(db)
 	return RepositoryOption{
 		Name:       "PostgreSQL",
-		Repository: NewTenantRepository(session),
-		Session:    session,
+		Repository: NewTenantRepository(currentSession),
+		Session:    currentSession,
 	}
 }

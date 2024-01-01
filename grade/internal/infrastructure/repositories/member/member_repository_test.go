@@ -114,15 +114,15 @@ func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	var tenantExp tenant.TenantExporter
 	db, err := testutils.NewTestDb()
 	require.NoError(t, err)
-	session := session.NewPgxSession(db)
-	tf := tenantRepo.NewTenantFaker(session)
+	currentSession := session.NewPgxSession(db)
+	tf := tenantRepo.NewTenantFaker(currentSession)
 	aTenant, err := tf.Create()
 	require.NoError(t, err)
 	aTenant.Export(&tenantExp)
 	return RepositoryOption{
 		Name:       "PostgreSQL",
-		Repository: NewMemberRepository(session),
-		Session:    session,
+		Repository: NewMemberRepository(currentSession),
+		Session:    currentSession,
 		TenantId:   uint(tenantExp.Id),
 	}
 }

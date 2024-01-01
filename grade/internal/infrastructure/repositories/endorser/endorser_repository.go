@@ -9,9 +9,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewEndorserRepository(session session.DbSession) *EndorserRepository {
+func NewEndorserRepository(currentSession session.DbSession) *EndorserRepository {
 	return &EndorserRepository{
-		session: session,
+		session: currentSession,
 	}
 }
 

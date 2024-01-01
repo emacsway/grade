@@ -7,14 +7,14 @@ import (
 )
 
 func NewCompetenceFaker(
-	session session.DbSession,
+	currentSession session.DbSession,
 	opts ...competence.CompetenceFakerOption,
 ) *competence.CompetenceFaker {
 	opts = append(
 		opts,
 		competence.WithTransientId(),
-		competence.WithRepository(NewCompetenceRepository(session)),
-		competence.WithMemberFaker(memberRepo.NewMemberFaker(session)),
+		competence.WithRepository(NewCompetenceRepository(currentSession)),
+		competence.WithMemberFaker(memberRepo.NewMemberFaker(currentSession)),
 	)
 	return competence.NewCompetenceFaker(opts...)
 }

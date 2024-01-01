@@ -9,9 +9,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewTenantRepository(session session.DbSession) *TenantRepository {
+func NewTenantRepository(currentSession session.DbSession) *TenantRepository {
 	return &TenantRepository{
-		session: session,
+		session: currentSession,
 	}
 }
 

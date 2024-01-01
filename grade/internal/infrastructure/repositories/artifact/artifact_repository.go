@@ -11,10 +11,10 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewArtifactRepository(session session.DbSession) *ArtifactRepository {
+func NewArtifactRepository(currentSession session.DbSession) *ArtifactRepository {
 	return &ArtifactRepository{
-		session:    session,
-		eventStore: repository.NewEventStore(session, "Artifact", eventQuery),
+		session:    currentSession,
+		eventStore: repository.NewEventStore(currentSession, "Artifact", eventQuery),
 	}
 }
 

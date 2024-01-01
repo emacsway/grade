@@ -6,13 +6,13 @@ import (
 )
 
 func NewTenantFaker(
-	session session.DbSession,
+	currentSession session.DbSession,
 	opts ...tenant.TenantFakerOption,
 ) *tenant.TenantFaker {
 	opts = append(
 		opts,
 		tenant.WithTransientId(),
-		tenant.WithRepository(NewTenantRepository(session)),
+		tenant.WithRepository(NewTenantRepository(currentSession)),
 	)
 	return tenant.NewTenantFaker(opts...)
 }

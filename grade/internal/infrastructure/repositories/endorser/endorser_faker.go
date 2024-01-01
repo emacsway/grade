@@ -7,13 +7,13 @@ import (
 )
 
 func NewEndorserFaker(
-	session session.DbSession,
+	currentSession session.DbSession,
 	opts ...endorser.EndorserFakerOption,
 ) *endorser.EndorserFaker {
 	opts = append(
 		opts,
-		endorser.WithRepository(NewEndorserRepository(session)),
-		endorser.WithMemberFaker(memberRepo.NewMemberFaker(session)),
+		endorser.WithRepository(NewEndorserRepository(currentSession)),
+		endorser.WithMemberFaker(memberRepo.NewMemberFaker(currentSession)),
 	)
 	return endorser.NewEndorserFaker(opts...)
 }

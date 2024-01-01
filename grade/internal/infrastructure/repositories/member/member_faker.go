@@ -7,15 +7,15 @@ import (
 )
 
 func NewMemberFaker(
-	session session.DbSession,
+	currentSession session.DbSession,
 	opts ...member.MemberFakerOption,
 ) *member.MemberFaker {
 	opts = append(
 		opts,
 		member.WithTransientId(),
-		member.WithRepository(NewMemberRepository(session)),
+		member.WithRepository(NewMemberRepository(currentSession)),
 		// TODO: Is this a reason to pass a session to repository method?
-		member.WithTenantFaker(tenantRepo.NewTenantFaker(session)),
+		member.WithTenantFaker(tenantRepo.NewTenantFaker(currentSession)),
 	)
 	return member.NewMemberFaker(opts...)
 }

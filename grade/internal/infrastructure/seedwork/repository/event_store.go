@@ -7,9 +7,9 @@ import (
 
 type EventQueryFactory func(aggregate.PersistentDomainEvent) session.EventSourcedQueryEvaluator
 
-func NewEventStore(session session.DbSession, streamType string, eventQuery EventQueryFactory) *EventStore {
+func NewEventStore(currentSession session.DbSession, streamType string, eventQuery EventQueryFactory) *EventStore {
 	return &EventStore{
-		session:    session,
+		session:    currentSession,
 		streamType: streamType,
 		eventQuery: eventQuery,
 	}

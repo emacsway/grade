@@ -9,9 +9,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-func NewCompetenceRepository(session session.DbSession) *CompetenceRepository {
+func NewCompetenceRepository(currentSession session.DbSession) *CompetenceRepository {
 	return &CompetenceRepository{
-		session: session,
+		session: currentSession,
 	}
 }
 
