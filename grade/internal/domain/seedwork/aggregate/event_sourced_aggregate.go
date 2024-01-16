@@ -29,8 +29,8 @@ func (a *EventSourcedAggregate[T]) LoadFrom(pastEvents []T) {
 
 func (a *EventSourcedAggregate[T]) Update(e T) {
 	e.SetAggregateVersion(a.NextVersion())
-	a.handlers[e.EventType()](e)
 	a.AddDomainEvent(e)
+	a.handlers[e.EventType()](e)
 }
 func (a EventSourcedAggregate[T]) PendingDomainEvents() []T {
 	return a.EventiveEntity.PendingDomainEvents()
