@@ -51,22 +51,22 @@ type EventSourcedQueryEvaluator interface {
 
 // Deferred
 
-type DeferredResultCallback func(Result)
+type DeferredResultCallback func(Result) error
 
 type DeferredResult interface {
-	AddCallback(DeferredResultCallback)
+	AddCallback(DeferredResultCallback) error
 }
 
-type DeferredRowsCallback func(Rows)
+type DeferredRowsCallback func(Rows) error
 
 type DeferredRows interface {
-	AddCallback(DeferredRowsCallback)
+	AddCallback(DeferredRowsCallback) error
 }
 
-type DeferredRowCallback func(Rows)
+type DeferredRowCallback func(Rows) error
 
 type DeferredRow interface {
-	AddCallback(DeferredRowsCallback)
+	AddCallback(DeferredRowsCallback) error
 }
 
 type DeferredDbSessionExecutor interface {

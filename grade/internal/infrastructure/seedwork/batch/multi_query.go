@@ -36,7 +36,7 @@ type MultiQueryBase struct {
 	sqlTemplate  string
 	placeholders string
 	params       [][]any
-	results      []*DeferredResult
+	results      []*session.DeferredResultImp
 	re           *regexp.Regexp
 	replacement  string
 	concat       string
@@ -66,7 +66,7 @@ func (q *MultiQueryBase) Exec(query string, args ...any) (session.DeferredResult
 	q.placeholders = q.re.FindStringSubmatch(query)[1]
 	q.sqlTemplate = q.re.ReplaceAllLiteralString(query, q.replacement)
 	q.params = append(q.params, args)
-	result := &DeferredResult{}
+	result := &session.DeferredResultImp{}
 	q.results = append(q.results, result)
 	return result, nil
 }
@@ -81,7 +81,10 @@ func (q MultiQuery) Evaluate(s session.DbSession) (session.Result, error) {
 		return nil, err
 	}
 	for i := range q.results {
-		q.results[i].Resolve(0, 0)
+		err = q.results[i].Resolve(0, 0)
+		if err != nil {
+			return r, err
+		}
 	}
 	return r, nil
 }
@@ -103,7 +106,10 @@ func (q AutoincrementMultiInsertQuery) Evaluate(s session.DbSession) (session.Re
 		if err != nil {
 			return nil, err
 		}
-		q.results[i].Resolve(id, 0)
+		err = q.results[i].Resolve(id, 0)
+		if err != nil {
+			return session.RowsAffected(len(q.results)), err
+		}
 		i++
 	}
 	err = rows.Err()

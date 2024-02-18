@@ -27,7 +27,7 @@ func (s DbSessionStub) Atomic(callback appSession.SessionCallback) error {
 func (s *DbSessionStub) Exec(query string, args ...any) (session.Result, error) {
 	s.ActualQuery = query
 	s.ActualParams = args
-	return &ResultStub{}, nil
+	return &session.DeferredResultImp{}, nil
 }
 
 func (s *DbSessionStub) Query(query string, args ...any) (session.Rows, error) {
@@ -92,42 +92,4 @@ func (r *RowStub) Err() error {
 
 func (r *RowStub) Scan(dest ...any) error {
 	return r.rows.Scan(dest...)
-}
-
-type ResultStub struct {
-	lastInsertId int64
-	rowsAffected int64
-	callbacks    []session.DeferredResultCallback
-}
-
-func (r *ResultStub) Resolve(lastInsertId, rowsAffected int64) {
-	r.lastInsertId = lastInsertId
-	r.rowsAffected = rowsAffected
-	for i := range r.callbacks {
-		r.callbacks[i](r)
-	}
-}
-
-func (r *ResultStub) SetRowsAffected(v int64) {
-	r.rowsAffected = v
-}
-
-func (r *ResultStub) AddCallback(callback session.DeferredResultCallback) {
-	r.callbacks = append(r.callbacks, callback)
-}
-
-func (r ResultStub) LastInsertId() (int64, error) {
-	if r.rowsAffected == 0 {
-		return r.lastInsertId, nil
-	} else {
-		return 0, errors.New("LastInsertId is not supported by this driver")
-	}
-}
-
-func (r ResultStub) RowsAffected() (int64, error) {
-	if r.lastInsertId == 0 {
-		return r.rowsAffected, nil
-	} else {
-		return 0, errors.New("RowsAffected is not supported by INSERT command")
-	}
 }
