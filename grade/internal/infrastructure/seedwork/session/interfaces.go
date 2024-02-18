@@ -19,6 +19,8 @@ type Row interface {
 	Scan(dest ...any) error
 }
 
+// Db
+
 type DbSessionExecutor interface {
 	Exec(query string, args ...any) (Result, error)
 }
