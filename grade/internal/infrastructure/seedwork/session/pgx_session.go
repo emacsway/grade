@@ -57,9 +57,14 @@ func (s *PgxSession) Exec(query string, args ...any) (Result, error) {
 }
 
 func (s *PgxSession) insert(query string, args ...any) (Result, error) {
-	var id int
+	var id int64
 	err := s.dbExecutor.QueryRow(query, args...).Scan(&id)
-	return LastInsertId(id), err
+	if err != nil {
+		return nil, err
+	}
+	r := &DeferredResultImp{}
+	err = r.Resolve(id, 0)
+	return r, err
 }
 
 func (s *PgxSession) Query(query string, args ...any) (Rows, error) {
@@ -74,26 +79,6 @@ type DbExecutor interface {
 	Exec(query string, args ...any) (sql.Result, error)
 	Query(query string, args ...any) (*sql.Rows, error)
 	QueryRow(query string, args ...any) *sql.Row
-}
-
-type LastInsertId int64
-
-func (i LastInsertId) LastInsertId() (int64, error) {
-	return int64(i), nil
-}
-
-func (i LastInsertId) RowsAffected() (int64, error) {
-	return 0, errors.New("RowsAffected is not supported by INSERT command")
-}
-
-type RowsAffected int64
-
-func (RowsAffected) LastInsertId() (int64, error) {
-	return 0, errors.New("LastInsertId is not supported by this driver")
-}
-
-func (v RowsAffected) RowsAffected() (int64, error) {
-	return int64(v), nil
 }
 
 func IsInsertQuery(query string) bool {
