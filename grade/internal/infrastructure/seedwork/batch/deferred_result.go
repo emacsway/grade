@@ -22,10 +22,6 @@ func (r *DeferredResult) Resolve(lastInsertId, rowsAffected int64) {
 	}
 }
 
-func (r *DeferredResult) SetRowsAffected(v int64) {
-	r.rowsAffected = v
-}
-
 func (r *DeferredResult) AddCallback(callback session.DeferredResultCallback) {
 	if r.isResolved {
 		callback(r)
