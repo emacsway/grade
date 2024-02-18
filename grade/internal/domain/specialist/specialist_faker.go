@@ -63,15 +63,15 @@ func NewSpecialistFaker(opts ...SpecialistFakerOption) *SpecialistFaker {
 }
 
 type SpecialistFaker struct {
-	Id                   memberVal.MemberIdFaker
-	Grade                uint8
-	ReceivedEndorsements []ReceivedEndorsementFakeItem
-	CreatedAt            time.Time
-	Repository           SpecialistRepository
-	ArtifactFaker        *artifact.ArtifactFaker
-	EndorserFaker        *endorser.EndorserFaker
-	MemberFaker          *member.MemberFaker
-	agg                  *Specialist
+	Id            memberVal.MemberIdFaker
+	Grade         uint8
+	Commands      []interface{}
+	CreatedAt     time.Time
+	Repository    SpecialistRepository
+	ArtifactFaker *artifact.ArtifactFaker
+	EndorserFaker *endorser.EndorserFaker
+	MemberFaker   *member.MemberFaker
+	agg           *Specialist
 }
 
 func (f *SpecialistFaker) fake() {
@@ -145,7 +145,7 @@ func (f *SpecialistFaker) receiveEndorsement(ef *endorser.EndorserFaker) error {
 		return err
 	}
 
-	f.ReceivedEndorsements = append(f.ReceivedEndorsements, ReceivedEndorsementFakeItem{
+	f.Commands = append(f.Commands, ReceivedEndorsementFakeCommand{
 		Endorser:  *ef,
 		Artifact:  *af,
 		CreatedAt: time.Now().Truncate(time.Microsecond),
@@ -169,22 +169,25 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 	if err != nil {
 		return nil, err
 	}
-	for i := range f.ReceivedEndorsements {
-		e, err := f.ReceivedEndorsements[i].Endorser.Create()
-		if err != nil {
-			return nil, err
-		}
-		art, err := f.ReceivedEndorsements[i].Artifact.Create()
-		if err != nil {
-			return nil, err
-		}
-		err = e.ReserveEndorsement()
-		if err != nil {
-			return nil, err
-		}
-		err = agg.ReceiveEndorsement(*e, *art, f.ReceivedEndorsements[i].CreatedAt)
-		if err != nil {
-			return nil, err
+	for i := range f.Commands {
+		switch cmd := f.Commands[i].(type) {
+		case ReceivedEndorsementFakeCommand:
+			e, err := cmd.Endorser.Create()
+			if err != nil {
+				return nil, err
+			}
+			art, err := cmd.Artifact.Create()
+			if err != nil {
+				return nil, err
+			}
+			err = e.ReserveEndorsement()
+			if err != nil {
+				return nil, err
+			}
+			err = agg.ReceiveEndorsement(*e, *art, cmd.CreatedAt)
+			if err != nil {
+				return nil, err
+			}
 		}
 		agg.SetVersion(agg.Version() + 1)
 	}
@@ -225,7 +228,7 @@ func (f *SpecialistFaker) BuildDependencies() (err error) {
 	return err
 }
 
-type ReceivedEndorsementFakeItem struct {
+type ReceivedEndorsementFakeCommand struct {
 	Endorser  endorser.EndorserFaker
 	Artifact  artifact.ArtifactFaker
 	CreatedAt time.Time
