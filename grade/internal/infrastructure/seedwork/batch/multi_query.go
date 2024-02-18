@@ -84,9 +84,11 @@ func (q MultiQuery) Evaluate(s session.DbSession) (session.Result, error) {
 		return nil, err
 	}
 	for i := range q.results {
-		err = q.results[i].Resolve(0, 0)
-		if err != nil {
-			errs = multierror.Append(errs, err)
+		d := q.results[i]
+		d.Resolve(0, 0)
+		occurredErr := d.OccurredErr()
+		if occurredErr != nil {
+			errs = multierror.Append(errs, occurredErr)
 		}
 	}
 	return r, errs
@@ -110,9 +112,11 @@ func (q AutoincrementMultiInsertQuery) Evaluate(s session.DbSession) (session.Re
 		if err != nil {
 			return nil, err
 		}
-		err = q.results[i].Resolve(id, 0)
-		if err != nil {
-			errs = multierror.Append(errs, err)
+		d := q.results[i]
+		d.Resolve(id, 0)
+		occurredErr := d.OccurredErr()
+		if occurredErr != nil {
+			errs = multierror.Append(errs, occurredErr)
 		}
 		i++
 	}

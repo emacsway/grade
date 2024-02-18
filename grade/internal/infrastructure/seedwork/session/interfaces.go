@@ -1,6 +1,9 @@
 package session
 
-import "github.com/emacsway/grade/grade/internal/application/seedwork/session"
+import (
+	"github.com/emacsway/grade/grade/internal/application/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/deferred"
+)
 
 type Result interface {
 	LastInsertId() (int64, error)
@@ -51,23 +54,16 @@ type EventSourcedQueryEvaluator interface {
 
 // Deferred
 
-type DeferredCallback[T interface{}] func(T) error
-
-type Deferred[T interface{}] interface {
-	Then(DeferredCallback[T]) error
-	Catch(DeferredCallback[error]) error
-}
-
 type DeferredResult interface {
-	Deferred[Result]
+	deferred.Deferred[Result]
 }
 
 type DeferredRows interface {
-	Then(DeferredCallback[Rows]) error
+	deferred.Deferred[Rows]
 }
 
 type DeferredRow interface {
-	Then(DeferredCallback[Row]) error
+	deferred.Deferred[Row]
 }
 
 type DeferredDbSessionExecutor interface {

@@ -2,14 +2,13 @@ package session
 
 import (
 	"errors"
+
+	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/deferred"
 )
 
 func NewResult(lastInsertId, rowsAffected int64) *DeferredResultImp {
 	r := &DeferredResultImp{}
-	err := r.Resolve(lastInsertId, rowsAffected)
-	if err != nil {
-		panic(err)
-	}
+	r.Resolve(lastInsertId, rowsAffected)
 	return r
 }
 
@@ -39,11 +38,11 @@ func (r ResultImp) RowsAffected() (int64, error) {
 }
 
 type DeferredResultImp struct {
-	DeferredImp[Result]
 	ResultImp
+	deferred.DeferredImp[Result]
 }
 
-func (r *DeferredResultImp) Resolve(lastInsertId, rowsAffected int64) error {
+func (r *DeferredResultImp) Resolve(lastInsertId, rowsAffected int64) {
 	r.ResultImp = ResultImp{lastInsertId, rowsAffected}
-	return r.DeferredImp.Resolve(r)
+	r.DeferredImp.Resolve(r)
 }
