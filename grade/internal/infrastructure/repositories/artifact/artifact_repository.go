@@ -35,9 +35,7 @@ func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.Ar
 func eventQuery(iEvent aggregate.PersistentDomainEvent) (q session.EventSourcedQueryEvaluator) {
 	switch event := iEvent.(type) {
 	case *events.ArtifactProposed:
-		q = &queries.ArtifactProposedQuery{}
-		qt := q.(events.ArtifactProposedExporterSetter)
-		event.Export(qt)
+		q = queries.NewArtifactProposedQuery(event)
 	}
 	return q
 }

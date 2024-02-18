@@ -3,6 +3,7 @@ package queries
 import (
 	"time"
 
+	"github.com/emacsway/grade/grade/internal/domain/artifact/events"
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
@@ -10,6 +11,12 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/repository"
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
+
+func NewArtifactProposedQuery(event *events.ArtifactProposed) *ArtifactProposedQuery {
+	q := &ArtifactProposedQuery{}
+	event.Export(q)
+	return q
+}
 
 type ArtifactProposedQuery struct {
 	repository.EventInsertQuery
