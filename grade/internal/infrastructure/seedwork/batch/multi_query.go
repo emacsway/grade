@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/hashicorp/go-multierror"
+
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/utils"
 )
@@ -76,6 +78,7 @@ type MultiQuery struct {
 }
 
 func (q MultiQuery) Evaluate(s session.DbSession) (session.Result, error) {
+	var errs error
 	r, err := s.Exec(q.sql(), q.flatParams()...)
 	if err != nil {
 		return nil, err
@@ -83,10 +86,10 @@ func (q MultiQuery) Evaluate(s session.DbSession) (session.Result, error) {
 	for i := range q.results {
 		err = q.results[i].Resolve(0, 0)
 		if err != nil {
-			return nil, err
+			errs = multierror.Append(errs, err)
 		}
 	}
-	return r, nil
+	return r, errs
 }
 
 type AutoincrementMultiInsertQuery struct {
@@ -95,6 +98,7 @@ type AutoincrementMultiInsertQuery struct {
 
 func (q AutoincrementMultiInsertQuery) Evaluate(s session.DbSession) (session.Result, error) {
 	var id int64
+	var errs error
 	rows, err := s.Query(q.sql(), q.flatParams()...)
 	if err != nil {
 		return nil, err
@@ -108,7 +112,7 @@ func (q AutoincrementMultiInsertQuery) Evaluate(s session.DbSession) (session.Re
 		}
 		err = q.results[i].Resolve(id, 0)
 		if err != nil {
-			return nil, err
+			errs = multierror.Append(errs, err)
 		}
 		i++
 	}
@@ -116,5 +120,5 @@ func (q AutoincrementMultiInsertQuery) Evaluate(s session.DbSession) (session.Re
 	if err != nil {
 		return nil, err
 	}
-	return session.NewResult(0, int64(len(q.results))), nil
+	return session.NewResult(0, int64(len(q.results))), errs
 }
