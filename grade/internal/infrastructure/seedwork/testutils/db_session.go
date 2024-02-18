@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/emacsway/grade/grade/internal/application"
+	appSession "github.com/emacsway/grade/grade/internal/application/seedwork/session"
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
@@ -20,7 +20,7 @@ type DbSessionStub struct {
 	ActualParams []any
 }
 
-func (s DbSessionStub) Atomic(callback application.SessionCallback) error {
+func (s DbSessionStub) Atomic(callback appSession.SessionCallback) error {
 	return callback(s)
 }
 

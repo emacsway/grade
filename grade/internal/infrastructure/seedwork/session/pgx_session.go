@@ -15,7 +15,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/pkg/errors"
 
-	"github.com/emacsway/grade/grade/internal/application"
+	"github.com/emacsway/grade/grade/internal/application/seedwork/session"
 )
 
 type sessionKey struct{}
@@ -47,8 +47,8 @@ type SessionContext struct {
 	DbSession
 }
 
-func (s *SessionContext) Atomic(callback application.SessionContextCallback) error {
-	callbackUnclothed := func(dbSession application.Session) error {
+func (s *SessionContext) Atomic(callback session.SessionContextCallback) error {
+	callbackUnclothed := func(dbSession session.Session) error {
 		sessionContext := &SessionContext{
 			NewBackgroundContext(s.Context),
 			dbSession.(DbSession),
@@ -70,7 +70,7 @@ type PgxSession struct {
 	dbExecutor DbExecutor
 }
 
-func (s *PgxSession) Atomic(callback application.SessionCallback) error {
+func (s *PgxSession) Atomic(callback session.SessionCallback) error {
 	// TODO: Add support for SavePoint:
 	// https://github.com/golang/go/issues/7898#issuecomment-580080390
 	if s.db == nil {

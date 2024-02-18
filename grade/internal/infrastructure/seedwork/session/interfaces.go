@@ -1,8 +1,6 @@
 package session
 
-import (
-	"github.com/emacsway/grade/grade/internal/application"
-)
+import "github.com/emacsway/grade/grade/internal/application/seedwork/session"
 
 type Result interface {
 	LastInsertId() (int64, error)
@@ -34,7 +32,7 @@ type DbSessionSingleQuerier interface {
 }
 
 type DbSession interface {
-	application.Session
+	session.Session
 	DbSessionExecutor
 	DbSessionQuerier
 	DbSessionSingleQuerier
