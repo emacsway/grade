@@ -27,7 +27,7 @@ func (s DbSessionStub) Atomic(callback appSession.SessionCallback) error {
 func (s *DbSessionStub) Exec(query string, args ...any) (session.Result, error) {
 	s.ActualQuery = query
 	s.ActualParams = args
-	return &session.DeferredResultImp{}, nil
+	return session.NewDeferredResult(), nil
 }
 
 func (s *DbSessionStub) Query(query string, args ...any) (session.Rows, error) {

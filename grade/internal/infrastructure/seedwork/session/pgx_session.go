@@ -62,9 +62,7 @@ func (s *PgxSession) insert(query string, args ...any) (Result, error) {
 	if err != nil {
 		return nil, err
 	}
-	r := &DeferredResultImp{}
-	err = r.Resolve(id, 0)
-	return r, err
+	return NewResult(id, 0), nil
 }
 
 func (s *PgxSession) Query(query string, args ...any) (Rows, error) {

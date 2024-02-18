@@ -54,10 +54,5 @@ func (c *QueryCollector) Evaluate(s session.DbSession) (session.Result, error) {
 			}
 		}
 	}
-	r := &session.DeferredResultImp{}
-	err := r.Resolve(0, rowsAffected)
-	if err != nil {
-		return nil, err
-	}
-	return r, nil
+	return session.NewResult(0, rowsAffected), nil
 }

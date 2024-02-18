@@ -4,6 +4,19 @@ import (
 	"errors"
 )
 
+func NewResult(lastInsertId, rowsAffected int64) *DeferredResultImp {
+	r := &DeferredResultImp{}
+	err := r.Resolve(lastInsertId, rowsAffected)
+	if err != nil {
+		panic(err)
+	}
+	return r
+}
+
+func NewDeferredResult() *DeferredResultImp {
+	return &DeferredResultImp{}
+}
+
 type DeferredResultImp struct {
 	lastInsertId int64
 	rowsAffected int64

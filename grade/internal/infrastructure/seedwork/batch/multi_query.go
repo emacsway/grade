@@ -66,7 +66,7 @@ func (q *MultiQueryBase) Exec(query string, args ...any) (session.DeferredResult
 	q.placeholders = q.re.FindStringSubmatch(query)[1]
 	q.sqlTemplate = q.re.ReplaceAllLiteralString(query, q.replacement)
 	q.params = append(q.params, args)
-	result := &session.DeferredResultImp{}
+	result := session.NewDeferredResult()
 	q.results = append(q.results, result)
 	return result, nil
 }
@@ -116,11 +116,5 @@ func (q AutoincrementMultiInsertQuery) Evaluate(s session.DbSession) (session.Re
 	if err != nil {
 		return nil, err
 	}
-
-	r := &session.DeferredResultImp{}
-	err = r.Resolve(0, int64(len(q.results)))
-	if err != nil {
-		return nil, err
-	}
-	return r, nil
+	return session.NewResult(0, int64(len(q.results))), nil
 }
