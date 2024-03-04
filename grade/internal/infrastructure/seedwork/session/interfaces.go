@@ -83,3 +83,13 @@ type DeferredDbSession interface {
 	DeferredDbSessionQuerier
 	DeferredDbSessionSingleQuerier
 }
+
+type IdentityMap[K comparable] interface {
+	Get(key K) (any, error)
+	Add(key K, value any) error
+	Has(key K) (bool, error)
+	Remove(key K)
+	Clear()
+
+	SetIsolationLevel(isolation IsolationLevel)
+}
