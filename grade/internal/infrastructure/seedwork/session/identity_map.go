@@ -6,7 +6,10 @@ type IsolationLevel int
 
 type NonexistentObject struct{}
 
-var ErrNonexistentObject = errors.New("")
+var (
+	ErrNonexistentObject = errors.New("")
+	ErrUnknownKey        = errors.New("")
+)
 
 const (
 	ReadUncommittedLevel IsolationLevel = iota
@@ -21,11 +24,11 @@ type IsolationStrategy[K any] interface {
 	has(key K) (bool, error)
 }
 
-type SerializableStrategyImpl[K comparable] struct {
+type SerializableStrategy[K comparable] struct {
 	identityMap *IdentityMapImpl[K]
 }
 
-func (s *SerializableStrategyImpl[K]) add(key K, value any) error {
+func (s *SerializableStrategy[K]) add(key K, value any) error {
 	if value == nil {
 		value = NonexistentObject{}
 	}
@@ -34,18 +37,82 @@ func (s *SerializableStrategyImpl[K]) add(key K, value any) error {
 	return nil
 }
 
-func (s *SerializableStrategyImpl[K]) get(key K) (any, error) {
+func (s *SerializableStrategy[K]) get(key K) (any, error) {
 
-	entity := s.identityMap.doGet(key)
-	if _, ok := entity.(NonexistentObject); ok || entity == nil {
+	object := s.identityMap.doGet(key)
+	if _, ok := object.(NonexistentObject); ok || object == nil {
 		return nil, ErrNonexistentObject
 	}
 
-	return entity, nil
+	return object, nil
 }
 
-func (s *SerializableStrategyImpl[K]) has(key K) (bool, error) {
+func (s *SerializableStrategy[K]) has(key K) (bool, error) {
 	return s.identityMap.doHas(key), nil
+}
+
+type ReadUncommittedStrategy[K comparable] struct {
+	identityMap *IdentityMapImpl[K]
+}
+
+func (s *ReadUncommittedStrategy[K]) add(key K, value any) error {
+	return nil
+}
+
+func (s *ReadUncommittedStrategy[K]) get(key K) (any, error) {
+	return nil, ErrUnknownKey
+}
+
+func (s *ReadUncommittedStrategy[K]) has(key K) (bool, error) {
+	return false, nil
+}
+
+type ReadCommittedStrategy[K comparable] struct {
+	identityMap *IdentityMapImpl[K]
+}
+
+func (s *ReadCommittedStrategy[K]) add(key K, value any) error {
+	return nil
+}
+
+func (s *ReadCommittedStrategy[K]) get(key K) (any, error) {
+	return nil, ErrUnknownKey
+}
+
+func (s *ReadCommittedStrategy[K]) has(key K) (bool, error) {
+	return false, nil
+}
+
+type RepeatableReadsStrategy[K comparable] struct {
+	identityMap *IdentityMapImpl[K]
+}
+
+func (s *RepeatableReadsStrategy[K]) add(key K, value any) error {
+	if value != nil {
+		s.identityMap.doAdd(key, value)
+	}
+
+	return nil
+}
+
+func (s *RepeatableReadsStrategy[K]) get(key K) (any, error) {
+	object := s.identityMap.doGet(key)
+	if _, ok := object.(NonexistentObject); ok || object == nil {
+		return nil, ErrNonexistentObject
+	}
+
+	return object, nil
+}
+
+func (s *RepeatableReadsStrategy[K]) has(key K) (bool, error) {
+	if !s.identityMap.doHas(key) {
+		return false, ErrUnknownKey
+	}
+
+	object := s.identityMap.doGet(key)
+	_, ok := object.(NonexistentObject)
+
+	return ok, nil
 }
 
 type IdentityMapImpl[K comparable] struct {
@@ -89,7 +156,13 @@ func (i *IdentityMapImpl[K]) Remove(key K) {
 func (i *IdentityMapImpl[K]) SetIsolationLevel(isolation IsolationLevel) {
 	switch isolation {
 	case SerializableLevel:
-		i.strategy = &SerializableStrategyImpl[K]{i}
+		i.strategy = &SerializableStrategy[K]{i}
+	case ReadUncommittedLevel:
+		i.strategy = &ReadUncommittedStrategy[K]{i}
+	case ReadCommittedLevel:
+		i.strategy = &ReadCommittedStrategy[K]{i}
+	case RepeatableReadsLevel:
+		i.strategy = &RepeatableReadsStrategy[K]{i}
 	}
 }
 
