@@ -5,9 +5,12 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
+type EventReconstitutor func(*session.Rows) (aggregate.PersistentDomainEvent, error)
+
 type EventGetQuery struct {
-	StreamId      StreamId
-	SincePosition uint
+	StreamId           StreamId
+	SincePosition      uint
+	EventReconstitutor EventReconstitutor
 }
 
 func (q EventGetQuery) sql() string {
@@ -32,10 +35,12 @@ func (q *EventGetQuery) Stream(s session.DbSessionQuerier) ([]aggregate.Persiste
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan() // TODO: implement me
+		// err := rows.Scan() // TODO: implement me
+		event, err := q.EventReconstitutor(&rows)
 		if err != nil {
 			return nil, err
 		}
+		stream = append(stream, event)
 	}
 	err = rows.Err()
 	if err != nil {

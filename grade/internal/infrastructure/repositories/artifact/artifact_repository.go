@@ -14,7 +14,7 @@ import (
 func NewArtifactRepository(currentSession session.DbSession) *ArtifactRepository {
 	return &ArtifactRepository{
 		session:    currentSession,
-		eventStore: repository.NewEventStore(currentSession, "Artifact", eventQuery),
+		eventStore: repository.NewEventStore(currentSession, "Artifact", eventToQuery),
 	}
 }
 
@@ -32,10 +32,35 @@ func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.Ar
 	return q.Get(r.session)
 }
 
-func eventQuery(iEvent aggregate.PersistentDomainEvent) (q session.EventSourcedQueryEvaluator) {
+func (r *ArtifactRepository) Get(id artifactVal.ArtifactId) (*artifact.Artifact, error) {
+	idExporter := &artifactVal.ArtifactIdExporter{}
+	id.Export(idExporter)
+	streamId, err := r.eventStore.NewStreamId(int(idExporter.TenantId), idExporter.ArtifactId.String())
+	if err != nil {
+		return nil, err
+	}
+	q := repository.EventGetQuery{
+		StreamId:           streamId,
+		EventReconstitutor: rowsToEvent,
+	}
+	stream, err := q.Stream(r.session)
+	if err != nil {
+		return nil, err
+	}
+	rec := &artifact.ArtifactReconstitutor{
+		PastEvents: stream,
+	}
+	return rec.Reconstitute()
+}
+
+func eventToQuery(iEvent aggregate.PersistentDomainEvent) (q session.EventSourcedQueryEvaluator) {
 	switch event := iEvent.(type) {
 	case *events.ArtifactProposed:
 		q = queries.NewArtifactProposedQuery(event)
 	}
 	return q
+}
+
+func rowsToEvent(*session.Rows) (aggregate.PersistentDomainEvent, error) {
+	return nil, nil
 }

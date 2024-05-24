@@ -21,6 +21,13 @@ type EventStore struct {
 	eventQuery EventQueryFactory
 }
 
+func (r EventStore) NewStreamId(
+	tenantId int,
+	streamId string,
+) (StreamId, error) {
+	return NewStreamId(tenantId, r.streamType, streamId)
+}
+
 func (r *EventStore) Save(
 	agg aggregate.DomainEventAccessor[aggregate.PersistentDomainEvent],
 	eventMeta aggregate.EventMeta,
