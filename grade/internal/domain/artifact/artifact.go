@@ -25,22 +25,19 @@ func NewArtifact(
 		id, status, name, description, url, competenceIds,
 		authorIds, ownerId, createdAt,
 	)
+	agg, err := EmptyAggregate()
+	if err != nil {
+		return nil, err
+	}
+	agg.eventSourced.Update(e)
+	return agg, nil
+}
+
+func EmptyAggregate() (*Artifact, error) {
 	agg := &Artifact{
-		/*
-			id:            id,
-			status:        status,
-			name:          name,
-			description:   description,
-			url:           url,
-			competenceIds: competenceIds,
-			authorIds:     authorIds,
-			ownerId:       ownerId,
-			createdAt:     createdAt,
-		*/
 		eventSourced: aggregate.NewEventSourcedAggregate[aggregate.PersistentDomainEvent](0),
 	}
 	agg.eventSourced.AddHandler(&events.ArtifactProposed{}, agg.onArtifactProposed)
-	agg.eventSourced.Update(e)
 	return agg, nil
 }
 

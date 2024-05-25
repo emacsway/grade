@@ -21,7 +21,10 @@ func (r ArtifactReconstitutor) Reconstitute() (agg *Artifact, err error) {
 			return nil, err
 		}
 	} else {
-		agg = &Artifact{}
+		agg, err = EmptyAggregate()
+		if err != nil {
+			return nil, err
+		}
 	}
 	agg.eventSourced.LoadFrom(r.PastEvents)
 	return agg, nil
@@ -84,16 +87,20 @@ func (r ArtifactSnapshotReconstitutor) Reconstitute() (*Artifact, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Artifact{
-		id:            id,
-		status:        status,
-		name:          name,
-		description:   description,
-		url:           url,
-		competenceIds: competenceIds,
-		authorIds:     authorIds,
-		ownerId:       ownerId,
-		createdAt:     r.CreatedAt,
-		eventSourced:  aggregate.NewEventSourcedAggregate[aggregate.PersistentDomainEvent](r.Version),
-	}, nil
+	agg, err := NewArtifact(
+		id,
+		status,
+		name,
+		description,
+		url,
+		competenceIds,
+		authorIds,
+		ownerId,
+		r.CreatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+	agg.SetVersion(r.Version)
+	return agg, nil
 }

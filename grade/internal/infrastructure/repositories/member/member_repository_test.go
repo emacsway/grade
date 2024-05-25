@@ -75,26 +75,26 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
+	var exporterExpected member.MemberExporter
 	var exporterActual member.MemberExporter
-	var exporterRead member.MemberExporter
 	factory := NewMemberFaker(
 		repositoryOption.Session,
 		member.WithTenantId(repositoryOption.TenantId),
 	)
-	agg, err := factory.Create()
+	aggExpected, err := factory.Create()
 	require.NoError(t, err)
-	agg.Export(&exporterActual)
-	assert.Greater(t, int(exporterActual.Id.MemberId), 0)
+	aggExpected.Export(&exporterExpected)
+	assert.Greater(t, int(exporterExpected.Id.MemberId), 0)
 
 	id, err := memberVal.NewMemberId(
-		uint(exporterActual.Id.TenantId),
-		uint(exporterActual.Id.MemberId),
+		uint(exporterExpected.Id.TenantId),
+		uint(exporterExpected.Id.MemberId),
 	)
 	require.NoError(t, err)
-	aggRead, err := repositoryOption.Repository.Get(id)
+	aggActual, err := repositoryOption.Repository.Get(id)
 	require.NoError(t, err)
-	aggRead.Export(&exporterRead)
-	assert.Equal(t, exporterActual, exporterRead)
+	aggActual.Export(&exporterActual)
+	assert.Equal(t, exporterExpected, exporterActual)
 }
 
 type RepositoryOption struct {

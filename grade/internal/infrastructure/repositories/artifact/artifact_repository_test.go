@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
+	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
@@ -72,6 +73,29 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
+	var exporterActual artifact.ArtifactExporter
+	var exporterExpected artifact.ArtifactExporter
+	factory := NewArtifactFaker(
+		repositoryOption.Session,
+		artifact.WithTenantId(repositoryOption.TenantId),
+	)
+	err := factory.BuildDependencies()
+	require.NoError(t, err)
+	aggExpected, err := factory.Create()
+	require.NoError(t, err)
+	aggExpected.Export(&exporterExpected)
+
+	assert.Greater(t, int(exporterExpected.Id.ArtifactId), 0)
+
+	id, err := artifactVal.NewArtifactId(
+		uint(exporterExpected.Id.TenantId),
+		uint(exporterExpected.Id.ArtifactId),
+	)
+	require.NoError(t, err)
+	aggActual, err := repositoryOption.Repository.Get(id)
+	require.NoError(t, err)
+	aggActual.Export(&exporterActual)
+	assert.Equal(t, exporterExpected, exporterActual)
 }
 
 type RepositoryOption struct {

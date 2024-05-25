@@ -72,27 +72,27 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
+	var exporterExpected competence.CompetenceExporter
 	var exporterActual competence.CompetenceExporter
-	var exporterRead competence.CompetenceExporter
 	factory := NewCompetenceFaker(
 		repositoryOption.Session,
 		competence.WithTenantId(repositoryOption.TenantId),
 	)
 	factory.OwnerId.MemberId = repositoryOption.MemberId
-	agg, err := factory.Create()
+	aggExpected, err := factory.Create()
 	require.NoError(t, err)
-	agg.Export(&exporterActual)
-	assert.Greater(t, int(exporterActual.Id.CompetenceId), 0)
+	aggExpected.Export(&exporterExpected)
+	assert.Greater(t, int(exporterExpected.Id.CompetenceId), 0)
 
 	id, err := competenceVal.NewCompetenceId(
-		uint(exporterActual.Id.TenantId),
-		uint(exporterActual.Id.CompetenceId),
+		uint(exporterExpected.Id.TenantId),
+		uint(exporterExpected.Id.CompetenceId),
 	)
 	require.NoError(t, err)
-	aggRead, err := repositoryOption.Repository.Get(id)
+	aggActual, err := repositoryOption.Repository.Get(id)
 	require.NoError(t, err)
-	aggRead.Export(&exporterRead)
-	assert.Equal(t, exporterActual, exporterRead)
+	aggActual.Export(&exporterActual)
+	assert.Equal(t, exporterExpected, exporterActual)
 }
 
 type RepositoryOption struct {

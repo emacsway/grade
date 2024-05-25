@@ -71,20 +71,20 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
+	var exporterExpected tenant.TenantExporter
 	var exporterActual tenant.TenantExporter
-	var exporterRead tenant.TenantExporter
 	factory := NewTenantFaker(repositoryOption.Session)
-	agg, err := factory.Create()
-	require.NoError(t, err)
-	agg.Export(&exporterActual)
-	assert.Greater(t, int(exporterActual.Id), 0)
+	aggExpected, errActual := factory.Create()
+	require.NoError(t, errActual)
+	aggExpected.Export(&exporterExpected)
+	assert.Greater(t, int(exporterExpected.Id), 0)
 
-	id, err := tenantVal.NewTenantId(uint(exporterActual.Id))
-	require.NoError(t, err)
-	aggRead, err := repositoryOption.Repository.Get(id)
-	require.NoError(t, err)
-	aggRead.Export(&exporterRead)
-	assert.Equal(t, exporterActual, exporterRead)
+	id, errActual := tenantVal.NewTenantId(uint(exporterExpected.Id))
+	require.NoError(t, errActual)
+	aggRead, errActual := repositoryOption.Repository.Get(id)
+	require.NoError(t, errActual)
+	aggRead.Export(&exporterActual)
+	assert.Equal(t, exporterExpected, exporterActual)
 }
 
 type RepositoryOption struct {
