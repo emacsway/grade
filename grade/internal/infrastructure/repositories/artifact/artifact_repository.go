@@ -1,6 +1,10 @@
 package artifact
 
 import (
+	"encoding/json"
+	"fmt"
+	"strconv"
+
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/artifact/events"
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
@@ -35,13 +39,13 @@ func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.Ar
 func (r *ArtifactRepository) Get(id artifactVal.ArtifactId) (*artifact.Artifact, error) {
 	idExporter := &artifactVal.ArtifactIdExporter{}
 	id.Export(idExporter)
-	streamId, err := r.eventStore.NewStreamId(int(idExporter.TenantId), idExporter.ArtifactId.String())
+	streamId, err := r.eventStore.NewStreamId(uint(idExporter.TenantId), idExporter.ArtifactId.String())
 	if err != nil {
 		return nil, err
 	}
 	q := repository.EventGetQuery{
 		StreamId:           streamId,
-		EventReconstitutor: rowsToEvent,
+		EventReconstitutor: rowToEvent,
 	}
 	stream, err := q.Stream(r.session)
 	if err != nil {
@@ -61,6 +65,41 @@ func eventToQuery(iEvent aggregate.PersistentDomainEvent) (q session.EventSource
 	return q
 }
 
-func rowsToEvent(*session.Rows) (aggregate.PersistentDomainEvent, error) {
-	return nil, nil
+func rowToEvent(
+	streamId repository.StreamId,
+	streamPosition uint,
+	eventType string,
+	eventVersion uint,
+	payload []byte,
+	metadata []byte,
+) (aggregate.PersistentDomainEvent, error) {
+	metaRec := aggregate.EventMetaReconstitutor{}
+	err := json.Unmarshal(metadata, &metaRec)
+	if err != nil {
+		return nil, err
+	}
+	expectedCase := c{eventType, eventVersion}
+	switch expectedCase {
+	case c{events.ArtifactProposed{}.EventType(), 1}:
+		rec := events.ArtifactProposedReconstitutor{}
+		err := json.Unmarshal([]byte(payload), &rec)
+		if err != nil {
+			return nil, err
+		}
+		rec.AggregateId.TenantId = streamId.TenantId()
+		artifactId, err := strconv.ParseUint(streamId.StreamId(), 10, 0)
+		if err != nil {
+			return nil, err
+		}
+		rec.AggregateId.ArtifactId = uint(artifactId)
+		rec.AggregateVersion = streamPosition
+		rec.EventMeta = metaRec
+		return rec.Reconstitute()
+	}
+	return nil, fmt.Errorf("unknown eventType %s", eventType)
+}
+
+type c struct {
+	EventType    string
+	EventVersion uint
 }

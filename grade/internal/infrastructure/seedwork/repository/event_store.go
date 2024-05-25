@@ -22,7 +22,7 @@ type EventStore struct {
 }
 
 func (r EventStore) NewStreamId(
-	tenantId int,
+	tenantId uint,
 	streamId string,
 ) (StreamId, error) {
 	return NewStreamId(tenantId, r.streamType, streamId)

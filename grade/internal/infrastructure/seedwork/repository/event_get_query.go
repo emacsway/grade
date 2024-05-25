@@ -5,7 +5,14 @@ import (
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
-type EventReconstitutor func(*session.Rows) (aggregate.PersistentDomainEvent, error)
+type EventReconstitutor func(
+	streamId StreamId,
+	streamPosition uint,
+	eventType string,
+	eventVersion uint,
+	payload []byte,
+	metadata []byte,
+) (aggregate.PersistentDomainEvent, error)
 
 type EventGetQuery struct {
 	StreamId           StreamId
@@ -16,7 +23,7 @@ type EventGetQuery struct {
 func (q EventGetQuery) sql() string {
 	return `
 		SELECT
-		    tenant_id, stream_type, stream_id, stream_position, event_type, event_version, payload, metadata
+		    stream_position, event_type, event_version, payload, metadata
 		FROM
 			event_log
 		WHERE
@@ -35,8 +42,16 @@ func (q *EventGetQuery) Stream(s session.DbSessionQuerier) ([]aggregate.Persiste
 	}
 	defer rows.Close()
 	for rows.Next() {
-		// err := rows.Scan() // TODO: implement me
-		event, err := q.EventReconstitutor(&rows)
+		var streamPosition uint
+		var eventType string
+		var eventVersion uint
+		var payload []byte
+		var metadata []byte
+		err := rows.Scan(&streamPosition, &eventType, &eventVersion, &payload, &metadata)
+		if err != nil {
+			return nil, err
+		}
+		event, err := q.EventReconstitutor(q.StreamId, streamPosition, eventType, eventVersion, payload, metadata)
 		if err != nil {
 			return nil, err
 		}

@@ -1,7 +1,7 @@
 package repository
 
 func NewStreamId(
-	tenantId int,
+	tenantId uint,
 	streamType string,
 	streamId string,
 ) (StreamId, error) {
@@ -13,12 +13,12 @@ func NewStreamId(
 }
 
 type StreamId struct {
-	tenantId   int
+	tenantId   uint
 	streamType string
 	streamId   string
 }
 
-func (id StreamId) TenantId() int {
+func (id StreamId) TenantId() uint {
 	return id.tenantId
 }
 func (id StreamId) StreamType() string {
