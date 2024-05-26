@@ -64,6 +64,7 @@ func (m EventMeta) Reason() string {
 
 func (m EventMeta) Spawn(eventId uuid.Uuid) EventMeta {
 	n := m
+	n.causationId = n.eventId
 	n.eventId = eventId
 	return n
 }

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
+	"github.com/emacsway/grade/grade/internal/domain/seedwork/uuid"
 	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
 )
 
@@ -33,7 +34,10 @@ func (r *EventStore) Save(
 	eventMeta aggregate.EventMeta,
 ) error {
 	pendingEvents := agg.PendingDomainEvents()
+	agg.ClearPendingDomainEvents()
+
 	for _, iEvent := range pendingEvents {
+		eventMeta = eventMeta.Spawn(uuid.NewUuid())
 		iEvent.SetEventMeta(eventMeta)
 		q := r.eventQuery(iEvent)
 		q.SetStreamType(r.streamType)
@@ -42,6 +46,5 @@ func (r *EventStore) Save(
 			return err
 		}
 	}
-	agg.ClearPendingDomainEvents()
 	return nil
 }
