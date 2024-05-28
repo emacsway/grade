@@ -32,6 +32,11 @@ func TestEndorserRepository(t *testing.T) {
 				t.Parallel()
 				clearable(testInsert)(t, ro)
 			})
+
+			t.Run("testGet", func(t *testing.T) {
+				t.Parallel()
+				clearable(testGet)(t, ro)
+			})
 		})
 	}
 }
@@ -52,8 +57,8 @@ func clearable(callable testCase) testCase {
 }
 
 func testInsert(t *testing.T, repositoryOption RepositoryOption) {
+	var exporterExpected endorser.EndorserExporter
 	var exporterActual endorser.EndorserExporter
-	var exporterRead endorser.EndorserExporter
 	factory := endorser.NewEndorserFaker(
 		endorser.WithTenantId(repositoryOption.TenantId),
 		endorser.WithMemberId(repositoryOption.MemberId),
@@ -62,17 +67,40 @@ func testInsert(t *testing.T, repositoryOption RepositoryOption) {
 	require.NoError(t, err)
 	err = repositoryOption.Repository.Insert(agg)
 	require.NoError(t, err)
-	agg.Export(&exporterActual)
+	agg.Export(&exporterExpected)
 
 	id, err := memberVal.NewMemberId(
-		uint(exporterActual.Id.TenantId),
-		uint(exporterActual.Id.MemberId),
+		uint(exporterExpected.Id.TenantId),
+		uint(exporterExpected.Id.MemberId),
 	)
 	require.NoError(t, err)
 	aggRead, err := repositoryOption.Repository.Get(id)
 	require.NoError(t, err)
-	aggRead.Export(&exporterRead)
-	assert.Equal(t, exporterActual, exporterRead)
+	aggRead.Export(&exporterActual)
+	assert.Equal(t, exporterExpected, exporterActual)
+}
+
+func testGet(t *testing.T, repositoryOption RepositoryOption) {
+	var exporterExpected endorser.EndorserExporter
+	var exporterActual endorser.EndorserExporter
+	factory := NewEndorserFaker(
+		repositoryOption.Session,
+	)
+	factory.BuildDependencies()
+	aggExpected, err := factory.Create()
+	require.NoError(t, err)
+	aggExpected.Export(&exporterExpected)
+	assert.Greater(t, int(exporterExpected.Id.MemberId), 0)
+
+	id, err := memberVal.NewMemberId(
+		uint(exporterExpected.Id.TenantId),
+		uint(exporterExpected.Id.MemberId),
+	)
+	require.NoError(t, err)
+	aggActual, err := repositoryOption.Repository.Get(id)
+	require.NoError(t, err)
+	aggActual.Export(&exporterActual)
+	assert.Equal(t, exporterExpected, exporterActual)
 }
 
 type RepositoryOption struct {
