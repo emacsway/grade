@@ -86,7 +86,8 @@ func testGet(t *testing.T, repositoryOption RepositoryOption) {
 	factory := NewEndorserFaker(
 		repositoryOption.Session,
 	)
-	factory.BuildDependencies()
+	err := factory.BuildDependencies()
+	require.NoError(t, err)
 	aggExpected, err := factory.Create()
 	require.NoError(t, err)
 	aggExpected.Export(&exporterExpected)
