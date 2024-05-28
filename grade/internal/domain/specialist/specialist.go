@@ -9,7 +9,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
-	member "github.com/emacsway/grade/grade/internal/domain/member/values"
+	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	assignmentVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
@@ -40,7 +40,7 @@ var (
 
 // FIXME: Move this constructor to tenant aggregate
 func NewSpecialist(
-	id member.MemberId,
+	id memberVal.MemberId,
 	createdAt time.Time,
 ) (*Specialist, error) {
 	zeroGrade, _ := grade.DefaultConstructor(0)
@@ -52,7 +52,7 @@ func NewSpecialist(
 }
 
 type Specialist struct {
-	id                   member.MemberId
+	id                   memberVal.MemberId
 	grade                grade.Grade
 	receivedEndorsements []endorsement.Endorsement
 	assignments          []assignment.Assignment
@@ -191,7 +191,7 @@ func (s Specialist) Export(ex SpecialistExporterSetter) {
 }
 
 type SpecialistExporterSetter interface {
-	SetId(member.MemberId)
+	SetId(memberVal.MemberId)
 	SetGrade(grade.Grade)
 	AddEndorsement(endorsement.Endorsement)
 	AddAssignment(assignment.Assignment)
