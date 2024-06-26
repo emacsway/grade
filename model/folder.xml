@@ -2,4 +2,9 @@
     xmlns:archimate="http://www.archimatetool.com/archimate"
     name="grade"
     id="id-3466983937ea448bac822055acd8324c"
-    version="5.0.0"/>
+    version="5.0.0">
+  <profiles
+      name="Command"
+      id="id-643b9b0e53c6430698e397128f514d52"
+      conceptType="Artifact"/>
+</archimate:ArchimateModel>

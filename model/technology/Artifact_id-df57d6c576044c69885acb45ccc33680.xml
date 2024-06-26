@@ -1,0 +1,7 @@
+<archimate:Artifact
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Bus Message"
+    id="id-df57d6c576044c69885acb45ccc33680">
+  <profiles
+      href="folder.xml#id-643b9b0e53c6430698e397128f514d52"/>
+</archimate:Artifact>

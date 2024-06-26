@@ -1,0 +1,7 @@
+<archimate:Artifact
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="HTTP-Response"
+    id="id-eb7c28b38db647e48dc6ba0a4980c337">
+  <profiles
+      href="folder.xml#id-643b9b0e53c6430698e397128f514d52"/>
+</archimate:Artifact>
