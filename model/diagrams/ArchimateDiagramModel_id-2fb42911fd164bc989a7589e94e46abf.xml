@@ -1861,11 +1861,11 @@
       xsi:type="archimate:DiagramModelNote"
       id="id-b164b8b64157476cb268ac951c4bedcb"
       textAlignment="1"
-      content="- https://alistair.cockburn.us/hexagonal-architecture/&#xA;- https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/&#xA;- https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html&#xA;- https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&#xA;- https://github.com/gregoryyoung/m-r&#xA;- http://udidahan.com/2009/12/09/clarified-cqrs/&#xA;&#xA;- https://threedots.tech/post/ddd-cqrs-clean-architecture-combined/&#xA;- https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-2-efd432505554&#xA;- https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-3-f9dfd7ab0a78&#xA;- https://medium.com/@TonyBologni/hexagonal-architecture-structuring-a-project-and-the-influence-of-granularity-df4e0851ab5c&#xA;- https://blog.ploeh.dk/2013/12/03/layers-onions-ports-adapters-its-all-the-same/&#xA;&#xA;&#xA;- https://www.youtube.com/watch?v=th4AgBcrEHA&#xA;- https://www.youtube.com/watch?v=iALcE8BPs94&#xA;- https://www.youtube.com/watch?v=DAe0Bmcyt-4">
+      content="- https://alistair.cockburn.us/hexagonal-architecture/&#xA;- https://jeffreypalermo.com/2008/07/the-onion-architecture-part-1/&#xA;- https://github.com/jeffreypalermo/onion-architecture-dotnet-6&#xA;- https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html&#xA;- https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf&#xA;- https://github.com/gregoryyoung/m-r&#xA;- http://udidahan.com/2009/12/09/clarified-cqrs/&#xA;&#xA;- https://threedots.tech/post/ddd-cqrs-clean-architecture-combined/&#xA;- https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-2-efd432505554&#xA;- https://medium.com/@TonyBologni/implementing-domain-driven-design-and-hexagonal-architecture-with-go-3-f9dfd7ab0a78&#xA;- https://medium.com/@TonyBologni/hexagonal-architecture-structuring-a-project-and-the-influence-of-granularity-df4e0851ab5c&#xA;- https://blog.ploeh.dk/2013/12/03/layers-onions-ports-adapters-its-all-the-same/&#xA;&#xA;&#xA;- https://www.youtube.com/watch?v=th4AgBcrEHA&#xA;- https://www.youtube.com/watch?v=iALcE8BPs94&#xA;- https://www.youtube.com/watch?v=DAe0Bmcyt-4">
     <bounds
         x="864"
         y="-360"
         width="905"
-        height="276"/>
+        height="300"/>
   </children>
 </archimate:ArchimateDiagramModel>
