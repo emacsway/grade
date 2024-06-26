@@ -1,0 +1,7 @@
+<archimate:BusinessProcess
+    xmlns:archimate="http://www.archimatetool.com/archimate"
+    name="Политика"
+    id="id-519c55f9b1be49b5a9c309b9ae9c6950">
+  <profiles
+      href="folder.xml#id-b78114bfa4ae4c74ae40c059b59696cd"/>
+</archimate:BusinessProcess>

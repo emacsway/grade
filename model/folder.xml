@@ -7,4 +7,16 @@
       name="Command"
       id="id-643b9b0e53c6430698e397128f514d52"
       conceptType="Artifact"/>
+  <profiles
+      name="Policy"
+      id="id-b78114bfa4ae4c74ae40c059b59696cd"
+      conceptType="BusinessProcess"/>
+  <profiles
+      name="Command"
+      id="id-72bf6e17f39648fc8ff87c5f2d2b4a8f"
+      conceptType="BusinessProcess"/>
+  <profiles
+      name="Query"
+      id="id-8a2f45a8e2da4663a86b55b0259584d4"
+      conceptType="BusinessFunction"/>
 </archimate:ArchimateModel>
