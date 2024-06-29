@@ -6,7 +6,7 @@
   <children
       xsi:type="archimate:DiagramModelArchimateObject"
       id="id-45baecaec39f43a0a82844aa6a37cccf"
-      targetConnections="id-bec7fe4adb654f6c8c0d8192fa43b5a6"
+      targetConnections="id-bec7fe4adb654f6c8c0d8192fa43b5a6 id-8c60b638a2304c2093064857b7dc8920"
       textAlignment="1"
       fillColor="#deddda">
     <sourceConnections
@@ -703,7 +703,7 @@
                     x="12"
                     y="132"
                     width="120"
-                    height="85"/>
+                    height="61"/>
                 <archimateElement
                     xsi:type="archimate:ApplicationInteraction"
                     href="ApplicationInteraction_id-0a35bfde8b1a41678c3dd9d79a81cab1.xml#id-0a35bfde8b1a41678c3dd9d79a81cab1"/>
@@ -1470,7 +1470,7 @@
       xsi:type="archimate:DiagramModelNote"
       id="id-f266a74a805144b6b13c0fb86cc265fe"
       textAlignment="1"
-      content="Существенная сложность. Логика, являющаяся причиной существования системы. Код, который чаще всего читают программисты.">
+      content="Существенная Сложность (Essential Complexity). Логика, являющаяся причиной существования системы. Код, который чаще всего читают программисты.">
     <sourceConnections
         id="id-95a6bedcb6a0480a9b48cea9747eb5ff"
         source="id-f266a74a805144b6b13c0fb86cc265fe"
@@ -1849,7 +1849,7 @@
       xsi:type="archimate:DiagramModelNote"
       id="id-ef335d0860db4f1699fdf3520989263d"
       font="1|Sans|12.0|1|GTK|1|"
-      content="Hexagonal Architecture"
+      content="CQRS Hexagonal Architecture"
       textPosition="1">
     <bounds
         x="864"
@@ -1867,5 +1867,20 @@
         y="-360"
         width="905"
         height="300"/>
+  </children>
+  <children
+      xsi:type="archimate:DiagramModelNote"
+      id="id-5a3e0395210244fdbb8455301100353e"
+      textAlignment="1"
+      content="Побочная Сложность (Accidental Complexity).">
+    <sourceConnections
+        id="id-8c60b638a2304c2093064857b7dc8920"
+        source="id-5a3e0395210244fdbb8455301100353e"
+        target="id-45baecaec39f43a0a82844aa6a37cccf"/>
+    <bounds
+        x="2736"
+        y="12"
+        width="185"
+        height="80"/>
   </children>
 </archimate:ArchimateDiagramModel>
