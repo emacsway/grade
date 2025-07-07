@@ -282,6 +282,7 @@ func Wilcard(parent EmptiableObject, predicate Visitable) WilcardNode {
 }
 
 // See JSONPath specification for * and @, for example jsonb_path_match() in PostgreSQL.
+// TODO: should it implement Field interface?
 type WilcardNode struct {
 	parent    EmptiableObject
 	predicate Visitable
