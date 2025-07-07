@@ -95,6 +95,9 @@ func (v *EvaluateVisitor) VisitInfix(n InfixNode) error {
 	rights := v.CurrentValue()
 	if v.yieldBooleanOperator(n.Operator()) {
 		result := false
+		// FIXME: здесь мы ищем совпадение по атрибуту любой из вложенных сущностей,
+		// в то время как PostgresqlVisitor ищет совпадение по одной из вложенных сущностей.
+		// В качестве решения можно воспользоваться относительным путем по аналогии @ в jsonpath.
 		for i := range lefts {
 			for j := range rights {
 				// aggregate.[]entity.field int == aggregate2.[]entity.field int

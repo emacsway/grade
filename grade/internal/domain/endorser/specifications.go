@@ -68,6 +68,8 @@ func (c Context) ValuesByPath(path ...string) ([]any, error) {
 }
 
 func (c Context) endorserPath(obj Endorser, path ...string) ([]any, error) {
+	// FIXME: Здесь мы имеем доступ к защищенным атрибутам только одного агрегата, что делает идею объекта Context лишенной смысла.
+	// По хорошему должна быто композиция контекстов.
 	switch path[0] {
 	case "availableEndorsementCount":
 		return []any{obj.availableEndorsementCount}, nil
