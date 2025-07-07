@@ -45,7 +45,9 @@ func (e EndorserCanCompleteEndorsementSpecification) Expression() s.Visitable {
 
 func (e EndorserCanCompleteEndorsementSpecification) IsSatisfiedBy(obj Endorser) (bool, error) {
 	v := s.NewEvaluateVisitor(Context{
-		endorser: obj,
+		endorser: EndorserContext{
+			obj: obj,
+		},
 	})
 	err := e.Expression().Accept(v)
 	if err != nil {
@@ -54,28 +56,30 @@ func (e EndorserCanCompleteEndorsementSpecification) IsSatisfiedBy(obj Endorser)
 	return v.Result()
 }
 
+type EndorserContext struct {
+	obj Endorser
+}
+
+func (c EndorserContext) ValuesByPath(path ...string) ([]any, error) {
+	switch path[0] {
+	case "availableEndorsementCount":
+		return []any{c.obj.availableEndorsementCount}, nil
+	case "pendingEndorsementCount":
+		return []any{c.obj.pendingEndorsementCount}, nil
+	default:
+		return []any{}, fmt.Errorf("can't get field \"%s\"", path[0])
+	}
+}
+
 type Context struct {
-	endorser Endorser
+	endorser EndorserContext
 }
 
 func (c Context) ValuesByPath(path ...string) ([]any, error) {
 	switch path[0] {
 	case "endorser":
-		return c.endorserPath(c.endorser, path[1:]...)
+		return c.endorser.ValuesByPath(path[1:]...)
 	default:
 		return []any{}, fmt.Errorf("can't get object \"%s\"", path[0])
-	}
-}
-
-func (c Context) endorserPath(obj Endorser, path ...string) ([]any, error) {
-	// FIXME: Здесь мы имеем доступ к защищенным атрибутам только одного агрегата, что делает идею объекта Context лишенной смысла.
-	// По хорошему должна быто композиция контекстов.
-	switch path[0] {
-	case "availableEndorsementCount":
-		return []any{obj.availableEndorsementCount}, nil
-	case "pendingEndorsementCount":
-		return []any{obj.pendingEndorsementCount}, nil
-	default:
-		return []any{}, fmt.Errorf("can't get field \"%s\"", path[0])
 	}
 }

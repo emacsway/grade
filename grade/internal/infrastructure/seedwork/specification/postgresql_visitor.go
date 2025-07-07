@@ -89,6 +89,14 @@ func (v *PostgresqlVisitor) VisitObject(_ s.ObjectNode) error {
 	return nil
 }
 
+func (v *PostgresqlVisitor) VisitWildcard(n s.WilcardNode) error {
+	return nil
+}
+
+func (v *PostgresqlVisitor) VisitItem(n s.ItemNode) error {
+	return nil
+}
+
 func (v *PostgresqlVisitor) VisitField(n s.FieldNode) error {
 	name, err := v.Context.NameByPath(s.ExtractFieldPath(n)...)
 	if err != nil {

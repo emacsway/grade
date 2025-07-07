@@ -63,6 +63,8 @@ type Visitable interface {
 
 type Visitor interface {
 	VisitObject(ObjectNode) error
+	VisitWildcard(WilcardNode) error
+	VisitItem(ItemNode) error
 	VisitField(FieldNode) error
 	VisitValue(ValueNode) error
 	VisitPrefix(PrefixNode) error
@@ -270,6 +272,61 @@ func (n ObjectNode) IsEmpty() bool {
 
 func (n ObjectNode) Accept(v Visitor) error {
 	return v.VisitObject(n)
+}
+
+func Wilcard(parent EmptiableObject, predicate Visitable) WilcardNode {
+	return WilcardNode{
+		parent:    parent,
+		predicate: predicate,
+	}
+}
+
+// See JSONPath specification for * and @, for example jsonb_path_match() in PostgreSQL.
+type WilcardNode struct {
+	parent    EmptiableObject
+	predicate Visitable
+}
+
+func (n WilcardNode) Parent() EmptiableObject {
+	return n.parent
+}
+
+func (n WilcardNode) Name() string {
+	return "*"
+}
+
+func (n WilcardNode) IsEmpty() bool {
+	return false
+}
+
+func (n WilcardNode) Predicate() Visitable {
+	return n.predicate
+}
+
+func (n WilcardNode) Accept(v Visitor) error {
+	return v.VisitWildcard(n)
+}
+
+func Item() ItemNode {
+	return ItemNode{}
+}
+
+type ItemNode struct{}
+
+func (n ItemNode) Parent() EmptiableObject {
+	return EmptyObject()
+}
+
+func (n ItemNode) Name() string {
+	return "@"
+}
+
+func (n ItemNode) IsEmpty() bool {
+	return false
+}
+
+func (n ItemNode) Accept(v Visitor) error {
+	return v.VisitItem(n)
 }
 
 func Field(object ObjectNode, name string) FieldNode {

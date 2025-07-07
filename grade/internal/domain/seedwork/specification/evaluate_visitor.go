@@ -13,6 +13,7 @@ func NewEvaluateVisitor(context Context) *EvaluateVisitor {
 
 type EvaluateVisitor struct {
 	currentValue []any
+	currentItem  Context
 	Context
 }
 
@@ -24,8 +25,23 @@ func (v *EvaluateVisitor) SetCurrentValue(val []any) {
 	v.currentValue = val
 }
 
-func (v *EvaluateVisitor) VisitObject(_ ObjectNode) error {
+func (v *EvaluateVisitor) VisitObject(n ObjectNode) error {
 	// Is not used in Evaluation - only in SQL-building
+	return nil
+}
+
+func (v *EvaluateVisitor) VisitWildcard(n WilcardNode) error {
+	items, err := v.Context.ValuesByPath(n.Name())
+	if err != nil {
+		return err
+	}
+	for i := range items {
+		v.currentItem = items[i].(Context)
+	}
+	return nil
+}
+
+func (v *EvaluateVisitor) VisitItem(n ItemNode) error {
 	return nil
 }
 
@@ -227,4 +243,20 @@ func ExtractFieldPath(n FieldNode) []string {
 		obj = obj.Parent()
 	}
 	return path
+}
+
+type WildcardContext struct {
+	items []Context
+}
+
+func (c WildcardContext) ValuesByPath(path ...string) ([]any, error) {
+	var result []any
+	for i := range c.items {
+		values, err := c.items[i].ValuesByPath(path...)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, values...)
+	}
+	return result, nil
 }

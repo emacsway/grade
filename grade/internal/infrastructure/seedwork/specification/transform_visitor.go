@@ -29,6 +29,14 @@ func (v *TransformVisitor) VisitObject(_ s.ObjectNode) error {
 	return nil
 }
 
+func (v *TransformVisitor) VisitWildcard(n s.WilcardNode) error {
+	return nil
+}
+
+func (v *TransformVisitor) VisitItem(n s.ItemNode) error {
+	return nil
+}
+
 func (v *TransformVisitor) VisitField(n s.FieldNode) error {
 	_, err := v.Context.NameByPath(s.ExtractFieldPath(n)...)
 	if err != nil {
