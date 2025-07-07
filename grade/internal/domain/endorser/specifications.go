@@ -71,7 +71,6 @@ func (c EndorserContext) Get(path ...string) ([]any, error) {
 	}
 }
 
-// TODO: Rename me to GlobalScopeContext
 type GlobalScopeContext struct {
 	endorser EndorserContext
 }
