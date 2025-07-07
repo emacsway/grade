@@ -44,7 +44,7 @@ func (e EndorserCanCompleteEndorsementSpecification) Expression() s.Visitable {
 }
 
 func (e EndorserCanCompleteEndorsementSpecification) IsSatisfiedBy(obj Endorser) (bool, error) {
-	v := s.NewEvaluateVisitor(Context{
+	v := s.NewEvaluateVisitor(GlobalScopeContext{
 		endorser: EndorserContext{
 			obj: obj,
 		},
@@ -72,11 +72,11 @@ func (c EndorserContext) Get(path ...string) ([]any, error) {
 }
 
 // TODO: Rename me to GlobalScopeContext
-type Context struct {
+type GlobalScopeContext struct {
 	endorser EndorserContext
 }
 
-func (c Context) Get(path ...string) ([]any, error) {
+func (c GlobalScopeContext) Get(path ...string) ([]any, error) {
 	switch path[0] {
 	case "endorser":
 		return []any{c.endorser}, nil
