@@ -48,10 +48,13 @@ func (v *EvaluateVisitor) VisitWildcard(n WilcardNode) error {
 	if err != nil {
 		return err
 	}
+	result := false
 	for i := range items {
 		v.currentItem = items[i].(Context)
 		n.Predicate().Accept(v)
+		result = result || v.CurrentValue()[0].(bool)
 	}
+	v.SetCurrentValue([]any{result})
 	return nil
 }
 
@@ -131,6 +134,7 @@ func (v *EvaluateVisitor) VisitInfix(n InfixNode) error {
 		// FIXME: здесь мы ищем совпадение по атрибуту любой из вложенных сущностей,
 		// в то время как PostgresqlVisitor ищет совпадение по одной из вложенных сущностей.
 		// В качестве решения можно воспользоваться относительным путем по аналогии @ в jsonpath.
+		// Fixed by add support for Wildcard
 		for i := range lefts {
 			for j := range rights {
 				// aggregate.[]entity.field int == aggregate2.[]entity.field int
