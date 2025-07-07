@@ -25,32 +25,49 @@ func (v *EvaluateVisitor) SetCurrentValue(val []any) {
 	v.currentValue = val
 }
 
+func (v *EvaluateVisitor) VisitGlobalScope(n EmptyObjectNode) error {
+	v.SetCurrentValue([]any{v.Context})
+	return nil
+}
+
 func (v *EvaluateVisitor) VisitObject(n ObjectNode) error {
-	// Is not used in Evaluation - only in SQL-building
+	n.Parent().Accept(v)
+	parent := v.CurrentValue()[0].(Context)
+	obj, err := parent.Get(n.Name())
+	if err != nil {
+		return err
+	}
+	v.SetCurrentValue(obj)
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitWildcard(n WilcardNode) error {
-	items, err := v.Context.ValuesByPath(n.Name())
+	n.Parent().Accept(v)
+	obj := v.CurrentValue()[0].(Context)
+	items, err := obj.Get(n.Name())
 	if err != nil {
 		return err
 	}
 	for i := range items {
 		v.currentItem = items[i].(Context)
+		n.Predicate().Accept(v)
 	}
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitItem(n ItemNode) error {
+	v.SetCurrentValue([]any{v.currentItem})
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitField(n FieldNode) error {
-	values, err := v.Context.ValuesByPath(ExtractFieldPath(n)...)
+	n.Object().Accept(v)
+	obj := v.CurrentValue()[0].(Context)
+	value, err := obj.Get(n.Name())
 	if err != nil {
 		return err
 	}
-	v.SetCurrentValue(values)
+	v.SetCurrentValue(value)
 	return nil
 }
 
@@ -232,7 +249,7 @@ func (v EvaluateVisitor) Result() (bool, error) {
 }
 
 type Context interface {
-	ValuesByPath(...string) ([]any, error)
+	Get(...string) ([]any, error)
 }
 
 func ExtractFieldPath(n FieldNode) []string {
@@ -245,18 +262,18 @@ func ExtractFieldPath(n FieldNode) []string {
 	return path
 }
 
+// TODO: Rename me to CollectionContext
 type WildcardContext struct {
 	items []Context
 }
 
-func (c WildcardContext) ValuesByPath(path ...string) ([]any, error) {
-	var result []any
-	for i := range c.items {
-		values, err := c.items[i].ValuesByPath(path...)
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, values...)
+func (c WildcardContext) Get(path ...string) ([]any, error) {
+	result := make([]any, len(c.items))
+	for i, v := range c.items {
+		result[i] = v
 	}
-	return result, nil
+	if path[0] == "*" {
+		return result, nil
+	}
+	return nil, errors.New("unsupported slice access")
 }

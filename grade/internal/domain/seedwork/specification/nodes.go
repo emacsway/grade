@@ -62,6 +62,7 @@ type Visitable interface {
 }
 
 type Visitor interface {
+	VisitGlobalScope(EmptyObjectNode) error
 	VisitObject(ObjectNode) error
 	VisitWildcard(WilcardNode) error
 	VisitItem(ItemNode) error
@@ -225,6 +226,7 @@ type EmptiableObject interface {
 	IsEmpty() bool
 }
 
+// TODO: Rename me to GlobalScope
 func EmptyObject() EmptyObjectNode {
 	return EmptyObjectNode{}
 }
@@ -242,8 +244,8 @@ func (n EmptyObjectNode) Name() string {
 func (n EmptyObjectNode) IsEmpty() bool {
 	return true
 }
-func (n EmptyObjectNode) Accept(_ Visitor) error {
-	return nil
+func (n EmptyObjectNode) Accept(v Visitor) error {
+	return v.VisitGlobalScope(n)
 }
 
 func Object(parent EmptiableObject, name string) ObjectNode {

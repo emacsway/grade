@@ -60,7 +60,7 @@ type EndorserContext struct {
 	obj Endorser
 }
 
-func (c EndorserContext) ValuesByPath(path ...string) ([]any, error) {
+func (c EndorserContext) Get(path ...string) ([]any, error) {
 	switch path[0] {
 	case "availableEndorsementCount":
 		return []any{c.obj.availableEndorsementCount}, nil
@@ -71,14 +71,15 @@ func (c EndorserContext) ValuesByPath(path ...string) ([]any, error) {
 	}
 }
 
+// TODO: Rename me to GlobalScopeContext
 type Context struct {
 	endorser EndorserContext
 }
 
-func (c Context) ValuesByPath(path ...string) ([]any, error) {
+func (c Context) Get(path ...string) ([]any, error) {
 	switch path[0] {
 	case "endorser":
-		return c.endorser.ValuesByPath(path[1:]...)
+		return []any{c.endorser}, nil
 	default:
 		return []any{}, fmt.Errorf("can't get object \"%s\"", path[0])
 	}
