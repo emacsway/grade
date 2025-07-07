@@ -48,7 +48,19 @@ type PostgresqlVisitor struct {
 	parameters        []driver.Valuer
 	precedence        int
 	precedenceMapping map[string]int
+	// currentItem       Context
+	stack []Context
 	Context
+}
+
+func (v *PostgresqlVisitor) Push(ctx Context) {
+	v.stack = append(v.stack, v.Context)
+	v.Context = ctx
+}
+
+func (v *PostgresqlVisitor) Pop() {
+	v.Context = v.stack[len(v.stack)-1]
+	v.stack = v.stack[:len(v.stack)-1]
 }
 
 func (v PostgresqlVisitor) getNodePrecedenceKey(n s.Operable) string {
@@ -86,6 +98,7 @@ func (v *PostgresqlVisitor) visit(precedenceKey string, callable func() error) e
 }
 
 func (v *PostgresqlVisitor) VisitGlobalScope(_ s.GlobalScopeNode) error {
+	// v.push(v.Context)
 	return nil
 }
 
@@ -98,11 +111,13 @@ func (v *PostgresqlVisitor) VisitCollection(n s.CollectionNode) error {
 }
 
 func (v *PostgresqlVisitor) VisitItem(n s.ItemNode) error {
+	// v.push(v.currentItem)
 	return nil
 }
 
 func (v *PostgresqlVisitor) VisitField(n s.FieldNode) error {
 	name, err := v.Context.NameByPath(s.ExtractFieldPath(n)...)
+	// v.pop()
 	if err != nil {
 		return err
 	}
