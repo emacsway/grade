@@ -14,7 +14,18 @@ func NewEvaluateVisitor(context Context) *EvaluateVisitor {
 type EvaluateVisitor struct {
 	currentValue any
 	currentItem  Context
+	stack        []Context
 	Context
+}
+
+func (v *EvaluateVisitor) push(ctx Context) {
+	v.stack = append(v.stack, v.Context)
+	v.Context = ctx
+}
+
+func (v *EvaluateVisitor) pop() {
+	v.Context = v.stack[len(v.stack)-1]
+	v.stack = v.stack[:len(v.stack)-1]
 }
 
 func (v EvaluateVisitor) CurrentValue() any {
@@ -26,25 +37,31 @@ func (v *EvaluateVisitor) SetCurrentValue(val any) {
 }
 
 func (v *EvaluateVisitor) VisitGlobalScope(n GlobalScopeNode) error {
-	v.SetCurrentValue(v.Context)
+	v.push(v.Context)
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitObject(n ObjectNode) error {
-	n.Parent().Accept(v)
-	parent := v.CurrentValue().(Context)
-	obj, err := parent.Get(n.Name())
+	err := n.Parent().Accept(v)
 	if err != nil {
 		return err
 	}
-	v.SetCurrentValue(obj)
+	obj, err := v.Context.Get(n.Name())
+	v.pop()
+	if err != nil {
+		return err
+	}
+	v.push(obj.(Context))
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitCollection(n CollectionNode) error {
-	n.Parent().Accept(v)
-	obj := v.CurrentValue().(Context)
-	items, err := obj.Get(n.Name())
+	err := n.Parent().Accept(v)
+	if err != nil {
+		return err
+	}
+	items, err := v.Context.Get(n.Name())
+	v.pop()
 	if err != nil {
 		return err
 	}
@@ -55,7 +72,10 @@ func (v *EvaluateVisitor) VisitCollection(n CollectionNode) error {
 	result := false
 	for i := range itemsTyped {
 		v.currentItem = itemsTyped[i]
-		n.Predicate().Accept(v)
+		err := n.Predicate().Accept(v)
+		if err != nil {
+			return err
+		}
 		result = result || v.CurrentValue().(bool)
 	}
 	v.SetCurrentValue(result)
@@ -63,14 +83,17 @@ func (v *EvaluateVisitor) VisitCollection(n CollectionNode) error {
 }
 
 func (v *EvaluateVisitor) VisitItem(n ItemNode) error {
-	v.SetCurrentValue(v.currentItem)
+	v.push(v.currentItem)
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitField(n FieldNode) error {
-	n.Object().Accept(v)
-	obj := v.CurrentValue().(Context)
-	value, err := obj.Get(n.Name())
+	err := n.Object().Accept(v)
+	if err != nil {
+		return err
+	}
+	value, err := v.Context.Get(n.Name())
+	v.pop()
 	if err != nil {
 		return err
 	}
