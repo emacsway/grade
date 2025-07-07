@@ -12,27 +12,27 @@ func NewEvaluateVisitor(context Context) *EvaluateVisitor {
 }
 
 type EvaluateVisitor struct {
-	currentValue []any
+	currentValue any
 	currentItem  Context
 	Context
 }
 
-func (v EvaluateVisitor) CurrentValue() []any {
+func (v EvaluateVisitor) CurrentValue() any {
 	return v.currentValue
 }
 
-func (v *EvaluateVisitor) SetCurrentValue(val []any) {
+func (v *EvaluateVisitor) SetCurrentValue(val any) {
 	v.currentValue = val
 }
 
 func (v *EvaluateVisitor) VisitGlobalScope(n GlobalScopeNode) error {
-	v.SetCurrentValue([]any{v.Context})
+	v.SetCurrentValue(v.Context)
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitObject(n ObjectNode) error {
 	n.Parent().Accept(v)
-	parent := v.CurrentValue()[0].(Context)
+	parent := v.CurrentValue().(Context)
 	obj, err := parent.Get(n.Name())
 	if err != nil {
 		return err
@@ -43,29 +43,33 @@ func (v *EvaluateVisitor) VisitObject(n ObjectNode) error {
 
 func (v *EvaluateVisitor) VisitCollection(n CollectionNode) error {
 	n.Parent().Accept(v)
-	obj := v.CurrentValue()[0].(Context)
+	obj := v.CurrentValue().(Context)
 	items, err := obj.Get(n.Name())
 	if err != nil {
 		return err
 	}
-	result := false
-	for i := range items {
-		v.currentItem = items[i].(Context)
-		n.Predicate().Accept(v)
-		result = result || v.CurrentValue()[0].(bool)
+	itemsTyped, ok := items.([]Context)
+	if !ok {
+		return errors.New("currentValue is not a collection of Contexts")
 	}
-	v.SetCurrentValue([]any{result})
+	result := false
+	for i := range itemsTyped {
+		v.currentItem = itemsTyped[i]
+		n.Predicate().Accept(v)
+		result = result || v.CurrentValue().(bool)
+	}
+	v.SetCurrentValue(result)
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitItem(n ItemNode) error {
-	v.SetCurrentValue([]any{v.currentItem})
+	v.SetCurrentValue(v.currentItem)
 	return nil
 }
 
 func (v *EvaluateVisitor) VisitField(n FieldNode) error {
 	n.Object().Accept(v)
-	obj := v.CurrentValue()[0].(Context)
+	obj := v.CurrentValue().(Context)
 	value, err := obj.Get(n.Name())
 	if err != nil {
 		return err
@@ -75,7 +79,7 @@ func (v *EvaluateVisitor) VisitField(n FieldNode) error {
 }
 
 func (v *EvaluateVisitor) VisitValue(n ValueNode) error {
-	v.SetCurrentValue([]any{n.Value()})
+	v.SetCurrentValue(n.Value())
 	return nil
 }
 
@@ -84,18 +88,13 @@ func (v *EvaluateVisitor) VisitPrefix(n PrefixNode) error {
 	if err != nil {
 		return err
 	}
-	operands := v.CurrentValue()
+	operand := v.CurrentValue()
 	if v.yieldBooleanOperator(n.Operator()) {
-		// aggregate.[]entity.field bool
-		result := false
-		for i := range operands {
-			nextResult, err := v.evalYieldBooleanPrefix(operands[i], n.Operator())
-			if err != nil {
-				return err
-			}
-			result = result || nextResult
+		result, err := v.evalYieldBooleanPrefix(operand, n.Operator())
+		if err != nil {
+			return err
 		}
-		v.SetCurrentValue([]any{result})
+		v.SetCurrentValue(result)
 	} else {
 		return fmt.Errorf("mathematical operator \"%s\" is not supported", n.Operator())
 	}
@@ -123,29 +122,18 @@ func (v *EvaluateVisitor) VisitInfix(n InfixNode) error {
 	if err != nil {
 		return err
 	}
-	lefts := v.CurrentValue()
+	left := v.CurrentValue()
 	err = n.Right().Accept(v)
 	if err != nil {
 		return err
 	}
-	rights := v.CurrentValue()
+	right := v.CurrentValue()
 	if v.yieldBooleanOperator(n.Operator()) {
-		result := false
-		// FIXME: здесь мы ищем совпадение по атрибуту любой из вложенных сущностей,
-		// в то время как PostgresqlVisitor ищет совпадение по одной из вложенных сущностей.
-		// В качестве решения можно воспользоваться относительным путем по аналогии @ в jsonpath.
-		// Fixed by add support for Wildcard
-		for i := range lefts {
-			for j := range rights {
-				// aggregate.[]entity.field int == aggregate2.[]entity.field int
-				nextResult, err := v.evalYieldBooleanInfix(lefts[i], n.Operator(), rights[j])
-				if err != nil {
-					return err
-				}
-				result = result || nextResult
-			}
+		result, err := v.evalYieldBooleanInfix(left, n.Operator(), right)
+		if err != nil {
+			return err
 		}
-		v.SetCurrentValue([]any{result})
+		v.SetCurrentValue(result)
 	} else {
 		return fmt.Errorf("mathematical operator \"%s\" is not supported", n.Operator())
 	}
@@ -239,21 +227,16 @@ func (v EvaluateVisitor) evalAnd(left, right any) (bool, error) {
 }
 
 func (v EvaluateVisitor) Result() (bool, error) {
-	results := v.CurrentValue()
-	for i := range results {
-		resultTyped, ok := results[i].(bool)
-		if !ok {
-			return false, errors.New("the result is not a bool")
-		}
-		if resultTyped {
-			return resultTyped, nil
-		}
+	result := v.CurrentValue()
+	resultTyped, ok := result.(bool)
+	if !ok {
+		return false, errors.New("the result is not a bool")
 	}
-	return false, nil
+	return resultTyped, nil
 }
 
 type Context interface {
-	Get(...string) ([]any, error)
+	Get(string) (any, error)
 }
 
 func ExtractFieldPath(n FieldNode) []string {
@@ -266,18 +249,13 @@ func ExtractFieldPath(n FieldNode) []string {
 	return path
 }
 
-// TODO: Rename me to CollectionContext
 type CollectionContext struct {
 	items []Context
 }
 
-func (c CollectionContext) Get(path ...string) ([]any, error) {
-	result := make([]any, len(c.items))
-	for i, v := range c.items {
-		result[i] = v
+func (c CollectionContext) Get(slice string) (any, error) {
+	if slice == "*" {
+		return c.items, nil
 	}
-	if path[0] == "*" {
-		return result, nil
-	}
-	return nil, errors.New("unsupported slice access")
+	return nil, fmt.Errorf("unsupported slice type \"%s\"", slice)
 }

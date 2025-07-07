@@ -60,14 +60,14 @@ type EndorserContext struct {
 	obj Endorser
 }
 
-func (c EndorserContext) Get(path ...string) ([]any, error) {
-	switch path[0] {
+func (c EndorserContext) Get(attr string) (any, error) {
+	switch attr {
 	case "availableEndorsementCount":
-		return []any{c.obj.availableEndorsementCount}, nil
+		return c.obj.availableEndorsementCount, nil
 	case "pendingEndorsementCount":
-		return []any{c.obj.pendingEndorsementCount}, nil
+		return c.obj.pendingEndorsementCount, nil
 	default:
-		return []any{}, fmt.Errorf("can't get field \"%s\"", path[0])
+		return nil, fmt.Errorf("can't get field \"%s\"", attr)
 	}
 }
 
@@ -75,11 +75,11 @@ type GlobalScopeContext struct {
 	endorser EndorserContext
 }
 
-func (c GlobalScopeContext) Get(path ...string) ([]any, error) {
-	switch path[0] {
+func (c GlobalScopeContext) Get(attr string) (any, error) {
+	switch attr {
 	case "endorser":
-		return []any{c.endorser}, nil
+		return c.endorser, nil
 	default:
-		return []any{}, fmt.Errorf("can't get object \"%s\"", path[0])
+		return nil, fmt.Errorf("can't get object \"%s\"", attr)
 	}
 }
