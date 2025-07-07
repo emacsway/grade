@@ -41,7 +41,7 @@ func (v *EvaluateVisitor) VisitObject(n ObjectNode) error {
 	return nil
 }
 
-func (v *EvaluateVisitor) VisitWildcard(n WilcardNode) error {
+func (v *EvaluateVisitor) VisitCollection(n WilcardNode) error {
 	n.Parent().Accept(v)
 	obj := v.CurrentValue()[0].(Context)
 	items, err := obj.Get(n.Name())
@@ -267,11 +267,11 @@ func ExtractFieldPath(n FieldNode) []string {
 }
 
 // TODO: Rename me to CollectionContext
-type WildcardContext struct {
+type CollectionContext struct {
 	items []Context
 }
 
-func (c WildcardContext) Get(path ...string) ([]any, error) {
+func (c CollectionContext) Get(path ...string) ([]any, error) {
 	result := make([]any, len(c.items))
 	for i, v := range c.items {
 		result[i] = v

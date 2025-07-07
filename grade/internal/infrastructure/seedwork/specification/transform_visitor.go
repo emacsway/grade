@@ -33,7 +33,7 @@ func (v *TransformVisitor) VisitObject(_ s.ObjectNode) error {
 	return nil
 }
 
-func (v *TransformVisitor) VisitWildcard(n s.WilcardNode) error {
+func (v *TransformVisitor) VisitCollection(n s.WilcardNode) error {
 	return nil
 }
 

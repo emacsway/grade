@@ -64,7 +64,7 @@ type Visitable interface {
 type Visitor interface {
 	VisitGlobalScope(GlobalScopeNode) error
 	VisitObject(ObjectNode) error
-	VisitWildcard(WilcardNode) error
+	VisitCollection(WilcardNode) error
 	VisitItem(ItemNode) error
 	VisitField(FieldNode) error
 	VisitValue(ValueNode) error
@@ -307,7 +307,7 @@ func (n WilcardNode) Predicate() Visitable {
 }
 
 func (n WilcardNode) Accept(v Visitor) error {
-	return v.VisitWildcard(n)
+	return v.VisitCollection(n)
 }
 
 func Item() ItemNode {
