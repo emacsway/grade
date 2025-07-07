@@ -62,7 +62,7 @@ type Visitable interface {
 }
 
 type Visitor interface {
-	VisitGlobalScope(EmptyObjectNode) error
+	VisitGlobalScope(GlobalScopeNode) error
 	VisitObject(ObjectNode) error
 	VisitWildcard(WilcardNode) error
 	VisitItem(ItemNode) error
@@ -223,28 +223,27 @@ type EmptiableObject interface {
 	Visitable
 	Parent() EmptiableObject
 	Name() string
-	IsEmpty() bool
+	IsRoot() bool
 }
 
-// TODO: Rename me to GlobalScope
-func EmptyObject() EmptyObjectNode {
-	return EmptyObjectNode{}
+func GlobalScope() GlobalScopeNode {
+	return GlobalScopeNode{}
 }
 
-type EmptyObjectNode struct{}
+type GlobalScopeNode struct{}
 
-func (n EmptyObjectNode) Parent() EmptiableObject {
+func (n GlobalScopeNode) Parent() EmptiableObject {
 	return n
 }
 
-func (n EmptyObjectNode) Name() string {
+func (n GlobalScopeNode) Name() string {
 	return "Empty"
 }
 
-func (n EmptyObjectNode) IsEmpty() bool {
+func (n GlobalScopeNode) IsRoot() bool {
 	return true
 }
-func (n EmptyObjectNode) Accept(v Visitor) error {
+func (n GlobalScopeNode) Accept(v Visitor) error {
 	return v.VisitGlobalScope(n)
 }
 
@@ -268,7 +267,7 @@ func (n ObjectNode) Name() string {
 	return n.name
 }
 
-func (n ObjectNode) IsEmpty() bool {
+func (n ObjectNode) IsRoot() bool {
 	return false
 }
 
@@ -317,7 +316,7 @@ func Item() ItemNode {
 type ItemNode struct{}
 
 func (n ItemNode) Parent() EmptiableObject {
-	return EmptyObject()
+	return GlobalScope()
 }
 
 func (n ItemNode) Name() string {

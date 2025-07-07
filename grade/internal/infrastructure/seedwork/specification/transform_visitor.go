@@ -25,7 +25,7 @@ type TransformVisitor struct {
 	Context
 }
 
-func (v *TransformVisitor) VisitGlobalScope(_ s.EmptyObjectNode) error {
+func (v *TransformVisitor) VisitGlobalScope(_ s.GlobalScopeNode) error {
 	return nil
 }
 

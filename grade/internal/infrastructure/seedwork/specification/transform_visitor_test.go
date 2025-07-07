@@ -20,7 +20,7 @@ func (sc SomethingCriteria) Id() s.FieldNode {
 }
 
 func (sc SomethingCriteria) obj() s.ObjectNode {
-	return s.Object(s.EmptyObject(), "something")
+	return s.Object(s.GlobalScope(), "something")
 }
 
 type SomethingSpecification struct {

@@ -85,7 +85,7 @@ func (v *PostgresqlVisitor) visit(precedenceKey string, callable func() error) e
 	return nil
 }
 
-func (v *PostgresqlVisitor) VisitGlobalScope(_ s.EmptyObjectNode) error {
+func (v *PostgresqlVisitor) VisitGlobalScope(_ s.GlobalScopeNode) error {
 	return nil
 }
 

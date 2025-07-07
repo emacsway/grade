@@ -18,7 +18,7 @@ func (c EndorserCriteria) pendingEndorsementCount() s.FieldNode {
 }
 
 func (c EndorserCriteria) obj() s.ObjectNode {
-	return s.Object(s.EmptyObject(), "endorser")
+	return s.Object(s.GlobalScope(), "endorser")
 }
 
 var endorser = EndorserCriteria{}

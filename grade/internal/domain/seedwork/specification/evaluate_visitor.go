@@ -25,7 +25,7 @@ func (v *EvaluateVisitor) SetCurrentValue(val []any) {
 	v.currentValue = val
 }
 
-func (v *EvaluateVisitor) VisitGlobalScope(n EmptyObjectNode) error {
+func (v *EvaluateVisitor) VisitGlobalScope(n GlobalScopeNode) error {
 	v.SetCurrentValue([]any{v.Context})
 	return nil
 }
@@ -255,7 +255,7 @@ type Context interface {
 func ExtractFieldPath(n FieldNode) []string {
 	path := []string{n.Name()}
 	var obj EmptiableObject = n.Object()
-	for !obj.IsEmpty() {
+	for !obj.IsRoot() {
 		path = append([]string{obj.Name()}, path...)
 		obj = obj.Parent()
 	}
