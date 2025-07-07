@@ -64,7 +64,7 @@ type Visitable interface {
 type Visitor interface {
 	VisitGlobalScope(GlobalScopeNode) error
 	VisitObject(ObjectNode) error
-	VisitCollection(WilcardNode) error
+	VisitCollection(CollectionNode) error
 	VisitItem(ItemNode) error
 	VisitField(FieldNode) error
 	VisitValue(ValueNode) error
@@ -276,37 +276,39 @@ func (n ObjectNode) Accept(v Visitor) error {
 	return v.VisitObject(n)
 }
 
-func Wilcard(parent EmptiableObject, predicate Visitable) WilcardNode {
-	return WilcardNode{
+func Wilcard(parent EmptiableObject, predicate Visitable) CollectionNode {
+	return CollectionNode{
 		parent:    parent,
+		name:      "*",
 		predicate: predicate,
 	}
 }
 
 // See JSONPath specification for * and @, for example jsonb_path_match() in PostgreSQL.
 // TODO: should it implement Field interface?
-type WilcardNode struct {
+type CollectionNode struct {
 	parent    EmptiableObject
+	name      string // TODO: rename to slice?
 	predicate Visitable
 }
 
-func (n WilcardNode) Parent() EmptiableObject {
+func (n CollectionNode) Parent() EmptiableObject {
 	return n.parent
 }
 
-func (n WilcardNode) Name() string {
-	return "*"
+func (n CollectionNode) Name() string {
+	return n.name
 }
 
-func (n WilcardNode) IsEmpty() bool {
+func (n CollectionNode) IsRoot() bool {
 	return false
 }
 
-func (n WilcardNode) Predicate() Visitable {
+func (n CollectionNode) Predicate() Visitable {
 	return n.predicate
 }
 
-func (n WilcardNode) Accept(v Visitor) error {
+func (n CollectionNode) Accept(v Visitor) error {
 	return v.VisitCollection(n)
 }
 
@@ -317,15 +319,15 @@ func Item() ItemNode {
 type ItemNode struct{}
 
 func (n ItemNode) Parent() EmptiableObject {
-	return GlobalScope()
+	return GlobalScope() // FIXME: is it correct?
 }
 
 func (n ItemNode) Name() string {
 	return "@"
 }
 
-func (n ItemNode) IsEmpty() bool {
-	return false
+func (n ItemNode) IsRoot() bool {
+	return true
 }
 
 func (n ItemNode) Accept(v Visitor) error {

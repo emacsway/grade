@@ -93,7 +93,7 @@ func (v *PostgresqlVisitor) VisitObject(_ s.ObjectNode) error {
 	return nil
 }
 
-func (v *PostgresqlVisitor) VisitCollection(n s.WilcardNode) error {
+func (v *PostgresqlVisitor) VisitCollection(n s.CollectionNode) error {
 	return nil
 }
 

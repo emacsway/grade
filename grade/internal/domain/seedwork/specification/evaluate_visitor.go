@@ -41,7 +41,7 @@ func (v *EvaluateVisitor) VisitObject(n ObjectNode) error {
 	return nil
 }
 
-func (v *EvaluateVisitor) VisitCollection(n WilcardNode) error {
+func (v *EvaluateVisitor) VisitCollection(n CollectionNode) error {
 	n.Parent().Accept(v)
 	obj := v.CurrentValue()[0].(Context)
 	items, err := obj.Get(n.Name())
