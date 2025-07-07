@@ -219,6 +219,7 @@ func (n InfixNode) Accept(v Visitor) error {
 	return v.VisitInfix(n)
 }
 
+// TODO: Rename me to Scope?
 type EmptiableObject interface {
 	Visitable
 	Parent() EmptiableObject
