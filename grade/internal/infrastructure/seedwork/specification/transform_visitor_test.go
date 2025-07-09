@@ -134,6 +134,7 @@ func (c TestContext) somethingPath(prefix string, path ...string) (string, error
 		// Нам нужно добавить JOIN в Visitor для Collection и создать alias для Item.
 		// Context нам нужно подменить, чтобы подменить наименование таблицы на alias of the JOIN.
 		// А в принципе, если весь Collection.expression запихнуть в JOIN ... ON, тогда alias может и не понадобится.
+		// Кажется, решение в том, чтобы выделить TransformContext с правилами маппинга.
 		return c.somethingIdPath(prefix, path[1:]...)
 	default:
 		return "", fmt.Errorf("can't get field \"%s\"", path[0])
