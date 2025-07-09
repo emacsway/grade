@@ -136,6 +136,7 @@ func (c TestContext) somethingPath(prefix string, path ...string) (string, error
 		// А в принципе, если весь Collection.expression запихнуть в JOIN ... ON, тогда alias может и не понадобится.
 		// Кажется, решение в том, чтобы выделить TransformContext с правилами преобразования.
 		// Нужно подумать что делать с полями сущностей 3-го и более глубокого уровня вложенности.
+		// В принципе, там должны получаться многоуровневые JOINs.
 		return c.somethingIdPath(prefix, path[1:]...)
 	default:
 		return "", fmt.Errorf("can't get field \"%s\"", path[0])
