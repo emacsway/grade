@@ -132,6 +132,7 @@ func (c TestContext) somethingPath(prefix string, path ...string) (string, error
 		// FIXME: In case of stack implementation it will not work with member_id because this attrite is present on both cases:
 		// before transformation and after transformation
 		// Нам нужно добавить JOIN в Visitor для Collection и создать alias для Item
+		// Context нам нужно подменить, чтобы подменить наименование поля на alias
 		return c.somethingIdPath(prefix, path[1:]...)
 	default:
 		return "", fmt.Errorf("can't get field \"%s\"", path[0])
