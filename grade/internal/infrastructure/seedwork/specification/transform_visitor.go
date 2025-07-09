@@ -49,6 +49,7 @@ func (v *TransformVisitor) VisitField(n s.FieldNode) error {
 			o := s.Object(n.Object(), n.Name())
 			compositeExpression := CompositeExpression{}
 			for i := range names {
+				// TODO: use n.Object() instead of o?
 				compositeExpression.Add(s.Field(o, names[i]))
 			}
 			v.compositeExpressions = append(v.compositeExpressions, compositeExpression)
