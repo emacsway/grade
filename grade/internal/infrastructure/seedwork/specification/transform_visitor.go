@@ -13,13 +13,11 @@ var (
 
 func NewTransformVisitor(context Context) *TransformVisitor {
 	return &TransformVisitor{
-		isChanged: false,
-		Context:   context,
+		Context: context,
 	}
 }
 
 type TransformVisitor struct {
-	isChanged            bool
 	compositeExpressions []CompositeExpression
 	currentNode          s.Visitable
 	Context
@@ -107,7 +105,7 @@ func (v *TransformVisitor) VisitInfix(n s.InfixNode) error {
 	}
 	if newNode != nil {
 		v.currentNode = newNode
-		v.isChanged = true
+		v.currentNode.Accept(v)
 	} else {
 		v.currentNode = s.NewInfixNode(left, n.Operator(), right, n.Associativity())
 	}
@@ -132,10 +130,6 @@ func (v *TransformVisitor) buildNodeFromCompositeExpressions(n s.InfixNode) (s.V
 		}
 	}
 	return nil, nil
-}
-
-func (v TransformVisitor) IsChanged() bool {
-	return v.isChanged
 }
 
 func (v TransformVisitor) Result() (s.Visitable, error) {

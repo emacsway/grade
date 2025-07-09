@@ -50,19 +50,14 @@ func (ss SomethingSpecification) Evaluate( /* session session.PgxSession */ ) (
 	sql string, params []driver.Valuer, err error,
 ) {
 	exp := ss.Expression()
-	for i := 1; i <= 10; i++ {
-		v := NewTransformVisitor(TestContext{})
-		err := exp.Accept(v)
-		if err != nil {
-			return "", nil, err
-		}
-		exp, err = v.Result()
-		if err != nil {
-			return "", nil, err
-		}
-		if !v.IsChanged() {
-			break
-		}
+	tv := NewTransformVisitor(TestContext{})
+	err = exp.Accept(tv)
+	if err != nil {
+		return "", nil, err
+	}
+	exp, err = tv.Result()
+	if err != nil {
+		return "", nil, err
 	}
 	v := NewPostgresqlVisitor(TestContext{})
 	err = exp.Accept(v)
