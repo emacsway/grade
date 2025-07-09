@@ -129,7 +129,7 @@ func (c TestContext) NameByPath(path ...string) (string, error) {
 func (c TestContext) somethingPath(prefix string, path ...string) (string, error) {
 	switch path[0] {
 	case "id":
-		// FIXME: It doesn't work with member_id because this attrite is present on both cases:
+		// FIXME: In case of stack implementation it will not work with member_id because this attrite is present on both cases:
 		// before transformation and after transformation
 		// Нам нужно добавить JOIN в Visitor для Collection и создать alias для Item
 		return c.somethingIdPath(prefix, path[1:]...)
