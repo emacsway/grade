@@ -8,11 +8,11 @@ import (
 )
 
 func NewTestDb() (*sql.DB, error) {
-	var db_username string = getEnv("DB_USERNAME", "")
-	var db_password string = getEnv("DB_PASSWORD", "")
+	var db_username string = getEnv("DB_USERNAME", "devel")
+	var db_password string = getEnv("DB_PASSWORD", "devel")
 	var db_host string = getEnv("DB_HOST", "localhost")
 	var db_port string = getEnv("DB_PORT", "5432")
-	var db_basename string = getEnv("DB_DATABASE", "")
+	var db_basename string = getEnv("DB_DATABASE", "devel_grade")
 
 	// https://github.com/jackc/pgx/wiki/Getting-started-with-pgx-through-database-sql
 	// postgres://username:password@host:port/base_name
