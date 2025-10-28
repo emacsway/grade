@@ -334,7 +334,7 @@ func (n ItemNode) Accept(v Visitor) error {
 	return v.VisitItem(n)
 }
 
-func Field(object ObjectNode, name string) FieldNode {
+func Field(object EmptiableObject, name string) FieldNode {
 	return FieldNode{
 		object: object,
 		name:   name,
@@ -342,7 +342,7 @@ func Field(object ObjectNode, name string) FieldNode {
 }
 
 type FieldNode struct {
-	object ObjectNode
+	object EmptiableObject
 	name   string
 }
 
@@ -350,7 +350,7 @@ func (n FieldNode) Name() string {
 	return n.name
 }
 
-func (n FieldNode) Object() ObjectNode {
+func (n FieldNode) Object() EmptiableObject {
 	return n.object
 }
 

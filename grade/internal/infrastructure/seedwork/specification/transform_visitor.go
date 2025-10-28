@@ -11,6 +11,12 @@ var (
 	ErrCompositeExpressionsDifferentLength = errors.New("composite expressions have different length")
 )
 
+type Context interface {
+	AttrNode(path []string) (s.Visitable, error)
+	ValueNode(val any) (s.Visitable, error)
+	// TODO: с вложенными контекстами ValueNode не будет работать, т.к. ValueNode может идти первым операндом. Нужно разделять интерфейсы.
+}
+
 func NewTransformVisitor(context Context) *TransformVisitor {
 	return &TransformVisitor{
 		Context: context,
@@ -18,12 +24,23 @@ func NewTransformVisitor(context Context) *TransformVisitor {
 }
 
 type TransformVisitor struct {
-	compositeExpressions []CompositeExpression
-	currentNode          s.Visitable
+	currentNode s.Visitable
+	stack       []Context
 	Context
 }
 
+func (v *TransformVisitor) Push(ctx Context) {
+	v.stack = append(v.stack, v.Context)
+	v.Context = ctx
+}
+
+func (v *TransformVisitor) Pop() {
+	v.Context = v.stack[len(v.stack)-1]
+	v.stack = v.stack[:len(v.stack)-1]
+}
+
 func (v *TransformVisitor) VisitGlobalScope(_ s.GlobalScopeNode) error {
+	// v.push(v.Context)
 	return nil
 }
 
@@ -36,46 +53,26 @@ func (v *TransformVisitor) VisitCollection(n s.CollectionNode) error {
 }
 
 func (v *TransformVisitor) VisitItem(n s.ItemNode) error {
+	// v.push(v.currentItem)
 	return nil
 }
 
 func (v *TransformVisitor) VisitField(n s.FieldNode) error {
-	_, err := v.Context.NameByPath(s.ExtractFieldPath(n)...)
+	node, err := v.Context.AttrNode(s.ExtractFieldPath(n))
+	// v.pop()
 	if err != nil {
-		if errTyped, ok := err.(MissingFieldsError); ok {
-			names := errTyped.MissingFieldNames()
-			o := s.Object(n.Object(), n.Name())
-			compositeExpression := CompositeExpression{}
-			for i := range names {
-				// TODO: use n.Object() instead of o?
-				compositeExpression.Add(s.Field(o, names[i]))
-			}
-			v.compositeExpressions = append(v.compositeExpressions, compositeExpression)
-			return nil
-		} else {
-			return err
-		}
+		return err
 	}
-	v.currentNode = n
+	v.currentNode = node
 	return nil
 }
 
 func (v *TransformVisitor) VisitValue(n s.ValueNode) error {
-	_, err := v.Extract(n.Value())
+	node, err := v.Context.ValueNode(n.Value())
 	if err != nil {
-		if errTyped, ok := err.(MissingValuesError); ok {
-			values := errTyped.MissingValues()
-			compositeExpression := CompositeExpression{}
-			for i := range values {
-				compositeExpression.Add(s.Value(values[i]))
-			}
-			v.compositeExpressions = append(v.compositeExpressions, compositeExpression)
-			return nil
-		} else {
-			return err
-		}
+		return err
 	}
-	v.currentNode = n
+	v.currentNode = node
 	return nil
 }
 
@@ -99,71 +96,31 @@ func (v *TransformVisitor) VisitInfix(n s.InfixNode) error {
 		return err
 	}
 	right := v.currentNode
-	newNode, err := v.buildNodeFromCompositeExpressions(n)
-	if err != nil {
-		return err
-	}
-	if newNode != nil {
-		v.currentNode = newNode
-		v.currentNode.Accept(v)
+	leftComposite, ok := left.(CompositeExpressionNode)
+	if ok {
+		rightComposite, ok := right.(CompositeExpressionNode)
+		if !ok {
+			return errors.New("not enough composite expressions")
+		}
+		switch n.Operator() {
+		case s.OperatorEq:
+			v.currentNode, err = leftComposite.Equal(rightComposite)
+		case s.OperatorNe:
+			v.currentNode, err = leftComposite.Equal(rightComposite)
+		default:
+			return fmt.Errorf("operator \"%s\" is not supported for composite expressions", n.Operator())
+		}
+		if err != nil {
+			return err
+		}
 	} else {
 		v.currentNode = s.NewInfixNode(left, n.Operator(), right, n.Associativity())
 	}
 	return nil
 }
 
-func (v *TransformVisitor) buildNodeFromCompositeExpressions(n s.InfixNode) (s.Visitable, error) {
-	l := len(v.compositeExpressions)
-	if l != 0 {
-		if l < 2 {
-			return nil, errors.New("not enough composite expressions")
-		}
-		left, right := v.compositeExpressions[l-2], v.compositeExpressions[l-1]
-		v.compositeExpressions = v.compositeExpressions[:l-2]
-		switch n.Operator() {
-		case s.OperatorEq:
-			return left.Equal(right)
-		case s.OperatorNe:
-			return left.NotEqual(right)
-		default:
-			return nil, fmt.Errorf("operator \"%s\" is not supported for composite expressions", n.Operator())
-		}
-	}
-	return nil, nil
-}
-
 func (v TransformVisitor) Result() (s.Visitable, error) {
 	return v.currentNode, nil
-}
-
-type CompositeExpression struct {
-	nodes []s.Visitable
-}
-
-func (n *CompositeExpression) Add(nodes ...s.Visitable) {
-	n.nodes = append(n.nodes, nodes...)
-}
-
-func (n CompositeExpression) Equal(other CompositeExpression) (s.Visitable, error) {
-	var operands []s.Visitable
-	if len(n.nodes) != len(other.nodes) {
-		return nil, ErrCompositeExpressionsDifferentLength
-	}
-	for i := range n.nodes {
-		operands = append(operands, s.Equal(n.nodes[i], other.nodes[i]))
-	}
-	return s.And(operands[0], operands[1:]...), nil
-}
-
-func (n CompositeExpression) NotEqual(other CompositeExpression) (s.Visitable, error) {
-	var operands []s.Visitable
-	if len(n.nodes) != len(other.nodes) {
-		return nil, ErrCompositeExpressionsDifferentLength
-	}
-	for i := range n.nodes {
-		operands = append(operands, s.Equal(n.nodes[i], other.nodes[i]))
-	}
-	return s.Not(s.And(operands[0], operands[1:]...)), nil
 }
 
 func NewMissingFieldsError(names ...string) MissingFieldsError {

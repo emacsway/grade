@@ -3,6 +3,7 @@ package specification
 import (
 	"database/sql/driver"
 	"fmt"
+	"strings"
 
 	s "github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
@@ -15,10 +16,9 @@ func PlaceholderIndex(index uint8) PostgresqlVisitorOption {
 	}
 }
 
-func NewPostgresqlVisitor(context Context, opts ...PostgresqlVisitorOption) *PostgresqlVisitor {
+func NewPostgresqlVisitor(opts ...PostgresqlVisitorOption) *PostgresqlVisitor {
 	v := &PostgresqlVisitor{
 		precedenceMapping: make(map[string]int),
-		Context:           context,
 	}
 	// https://www.postgresql.org/docs/14/sql-syntax-lexical.html#SQL-PRECEDENCE-TABLE
 	v.setPrecedence(160, ". LEFT")
@@ -48,19 +48,6 @@ type PostgresqlVisitor struct {
 	parameters        []driver.Valuer
 	precedence        int
 	precedenceMapping map[string]int
-	// currentItem       Context
-	stack []Context
-	Context
-}
-
-func (v *PostgresqlVisitor) Push(ctx Context) {
-	v.stack = append(v.stack, v.Context)
-	v.Context = ctx
-}
-
-func (v *PostgresqlVisitor) Pop() {
-	v.Context = v.stack[len(v.stack)-1]
-	v.stack = v.stack[:len(v.stack)-1]
 }
 
 func (v PostgresqlVisitor) getNodePrecedenceKey(n s.Operable) string {
@@ -98,7 +85,6 @@ func (v *PostgresqlVisitor) visit(precedenceKey string, callable func() error) e
 }
 
 func (v *PostgresqlVisitor) VisitGlobalScope(_ s.GlobalScopeNode) error {
-	// v.push(v.Context)
 	return nil
 }
 
@@ -111,25 +97,17 @@ func (v *PostgresqlVisitor) VisitCollection(n s.CollectionNode) error {
 }
 
 func (v *PostgresqlVisitor) VisitItem(n s.ItemNode) error {
-	// v.push(v.currentItem)
 	return nil
 }
 
 func (v *PostgresqlVisitor) VisitField(n s.FieldNode) error {
-	name, err := v.Context.NameByPath(s.ExtractFieldPath(n)...)
-	// v.pop()
-	if err != nil {
-		return err
-	}
+	name := strings.Join(s.ExtractFieldPath(n), ".")
 	v.sql += name
 	return nil
 }
 
 func (v *PostgresqlVisitor) VisitValue(n s.ValueNode) error {
-	val, err := v.Extract(n.Value())
-	if err != nil {
-		return err
-	}
+	val := n.Value().(driver.Valuer)
 	v.parameters = append(v.parameters, val)
 	v.sql += fmt.Sprintf("$%d", len(v.parameters))
 	return nil
@@ -166,9 +144,4 @@ func (v *PostgresqlVisitor) VisitInfix(n s.InfixNode) error {
 
 func (v PostgresqlVisitor) Result() (sql string, params []driver.Valuer, err error) {
 	return v.sql, v.parameters, nil
-}
-
-type Context interface {
-	NameByPath(...string) (string, error)
-	Extract(any) (driver.Valuer, error)
 }
