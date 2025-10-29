@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html class="frame" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<title>Adapters</title>
+
+	<!-- JQUERY -->
+	<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+	<!-- BOOTSTRAP -->
+	<link type="text/css" rel="stylesheet" href="../../lib/bootstrap/css/bootstrap.min.yeti.css">
+	<script type="text/javascript" src="../../lib/bootstrap/js/bootstrap-3.3.2.min.js"></script>
+	<!-- REPORT SPECIFIC -->
+	<link type="text/css" rel="stylesheet" href="../../css/model.css">
+	<link type="text/css" rel="stylesheet" href="../../css/i18n.css">
+	<script type="text/javascript" src="../../js/frame.js"></script>
+	<script type="text/javascript" src="../../js/imageMapResizer.min.js"></script>
+</head>
+
+<body>
+	<div class="panel panel-default root-panel">
+
+		<div class="panel-heading root-panel-heading">
+            <!-- Name -->
+               <b>Adapters</b>
+
+            <!-- If a View with Viewpoint -->
+			   (<span class="i18n-elementtype-DiagramModelGroup"></span>)
+			   <a class="glyphicon glyphicon-info-sign" id="hint-DiagramModelGroup" target="hint"></a>
+		</div>
+
+		<div class="panel-body root-panel-body">
+		    <!-- If this is a digram model (has children and no bounds) show the image -->
+
+			<div role="tabpanel">
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+                    <!-- Purpose / Documentation / Content -->
+					   <li role="presentation" class="active"><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab" class="i18n-documentation"></a></li>
+
+                    <!-- Properties -->
+                    <li role="presentation"><a href="#properties" aria-controls="properties" role="tab" data-toggle="tab" class="i18n-properties"></a></li>
+
+						<li role="presentation"><a href="#elements" aria-controls="elements" role="tab" data-toggle="tab" class="i18n-elements"></a></li>
+						<li role="presentation"><a href="#relationships" aria-controls="relationships" role="tab" data-toggle="tab" class="i18n-relationships"></a></li>
+                    <!-- Model, Query Tab -->
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="documentation">
+						<div class="convertlinks documentation" style="white-space:pre-wrap"></div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="properties">
+						<table class="table table-striped table-hover table-condensed">
+							<thead>
+								<tr>
+									<th class="i18n-key"></th>
+									<th class="i18n-value"></th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+						<div role="tabpanel" class="tab-pane" id="elements">
+							<table class="table table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th class="i18n-name"></th>
+										<th class="i18n-type"></th>
+									</tr>
+								</thead>
+								<tbody>
+											<tr>
+											    <td> <a href="../elements/id-5ea197b09f0041869eac4ec66596f9d4.html" target="element"> REST-API Hexagonal Adapter </a> </td>
+											    <td> <a href="../elements/id-5ea197b09f0041869eac4ec66596f9d4.html" target="element" class="i18n-elementtype-ApplicationProcess">
+											    </a> </td>
+											</tr>
+
+											<tr>
+											    <td> <a href="../elements/id-20a350109a5a44e8bda98b6203ed68f9.html" target="element"> ReadModel </a> </td>
+											    <td> <a href="../elements/id-20a350109a5a44e8bda98b6203ed68f9.html" target="element" class="i18n-elementtype-DataObject">
+											    </a> </td>
+											</tr>
+
+
+								</tbody>
+							</table>
+						</div>
+						<div role="tabpanel" class="tab-pane" id="relationships">
+							<table class="table table-striped table-hover table-condensed">
+								<thead>
+									<tr>
+										<th class="i18n-name"></th>
+										<th class="i18n-type"></th>
+										<th class="i18n-source"></th>
+										<th class="i18n-target"></th>
+									</tr>
+								</thead>
+								<tbody>
+																	<tr>
+																		<td> <a href="../elements/id-5a0980ac048b43a5b8f96af1cf481d52.html" target="element">  </a> </td>
+																		<td> <a href="../elements/id-5a0980ac048b43a5b8f96af1cf481d52.html" target="element" class="i18n-elementtype-TriggeringRelationship">
+																		</a> </td>
+																		<td> <a href="../elements/id-5ea197b09f0041869eac4ec66596f9d4.html" target="element"> REST-API Hexagonal Adapter </a> </td>
+																		<td> <a href="../elements/id-0e35359b025c457d9e5631c53738b72b.html" target="element"> Query (Hexagonal Port, Interface) </a> </td>
+																	</tr>
+																	<tr>
+																		<td> <a href="../elements/id-9489ebb7c47f475b944ea2cd248785f2.html" target="element">  </a> </td>
+																		<td> <a href="../elements/id-9489ebb7c47f475b944ea2cd248785f2.html" target="element" class="i18n-elementtype-AccessRelationship">
+																		</a> </td>
+																		<td> <a href="../elements/id-5ea197b09f0041869eac4ec66596f9d4.html" target="element"> REST-API Hexagonal Adapter </a> </td>
+																		<td> <a href="../elements/id-eb7c28b38db647e48dc6ba0a4980c337.html" target="element"> HTTP-Response </a> </td>
+																	</tr>
+																	<tr>
+																		<td> <a href="../elements/id-444dab89a7a14f4e86da139f841530d7.html" target="element">  </a> </td>
+																		<td> <a href="../elements/id-444dab89a7a14f4e86da139f841530d7.html" target="element" class="i18n-elementtype-AccessRelationship">
+																		</a> </td>
+																		<td> <a href="../elements/id-5ea197b09f0041869eac4ec66596f9d4.html" target="element"> REST-API Hexagonal Adapter </a> </td>
+																		<td> <a href="../elements/id-20a350109a5a44e8bda98b6203ed68f9.html" target="element"> ReadModel </a> </td>
+																	</tr>
+																	<tr>
+																		<td> <a href="../elements/id-6bb0cf8816a14cfe85f6f9a75420fe00.html" target="element">  </a> </td>
+																		<td> <a href="../elements/id-6bb0cf8816a14cfe85f6f9a75420fe00.html" target="element" class="i18n-elementtype-AccessRelationship">
+																		</a> </td>
+																		<td> <a href="../elements/id-5ea197b09f0041869eac4ec66596f9d4.html" target="element"> REST-API Hexagonal Adapter </a> </td>
+																		<td> <a href="../elements/id-01ee22d91bcc416fb5798ea7ed9a65e7.html" target="element"> HTTP-Request </a> </td>
+																	</tr>
+
+
+								</tbody>
+							</table>
+						</div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">imageMapResize();</script>
+</body>
+</html>
