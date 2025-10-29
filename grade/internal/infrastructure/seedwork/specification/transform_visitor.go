@@ -122,39 +122,3 @@ func (v *TransformVisitor) VisitInfix(n s.InfixNode) error {
 func (v TransformVisitor) Result() (s.Visitable, error) {
 	return v.currentNode, nil
 }
-
-func NewMissingFieldsError(names ...string) MissingFieldsError {
-	return MissingFieldsError{
-		missingFieldNames: names,
-	}
-}
-
-type MissingFieldsError struct {
-	missingFieldNames []string
-}
-
-func (e MissingFieldsError) MissingFieldNames() []string {
-	return e.missingFieldNames
-}
-
-func (e MissingFieldsError) Error() string {
-	return fmt.Sprintf("Missing names: %#v", e.missingFieldNames)
-}
-
-func NewMissingValuesError(values ...any) MissingValuesError {
-	return MissingValuesError{
-		missingValues: values,
-	}
-}
-
-type MissingValuesError struct {
-	missingValues []any
-}
-
-func (e MissingValuesError) MissingValues() []any {
-	return e.missingValues
-}
-
-func (e MissingValuesError) Error() string {
-	return fmt.Sprintf("Missing values: %#v", e.missingValues)
-}
