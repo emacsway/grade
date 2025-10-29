@@ -18,22 +18,7 @@ type EndorserCanCompleteEndorsementSpecification struct {
 }
 
 func (e *EndorserCanCompleteEndorsementSpecification) Compile() (sql string, params []driver.Valuer, err error) {
-	exp := e.Expression()
-	tv := is.NewTransformVisitor(GlobalScopeContext{})
-	err = exp.Accept(tv)
-	if err != nil {
-		return "", nil, err
-	}
-	exp, err = tv.Result()
-	if err != nil {
-		return "", nil, err
-	}
-	v := is.NewPostgresqlVisitor()
-	err = exp.Accept(v)
-	if err != nil {
-		return "", []driver.Valuer{}, err
-	}
-	return v.Result()
+	return is.Compile(GlobalScopeContext{}, e.Expression())
 }
 
 type EndorserContext struct {

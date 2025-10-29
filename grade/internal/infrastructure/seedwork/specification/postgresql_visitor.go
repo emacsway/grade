@@ -8,6 +8,24 @@ import (
 	s "github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 )
 
+func Compile(context Context, exp s.Visitable) (sql string, params []driver.Valuer, err error) {
+	tv := NewTransformVisitor(context)
+	err = exp.Accept(tv)
+	if err != nil {
+		return "", nil, err
+	}
+	exp, err = tv.Result()
+	if err != nil {
+		return "", nil, err
+	}
+	v := NewPostgresqlVisitor()
+	err = exp.Accept(v)
+	if err != nil {
+		return "", nil, err
+	}
+	return v.Result()
+}
+
 type PostgresqlVisitorOption func(*PostgresqlVisitor)
 
 func PlaceholderIndex(index uint8) PostgresqlVisitorOption {

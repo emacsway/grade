@@ -49,22 +49,7 @@ func (ss SomethingSpecification) Expression() s.Visitable {
 func (ss SomethingSpecification) Evaluate( /* session session.PgxSession */ ) (
 	sql string, params []driver.Valuer, err error,
 ) {
-	exp := ss.Expression()
-	tv := NewTransformVisitor(TestGlobalScopeContext{})
-	err = exp.Accept(tv)
-	if err != nil {
-		return "", nil, err
-	}
-	exp, err = tv.Result()
-	if err != nil {
-		return "", nil, err
-	}
-	v := NewPostgresqlVisitor()
-	err = exp.Accept(v)
-	if err != nil {
-		return "", nil, err
-	}
-	return v.Result()
+	return Compile(TestGlobalScopeContext{}, ss.Expression())
 }
 
 type MemberSomethingId struct {
