@@ -137,7 +137,7 @@ Specification Pattern с применением Abstract [Expression Tree](https
 
 - [Абстрактная реализация + inMemory evaluator](./grade/internal/domain/seedwork/specification/)
 - [Конкретная реализация inMemory evaluator без использования рефлекции](./grade/internal/domain/endorser/specifications.go)
-- [Абстрактная реализация строителя PostgreSQL-запроса с учетом приоритетов операторов для исключения лишних скобочек](./grade/internal/infrastructure/specification/)
+- [Абстрактная реализация строителя PostgreSQL-запроса с учетом приоритетов операторов для исключения лишних скобочек](./grade/internal/infrastructure/seedwork/specification)
 - [Конкретная реализация строителя PostgreSQL-запроса с гибкой возможностью маппинга атрибутов](./grade/internal/infrastructure/repositories/endorser/endorser_specifications.go)
 
 Заложена (но до конца не продемонстрирована) возможность просмотра коллекций сущностей внутри агрегата и поиск удовлетворения условия хотя бы одним из элементов коллекции.
