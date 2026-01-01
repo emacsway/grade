@@ -12,8 +12,8 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/testutils"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/testutils"
 )
 
 type testCase func(t *testing.T, repositoryOption RepositoryOption)

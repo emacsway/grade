@@ -1,6 +1,6 @@
 package values
 
-import "github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+import "github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 
 func NewFullNameExporter(firstName, lastName string) FullNameExporter {
 	return FullNameExporter{

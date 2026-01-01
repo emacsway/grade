@@ -3,8 +3,8 @@ package values
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 )
 
 const YearlyEndorsementCount = uint(20)

@@ -7,10 +7,10 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	endorserVal "github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	s "github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	is "github.com/emacsway/grade/grade/internal/infrastructure/seedwork/specification"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
+	s "github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
+	is "github.com/emacsway/grade/grade/internal/seedwork/infrastructure/specification"
 )
 
 type EndorserCanCompleteEndorsementSpecification struct {

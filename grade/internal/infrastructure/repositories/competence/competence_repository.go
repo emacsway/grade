@@ -4,9 +4,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	"github.com/emacsway/grade/grade/internal/domain/competence/events"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/competence/queries"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 func NewCompetenceRepository(currentSession session.DbSession) *CompetenceRepository {

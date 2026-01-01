@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestMemberExport(t *testing.T) {

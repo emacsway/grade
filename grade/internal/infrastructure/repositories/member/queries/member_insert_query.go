@@ -4,9 +4,9 @@ import (
 	"time"
 
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 type MemberInsertQuery struct {

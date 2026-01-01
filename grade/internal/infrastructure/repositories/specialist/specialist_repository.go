@@ -5,7 +5,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/specialist"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/specialist/queries"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 func NewSpecialistRepository(currentSession session.DbSession) *SpecialistRepository {

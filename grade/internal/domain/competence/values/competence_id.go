@@ -1,8 +1,8 @@
 package values
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/specification"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 )
 
 func NewCompetenceId(tenantId, competenceId uint) (CompetenceId, error) {

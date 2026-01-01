@@ -9,10 +9,10 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/faker"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/faker"
 )
 
 type ArtifactFakerOption func(*ArtifactFaker)

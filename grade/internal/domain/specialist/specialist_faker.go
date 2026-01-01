@@ -8,7 +8,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 var SpecialistMemberIdFakeValue = memberVal.MemberIdFakeValue

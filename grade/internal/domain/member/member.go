@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
 )
 
 func NewMember(

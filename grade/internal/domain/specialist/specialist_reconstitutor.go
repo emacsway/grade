@@ -5,9 +5,9 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
 )
 
 type SpecialistReconstitutor struct {

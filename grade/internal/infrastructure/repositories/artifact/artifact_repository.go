@@ -8,11 +8,11 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	"github.com/emacsway/grade/grade/internal/domain/artifact/events"
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/artifact/queries"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/repository"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/repository"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 func NewArtifactRepository(currentSession session.DbSession) *ArtifactRepository {

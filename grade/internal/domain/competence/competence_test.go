@@ -7,7 +7,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestCompetenceExport(t *testing.T) {

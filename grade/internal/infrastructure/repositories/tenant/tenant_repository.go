@@ -6,7 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant/queries"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 func NewTenantRepository(currentSession session.DbSession) *TenantRepository {

@@ -3,7 +3,7 @@ package queries
 import (
 	"github.com/emacsway/grade/grade/internal/domain/competence"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 type CompetenceGetQuery struct {

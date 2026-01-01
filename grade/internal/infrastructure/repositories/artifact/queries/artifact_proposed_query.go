@@ -7,9 +7,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/repository"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/repository"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 func NewArtifactProposedQuery(event *events.ArtifactProposed) *ArtifactProposedQuery {

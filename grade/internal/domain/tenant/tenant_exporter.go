@@ -3,8 +3,8 @@ package tenant
 import (
 	"time"
 
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 type TenantExporter struct {

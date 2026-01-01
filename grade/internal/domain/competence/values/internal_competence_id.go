@@ -1,7 +1,7 @@
 package values
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/identity"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/identity"
 )
 
 func NewInternalCompetenceId(value uint) (InternalCompetenceId, error) {

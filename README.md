@@ -135,9 +135,9 @@ Karma bot for Slack: https://karmabot.chat/
 
 Specification Pattern с применением Abstract [Expression Tree](https://docs.microsoft.com/ru-ru/dotnet/csharp/programming-guide/concepts/expression-trees/).
 
-- [Абстрактная реализация + inMemory evaluator](./grade/internal/domain/seedwork/specification/)
+- [Абстрактная реализация + inMemory evaluator](./grade/internal/seedwork/domain/specification/)
 - [Конкретная реализация inMemory evaluator без использования рефлекции](./grade/internal/domain/endorser/specifications.go)
-- [Абстрактная реализация строителя PostgreSQL-запроса с учетом приоритетов операторов для исключения лишних скобочек](./grade/internal/infrastructure/seedwork/specification)
+- [Абстрактная реализация строителя PostgreSQL-запроса с учетом приоритетов операторов для исключения лишних скобочек](./grade/internal/seedwork/infrastructure/specification)
 - [Конкретная реализация строителя PostgreSQL-запроса с гибкой возможностью маппинга атрибутов](./grade/internal/infrastructure/repositories/endorser/endorser_specifications.go)
 
 Заложена (но до конца не продемонстрирована) возможность просмотра коллекций сущностей внутри агрегата и поиск удовлетворения условия хотя бы одним из элементов коллекции.
@@ -170,7 +170,7 @@ Specification Pattern с применением Abstract [Expression Tree](https
 RDBMS устроена немного по другому, нежели агрегато-(документо-)ориентированные хранилища на LSM-tree, - чем больше записей сохраняется за один коммит, тем лучше Performance.
 Главное, чтоб не страдал уровень параллелизма, не возникали ожидания и взаимные блокировки.
 А как сказал Nick Tune, на операциях Insert взаимные блокировки и ожидания впринципе невозможны, и такие запросы можно пакетировать, что обычно в ORM выполняет UoW.
-В данном проекте [продемонстрировано, как этого можно достигнуть без ORM](https://github.com/emacsway/grade/tree/main/grade/internal/infrastructure/repositories/seedwork/batch), а заодно и решить проблему N+1 при загрузке агрегатов из БД.
+В данном проекте [продемонстрировано, как этого можно достигнуть без ORM](https://github.com/emacsway/grade/tree/main/grade/internal/seedwork/infrastructure/repositories/batch), а заодно и решить проблему N+1 при загрузке агрегатов из БД.
 
 Подробности см. [здесь](https://dckms.github.io/system-architecture/emacsway/it/ddd/tactical-design/domain-model/domain-events/domain-events-in-ddd.html#performance).
 

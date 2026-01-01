@@ -9,12 +9,12 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/member"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/testutils"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/testutils"
 )
 
 type testCase func(t *testing.T, repositoryOption RepositoryOption)

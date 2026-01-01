@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 type ArtifactNextIdGetQuery struct {

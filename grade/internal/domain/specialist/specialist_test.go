@@ -9,9 +9,9 @@ import (
 	artifact "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestSpecialistExport(t *testing.T) {

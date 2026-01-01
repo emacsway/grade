@@ -10,11 +10,11 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	assignmentVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/events"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
 )
 
 var (

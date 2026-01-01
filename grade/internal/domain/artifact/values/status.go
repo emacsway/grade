@@ -1,7 +1,7 @@
 package values
 
 import (
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func NewStatus(val uint8) (Status, error) {

@@ -5,9 +5,9 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/exporters"
 	gradeVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 type AssignmentInsertQuery struct {

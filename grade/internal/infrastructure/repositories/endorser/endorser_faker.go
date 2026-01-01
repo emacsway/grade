@@ -3,7 +3,7 @@ package endorser
 import (
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 func NewEndorserFaker(

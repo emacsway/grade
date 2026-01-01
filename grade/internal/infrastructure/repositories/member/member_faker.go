@@ -3,7 +3,7 @@ package member
 import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
-	"github.com/emacsway/grade/grade/internal/infrastructure/seedwork/session"
+	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
 func NewMemberFaker(

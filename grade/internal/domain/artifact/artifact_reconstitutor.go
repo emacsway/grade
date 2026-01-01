@@ -6,7 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/domain/seedwork/aggregate"
+	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
 )
 
 type ArtifactReconstitutor struct {
