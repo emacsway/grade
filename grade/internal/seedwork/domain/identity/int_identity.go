@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 )
 
@@ -29,8 +28,8 @@ func (id IntIdentity) Equal(other specification.EqualOperand) bool {
 	return !id.IsTransient() && id.value == exportableOther.Value()
 }
 
-func (id IntIdentity) Export(ex exporters.ExporterSetter[uint]) {
-	ex.SetState(id.value)
+func (id IntIdentity) Export(ex func(uint)) {
+	ex(id.value)
 }
 
 func (id IntIdentity) Value() uint {

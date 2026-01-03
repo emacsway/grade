@@ -6,7 +6,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -29,9 +28,7 @@ func (q *CompetenceCreatedQuery) SetId(val values.CompetenceId) {
 }
 
 func (q *CompetenceCreatedQuery) SetTenantId(val tenantVal.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v uint) { q.params[0] = v })
 }
 
 func (q *CompetenceCreatedQuery) SetCompetenceId(val values.InternalCompetenceId) {
@@ -39,9 +36,7 @@ func (q *CompetenceCreatedQuery) SetCompetenceId(val values.InternalCompetenceId
 }
 
 func (q *CompetenceCreatedQuery) SetName(val values.Name) {
-	var v exporters.StringExporter
-	val.Export(&v)
-	q.params[1] = v
+	val.Export(func(v string) { q.params[1] = v })
 }
 
 func (q *CompetenceCreatedQuery) SetOwnerId(val memberVal.MemberId) {

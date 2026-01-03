@@ -11,7 +11,6 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/faker"
 )
 
@@ -237,9 +236,9 @@ func (r ArtifactDummyRepository) Insert(agg *Artifact, eventMeta aggregate.Event
 }
 
 func (r *ArtifactDummyRepository) NextId(tenantId tenantVal.TenantId) (values.ArtifactId, error) {
-	var tenantIdExp exporters.UintExporter
-	tenantId.Export(&tenantIdExp)
-	r.IdFaker.TenantId = uint(tenantIdExp)
+	var tenantIdExp uint
+	tenantId.Export(func(v uint) { tenantIdExp = v })
+	r.IdFaker.TenantId = tenantIdExp
 	r.IdFaker.ArtifactId += 1
 	return r.IdFaker.Create()
 }

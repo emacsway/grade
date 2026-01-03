@@ -5,7 +5,6 @@ import (
 
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -28,9 +27,7 @@ func (q *MemberInsertQuery) SetId(val memberVal.MemberId) {
 }
 
 func (q *MemberInsertQuery) SetTenantId(val tenant.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v uint) { q.params[0] = v })
 }
 
 func (q *MemberInsertQuery) SetMemberId(val memberVal.InternalMemberId) {
@@ -38,9 +35,7 @@ func (q *MemberInsertQuery) SetMemberId(val memberVal.InternalMemberId) {
 }
 
 func (q *MemberInsertQuery) SetStatus(val memberVal.Status) {
-	var v exporters.Uint8Exporter
-	val.Export(&v)
-	q.params[1] = v
+	val.Export(func(v uint8) { q.params[1] = v })
 }
 
 func (q *MemberInsertQuery) SetFullName(val memberVal.FullName) {
@@ -48,15 +43,11 @@ func (q *MemberInsertQuery) SetFullName(val memberVal.FullName) {
 }
 
 func (q *MemberInsertQuery) SetFirstName(val memberVal.FirstName) {
-	var v exporters.StringExporter
-	val.Export(&v)
-	q.params[2] = v
+	val.Export(func(v string) { q.params[2] = v })
 }
 
 func (q *MemberInsertQuery) SetLastName(val memberVal.LastName) {
-	var v exporters.StringExporter
-	val.Export(&v)
-	q.params[3] = v
+	val.Export(func(v string) { q.params[3] = v })
 }
 
 func (q *MemberInsertQuery) SetCreatedAt(val time.Time) {

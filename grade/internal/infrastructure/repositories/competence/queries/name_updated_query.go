@@ -4,7 +4,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -26,21 +25,15 @@ func (q *NameUpdatedQuery) SetId(val values.CompetenceId) {
 }
 
 func (q *NameUpdatedQuery) SetTenantId(val tenantVal.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v uint) { q.params[0] = v })
 }
 
 func (q *NameUpdatedQuery) SetCompetenceId(val values.InternalCompetenceId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[1] = v
+	val.Export(func(v uint) { q.params[1] = v })
 }
 
 func (q *NameUpdatedQuery) SetName(val values.Name) {
-	var v exporters.StringExporter
-	val.Export(&v)
-	q.params[2] = v
+	val.Export(func(v string) { q.params[2] = v })
 }
 
 func (q *NameUpdatedQuery) SetAggregateVersion(val uint) {

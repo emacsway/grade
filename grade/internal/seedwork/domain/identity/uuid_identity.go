@@ -1,7 +1,6 @@
 package identity
 
 import (
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/uuid"
 )
@@ -19,8 +18,8 @@ func (id UuidIdentity) Equal(other specification.EqualOperand) bool {
 	return id.value == exportableOther.Value()
 }
 
-func (id UuidIdentity) Export(ex exporters.ExporterSetter[uuid.Uuid]) {
-	ex.SetState(id.value)
+func (id UuidIdentity) Export(ex func(uuid.Uuid)) {
+	ex(id.value)
 }
 
 func (id UuidIdentity) Value() uuid.Uuid {

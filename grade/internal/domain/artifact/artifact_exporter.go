@@ -6,15 +6,14 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competence "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 type ArtifactExporter struct {
 	Id            values.ArtifactIdExporter
-	Status        exporters.Uint8Exporter
-	Name          exporters.StringExporter
-	Description   exporters.StringExporter
-	Url           exporters.StringExporter
+	Status        uint8
+	Name          string
+	Description   string
+	Url           string
 	CompetenceIds []competence.CompetenceIdExporter
 	AuthorIds     []member.MemberIdExporter
 	OwnerId       member.MemberIdExporter
@@ -27,19 +26,19 @@ func (ex *ArtifactExporter) SetId(val values.ArtifactId) {
 }
 
 func (ex *ArtifactExporter) SetStatus(val values.Status) {
-	val.Export(&ex.Status)
+	val.Export(func(v uint8) { ex.Status = v })
 }
 
 func (ex *ArtifactExporter) SetName(val values.Name) {
-	val.Export(&ex.Name)
+	val.Export(func(v string) { ex.Name = v })
 }
 
 func (ex *ArtifactExporter) SetDescription(val values.Description) {
-	val.Export(&ex.Description)
+	val.Export(func(v string) { ex.Description = v })
 }
 
 func (ex *ArtifactExporter) SetUrl(val values.Url) {
-	val.Export(&ex.Url)
+	val.Export(func(v string) { ex.Url = v })
 }
 
 func (ex *ArtifactExporter) AddCompetenceId(val competence.CompetenceId) {

@@ -11,7 +11,6 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestSpecialistExport(t *testing.T) {
@@ -35,57 +34,57 @@ func TestSpecialistExport(t *testing.T) {
 	s.Export(&actualExporter)
 	assert.Equal(t, SpecialistExporter{
 		Id:    member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-		Grade: exporters.Uint8Exporter(sf.Grade + 1),
+		Grade: sf.Grade + 1,
 		ReceivedEndorsements: []endorsement.EndorsementExporter{
 			{
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
+				SpecialistGrade:   sf.Grade,
 				SpecialistVersion: 0,
 				ArtifactId: artifact.NewArtifactIdExporter(
 					sf.Commands[0].(ReceivedEndorsementFakeCommand).Artifact.Id.TenantId,
 					sf.Commands[0].(ReceivedEndorsementFakeCommand).Artifact.Id.ArtifactId,
 				),
 				EndorserId:      member.NewMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-				EndorserGrade:   exporters.Uint8Exporter(ef.Grade),
+				EndorserGrade:   ef.Grade,
 				EndorserVersion: 0,
 				CreatedAt:       sf.Commands[0].(ReceivedEndorsementFakeCommand).CreatedAt,
 			},
 			{
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
+				SpecialistGrade:   sf.Grade,
 				SpecialistVersion: 1,
 				ArtifactId: artifact.NewArtifactIdExporter(
 					sf.Commands[1].(ReceivedEndorsementFakeCommand).Artifact.Id.TenantId,
 					sf.Commands[1].(ReceivedEndorsementFakeCommand).Artifact.Id.ArtifactId,
 				),
 				EndorserId:      member.NewMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-				EndorserGrade:   exporters.Uint8Exporter(ef.Grade),
+				EndorserGrade:   ef.Grade,
 				EndorserVersion: 0,
 				CreatedAt:       sf.Commands[1].(ReceivedEndorsementFakeCommand).CreatedAt,
 			},
 			{
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade),
+				SpecialistGrade:   sf.Grade,
 				SpecialistVersion: 2,
 				ArtifactId: artifact.NewArtifactIdExporter(
 					sf.Commands[2].(ReceivedEndorsementFakeCommand).Artifact.Id.TenantId,
 					sf.Commands[2].(ReceivedEndorsementFakeCommand).Artifact.Id.ArtifactId,
 				),
 				EndorserId:      member.NewMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-				EndorserGrade:   exporters.Uint8Exporter(ef.Grade),
+				EndorserGrade:   ef.Grade,
 				EndorserVersion: 0,
 				CreatedAt:       sf.Commands[2].(ReceivedEndorsementFakeCommand).CreatedAt,
 			},
 			{
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
-				SpecialistGrade:   exporters.Uint8Exporter(sf.Grade + 1),
+				SpecialistGrade:   sf.Grade + 1,
 				SpecialistVersion: 3,
 				ArtifactId: artifact.NewArtifactIdExporter(
 					sf.Commands[3].(ReceivedEndorsementFakeCommand).Artifact.Id.TenantId,
 					sf.Commands[3].(ReceivedEndorsementFakeCommand).Artifact.Id.ArtifactId,
 				),
 				EndorserId:      member.NewMemberIdExporter(ef.Id.TenantId, ef.Id.MemberId),
-				EndorserGrade:   exporters.Uint8Exporter(ef.Grade),
+				EndorserGrade:   ef.Grade,
 				EndorserVersion: 0,
 				CreatedAt:       sf.Commands[3].(ReceivedEndorsementFakeCommand).CreatedAt,
 			},
@@ -94,8 +93,8 @@ func TestSpecialistExport(t *testing.T) {
 			{
 				SpecialistId:      member.NewMemberIdExporter(sf.Id.TenantId, sf.Id.MemberId),
 				SpecialistVersion: 2,
-				AssignedGrade:     exporters.Uint8Exporter(sf.Grade + 1),
-				Reason:            exporters.StringExporter("Achieved"),
+				AssignedGrade:     sf.Grade + 1,
+				Reason:            "Achieved",
 				CreatedAt:         sf.Commands[2].(ReceivedEndorsementFakeCommand).CreatedAt,
 			},
 		},

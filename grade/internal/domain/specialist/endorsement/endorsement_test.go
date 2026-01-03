@@ -9,7 +9,6 @@ import (
 	artifact "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestEndorsementIsEndorsedBy(t *testing.T) {
@@ -82,11 +81,11 @@ func TestEndorsementExport(t *testing.T) {
 	agg.Export(&actualExporter)
 	assert.Equal(t, EndorsementExporter{
 		SpecialistId:      member.NewMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
-		SpecialistGrade:   exporters.Uint8Exporter(f.SpecialistGrade),
+		SpecialistGrade:   f.SpecialistGrade,
 		SpecialistVersion: f.SpecialistVersion,
 		ArtifactId:        artifact.NewArtifactIdExporter(f.ArtifactId.TenantId, f.ArtifactId.ArtifactId),
 		EndorserId:        member.NewMemberIdExporter(f.EndorserId.TenantId, f.EndorserId.MemberId),
-		EndorserGrade:     exporters.Uint8Exporter(f.EndorserGrade),
+		EndorserGrade:     f.EndorserGrade,
 		EndorserVersion:   f.EndorserVersion,
 		CreatedAt:         f.CreatedAt,
 	}, actualExporter)

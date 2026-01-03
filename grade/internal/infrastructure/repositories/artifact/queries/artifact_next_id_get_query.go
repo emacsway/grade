@@ -5,7 +5,6 @@ import (
 
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -18,9 +17,9 @@ func (q ArtifactNextIdGetQuery) sql() string {
 }
 
 func (q ArtifactNextIdGetQuery) tenantIdValue() uint {
-	var tenantIdExp exporters.UintExporter
-	q.TenantId.Export(&tenantIdExp)
-	return uint(tenantIdExp)
+	var tenantIdExp uint
+	q.TenantId.Export(func(v uint) { tenantIdExp = v })
+	return tenantIdExp
 }
 
 func (q *ArtifactNextIdGetQuery) Get(s session.DbSessionSingleQuerier) (artifactVal.ArtifactId, error) {

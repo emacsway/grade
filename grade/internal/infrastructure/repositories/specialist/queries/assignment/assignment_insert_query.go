@@ -6,7 +6,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	gradeVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -34,15 +33,11 @@ func (q *AssignmentInsertQuery) SetSpecialistVersion(val uint) {
 }
 
 func (q *AssignmentInsertQuery) SetAssignedGrade(val grade.Grade) {
-	var v exporters.Uint8Exporter
-	val.Export(&v)
-	q.params[3] = v
+	val.Export(func(v uint8) { q.params[3] = v })
 }
 
 func (q *AssignmentInsertQuery) SetReason(val gradeVal.Reason) {
-	var v exporters.StringExporter
-	val.Export(&v)
-	q.params[4] = v
+	val.Export(func(v string) { q.params[4] = v })
 }
 
 func (q *AssignmentInsertQuery) SetCreatedAt(val time.Time) {

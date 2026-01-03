@@ -1,14 +1,13 @@
 package specification
 
 import (
-	"database/sql/driver"
 	"fmt"
 	"strings"
 
 	s "github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 )
 
-func Compile(context Context, exp s.Visitable) (sql string, params []driver.Valuer, err error) {
+func Compile(context Context, exp s.Visitable) (sql string, params []any, err error) {
 	tv := NewTransformVisitor(context)
 	err = exp.Accept(tv)
 	if err != nil {
@@ -63,7 +62,7 @@ func NewPostgresqlVisitor(opts ...PostgresqlVisitorOption) *PostgresqlVisitor {
 type PostgresqlVisitor struct {
 	sql               string
 	placeholderIndex  uint8
-	parameters        []driver.Valuer
+	parameters        []any
 	precedence        int
 	precedenceMapping map[string]int
 }
@@ -125,8 +124,8 @@ func (v *PostgresqlVisitor) VisitField(n s.FieldNode) error {
 }
 
 func (v *PostgresqlVisitor) VisitValue(n s.ValueNode) error {
-	val := n.Value().(driver.Valuer)
-	v.parameters = append(v.parameters, val)
+	value := n.Value()
+	v.parameters = append(v.parameters, value)
 	v.sql += fmt.Sprintf("$%d", len(v.parameters))
 	return nil
 }
@@ -160,6 +159,6 @@ func (v *PostgresqlVisitor) VisitInfix(n s.InfixNode) error {
 	})
 }
 
-func (v PostgresqlVisitor) Result() (sql string, params []driver.Valuer, err error) {
+func (v PostgresqlVisitor) Result() (sql string, params []any, err error) {
 	return v.sql, v.parameters, nil
 }

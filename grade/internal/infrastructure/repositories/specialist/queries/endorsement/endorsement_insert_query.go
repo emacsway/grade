@@ -6,7 +6,6 @@ import (
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -31,9 +30,7 @@ func (q *EndorsementInsertQuery) SetSpecialistId(val memberVal.MemberId) {
 }
 
 func (q *EndorsementInsertQuery) SetSpecialistGrade(val grade.Grade) {
-	var v exporters.Uint8Exporter
-	val.Export(&v)
-	q.params[2] = v
+	val.Export(func(v uint8) { q.params[2] = v })
 }
 
 func (q *EndorsementInsertQuery) SetSpecialistVersion(val uint) {
@@ -53,9 +50,7 @@ func (q *EndorsementInsertQuery) SetEndorserId(val memberVal.MemberId) {
 }
 
 func (q *EndorsementInsertQuery) SetEndorserGrade(val grade.Grade) {
-	var v exporters.Uint8Exporter
-	val.Export(&v)
-	q.params[6] = v
+	val.Export(func(v uint8) { q.params[6] = v })
 }
 
 func (q *EndorsementInsertQuery) SetEndorserVersion(val uint) {

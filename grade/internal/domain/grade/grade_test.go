@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestGradeConstructor(t *testing.T) {
@@ -75,8 +73,8 @@ func TestGradePrevious(t *testing.T) {
 }
 
 func TestGradeExport(t *testing.T) {
-	var ex exporters.Uint8Exporter
+	var ex uint8
 	g, _ := DefaultConstructor(1)
-	g.Export(&ex)
-	assert.Equal(t, g.value, uint8(ex))
+	g.Export(func(v uint8) { ex = v })
+	assert.Equal(t, g.value, ex)
 }

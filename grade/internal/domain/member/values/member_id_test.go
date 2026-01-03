@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestMemberIdEqual(t *testing.T) {
@@ -55,7 +53,7 @@ func TestMemberIdExport(t *testing.T) {
 	}
 	cid.Export(&actualExporter)
 	assert.Equal(t, MemberIdExporter{
-		TenantId: exporters.UintExporter(f.TenantId),
-		MemberId: exporters.UintExporter(f.MemberId),
+		TenantId: f.TenantId,
+		MemberId: f.MemberId,
 	}, actualExporter)
 }

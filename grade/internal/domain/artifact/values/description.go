@@ -1,15 +1,11 @@
 package values
 
-import (
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
-)
-
 func NewDescription(val string) (Description, error) {
 	return Description(val), nil
 }
 
 type Description string
 
-func (d Description) Export(ex exporters.ExporterSetter[string]) {
-	ex.SetState(string(d))
+func (d Description) Export(ex func(string)) {
+	ex(string(d))
 }

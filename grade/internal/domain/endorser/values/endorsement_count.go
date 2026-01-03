@@ -3,7 +3,6 @@ package values
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 )
 
@@ -52,6 +51,6 @@ func (c EndorsementCount) Decrease() (EndorsementCount, error) {
 	return n, nil
 }
 
-func (c EndorsementCount) Export(ex exporters.ExporterSetter[uint]) {
-	ex.SetState(uint(c))
+func (c EndorsementCount) Export(ex func(uint)) {
+	ex(uint(c))
 }

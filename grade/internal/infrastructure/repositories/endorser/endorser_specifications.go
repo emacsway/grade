@@ -1,23 +1,21 @@
 package endorser
 
 import (
-	"database/sql/driver"
 	"fmt"
 
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	endorserVal "github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	s "github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 	is "github.com/emacsway/grade/grade/internal/seedwork/infrastructure/specification"
 )
 
-type EndorserCanCompleteEndorsementSpecification struct {
+type EndorserCanCompleteEndorsementSpecification struct{
 	endorser.EndorserCanCompleteEndorsementSpecification
 }
 
-func (e *EndorserCanCompleteEndorsementSpecification) Compile() (sql string, params []driver.Valuer, err error) {
+func (e *EndorserCanCompleteEndorsementSpecification) Compile() (sql string, params []any, err error) {
 	return is.Compile(GlobalScopeContext{}, e.Expression())
 }
 
@@ -56,16 +54,16 @@ func (c GlobalScopeContext) AttrNode(path []string) (s.Visitable, error) {
 func (c GlobalScopeContext) ValueNode(val any) (s.Visitable, error) {
 	switch valTyped := val.(type) {
 	case endorserVal.EndorsementCount:
-		var ex exporters.UintExporter
-		valTyped.Export(&ex)
+		var ex uint
+		valTyped.Export(func(v uint) { ex = v })
 		return s.Value(ex), nil
 	case member.InternalMemberId:
-		var ex exporters.UintExporter
-		valTyped.Export(&ex)
+		var ex uint
+		valTyped.Export(func(v uint) { ex = v })
 		return s.Value(ex), nil
 	case tenant.TenantId:
-		var ex exporters.UintExporter
-		valTyped.Export(&ex)
+		var ex uint
+		valTyped.Export(func(v uint) { ex = v })
 		return s.Value(ex), nil
 	case member.MemberId:
 		var ex MemberIdExporter

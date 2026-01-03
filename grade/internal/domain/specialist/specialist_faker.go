@@ -8,7 +8,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 var SpecialistMemberIdFakeValue = memberVal.MemberIdFakeValue
@@ -112,9 +111,9 @@ func (f *SpecialistFaker) achieveGrade() error {
 		ef := f.EndorserFaker
 		// TODO: Remove me: ef.Id.TenantId = f.Id.TenantId
 		endorserGrade, _ := currentGrade.Next()
-		gradeExporter := exporters.Uint8Exporter(0)
-		endorserGrade.Export(&gradeExporter)
-		ef.Grade = uint8(gradeExporter)
+		var gradeExporter uint8
+		endorserGrade.Export(func(v uint8) { gradeExporter = v })
+		ef.Grade = gradeExporter
 		var endorsementCount uint = 0
 		for !currentGrade.NextGradeAchieved(endorsementCount) {
 			if err := f.receiveEndorsement(ef); err != nil {

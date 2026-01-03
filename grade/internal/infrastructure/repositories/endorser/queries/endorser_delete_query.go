@@ -3,7 +3,6 @@ package queries
 import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -18,15 +17,11 @@ func (q EndorserDeleteQuery) sql() string {
 }
 
 func (q *EndorserDeleteQuery) SetTenantId(val tenant.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v uint) { q.params[0] = v })
 }
 
 func (q *EndorserDeleteQuery) SetMemberId(val member.InternalMemberId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[1] = v
+	val.Export(func(v uint) { q.params[1] = v })
 }
 
 func (q *EndorserDeleteQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {

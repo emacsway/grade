@@ -3,7 +3,6 @@ package grade
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 )
 
@@ -93,6 +92,6 @@ func (g Grade) Equal(other specification.EqualOperand) bool {
 	return g.value == otherTyped.value
 }
 
-func (g Grade) Export(ex exporters.ExporterSetter[uint8]) {
-	ex.SetState(g.value)
+func (g Grade) Export(ex func(uint8)) {
+	ex(g.value)
 }

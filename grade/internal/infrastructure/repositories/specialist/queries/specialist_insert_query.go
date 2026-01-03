@@ -8,7 +8,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -29,21 +28,15 @@ func (q *SpecialistInsertQuery) SetId(val memberVal.MemberId) {
 }
 
 func (q *SpecialistInsertQuery) SetTenantId(val tenantVal.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v uint) { q.params[0] = v })
 }
 
 func (q *SpecialistInsertQuery) SetMemberId(val memberVal.InternalMemberId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[1] = v
+	val.Export(func(v uint) { q.params[1] = v })
 }
 
 func (q *SpecialistInsertQuery) SetGrade(val grade.Grade) {
-	var v exporters.Uint8Exporter
-	val.Export(&v)
-	q.params[2] = v
+	val.Export(func(v uint8) { q.params[2] = v })
 }
 
 func (q *SpecialistInsertQuery) AddEndorsement(endorsement.Endorsement) {

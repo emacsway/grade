@@ -6,7 +6,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/uuid"
 )
 
@@ -35,9 +34,9 @@ func TestUuidIdentityEqual(t *testing.T) {
 }
 
 func TestUuidIdentityExport(t *testing.T) {
-	var ex exporters.UuidExporter
+	var ex uuid.Uuid
 	val := uuid.ParseSilent("63e8d541-af30-4593-a8ac-761dc268926d")
 	id, _ := NewUuidIdentity(val)
-	id.Export(&ex)
-	assert.Equal(t, val, id.Value())
+	id.Export(func(v uuid.Uuid) { ex = v })
+	assert.Equal(t, val, ex)
 }

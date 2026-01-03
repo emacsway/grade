@@ -5,12 +5,11 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 type CompetenceExporter struct {
 	Id        values.CompetenceIdExporter
-	Name      exporters.StringExporter
+	Name      string
 	OwnerId   member.MemberIdExporter
 	CreatedAt time.Time
 	Version   uint
@@ -21,7 +20,7 @@ func (ex *CompetenceExporter) SetId(val values.CompetenceId) {
 }
 
 func (ex *CompetenceExporter) SetName(val values.Name) {
-	val.Export(&ex.Name)
+	val.Export(func(v string) { ex.Name = v })
 }
 
 func (ex *CompetenceExporter) SetOwnerId(val member.MemberId) {

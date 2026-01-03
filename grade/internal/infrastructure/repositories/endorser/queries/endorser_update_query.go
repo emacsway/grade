@@ -7,7 +7,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -31,33 +30,23 @@ func (q *EndorserUpdateQuery) SetId(val member.MemberId) {
 }
 
 func (q *EndorserUpdateQuery) SetTenantId(val tenant.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v uint) { q.params[0] = v })
 }
 
 func (q *EndorserUpdateQuery) SetMemberId(val member.InternalMemberId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[1] = v
+	val.Export(func(v uint) { q.params[1] = v })
 }
 
 func (q *EndorserUpdateQuery) SetGrade(val grade.Grade) {
-	var v exporters.Uint8Exporter
-	val.Export(&v)
-	q.params[2] = v
+	val.Export(func(v uint8) { q.params[2] = v })
 }
 
 func (q *EndorserUpdateQuery) SetAvailableEndorsementCount(val endorserVal.EndorsementCount) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[3] = v
+	val.Export(func(v uint) { q.params[3] = v })
 }
 
 func (q *EndorserUpdateQuery) SetPendingEndorsementCount(val endorserVal.EndorsementCount) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[4] = v
+	val.Export(func(v uint) { q.params[4] = v })
 }
 
 func (q *EndorserUpdateQuery) SetVersion(val uint) {

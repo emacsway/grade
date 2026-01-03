@@ -6,14 +6,13 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 type EndorserExporter struct {
 	Id                        member.MemberIdExporter
-	Grade                     exporters.Uint8Exporter
-	AvailableEndorsementCount exporters.UintExporter
-	PendingEndorsementCount   exporters.UintExporter
+	Grade                     uint8
+	AvailableEndorsementCount uint
+	PendingEndorsementCount   uint
 	CreatedAt                 time.Time
 	Version                   uint
 }
@@ -23,15 +22,15 @@ func (ex *EndorserExporter) SetId(val member.MemberId) {
 }
 
 func (ex *EndorserExporter) SetGrade(val grade.Grade) {
-	val.Export(&ex.Grade)
+	val.Export(func(v uint8) { ex.Grade = v })
 }
 
 func (ex *EndorserExporter) SetAvailableEndorsementCount(val values.EndorsementCount) {
-	val.Export(&ex.AvailableEndorsementCount)
+	val.Export(func(v uint) { ex.AvailableEndorsementCount = v })
 }
 
 func (ex *EndorserExporter) SetPendingEndorsementCount(val values.EndorsementCount) {
-	val.Export(&ex.PendingEndorsementCount)
+	val.Export(func(v uint) { ex.PendingEndorsementCount = v })
 }
 
 func (ex *EndorserExporter) SetCreatedAt(val time.Time) {

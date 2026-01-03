@@ -4,12 +4,11 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 type MemberExporter struct {
 	Id        values.MemberIdExporter
-	Status    exporters.Uint8Exporter
+	Status    uint8
 	FullName  values.FullNameExporter
 	CreatedAt time.Time
 	Version   uint
@@ -20,7 +19,7 @@ func (ex *MemberExporter) SetId(val values.MemberId) {
 }
 
 func (ex *MemberExporter) SetStatus(val values.Status) {
-	val.Export(&ex.Status)
+	val.Export(func(v uint8) { ex.Status = v })
 }
 
 func (ex *MemberExporter) SetFullName(val values.FullName) {

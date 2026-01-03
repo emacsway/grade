@@ -2,25 +2,24 @@ package values
 
 import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func NewCompetenceIdExporter(tenantId, competenceId uint) CompetenceIdExporter {
 	return CompetenceIdExporter{
-		TenantId:     exporters.UintExporter(tenantId),
-		CompetenceId: exporters.UintExporter(competenceId),
+		TenantId:     tenantId,
+		CompetenceId: competenceId,
 	}
 }
 
 type CompetenceIdExporter struct {
-	TenantId     exporters.UintExporter
-	CompetenceId exporters.UintExporter
+	TenantId     uint
+	CompetenceId uint
 }
 
 func (ex *CompetenceIdExporter) SetTenantId(val tenant.TenantId) {
-	val.Export(&ex.TenantId)
+	val.Export(func(v uint) { ex.TenantId = v })
 }
 
 func (ex *CompetenceIdExporter) SetCompetenceId(val InternalCompetenceId) {
-	val.Export(&ex.CompetenceId)
+	val.Export(func(v uint) { ex.CompetenceId = v })
 }

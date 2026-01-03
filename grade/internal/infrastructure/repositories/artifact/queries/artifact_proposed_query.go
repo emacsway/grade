@@ -1,13 +1,13 @@
 package queries
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/artifact/events"
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/repository"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
@@ -29,22 +29,20 @@ func (q *ArtifactProposedQuery) SetAggregateId(val values.ArtifactId) {
 }
 
 func (q *ArtifactProposedQuery) SetArtifactId(val values.InternalArtifactId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.SetStreamId(v.String())
+	val.Export(func(v uint) { q.SetStreamId(fmt.Sprintf("%d", v)) })
 }
 
 func (q *ArtifactProposedQuery) SetStatus(val values.Status) {
-	val.Export(&q.payload.Status)
+	val.Export(func(v uint8) { q.payload.Status = v })
 }
 func (q *ArtifactProposedQuery) SetName(val values.Name) {
-	val.Export(&q.payload.Name)
+	val.Export(func(v string) { q.payload.Name = v })
 }
 func (q *ArtifactProposedQuery) SetDescription(val values.Description) {
-	val.Export(&q.payload.Description)
+	val.Export(func(v string) { q.payload.Description = v })
 }
 func (q *ArtifactProposedQuery) SetUrl(val values.Url) {
-	val.Export(&q.payload.Url)
+	val.Export(func(v string) { q.payload.Url = v })
 }
 func (q *ArtifactProposedQuery) AddCompetenceId(val competenceVal.CompetenceId) {
 	var competenceExporter competenceVal.CompetenceIdExporter
@@ -70,10 +68,10 @@ func (q *ArtifactProposedQuery) Evaluate(s session.DbSession) (session.Result, e
 
 type ArtifactProposedPayload struct {
 	AggregateId   values.ArtifactIdExporter // Remove?
-	Status        exporters.Uint8Exporter
-	Name          exporters.StringExporter
-	Description   exporters.StringExporter
-	Url           exporters.StringExporter
+	Status        uint8
+	Name          string
+	Url           string
+	Description   string
 	CompetenceIds []competenceVal.CompetenceIdExporter
 	AuthorIds     []memberVal.MemberIdExporter
 	OwnerId       memberVal.MemberIdExporter

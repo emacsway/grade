@@ -4,22 +4,21 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 type TenantExporter struct {
-	Id        exporters.UintExporter
-	Name      exporters.StringExporter
+	Id        uint
+	Name      string
 	CreatedAt time.Time
 	Version   uint
 }
 
 func (ex *TenantExporter) SetId(val values.TenantId) {
-	val.Export(&ex.Id)
+	val.Export(func(v uint) { ex.Id = v })
 }
 
 func (ex *TenantExporter) SetName(val values.Name) {
-	val.Export(&ex.Name)
+	val.Export(func(v string) { ex.Name = v })
 }
 
 func (ex *TenantExporter) SetCreatedAt(val time.Time) {

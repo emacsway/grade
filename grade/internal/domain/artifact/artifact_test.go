@@ -8,7 +8,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competence "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestArtifactExport(t *testing.T) {
@@ -20,12 +19,14 @@ func TestArtifactExport(t *testing.T) {
 		t.FailNow()
 	}
 	agg.Export(&actualExporter)
+	var expectedStatus uint8
+	f.Status.Export(func(v uint8) { expectedStatus = v })
 	assert.Equal(t, ArtifactExporter{
 		Id:          values.NewArtifactIdExporter(f.Id.TenantId, f.Id.ArtifactId),
-		Status:      exporters.Uint8Exporter(f.Status),
-		Name:        exporters.StringExporter(f.Name),
-		Description: exporters.StringExporter(f.Description),
-		Url:         exporters.StringExporter(f.Url),
+		Status:      expectedStatus,
+		Name:        f.Name,
+		Description: f.Description,
+		Url:         f.Url,
 		CompetenceIds: []competence.CompetenceIdExporter{
 			competence.NewCompetenceIdExporter(
 				f.CompetenceIds[0].TenantId,

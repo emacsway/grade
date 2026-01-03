@@ -4,8 +4,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestTenantExport(t *testing.T) {
@@ -18,8 +16,8 @@ func TestTenantExport(t *testing.T) {
 	}
 	agg.Export(&actualExporter)
 	assert.Equal(t, TenantExporter{
-		Id:        exporters.UintExporter(f.Id),
-		Name:      exporters.StringExporter(f.Name),
+		Id:        f.Id,
+		Name:      f.Name,
 		CreatedAt: f.CreatedAt,
 	}, actualExporter)
 }

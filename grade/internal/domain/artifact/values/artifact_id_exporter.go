@@ -2,25 +2,24 @@ package values
 
 import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func NewArtifactIdExporter(tenantId, artifactId uint) ArtifactIdExporter {
 	return ArtifactIdExporter{
-		TenantId:   exporters.UintExporter(tenantId),
-		ArtifactId: exporters.UintExporter(artifactId),
+		TenantId:   tenantId,
+		ArtifactId: artifactId,
 	}
 }
 
 type ArtifactIdExporter struct {
-	TenantId   exporters.UintExporter
-	ArtifactId exporters.UintExporter
+	TenantId   uint
+	ArtifactId uint
 }
 
 func (ex *ArtifactIdExporter) SetTenantId(val tenant.TenantId) {
-	val.Export(&ex.TenantId)
+	val.Export(func(v uint) { ex.TenantId = v })
 }
 
 func (ex *ArtifactIdExporter) SetArtifactId(val InternalArtifactId) {
-	val.Export(&ex.ArtifactId)
+	val.Export(func(v uint) { ex.ArtifactId = v })
 }

@@ -4,8 +4,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestFullNameExport(t *testing.T) {
@@ -18,7 +16,7 @@ func TestFullNameExport(t *testing.T) {
 	}
 	cid.Export(&actualExporter)
 	assert.Equal(t, FullNameExporter{
-		FirstName: exporters.StringExporter(f.FirstName),
-		LastName:  exporters.StringExporter(f.LastName),
+		FirstName: f.FirstName,
+		LastName:  f.LastName,
 	}, actualExporter)
 }

@@ -7,7 +7,6 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -28,15 +27,11 @@ func (q *OptimisticOfflineLockLockQuery) SetId(val values.CompetenceId) {
 }
 
 func (q *OptimisticOfflineLockLockQuery) SetTenantId(val tenantVal.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v uint) { q.params[0] = v })
 }
 
 func (q *OptimisticOfflineLockLockQuery) SetCompetenceId(val values.InternalCompetenceId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[1] = v
+	val.Export(func(v uint) { q.params[1] = v })
 }
 
 func (q *OptimisticOfflineLockLockQuery) SetName(val values.Name) {

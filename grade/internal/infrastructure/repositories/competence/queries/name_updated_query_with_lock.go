@@ -4,7 +4,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -44,15 +43,11 @@ func (q *NameUpdatedQueryWithLock) SetId(val values.CompetenceId) {
 }
 
 func (q *NameUpdatedQueryWithLock) SetTenantId(val tenantVal.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v uint) { q.params[0] = v })
 }
 
 func (q *NameUpdatedQueryWithLock) SetCompetenceId(val values.InternalCompetenceId) {
-	var v exporters.UintExporter
-	val.Export(&v)
-	q.params[1] = v
+	val.Export(func(v uint) { q.params[1] = v })
 }
 
 func (q *NameUpdatedQueryWithLock) SetAggregateVersion(val uint) {
@@ -60,9 +55,7 @@ func (q *NameUpdatedQueryWithLock) SetAggregateVersion(val uint) {
 }
 
 func (q *NameUpdatedQueryWithLock) SetName(val values.Name) {
-	var v exporters.StringExporter
-	val.Export(&v)
-	q.params[3] = v
+	val.Export(func(v string) { q.params[3] = v })
 }
 
 func (q *NameUpdatedQueryWithLock) SetEventType(val string) {

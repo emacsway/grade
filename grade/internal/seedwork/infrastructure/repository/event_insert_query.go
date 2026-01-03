@@ -5,7 +5,6 @@ import (
 
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -23,8 +22,8 @@ func (q EventInsertQuery) sql() string {
 		($1, $2, $3, $4, $5, $6, $7, $8)`
 }
 func (q *EventInsertQuery) SetTenantId(val tenantVal.TenantId) {
-	var v exporters.UintExporter
-	val.Export(&v)
+	var v uint
+	val.Export(func(u uint) { v = u })
 	q.params[0] = v
 }
 func (q *EventInsertQuery) SetStreamType(val string) {

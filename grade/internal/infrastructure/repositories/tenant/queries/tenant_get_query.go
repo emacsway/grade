@@ -3,7 +3,6 @@ package queries
 import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -20,8 +19,8 @@ func (q TenantGetQuery) sql() string {
 }
 
 func (q TenantGetQuery) params() []any {
-	var id exporters.UintExporter
-	q.Id.Export(&id)
+	var id uint
+	q.Id.Export(func(x uint) { id = x })
 	return []any{id}
 }
 

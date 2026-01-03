@@ -7,7 +7,6 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestCompetenceExport(t *testing.T) {
@@ -21,7 +20,7 @@ func TestCompetenceExport(t *testing.T) {
 	agg.Export(&actualExporter)
 	assert.Equal(t, CompetenceExporter{
 		Id:        values.NewCompetenceIdExporter(f.Id.TenantId, f.Id.CompetenceId),
-		Name:      exporters.StringExporter(f.Name),
+		Name:      f.Name,
 		OwnerId:   member.NewMemberIdExporter(f.OwnerId.TenantId, f.OwnerId.MemberId),
 		CreatedAt: f.CreatedAt,
 		Version:   1,

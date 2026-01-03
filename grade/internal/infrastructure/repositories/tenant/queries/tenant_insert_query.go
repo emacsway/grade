@@ -4,7 +4,6 @@ import (
 	"time"
 
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
 )
 
@@ -27,9 +26,7 @@ func (q *TenantInsertQuery) SetId(val tenantVal.TenantId) {
 }
 
 func (q *TenantInsertQuery) SetName(val tenantVal.Name) {
-	var v exporters.StringExporter
-	val.Export(&v)
-	q.params[0] = v
+	val.Export(func(v string) { q.params[0] = v })
 }
 
 func (q *TenantInsertQuery) SetCreatedAt(val time.Time) {

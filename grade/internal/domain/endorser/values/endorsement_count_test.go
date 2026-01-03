@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestEndorsementCountConstructor(t *testing.T) {
@@ -71,8 +69,8 @@ func TestEndorsementCountNext(t *testing.T) {
 }
 
 func TestEndorsementCountExport(t *testing.T) {
-	var ex exporters.UintExporter
+	var ex uint
 	c, _ := NewEndorsementCount(1)
-	c.Export(&ex)
-	assert.Equal(t, uint(c), uint(ex))
+	c.Export(func(v uint) { ex = v })
+	assert.Equal(t, uint(c), ex)
 }

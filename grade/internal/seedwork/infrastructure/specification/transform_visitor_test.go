@@ -1,13 +1,11 @@
 package specification
 
 import (
-	"database/sql/driver"
 	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 	"github.com/emacsway/grade/grade/internal/seedwork/domain/identity"
 	s "github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
 )
@@ -47,7 +45,7 @@ func (ss SomethingSpecification) Expression() s.Visitable {
 }
 
 func (ss SomethingSpecification) Evaluate( /* session session.PgxSession */ ) (
-	sql string, params []driver.Valuer, err error,
+	sql string, params []any, err error,
 ) {
 	return Compile(TestGlobalScopeContext{}, ss.Expression())
 }
@@ -142,16 +140,16 @@ func (c TestGlobalScopeContext) AttrNode(path []string) (s.Visitable, error) {
 func (c TestGlobalScopeContext) ValueNode(val any) (s.Visitable, error) {
 	switch valTyped := val.(type) {
 	case InternalMemberId:
-		var ex exporters.UintExporter
-		valTyped.Export(&ex)
+		var ex uint
+		valTyped.Export(func(v uint) { ex = v })
 		return s.Value(ex), nil
 	case TenantId:
-		var ex exporters.UintExporter
-		valTyped.Export(&ex)
+		var ex uint
+		valTyped.Export(func(v uint) { ex = v })
 		return s.Value(ex), nil
 	case SomethingId:
-		var ex exporters.UintExporter
-		valTyped.Export(&ex)
+		var ex uint
+		valTyped.Export(func(v uint) { ex = v })
 		return s.Value(ex), nil
 	case MemberId:
 		var ex MemberIdExporter
@@ -225,9 +223,13 @@ func TestSomethingSpecification(t *testing.T) {
 		t,
 		"something.tenant_id = $1 AND something.member_id = $2 AND something.something_id = $3",
 		sql)
-	assert.Equal(t, []driver.Valuer{
-		exporters.UintExporter(tId.Value()),
-		exporters.UintExporter(mId.Value()),
-		exporters.UintExporter(sId.Value()),
-	}, params)
+	assert.Equal(t, 3, len(params))
+	var tIdValue, mIdValue, sIdValue uint
+	tId.Export(func(v uint) { tIdValue = v })
+	mId.Export(func(v uint) { mIdValue = v })
+	sId.Export(func(v uint) { sIdValue = v })
+
+	assert.Equal(t, tIdValue, params[0])
+	assert.Equal(t, mIdValue, params[1])
+	assert.Equal(t, sIdValue, params[2])
 }

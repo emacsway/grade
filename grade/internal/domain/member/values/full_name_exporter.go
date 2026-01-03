@@ -1,23 +1,21 @@
 package values
 
-import "github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
-
 func NewFullNameExporter(firstName, lastName string) FullNameExporter {
 	return FullNameExporter{
-		FirstName: exporters.StringExporter(firstName),
-		LastName:  exporters.StringExporter(lastName),
+		FirstName: firstName,
+		LastName:  lastName,
 	}
 }
 
 type FullNameExporter struct {
-	FirstName exporters.StringExporter
-	LastName  exporters.StringExporter
+	FirstName string
+	LastName  string
 }
 
 func (ex *FullNameExporter) SetFirstName(val FirstName) {
-	val.Export(&ex.FirstName)
+	val.Export(func(v string) { ex.FirstName = v })
 }
 
 func (ex *FullNameExporter) SetLastName(val LastName) {
-	val.Export(&ex.LastName)
+	val.Export(func(v string) { ex.LastName = v })
 }

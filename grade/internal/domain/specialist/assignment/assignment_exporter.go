@@ -6,14 +6,13 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 type AssignmentExporter struct {
 	SpecialistId      member.MemberIdExporter
 	SpecialistVersion uint
-	AssignedGrade     exporters.Uint8Exporter
-	Reason            exporters.StringExporter
+	AssignedGrade     uint8
+	Reason            string
 	CreatedAt         time.Time
 }
 
@@ -26,11 +25,11 @@ func (ex *AssignmentExporter) SetSpecialistVersion(val uint) {
 }
 
 func (ex *AssignmentExporter) SetAssignedGrade(val grade.Grade) {
-	val.Export(&ex.AssignedGrade)
+	val.Export(func(v uint8) { ex.AssignedGrade = v })
 }
 
 func (ex *AssignmentExporter) SetReason(val values.Reason) {
-	val.Export(&ex.Reason)
+	val.Export(func(v string) { ex.Reason = v })
 }
 
 func (ex *AssignmentExporter) SetCreatedAt(val time.Time) {

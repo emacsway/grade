@@ -6,7 +6,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestAssignmentExport(t *testing.T) {
@@ -17,8 +16,8 @@ func TestAssignmentExport(t *testing.T) {
 	assert.Equal(t, AssignmentExporter{
 		SpecialistId:      member.NewMemberIdExporter(f.SpecialistId.TenantId, f.SpecialistId.MemberId),
 		SpecialistVersion: f.SpecialistVersion,
-		AssignedGrade:     exporters.Uint8Exporter(f.AssignedGrade),
-		Reason:            exporters.StringExporter(f.Reason),
+		AssignedGrade:     f.AssignedGrade,
+		Reason:            f.Reason,
 		CreatedAt:         f.CreatedAt,
 	}, actualExporter)
 }

@@ -39,7 +39,7 @@ func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.Ar
 func (r *ArtifactRepository) Get(id artifactVal.ArtifactId) (*artifact.Artifact, error) {
 	idExporter := &artifactVal.ArtifactIdExporter{}
 	id.Export(idExporter)
-	streamId, err := r.eventStore.NewStreamId(uint(idExporter.TenantId), idExporter.ArtifactId.String())
+	streamId, err := r.eventStore.NewStreamId(uint(idExporter.TenantId), strconv.FormatUint(uint64(idExporter.ArtifactId), 10))
 	if err != nil {
 		return nil, err
 	}

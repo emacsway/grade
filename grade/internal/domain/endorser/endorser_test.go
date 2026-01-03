@@ -8,7 +8,6 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestEndorserCanCompleteEndorsement(t *testing.T) {
@@ -77,9 +76,9 @@ func TestEndorserExport(t *testing.T) {
 	agg.Export(&actualExporter)
 	assert.Equal(t, EndorserExporter{
 		Id:                        member.NewMemberIdExporter(f.Id.TenantId, f.Id.MemberId),
-		Grade:                     exporters.Uint8Exporter(f.Grade),
-		AvailableEndorsementCount: exporters.UintExporter(values.YearlyEndorsementCount),
-		PendingEndorsementCount:   exporters.UintExporter(0),
+		Grade:                     f.Grade,
+		AvailableEndorsementCount: values.YearlyEndorsementCount,
+		PendingEndorsementCount:   0,
 		Version:                   0,
 		CreatedAt:                 f.CreatedAt,
 	}, actualExporter)

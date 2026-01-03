@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/exporters"
 )
 
 func TestIntIdentityEqual(t *testing.T) {
@@ -40,9 +38,9 @@ func TestIntIdentityEqual(t *testing.T) {
 }
 
 func TestIntIdentityExport(t *testing.T) {
-	var ex exporters.UintExporter
+	var ex uint
 	val := uint(3)
 	id, _ := NewIntIdentity(val)
-	id.Export(&ex)
-	assert.Equal(t, val, id.Value())
+	id.Export(func(v uint) { ex = v })
+	assert.Equal(t, val, ex)
 }
