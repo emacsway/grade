@@ -1,4 +1,4 @@
-FROM golang:1.20.10-alpine3.17
+FROM golang:1.25.6-alpine3.23
 
 RUN apk add --no-cache -- \
     icu \

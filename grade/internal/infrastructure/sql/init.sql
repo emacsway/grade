@@ -143,7 +143,7 @@ CREATE TABLE event_log (
     metadata jsonb NULL,
     CONSTRAINT event_log_pk PRIMARY KEY (tenant_id, stream_type, stream_id, stream_position)
 );
-CREATE UNIQUE INDEX event_log_event_id_uniq ON event_log( ((metadata->>'event_id')::uuid) ) ;
+CREATE UNIQUE INDEX event_log__event_id_uniq ON event_log( ((metadata->>'event_id')::uuid) ) ;
 
 
 -- Endorser
