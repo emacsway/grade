@@ -14,7 +14,7 @@ import (
 	assignmentVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/events"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/aggregate"
 )
 
 var (

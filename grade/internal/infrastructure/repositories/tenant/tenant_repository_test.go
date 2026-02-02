@@ -8,8 +8,9 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/testutils"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session/pgx"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/utils/testutils"
 )
 
 type testCase func(t *testing.T, repositoryOption RepositoryOption)
@@ -102,7 +103,7 @@ func createRepositories(t *testing.T) []RepositoryOption {
 func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	db, err := testutils.NewTestDb()
 	require.NoError(t, err)
-	currentSession := session.NewPgxSession(db)
+	currentSession := pgx.NewPgxSession(db)
 	return RepositoryOption{
 		Name:       "PostgreSQL",
 		Repository: NewTenantRepository(currentSession),

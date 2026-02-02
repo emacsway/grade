@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/emacsway/grade/grade/internal/domain/endorser/values"
-	s "github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
+	s "github.com/krew-solutions/ascetic-ddd-go/asceticddd/specification/domain"
 )
 
 type EndorserCriteria struct{}

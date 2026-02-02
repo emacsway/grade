@@ -5,7 +5,7 @@ import (
 
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 type MemberInsertQuery struct {

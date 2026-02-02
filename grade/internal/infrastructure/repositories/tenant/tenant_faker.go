@@ -2,7 +2,7 @@ package tenant
 
 import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 func NewTenantFaker(

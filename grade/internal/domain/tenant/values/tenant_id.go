@@ -1,7 +1,7 @@
 package values
 
 import (
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/identity"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/identity"
 )
 
 func NewTenantId(value uint) (TenantId, error) {

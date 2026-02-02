@@ -5,7 +5,7 @@ import (
 
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 type ArtifactNextIdGetQuery struct {

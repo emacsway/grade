@@ -3,7 +3,7 @@ package values
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/specification/domain"
 )
 
 const YearlyEndorsementCount = uint(20)

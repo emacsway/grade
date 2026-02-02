@@ -4,7 +4,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact"
 	competenceRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/competence"
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 func NewArtifactFaker(

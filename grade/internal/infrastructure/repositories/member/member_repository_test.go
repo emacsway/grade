@@ -10,8 +10,9 @@ import (
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/testutils"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session/pgx"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/utils/testutils"
 )
 
 type testCase func(t *testing.T, repositoryOption RepositoryOption)
@@ -114,7 +115,7 @@ func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	var tenantExp tenant.TenantExporter
 	db, err := testutils.NewTestDb()
 	require.NoError(t, err)
-	currentSession := session.NewPgxSession(db)
+	currentSession := pgx.NewPgxSession(db)
 	tf := tenantRepo.NewTenantFaker(currentSession)
 	aTenant, err := tf.Create()
 	require.NoError(t, err)

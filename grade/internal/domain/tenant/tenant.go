@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/aggregate"
 )
 
 func NewTenant(

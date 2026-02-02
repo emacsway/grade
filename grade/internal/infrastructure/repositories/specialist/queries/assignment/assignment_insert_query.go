@@ -6,7 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	gradeVal "github.com/emacsway/grade/grade/internal/domain/specialist/assignment/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 type AssignmentInsertQuery struct {

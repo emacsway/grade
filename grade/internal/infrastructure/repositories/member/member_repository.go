@@ -6,7 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/member/queries"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 func NewMemberRepository(currentSession session.DbSession) *MemberRepository {

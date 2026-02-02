@@ -2,7 +2,7 @@ package values
 
 import (
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/specification/domain"
 )
 
 func NewMemberId(tenantId, memberId uint) (MemberId, error) {

@@ -6,7 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/faker"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/faker"
 )
 
 type CompetenceFakerOption func(*CompetenceFaker)

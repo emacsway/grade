@@ -3,7 +3,7 @@ package grade
 import (
 	"fmt"
 
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/specification/domain"
 )
 
 const MaxGradeValue = uint8(5)

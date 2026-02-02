@@ -8,8 +8,9 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/repository"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/infrastructure/repository"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 func NewArtifactProposedQuery(event *events.ArtifactProposed) *ArtifactProposedQuery {
@@ -26,6 +27,10 @@ type ArtifactProposedQuery struct {
 func (q *ArtifactProposedQuery) SetAggregateId(val values.ArtifactId) {
 	val.Export(&q.payload.AggregateId)
 	val.Export(q)
+}
+
+func (q *ArtifactProposedQuery) SetTenantId(val tenantVal.TenantId) {
+	val.Export(func(v uint) { q.EventInsertQuery.SetTenantId(v) })
 }
 
 func (q *ArtifactProposedQuery) SetArtifactId(val values.InternalArtifactId) {

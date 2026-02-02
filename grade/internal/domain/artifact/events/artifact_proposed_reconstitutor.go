@@ -6,7 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	competenceVal "github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/aggregate"
 )
 
 type ArtifactProposedReconstitutor struct {

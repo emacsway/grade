@@ -10,9 +10,9 @@ import (
 	artifactVal "github.com/emacsway/grade/grade/internal/domain/artifact/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/artifact/queries"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/repository"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/aggregate"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/infrastructure/repository"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 func NewArtifactRepository(currentSession session.DbSession) *ArtifactRepository {

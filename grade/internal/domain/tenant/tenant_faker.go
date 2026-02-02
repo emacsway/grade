@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/faker"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/faker"
 )
 
 type TenantFakerOption func(*TenantFaker)

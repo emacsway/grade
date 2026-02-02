@@ -1,6 +1,6 @@
 package values
 
-import "github.com/emacsway/grade/grade/internal/seedwork/domain/faker"
+import "github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/faker"
 
 func NewFullNameFaker() FullNameFaker {
 	f := FullNameFaker{}

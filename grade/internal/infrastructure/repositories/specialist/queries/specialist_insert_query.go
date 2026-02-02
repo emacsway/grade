@@ -8,7 +8,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 type SpecialistInsertQuery struct {

@@ -6,7 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/endorser"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/infrastructure/repositories/endorser/queries"
-	"github.com/emacsway/grade/grade/internal/seedwork/infrastructure/session"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 func NewEndorserRepository(currentSession session.DbSession) *EndorserRepository {

@@ -7,8 +7,8 @@ import (
 	endorserVal "github.com/emacsway/grade/grade/internal/domain/endorser/values"
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenant "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	s "github.com/emacsway/grade/grade/internal/seedwork/domain/specification"
-	is "github.com/emacsway/grade/grade/internal/seedwork/infrastructure/specification"
+	s "github.com/krew-solutions/ascetic-ddd-go/asceticddd/specification/domain"
+	is "github.com/krew-solutions/ascetic-ddd-go/asceticddd/specification/infrastructure"
 )
 
 type EndorserCanCompleteEndorsementSpecification struct{

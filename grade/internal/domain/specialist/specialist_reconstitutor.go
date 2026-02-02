@@ -7,7 +7,7 @@ import (
 	member "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/assignment"
 	"github.com/emacsway/grade/grade/internal/domain/specialist/endorsement"
-	"github.com/emacsway/grade/grade/internal/seedwork/domain/aggregate"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/aggregate"
 )
 
 type SpecialistReconstitutor struct {
