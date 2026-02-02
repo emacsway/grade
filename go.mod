@@ -8,7 +8,7 @@ require (
 	github.com/stretchr/testify v1.8.4
 )
 
-replace github.com/krew-solutions/ascetic-ddd-go => ../ascetic-ddd-go
+// replace github.com/krew-solutions/ascetic-ddd-go => ../ascetic-ddd-go
 
 require (
 	github.com/corpix/uarand v0.0.0-20170723150923-031be390f409 // indirect
