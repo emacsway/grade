@@ -4,7 +4,7 @@ go 1.25
 
 require (
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/krew-solutions/ascetic-ddd-go v0.0.0
+	github.com/krew-solutions/ascetic-ddd-go v0.1.0
 	github.com/stretchr/testify v1.8.4
 )
 
