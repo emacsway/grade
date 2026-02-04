@@ -6,6 +6,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 var EndorserMemberIdFakeValue = uint(1004)
@@ -64,10 +65,10 @@ func (f *EndorserFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *EndorserFaker) Next() error {
+func (f *EndorserFaker) Next(s session.Session) error {
 	f.fake()
 	f.MemberFaker.Next()
-	err := f.BuildDependencies()
+	err := f.BuildDependencies(s)
 	if err != nil {
 		return err
 	}
@@ -75,7 +76,7 @@ func (f *EndorserFaker) Next() error {
 	return nil
 }
 
-func (f *EndorserFaker) Create() (*Endorser, error) {
+func (f *EndorserFaker) Create(s session.Session) (*Endorser, error) {
 	if f.agg != nil {
 		return f.agg, nil
 	}
@@ -96,7 +97,7 @@ func (f *EndorserFaker) Create() (*Endorser, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = f.Repository.Insert(agg)
+	err = f.Repository.Insert(s, agg)
 	if err != nil {
 		return nil, err
 	}
@@ -118,12 +119,12 @@ func (f *EndorserFaker) SetId(id memberVal.MemberIdFaker) {
 	f.SetMemberId(id.MemberId)
 }
 
-func (f *EndorserFaker) BuildDependencies() (err error) {
-	err = f.MemberFaker.BuildDependencies()
+func (f *EndorserFaker) BuildDependencies(s session.Session) (err error) {
+	err = f.MemberFaker.BuildDependencies(s)
 	if err != nil {
 		return err
 	}
-	_, err = f.MemberFaker.Create() // Use repo if it is needed to get the instance.
+	_, err = f.MemberFaker.Create(s) // Use repo if it is needed to get the instance.
 	if err != nil {
 		return err
 	}
@@ -132,12 +133,12 @@ func (f *EndorserFaker) BuildDependencies() (err error) {
 }
 
 type EndorserRepository interface {
-	Insert(*Endorser) error
+	Insert(session.Session, *Endorser) error
 }
 
 type EndorserDummyRepository struct {
 }
 
-func (r EndorserDummyRepository) Insert(agg *Endorser) error {
+func (r EndorserDummyRepository) Insert(s session.Session, agg *Endorser) error {
 	return nil
 }

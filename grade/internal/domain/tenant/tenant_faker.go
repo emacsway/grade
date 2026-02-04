@@ -5,6 +5,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/faker"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 type TenantFakerOption func(*TenantFaker)
@@ -57,7 +58,7 @@ func (f *TenantFaker) Next() error {
 	return nil
 }
 
-func (f *TenantFaker) Create() (*Tenant, error) {
+func (f *TenantFaker) Create(s session.Session) (*Tenant, error) {
 	var aggExp TenantExporter
 	if f.agg != nil {
 		return f.agg, nil
@@ -76,7 +77,7 @@ func (f *TenantFaker) Create() (*Tenant, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = f.Repository.Insert(agg)
+	err = f.Repository.Insert(s, agg)
 	if err != nil {
 		return nil, err
 	}
@@ -91,19 +92,19 @@ func (f *TenantFaker) SetId(val uint) {
 	f.Id = val
 }
 
-func (f *TenantFaker) BuildDependencies() (err error) {
+func (f *TenantFaker) BuildDependencies(s session.Session) (err error) {
 	return nil
 }
 
 type TenantRepository interface {
-	Insert(*Tenant) error
+	Insert(session.Session, *Tenant) error
 }
 
 type TenantDummyRepository struct {
 	TenantFaker *TenantFaker
 }
 
-func (r *TenantDummyRepository) Insert(agg *Tenant) error {
+func (r *TenantDummyRepository) Insert(s session.Session, agg *Tenant) error {
 	// r.TenantFaker.Id += 1 // Do not do this, since TenantFaker.Id is an autoincrement PK accessor.
 	// This should be exactly as agg.id
 	// Also this value will be reseted by f.Id = uint(aggExp.Id)

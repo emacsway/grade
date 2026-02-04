@@ -16,17 +16,17 @@ import (
 func TestSpecialistExport(t *testing.T) {
 	var actualExporter SpecialistExporter
 	sf := NewSpecialistFaker()
-	err := sf.BuildDependencies()
+	err := sf.BuildDependencies(nil)
 	require.NoError(t, err)
 	ef := endorser.NewEndorserFaker()
 	for i := 0; i < 4; i++ {
-		err := sf.ReceiveEndorsement(ef)
+		err := sf.ReceiveEndorsement(nil, ef)
 		if err != nil {
 			t.Error(err)
 			t.FailNow()
 		}
 	}
-	s, err := sf.Create()
+	s, err := sf.Create(nil)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()

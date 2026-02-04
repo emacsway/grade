@@ -55,6 +55,6 @@ func (q *SpecialistInsertQuery) SetVersion(val uint) {
 	q.params[4] = val
 }
 
-func (q *SpecialistInsertQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
-	return s.Exec(q.sql(), q.params[:]...)
+func (q *SpecialistInsertQuery) Evaluate(s session.Session) (session.Result, error) {
+	return s.(session.DbSession).Connection().Exec(q.sql(), q.params[:]...)
 }

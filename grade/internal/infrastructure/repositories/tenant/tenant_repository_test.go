@@ -1,6 +1,7 @@
 package tenant
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,7 +10,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
-	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session/pgx"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/utils/testutils"
 )
 
@@ -48,12 +48,14 @@ func TestTenantRepository(t *testing.T) {
 func clearable(callable testCase) testCase {
 	return func(t *testing.T, repositoryOption RepositoryOption) {
 		/* TODO:
-			defer func() {
-			r, err := repositoryOption.Session.Exec("DELETE FROM tenant")
-			require.NoError(t, err)
-			rowsAffected, err := r.RowsAffected()
-			require.NoError(t, err)
-			assert.Greater(t, int(rowsAffected), 0)
+		defer func() {
+			err := repositoryOption.Pool.Session(context.Background(), func(s session.Session) error {
+				_, err := s.(session.DbSession).Connection().Exec("TRUNCATE tenant CASCADE")
+				return err
+			})
+			if err != nil {
+				t.Logf("cleanup warning: %v", err)
+			}
 		}()
 		*/
 		callable(t, repositoryOption)
@@ -61,37 +63,45 @@ func clearable(callable testCase) testCase {
 }
 
 func testInsert(t *testing.T, repositoryOption RepositoryOption) {
-	var exporterActual tenant.TenantExporter
-	factory := tenant.NewTenantFaker(tenant.WithTransientId())
-	agg, err := factory.Create()
+	err := repositoryOption.Pool.Session(context.Background(), func(s session.Session) error {
+		var exporterActual tenant.TenantExporter
+		factory := tenant.NewTenantFaker(tenant.WithTransientId())
+		agg, err := factory.Create(s)
+		require.NoError(t, err)
+		err = repositoryOption.Repository.Insert(s, agg)
+		require.NoError(t, err)
+		agg.Export(&exporterActual)
+		assert.Greater(t, int(exporterActual.Id), 0)
+		return nil
+	})
 	require.NoError(t, err)
-	err = repositoryOption.Repository.Insert(agg)
-	require.NoError(t, err)
-	agg.Export(&exporterActual)
-	assert.Greater(t, int(exporterActual.Id), 0)
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
-	var exporterExpected tenant.TenantExporter
-	var exporterActual tenant.TenantExporter
-	factory := NewTenantFaker(repositoryOption.Session)
-	aggExpected, errActual := factory.Create()
-	require.NoError(t, errActual)
-	aggExpected.Export(&exporterExpected)
-	assert.Greater(t, int(exporterExpected.Id), 0)
+	err := repositoryOption.Pool.Session(context.Background(), func(s session.Session) error {
+		var exporterExpected tenant.TenantExporter
+		var exporterActual tenant.TenantExporter
+		factory := NewTenantFaker()
+		aggExpected, err := factory.Create(s)
+		require.NoError(t, err)
+		aggExpected.Export(&exporterExpected)
+		assert.Greater(t, int(exporterExpected.Id), 0)
 
-	id, errActual := tenantVal.NewTenantId(uint(exporterExpected.Id))
-	require.NoError(t, errActual)
-	aggRead, errActual := repositoryOption.Repository.Get(id)
-	require.NoError(t, errActual)
-	aggRead.Export(&exporterActual)
-	assert.Equal(t, exporterExpected, exporterActual)
+		id, err := tenantVal.NewTenantId(uint(exporterExpected.Id))
+		require.NoError(t, err)
+		aggRead, err := repositoryOption.Repository.Get(s, id)
+		require.NoError(t, err)
+		aggRead.Export(&exporterActual)
+		assert.Equal(t, exporterExpected, exporterActual)
+		return nil
+	})
+	require.NoError(t, err)
 }
 
 type RepositoryOption struct {
 	Name       string
 	Repository *TenantRepository
-	Session    session.DbSession
+	Pool       session.SessionPool
 }
 
 func createRepositories(t *testing.T) []RepositoryOption {
@@ -101,12 +111,11 @@ func createRepositories(t *testing.T) []RepositoryOption {
 }
 
 func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
-	db, err := testutils.NewTestDb()
+	pool, err := testutils.NewPgSessionPool()
 	require.NoError(t, err)
-	currentSession := pgx.NewPgxSession(db)
 	return RepositoryOption{
 		Name:       "PostgreSQL",
-		Repository: NewTenantRepository(currentSession),
-		Session:    currentSession,
+		Repository: NewTenantRepository(),
+		Pool:       pool,
 	}
 }

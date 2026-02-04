@@ -8,6 +8,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/grade"
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 var SpecialistMemberIdFakeValue = memberVal.MemberIdFakeValue
@@ -78,10 +79,10 @@ func (f *SpecialistFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *SpecialistFaker) Next() error {
+func (f *SpecialistFaker) Next(s session.Session) error {
 	f.fake()
 	f.MemberFaker.Next()
-	err := f.BuildDependencies()
+	err := f.BuildDependencies(s)
 	if err != nil {
 		return err
 	}
@@ -89,22 +90,22 @@ func (f *SpecialistFaker) Next() error {
 	return nil
 }
 
-func (f *SpecialistFaker) ReceiveEndorsement(ef *endorser.EndorserFaker) error {
-	err := f.achieveGrade()
+func (f *SpecialistFaker) ReceiveEndorsement(s session.Session, ef *endorser.EndorserFaker) error {
+	err := f.achieveGrade(s)
 	if err != nil {
 		return err
 	}
-	return f.receiveEndorsement(ef)
+	return f.receiveEndorsement(s, ef)
 }
 
-func (f *SpecialistFaker) achieveGrade() error {
+func (f *SpecialistFaker) achieveGrade(s session.Session) error {
 	currentGrade, _ := grade.DefaultConstructor(0)
 	targetGrade, err := grade.DefaultConstructor(f.Grade)
 	if err != nil {
 		return err
 	}
 	for currentGrade.LessThan(targetGrade) {
-		err = f.EndorserFaker.Next()
+		err = f.EndorserFaker.Next(s)
 		if err != nil {
 			return err
 		}
@@ -116,7 +117,7 @@ func (f *SpecialistFaker) achieveGrade() error {
 		ef.Grade = gradeExporter
 		var endorsementCount uint = 0
 		for !currentGrade.NextGradeAchieved(endorsementCount) {
-			if err := f.receiveEndorsement(ef); err != nil {
+			if err := f.receiveEndorsement(s, ef); err != nil {
 				return err
 			}
 			endorsementCount += 2
@@ -129,18 +130,18 @@ func (f *SpecialistFaker) achieveGrade() error {
 	return nil
 }
 
-func (f *SpecialistFaker) receiveEndorsement(ef *endorser.EndorserFaker) error {
-	if _, err := ef.Create(); err != nil {
+func (f *SpecialistFaker) receiveEndorsement(s session.Session, ef *endorser.EndorserFaker) error {
+	if _, err := ef.Create(s); err != nil {
 		return err
 	}
 
-	if err := f.ArtifactFaker.Next(); err != nil {
+	if err := f.ArtifactFaker.Next(s); err != nil {
 		return err
 	}
 	af := f.ArtifactFaker
 	// TODO: Remove me: af.Id.TenantId = f.Id.TenantId
 	af.AddAuthorId(f.Id)
-	if _, err := af.Create(); err != nil {
+	if _, err := af.Create(s); err != nil {
 		return err
 	}
 
@@ -152,11 +153,11 @@ func (f *SpecialistFaker) receiveEndorsement(ef *endorser.EndorserFaker) error {
 	return nil
 }
 
-func (f SpecialistFaker) Create() (*Specialist, error) {
+func (f SpecialistFaker) Create(s session.Session) (*Specialist, error) {
 	if f.agg != nil {
 		return f.agg, nil
 	}
-	err := f.achieveGrade()
+	err := f.achieveGrade(s)
 	if err != nil {
 		return nil, err
 	}
@@ -171,11 +172,11 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 	for i := range f.Commands {
 		switch cmd := f.Commands[i].(type) {
 		case ReceivedEndorsementFakeCommand:
-			e, err := cmd.Endorser.Create()
+			e, err := cmd.Endorser.Create(s)
 			if err != nil {
 				return nil, err
 			}
-			art, err := cmd.Artifact.Create()
+			art, err := cmd.Artifact.Create(s)
 			if err != nil {
 				return nil, err
 			}
@@ -190,7 +191,7 @@ func (f SpecialistFaker) Create() (*Specialist, error) {
 		}
 		agg.SetVersion(agg.Version() + 1)
 	}
-	err = f.Repository.Insert(agg)
+	err = f.Repository.Insert(s, agg)
 	if err != nil {
 		return nil, err
 	}
@@ -212,12 +213,12 @@ func (f *SpecialistFaker) SetId(id memberVal.MemberIdFaker) {
 	f.SetMemberId(id.MemberId)
 }
 
-func (f *SpecialistFaker) BuildDependencies() (err error) {
-	err = f.ArtifactFaker.BuildDependencies()
+func (f *SpecialistFaker) BuildDependencies(s session.Session) (err error) {
+	err = f.ArtifactFaker.BuildDependencies(s)
 	if err != nil {
 		return err
 	}
-	_, err = f.ArtifactFaker.Create()
+	_, err = f.ArtifactFaker.Create(s)
 	if err != nil {
 		return err
 	}
@@ -234,11 +235,11 @@ type ReceivedEndorsementFakeCommand struct {
 }
 
 type SpecialistRepository interface {
-	Insert(*Specialist) error
+	Insert(session.Session, *Specialist) error
 }
 
 type SpecialistDummyRepository struct{}
 
-func (r SpecialistDummyRepository) Insert(agg *Specialist) error {
+func (r SpecialistDummyRepository) Insert(s session.Session, agg *Specialist) error {
 	return nil
 }

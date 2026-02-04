@@ -57,7 +57,7 @@ func (q *EndorserUpdateQuery) SetCreatedAt(val time.Time) {
 	q.params[6] = val
 }
 
-func (q *EndorserUpdateQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
+func (q *EndorserUpdateQuery) Evaluate(s session.Session) (session.Result, error) {
 	// TODO: Optimistic lock
-	return s.Exec(q.sql(), q.params[:]...)
+	return s.(session.DbSession).Connection().Exec(q.sql(), q.params[:]...)
 }

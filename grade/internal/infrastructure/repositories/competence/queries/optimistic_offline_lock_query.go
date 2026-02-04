@@ -51,8 +51,8 @@ func (q *OptimisticOfflineLockLockQuery) SetVersion(val uint) {
 	q.params[3] = val
 }
 
-func (q *OptimisticOfflineLockLockQuery) Evaluate(s session.DbSession) (session.Result, error) {
-	result, err := s.Exec(q.sql(), q.params[:]...)
+func (q *OptimisticOfflineLockLockQuery) Evaluate(s session.Session) (session.Result, error) {
+	result, err := s.(session.DbSession).Connection().Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err
 	}

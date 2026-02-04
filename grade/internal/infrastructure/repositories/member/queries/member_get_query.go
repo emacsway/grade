@@ -24,9 +24,9 @@ func (q MemberGetQuery) params() []any {
 	return []any{idExp.TenantId, idExp.MemberId}
 }
 
-func (q *MemberGetQuery) Get(s session.DbSessionSingleQuerier) (*member.Member, error) {
+func (q *MemberGetQuery) Get(s session.Session) (*member.Member, error) {
 	rec := &member.MemberReconstitutor{}
-	err := s.QueryRow(q.sql(), q.params()...).Scan(
+	err := s.(session.DbSession).Connection().QueryRow(q.sql(), q.params()...).Scan(
 		&rec.Id.TenantId, &rec.Id.MemberId, &rec.Status, &rec.FullName.FirstName, &rec.FullName.LastName,
 		&rec.CreatedAt, &rec.Version,
 	)

@@ -9,7 +9,7 @@ import (
 func TestTenantExport(t *testing.T) {
 	var actualExporter TenantExporter
 	f := NewTenantFaker()
-	agg, err := f.Create()
+	agg, err := f.Create(nil)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()

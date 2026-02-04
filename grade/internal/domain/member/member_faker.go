@@ -5,6 +5,7 @@ import (
 
 	"github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/emacsway/grade/grade/internal/domain/tenant"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 type MemberFakerOption func(*MemberFaker)
@@ -69,7 +70,7 @@ func (f *MemberFaker) Next() {
 	f.agg = nil
 }
 
-func (f *MemberFaker) Create() (*Member, error) {
+func (f *MemberFaker) Create(s session.Session) (*Member, error) {
 	var aggExp MemberExporter
 	if f.agg != nil {
 		return f.agg, nil
@@ -89,7 +90,7 @@ func (f *MemberFaker) Create() (*Member, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = f.Repository.Insert(agg)
+	err = f.Repository.Insert(s, agg)
 	if err != nil {
 		return nil, err
 	}
@@ -113,8 +114,8 @@ func (f *MemberFaker) SetId(id values.MemberIdFaker) {
 	f.SetMemberId(id.MemberId)
 }
 
-func (f *MemberFaker) BuildDependencies() (err error) {
-	_, err = f.TenantFaker.Create() // Use repo if it is needed to get the instance.
+func (f *MemberFaker) BuildDependencies(s session.Session) (err error) {
+	_, err = f.TenantFaker.Create(s) // Use repo if it is needed to get the instance.
 	if err != nil {
 		return err
 	}
@@ -123,11 +124,11 @@ func (f *MemberFaker) BuildDependencies() (err error) {
 }
 
 type MemberRepository interface {
-	Insert(*Member) error
+	Insert(session.Session, *Member) error
 }
 
 type MemberDummyRepository struct{}
 
-func (r *MemberDummyRepository) Insert(agg *Member) error {
+func (r *MemberDummyRepository) Insert(s session.Session, agg *Member) error {
 	return nil
 }

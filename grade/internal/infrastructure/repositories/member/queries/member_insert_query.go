@@ -58,8 +58,8 @@ func (q *MemberInsertQuery) SetVersion(val uint) {
 	q.params[5] = val
 }
 
-func (q *MemberInsertQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
-	result, err := s.Exec(q.sql(), q.params[:]...)
+func (q *MemberInsertQuery) Evaluate(s session.Session) (session.Result, error) {
+	result, err := s.(session.DbSession).Connection().Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err
 	}

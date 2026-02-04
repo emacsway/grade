@@ -13,7 +13,7 @@ import (
 func TestArtifactExport(t *testing.T) {
 	var actualExporter ArtifactExporter
 	f := NewArtifactFaker()
-	agg, err := f.Create()
+	agg, err := f.Create(nil)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()

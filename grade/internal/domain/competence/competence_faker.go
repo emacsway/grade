@@ -7,6 +7,7 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/faker"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 type CompetenceFakerOption func(*CompetenceFaker)
@@ -73,7 +74,7 @@ func (f *CompetenceFaker) Next() error {
 	return nil
 }
 
-func (f *CompetenceFaker) Create() (*Competence, error) {
+func (f *CompetenceFaker) Create(s session.Session) (*Competence, error) {
 	var aggExp CompetenceExporter
 	if f.agg != nil {
 		return f.agg, nil
@@ -97,7 +98,7 @@ func (f *CompetenceFaker) Create() (*Competence, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = f.Repository.Insert(agg)
+	err = f.Repository.Insert(s, agg)
 	if err != nil {
 		return nil, err
 	}
@@ -121,12 +122,12 @@ func (f *CompetenceFaker) SetId(id memberVal.MemberIdFaker) {
 	f.SetMemberId(id.MemberId)
 }
 
-func (f *CompetenceFaker) BuildDependencies() (err error) {
-	err = f.MemberFaker.BuildDependencies()
+func (f *CompetenceFaker) BuildDependencies(s session.Session) (err error) {
+	err = f.MemberFaker.BuildDependencies(s)
 	if err != nil {
 		return err
 	}
-	_, err = f.MemberFaker.Create()
+	_, err = f.MemberFaker.Create(s)
 	if err != nil {
 		return err
 	}
@@ -136,11 +137,11 @@ func (f *CompetenceFaker) BuildDependencies() (err error) {
 }
 
 type CompetenceRepository interface {
-	Insert(*Competence) error
+	Insert(session.Session, *Competence) error
 }
 
 type CompetenceDummyRepository struct{}
 
-func (r CompetenceDummyRepository) Insert(agg *Competence) error {
+func (r CompetenceDummyRepository) Insert(s session.Session, agg *Competence) error {
 	return nil
 }

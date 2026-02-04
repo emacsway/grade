@@ -24,6 +24,6 @@ func (q *EndorserDeleteQuery) SetMemberId(val member.InternalMemberId) {
 	val.Export(func(v uint) { q.params[1] = v })
 }
 
-func (q *EndorserDeleteQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
-	return s.Exec(q.sql(), q.params[:]...)
+func (q *EndorserDeleteQuery) Evaluate(s session.Session) (session.Result, error) {
+	return s.(session.DbSession).Connection().Exec(q.sql(), q.params[:]...)
 }

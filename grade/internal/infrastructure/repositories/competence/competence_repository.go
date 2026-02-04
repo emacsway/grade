@@ -9,36 +9,32 @@ import (
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
-func NewCompetenceRepository(currentSession session.DbSession) *CompetenceRepository {
-	return &CompetenceRepository{
-		session: currentSession,
-	}
+func NewCompetenceRepository() *CompetenceRepository {
+	return &CompetenceRepository{}
 }
 
-type CompetenceRepository struct {
-	session session.DbSession
+type CompetenceRepository struct{}
+
+func (r *CompetenceRepository) Insert(s session.Session, agg *competence.Competence) error {
+	return r.save(s, agg)
 }
 
-func (r *CompetenceRepository) Insert(agg *competence.Competence) error {
-	return r.save(agg)
-}
-
-func (r *CompetenceRepository) Update(agg *competence.Competence) error {
+func (r *CompetenceRepository) Update(s session.Session, agg *competence.Competence) error {
 	q := &queries.OptimisticOfflineLockLockQuery{}
 	agg.Export(q)
 	q.SetInitialVersion(agg.Version() - uint(len(agg.PendingDomainEvents())))
-	_, err := q.Evaluate(r.session)
+	_, err := q.Evaluate(s)
 	if err != nil {
 		return err
 	}
-	return r.save(agg)
+	return r.save(s, agg)
 }
 
-func (r *CompetenceRepository) save(agg *competence.Competence) error {
+func (r *CompetenceRepository) save(s session.Session, agg *competence.Competence) error {
 	pendingEvents := agg.PendingDomainEvents()
 	for _, iEvent := range pendingEvents {
 		q := r.eventQuery(iEvent)
-		_, err := q.Evaluate(r.session)
+		_, err := q.Evaluate(s)
 		if err != nil {
 			return err
 		}
@@ -46,6 +42,7 @@ func (r *CompetenceRepository) save(agg *competence.Competence) error {
 	agg.ClearPendingDomainEvents()
 	return nil
 }
+
 func (r CompetenceRepository) eventQuery(iEvent aggregate.DomainEvent) (q session.QueryEvaluator) {
 	switch event := iEvent.(type) {
 	case *events.CompetenceCreated:
@@ -60,7 +57,7 @@ func (r CompetenceRepository) eventQuery(iEvent aggregate.DomainEvent) (q sessio
 	return q
 }
 
-func (r *CompetenceRepository) Get(id competenceVal.CompetenceId) (*competence.Competence, error) {
+func (r *CompetenceRepository) Get(s session.Session, id competenceVal.CompetenceId) (*competence.Competence, error) {
 	q := queries.CompetenceGetQuery{Id: id}
-	return q.Get(r.session)
+	return q.Get(s)
 }

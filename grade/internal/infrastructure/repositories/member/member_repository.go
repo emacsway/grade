@@ -9,20 +9,16 @@ import (
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
-func NewMemberRepository(currentSession session.DbSession) *MemberRepository {
-	return &MemberRepository{
-		session: currentSession,
-	}
+func NewMemberRepository() *MemberRepository {
+	return &MemberRepository{}
 }
 
-type MemberRepository struct {
-	session session.DbSession
-}
+type MemberRepository struct{}
 
-func (r *MemberRepository) Insert(agg *member.Member) error {
+func (r *MemberRepository) Insert(s session.Session, agg *member.Member) error {
 	q := &queries.MemberInsertQuery{}
 	agg.Export(q)
-	result, err := q.Evaluate(r.session)
+	result, err := q.Evaluate(s)
 	if err != nil {
 		return err
 	}
@@ -36,7 +32,7 @@ func (r *MemberRepository) Insert(agg *member.Member) error {
 	return nil
 }
 
-func (r *MemberRepository) Get(id memberVal.MemberId) (*member.Member, error) {
+func (r *MemberRepository) Get(s session.Session, id memberVal.MemberId) (*member.Member, error) {
 	q := queries.MemberGetQuery{Id: id}
-	return q.Get(r.session)
+	return q.Get(s)
 }

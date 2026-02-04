@@ -8,20 +8,16 @@ import (
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
-func NewSpecialistRepository(currentSession session.DbSession) *SpecialistRepository {
-	return &SpecialistRepository{
-		session: currentSession,
-	}
+func NewSpecialistRepository() *SpecialistRepository {
+	return &SpecialistRepository{}
 }
 
-type SpecialistRepository struct {
-	session session.DbSession
-}
+type SpecialistRepository struct{}
 
-func (r SpecialistRepository) Insert(agg *specialist.Specialist) error {
+func (r *SpecialistRepository) Insert(s session.Session, agg *specialist.Specialist) error {
 	q := queries.SpecialistInsertQuery{}
 	agg.Export(&q)
-	result, err := q.Evaluate(r.session)
+	result, err := q.Evaluate(s)
 	if err != nil {
 		return err
 	}
@@ -36,8 +32,8 @@ func (r SpecialistRepository) Insert(agg *specialist.Specialist) error {
 }
 
 /*
-func (r *SpecialistRepository) Get(id memberVal.MemberId) (*specialist.Specialist, error) {
+func (r *SpecialistRepository) Get(s session.Session, id memberVal.MemberId) (*specialist.Specialist, error) {
 	q := queries.SpecialistGetQuery{Id: id}
-	return q.Get(r.session)
+	return q.Get(s)
 }
 */

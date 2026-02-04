@@ -25,9 +25,9 @@ func (q EndorserGetQuery) params() []any {
 	return []any{idExp.TenantId, idExp.MemberId}
 }
 
-func (q *EndorserGetQuery) Get(s session.DbSessionSingleQuerier) (*endorser.Endorser, error) {
+func (q *EndorserGetQuery) Get(s session.Session) (*endorser.Endorser, error) {
 	rec := &endorser.EndorserReconstitutor{}
-	err := s.QueryRow(q.sql(), q.params()...).Scan(
+	err := s.(session.DbSession).Connection().QueryRow(q.sql(), q.params()...).Scan(
 		&rec.Id.TenantId, &rec.Id.MemberId, &rec.Grade, &rec.AvailableEndorsementCount,
 		&rec.PendingEndorsementCount, &rec.CreatedAt, &rec.Version,
 	)

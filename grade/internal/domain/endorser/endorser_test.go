@@ -49,7 +49,7 @@ func TestEndorserCanCompleteEndorsement(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			f := NewEndorserFaker()
-			e, err := f.Create()
+			e, err := f.Create(nil)
 			if err != nil {
 				t.Error(err)
 				t.FailNow()
@@ -68,7 +68,7 @@ func TestEndorserCanCompleteEndorsement(t *testing.T) {
 func TestEndorserExport(t *testing.T) {
 	var actualExporter EndorserExporter
 	f := NewEndorserFaker()
-	agg, err := f.Create()
+	agg, err := f.Create(nil)
 	if err != nil {
 		t.Error(err)
 		t.FailNow()

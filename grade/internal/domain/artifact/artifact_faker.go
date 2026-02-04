@@ -12,6 +12,7 @@ import (
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/aggregate"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/faker"
+	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 type ArtifactFakerOption func(*ArtifactFaker)
@@ -97,10 +98,10 @@ func (f *ArtifactFaker) fake() {
 	f.CreatedAt = time.Now().Truncate(time.Microsecond)
 }
 
-func (f *ArtifactFaker) Next() error {
+func (f *ArtifactFaker) Next(s session.Session) error {
 	f.fake()
 	f.AuthorIds = []memberVal.MemberIdFaker{}
-	err := f.advanceId()
+	err := f.advanceId(s)
 	if err != nil {
 		return err
 	}
@@ -108,13 +109,13 @@ func (f *ArtifactFaker) Next() error {
 	return nil
 }
 
-func (f *ArtifactFaker) advanceId() error {
+func (f *ArtifactFaker) advanceId(s session.Session) error {
 	var idExp values.ArtifactIdExporter
 	tenantId, err := tenantVal.NewTenantId(f.Id.TenantId)
 	if err != nil {
 		return err
 	}
-	id, err := f.Repository.NextId(tenantId)
+	id, err := f.Repository.NextId(s, tenantId)
 	if err != nil {
 		return err
 	}
@@ -131,12 +132,12 @@ func (f *ArtifactFaker) AddCompetenceId(competenceId competenceVal.CompetenceIdF
 	f.CompetenceIds = append(f.CompetenceIds, competenceId)
 }
 
-func (f *ArtifactFaker) Create() (*Artifact, error) {
+func (f *ArtifactFaker) Create(s session.Session) (*Artifact, error) {
 	if f.agg != nil {
 		return f.agg, nil
 	}
 	if f.Id.ArtifactId == 0 {
-		err := f.advanceId()
+		err := f.advanceId(s)
 		if err != nil {
 			return nil, err
 		}
@@ -184,7 +185,7 @@ func (f *ArtifactFaker) Create() (*Artifact, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = f.Repository.Insert(agg, aggregate.EventMeta{})
+	err = f.Repository.Insert(s, agg, aggregate.EventMeta{})
 	if err != nil {
 		return nil, err
 	}
@@ -206,12 +207,12 @@ func (f *ArtifactFaker) SetId(id memberVal.MemberIdFaker) {
 	f.SetMemberId(id.MemberId)
 }
 
-func (f *ArtifactFaker) BuildDependencies() (err error) {
-	err = f.CompetenceFaker.BuildDependencies()
+func (f *ArtifactFaker) BuildDependencies(s session.Session) (err error) {
+	err = f.CompetenceFaker.BuildDependencies(s)
 	if err != nil {
 		return err
 	}
-	_, err = f.CompetenceFaker.Create()
+	_, err = f.CompetenceFaker.Create(s)
 	if err != nil {
 		return err
 	}
@@ -223,19 +224,19 @@ func (f *ArtifactFaker) BuildDependencies() (err error) {
 }
 
 type ArtifactRepository interface {
-	Insert(*Artifact, aggregate.EventMeta) error
-	NextId(tenantVal.TenantId) (values.ArtifactId, error)
+	Insert(session.Session, *Artifact, aggregate.EventMeta) error
+	NextId(session.Session, tenantVal.TenantId) (values.ArtifactId, error)
 }
 
 type ArtifactDummyRepository struct {
 	IdFaker *values.ArtifactIdFaker
 }
 
-func (r ArtifactDummyRepository) Insert(agg *Artifact, eventMeta aggregate.EventMeta) error {
+func (r ArtifactDummyRepository) Insert(s session.Session, agg *Artifact, eventMeta aggregate.EventMeta) error {
 	return nil
 }
 
-func (r *ArtifactDummyRepository) NextId(tenantId tenantVal.TenantId) (values.ArtifactId, error) {
+func (r *ArtifactDummyRepository) NextId(s session.Session, tenantId tenantVal.TenantId) (values.ArtifactId, error) {
 	var tenantIdExp uint
 	tenantId.Export(func(v uint) { tenantIdExp = v })
 	r.IdFaker.TenantId = tenantIdExp

@@ -22,10 +22,10 @@ func (q ArtifactNextIdGetQuery) tenantIdValue() uint {
 	return tenantIdExp
 }
 
-func (q *ArtifactNextIdGetQuery) Get(s session.DbSessionSingleQuerier) (artifactVal.ArtifactId, error) {
+func (q *ArtifactNextIdGetQuery) Get(s session.Session) (artifactVal.ArtifactId, error) {
 	rec := &artifactVal.ArtifactIdReconstitutor{}
 	rec.TenantId = q.tenantIdValue()
-	err := s.QueryRow(q.sql()).Scan(&rec.ArtifactId)
+	err := s.(session.DbSession).Connection().QueryRow(q.sql()).Scan(&rec.ArtifactId)
 	if err != nil {
 		return artifactVal.ArtifactId{}, err
 	}

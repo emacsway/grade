@@ -1,6 +1,7 @@
 package endorser
 
 import (
+	"context"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -13,7 +14,6 @@ import (
 	memberRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/member"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
-	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session/pgx"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/utils/testutils"
 )
 
@@ -45,12 +45,14 @@ func TestEndorserRepository(t *testing.T) {
 func clearable(callable testCase) testCase {
 	return func(t *testing.T, repositoryOption RepositoryOption) {
 		/* TODO:
-			defer func() {
-			r, err := repositoryOption.Session.Exec("DELETE FROM endorser")
-			require.NoError(t, err)
-			rowsAffected, err := r.RowsAffected()
-			require.NoError(t, err)
-			assert.Greater(t, int(rowsAffected), 0)
+		defer func() {
+			err := repositoryOption.Pool.Session(context.Background(), func(s session.Session) error {
+				_, err := s.(session.DbSession).Connection().Exec("TRUNCATE endorser CASCADE")
+				return err
+			})
+			if err != nil {
+				t.Logf("cleanup warning: %v", err)
+			}
 		}()
 		*/
 		callable(t, repositoryOption)
@@ -58,57 +60,63 @@ func clearable(callable testCase) testCase {
 }
 
 func testInsert(t *testing.T, repositoryOption RepositoryOption) {
-	var exporterExpected endorser.EndorserExporter
-	var exporterActual endorser.EndorserExporter
-	factory := endorser.NewEndorserFaker(
-		endorser.WithTenantId(repositoryOption.TenantId),
-		endorser.WithMemberId(repositoryOption.MemberId),
-	)
-	agg, err := factory.Create()
-	require.NoError(t, err)
-	err = repositoryOption.Repository.Insert(agg)
-	require.NoError(t, err)
-	agg.Export(&exporterExpected)
+	err := repositoryOption.Pool.Session(context.Background(), func(s session.Session) error {
+		var exporterExpected endorser.EndorserExporter
+		var exporterActual endorser.EndorserExporter
+		factory := endorser.NewEndorserFaker(
+			endorser.WithTenantId(repositoryOption.TenantId),
+			endorser.WithMemberId(repositoryOption.MemberId),
+		)
+		agg, err := factory.Create(s)
+		require.NoError(t, err)
+		err = repositoryOption.Repository.Insert(s, agg)
+		require.NoError(t, err)
+		agg.Export(&exporterExpected)
 
-	id, err := memberVal.NewMemberId(
-		uint(exporterExpected.Id.TenantId),
-		uint(exporterExpected.Id.MemberId),
-	)
+		id, err := memberVal.NewMemberId(
+			uint(exporterExpected.Id.TenantId),
+			uint(exporterExpected.Id.MemberId),
+		)
+		require.NoError(t, err)
+		aggRead, err := repositoryOption.Repository.Get(s, id)
+		require.NoError(t, err)
+		aggRead.Export(&exporterActual)
+		assert.Equal(t, exporterExpected, exporterActual)
+		return nil
+	})
 	require.NoError(t, err)
-	aggRead, err := repositoryOption.Repository.Get(id)
-	require.NoError(t, err)
-	aggRead.Export(&exporterActual)
-	assert.Equal(t, exporterExpected, exporterActual)
 }
 
 func testGet(t *testing.T, repositoryOption RepositoryOption) {
-	var exporterExpected endorser.EndorserExporter
-	var exporterActual endorser.EndorserExporter
-	factory := NewEndorserFaker(
-		repositoryOption.Session,
-	)
-	err := factory.BuildDependencies()
-	require.NoError(t, err)
-	aggExpected, err := factory.Create()
-	require.NoError(t, err)
-	aggExpected.Export(&exporterExpected)
-	assert.Greater(t, int(exporterExpected.Id.MemberId), 0)
+	err := repositoryOption.Pool.Session(context.Background(), func(s session.Session) error {
+		var exporterExpected endorser.EndorserExporter
+		var exporterActual endorser.EndorserExporter
+		factory := NewEndorserFaker()
+		err := factory.BuildDependencies(s)
+		require.NoError(t, err)
+		aggExpected, err := factory.Create(s)
+		require.NoError(t, err)
+		aggExpected.Export(&exporterExpected)
+		assert.Greater(t, int(exporterExpected.Id.MemberId), 0)
 
-	id, err := memberVal.NewMemberId(
-		uint(exporterExpected.Id.TenantId),
-		uint(exporterExpected.Id.MemberId),
-	)
+		id, err := memberVal.NewMemberId(
+			uint(exporterExpected.Id.TenantId),
+			uint(exporterExpected.Id.MemberId),
+		)
+		require.NoError(t, err)
+		aggActual, err := repositoryOption.Repository.Get(s, id)
+		require.NoError(t, err)
+		aggActual.Export(&exporterActual)
+		assert.Equal(t, exporterExpected, exporterActual)
+		return nil
+	})
 	require.NoError(t, err)
-	aggActual, err := repositoryOption.Repository.Get(id)
-	require.NoError(t, err)
-	aggActual.Export(&exporterActual)
-	assert.Equal(t, exporterExpected, exporterActual)
 }
 
 type RepositoryOption struct {
 	Name       string
 	Repository *EndorserRepository
-	Session    session.DbSession
+	Pool       session.SessionPool
 	TenantId   uint
 	MemberId   uint
 }
@@ -121,24 +129,31 @@ func createRepositories(t *testing.T) []RepositoryOption {
 
 func newPostgresqlRepositoryOption(t *testing.T) RepositoryOption {
 	var tenantExp tenant.TenantExporter
-	db, err := testutils.NewTestDb()
+	pool, err := testutils.NewPgSessionPool()
 	require.NoError(t, err)
-	currentSession := pgx.NewPgxSession(db)
-	tenantFaker := tenantRepo.NewTenantFaker(currentSession)
-	aTenant, err := tenantFaker.Create()
+
+	var tenantId uint
+	var memberId uint
+	err = pool.Session(context.Background(), func(s session.Session) error {
+		tenantFaker := tenantRepo.NewTenantFaker()
+		aTenant, err := tenantFaker.Create(s)
+		require.NoError(t, err)
+		aTenant.Export(&tenantExp)
+		tenantId = uint(tenantExp.Id)
+
+		memberFaker := memberRepo.NewMemberFaker(member.WithTenantId(tenantId))
+		_, err = memberFaker.Create(s)
+		require.NoError(t, err)
+		memberId = uint(memberFaker.Id.MemberId)
+		return nil
+	})
 	require.NoError(t, err)
-	aTenant.Export(&tenantExp)
-	memberFaker := memberRepo.NewMemberFaker(
-		currentSession,
-		member.WithTenantId(uint(tenantExp.Id)),
-	)
-	_, err = memberFaker.Create()
-	require.NoError(t, err)
+
 	return RepositoryOption{
 		Name:       "PostgreSQL",
-		Repository: NewEndorserRepository(currentSession),
-		Session:    currentSession,
-		TenantId:   uint(tenantExp.Id),
-		MemberId:   uint(memberFaker.Id.MemberId),
+		Repository: NewEndorserRepository(),
+		Pool:       pool,
+		TenantId:   tenantId,
+		MemberId:   memberId,
 	}
 }

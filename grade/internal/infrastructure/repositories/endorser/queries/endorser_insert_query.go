@@ -54,6 +54,6 @@ func (q *EndorserInsertQuery) SetVersion(val uint) {
 	q.params[6] = val
 }
 
-func (q *EndorserInsertQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
-	return s.Exec(q.sql(), q.params[:]...)
+func (q *EndorserInsertQuery) Evaluate(s session.Session) (session.Result, error) {
+	return s.(session.DbSession).Connection().Exec(q.sql(), q.params[:]...)
 }

@@ -15,28 +15,26 @@ import (
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
-func NewArtifactRepository(currentSession session.DbSession) *ArtifactRepository {
+func NewArtifactRepository() *ArtifactRepository {
 	return &ArtifactRepository{
-		session:    currentSession,
-		eventStore: repository.NewEventStore(currentSession, "Artifact", eventToQuery),
+		eventStore: repository.NewEventStore("Artifact", eventToQuery),
 	}
 }
 
 type ArtifactRepository struct {
-	session    session.DbSession
 	eventStore *repository.EventStore
 }
 
-func (r *ArtifactRepository) Insert(agg *artifact.Artifact, eventMeta aggregate.EventMeta) error {
-	return r.eventStore.Save(agg, eventMeta)
+func (r *ArtifactRepository) Insert(s session.Session, agg *artifact.Artifact, eventMeta aggregate.EventMeta) error {
+	return r.eventStore.Save(s, agg, eventMeta)
 }
 
-func (r *ArtifactRepository) NextId(tenantId tenantVal.TenantId) (artifactVal.ArtifactId, error) {
+func (r *ArtifactRepository) NextId(s session.Session, tenantId tenantVal.TenantId) (artifactVal.ArtifactId, error) {
 	q := queries.ArtifactNextIdGetQuery{TenantId: tenantId}
-	return q.Get(r.session)
+	return q.Get(s)
 }
 
-func (r *ArtifactRepository) Get(id artifactVal.ArtifactId) (*artifact.Artifact, error) {
+func (r *ArtifactRepository) Get(s session.Session, id artifactVal.ArtifactId) (*artifact.Artifact, error) {
 	idExporter := &artifactVal.ArtifactIdExporter{}
 	id.Export(idExporter)
 	streamId, err := r.eventStore.NewStreamId(uint(idExporter.TenantId), strconv.FormatUint(uint64(idExporter.ArtifactId), 10))
@@ -47,7 +45,7 @@ func (r *ArtifactRepository) Get(id artifactVal.ArtifactId) (*artifact.Artifact,
 		StreamId:           streamId,
 		EventReconstitutor: rowToEvent,
 	}
-	stream, err := q.Stream(r.session)
+	stream, err := q.Stream(s)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +55,7 @@ func (r *ArtifactRepository) Get(id artifactVal.ArtifactId) (*artifact.Artifact,
 	return rec.Reconstitute()
 }
 
-func eventToQuery(iEvent aggregate.PersistentDomainEvent) (q session.EventSourcedQueryEvaluator) {
+func eventToQuery(iEvent aggregate.PersistentDomainEvent) (q repository.EventSourcedQueryEvaluator) {
 	switch event := iEvent.(type) {
 	case *events.ArtifactProposed:
 		q = queries.NewArtifactProposedQuery(event)

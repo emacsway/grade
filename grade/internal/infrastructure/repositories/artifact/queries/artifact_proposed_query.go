@@ -66,7 +66,7 @@ func (q *ArtifactProposedQuery) SetCreatedAt(val time.Time) {
 	q.payload.CreatedAt = val
 }
 
-func (q *ArtifactProposedQuery) Evaluate(s session.DbSession) (session.Result, error) {
+func (q *ArtifactProposedQuery) Evaluate(s session.Session) (session.Result, error) {
 	q.EventInsertQuery.SetPayload(q.payload)
 	return q.EventInsertQuery.Evaluate(s)
 }

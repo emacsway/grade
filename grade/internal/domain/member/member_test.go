@@ -12,7 +12,7 @@ import (
 func TestMemberExport(t *testing.T) {
 	var actualExporter MemberExporter
 	f := NewMemberFaker()
-	agg, err := f.Create()
+	agg, err := f.Create(nil)
 	require.NoError(t, err)
 	agg.Export(&actualExporter)
 	var expectedStatus uint8

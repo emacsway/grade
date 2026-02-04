@@ -9,20 +9,16 @@ import (
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
-func NewTenantRepository(currentSession session.DbSession) *TenantRepository {
-	return &TenantRepository{
-		session: currentSession,
-	}
+func NewTenantRepository() *TenantRepository {
+	return &TenantRepository{}
 }
 
-type TenantRepository struct {
-	session session.DbSession
-}
+type TenantRepository struct{}
 
-func (r *TenantRepository) Insert(agg *tenant.Tenant) error {
+func (r *TenantRepository) Insert(s session.Session, agg *tenant.Tenant) error {
 	q := &queries.TenantInsertQuery{}
 	agg.Export(q)
-	result, err := q.Evaluate(r.session)
+	result, err := q.Evaluate(s)
 	if err != nil {
 		return err
 	}
@@ -36,7 +32,7 @@ func (r *TenantRepository) Insert(agg *tenant.Tenant) error {
 	return nil
 }
 
-func (r *TenantRepository) Get(id tenantVal.TenantId) (*tenant.Tenant, error) {
+func (r *TenantRepository) Get(s session.Session, id tenantVal.TenantId) (*tenant.Tenant, error) {
 	q := queries.TenantGetQuery{Id: id}
-	return q.Get(r.session)
+	return q.Get(s)
 }

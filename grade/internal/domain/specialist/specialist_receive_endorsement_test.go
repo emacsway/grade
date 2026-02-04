@@ -42,29 +42,29 @@ func TestSpecialistReceiveEndorsement(t *testing.T) {
 			sf := NewSpecialistFaker()
 			sf.SetTenantId(c.SpecialistTenantId)
 			sf.SetMemberId(c.SpecialistMemberId)
-			err := sf.BuildDependencies()
+			err := sf.BuildDependencies(nil)
 			require.NoError(t, err)
 			sf.Grade = c.SpecialistGrade
-			s, err := sf.Create()
+			s, err := sf.Create(nil)
 			require.NoError(t, err)
 
 			ef := endorser.NewEndorserFaker()
 			ef.SetTenantId(c.RecogniserTenantId)
 			ef.SetMemberId(c.RecogniserMemberId)
-			err = ef.BuildDependencies()
+			err = ef.BuildDependencies(nil)
 			require.NoError(t, err)
 			ef.Grade = c.EndorserGrade
-			e, err := ef.Create()
+			e, err := ef.Create(nil)
 			require.NoError(t, err)
 
 			af := artifact.NewArtifactFaker()
 			af.SetTenantId(c.ArtifactTenantId)
-			err = af.BuildDependencies()
+			err = af.BuildDependencies(nil)
 			require.NoError(t, err)
 			authorId := sf.Id
 			authorId.MemberId = c.ArtifactAuthorId
 			af.AddAuthorId(authorId)
-			a, err := af.Create()
+			a, err := af.Create(nil)
 			require.NoError(t, err)
 
 			err = e.ReserveEndorsement()
@@ -116,19 +116,19 @@ func TestSpecialistCanCompleteEndorsement(t *testing.T) {
 	for i, c := range cases {
 		t.Run(fmt.Sprintf("Case %d", i), func(t *testing.T) {
 			sf := NewSpecialistFaker()
-			err := sf.BuildDependencies()
+			err := sf.BuildDependencies(nil)
 			require.NoError(t, err)
-			s, err := sf.Create()
+			s, err := sf.Create(nil)
 			require.NoError(t, err)
 
 			ef := endorser.NewEndorserFaker()
-			e, err := ef.Create()
+			e, err := ef.Create(nil)
 			require.NoError(t, err)
 
 			af := artifact.NewArtifactFaker()
 			af.Id.TenantId = sf.Id.TenantId
 			af.AddAuthorId(sf.Id)
-			a, err := af.Create()
+			a, err := af.Create(nil)
 			require.NoError(t, err)
 
 			err = c.Prepare(e)

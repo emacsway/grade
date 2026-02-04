@@ -24,9 +24,9 @@ func (q CompetenceGetQuery) params() []any {
 	return []any{idExp.TenantId, idExp.CompetenceId}
 }
 
-func (q *CompetenceGetQuery) Get(s session.DbSessionSingleQuerier) (*competence.Competence, error) {
+func (q *CompetenceGetQuery) Get(s session.Session) (*competence.Competence, error) {
 	rec := &competence.CompetenceReconstitutor{}
-	err := s.QueryRow(q.sql(), q.params()...).Scan(
+	err := s.(session.DbSession).Connection().QueryRow(q.sql(), q.params()...).Scan(
 		&rec.Id.TenantId, &rec.Id.CompetenceId, &rec.Name, &rec.OwnerId.MemberId,
 		&rec.CreatedAt, &rec.Version,
 	)

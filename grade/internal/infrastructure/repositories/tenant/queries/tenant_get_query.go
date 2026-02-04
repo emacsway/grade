@@ -24,9 +24,9 @@ func (q TenantGetQuery) params() []any {
 	return []any{id}
 }
 
-func (q *TenantGetQuery) Get(s session.DbSessionSingleQuerier) (*tenant.Tenant, error) {
+func (q *TenantGetQuery) Get(s session.Session) (*tenant.Tenant, error) {
 	rec := &tenant.TenantReconstitutor{}
-	err := s.QueryRow(q.sql(), q.params()...).Scan(
+	err := s.(session.DbSession).Connection().QueryRow(q.sql(), q.params()...).Scan(
 		&rec.Id, &rec.Name, &rec.CreatedAt, &rec.Version,
 	)
 	if err != nil {

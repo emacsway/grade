@@ -3,19 +3,16 @@ package member
 import (
 	"github.com/emacsway/grade/grade/internal/domain/member"
 	tenantRepo "github.com/emacsway/grade/grade/internal/infrastructure/repositories/tenant"
-	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
 func NewMemberFaker(
-	currentSession session.DbSession,
 	opts ...member.MemberFakerOption,
 ) *member.MemberFaker {
 	opts = append(
 		opts,
 		member.WithTransientId(),
-		member.WithRepository(NewMemberRepository(currentSession)),
-		// TODO: Is this a reason to pass a session to repository method?
-		member.WithTenantFaker(tenantRepo.NewTenantFaker(currentSession)),
+		member.WithRepository(NewMemberRepository()),
+		member.WithTenantFaker(tenantRepo.NewTenantFaker()),
 	)
 	return member.NewMemberFaker(opts...)
 }

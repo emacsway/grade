@@ -37,8 +37,8 @@ func (q *TenantInsertQuery) SetVersion(val uint) {
 	q.params[2] = val
 }
 
-func (q *TenantInsertQuery) Evaluate(s session.DbSessionExecutor) (session.Result, error) {
-	result, err := s.Exec(q.sql(), q.params[:]...)
+func (q *TenantInsertQuery) Evaluate(s session.Session) (session.Result, error) {
+	result, err := s.(session.DbSession).Connection().Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err
 	}

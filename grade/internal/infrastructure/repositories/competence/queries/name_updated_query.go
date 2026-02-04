@@ -42,8 +42,8 @@ func (q *NameUpdatedQuery) SetAggregateVersion(val uint) {
 func (q *NameUpdatedQuery) SetEventType(val string) {
 }
 
-func (q *NameUpdatedQuery) Evaluate(s session.DbSession) (session.Result, error) {
-	result, err := s.Exec(q.sql(), q.params[:]...)
+func (q *NameUpdatedQuery) Evaluate(s session.Session) (session.Result, error) {
+	result, err := s.(session.DbSession).Connection().Exec(q.sql(), q.params[:]...)
 	if err != nil {
 		return result, err
 	}

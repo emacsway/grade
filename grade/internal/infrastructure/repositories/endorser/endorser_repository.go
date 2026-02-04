@@ -9,20 +9,16 @@ import (
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
-func NewEndorserRepository(currentSession session.DbSession) *EndorserRepository {
-	return &EndorserRepository{
-		session: currentSession,
-	}
+func NewEndorserRepository() *EndorserRepository {
+	return &EndorserRepository{}
 }
 
-type EndorserRepository struct {
-	session session.DbSession
-}
+type EndorserRepository struct{}
 
-func (r EndorserRepository) Insert(agg *endorser.Endorser) error {
+func (r *EndorserRepository) Insert(s session.Session, agg *endorser.Endorser) error {
 	q := queries.EndorserInsertQuery{}
 	agg.Export(&q)
-	result, err := q.Evaluate(r.session)
+	result, err := q.Evaluate(s)
 	if err != nil {
 		return err
 	}
@@ -36,7 +32,7 @@ func (r EndorserRepository) Insert(agg *endorser.Endorser) error {
 	return nil
 }
 
-func (r *EndorserRepository) Get(id memberVal.MemberId) (*endorser.Endorser, error) {
+func (r *EndorserRepository) Get(s session.Session, id memberVal.MemberId) (*endorser.Endorser, error) {
 	q := queries.EndorserGetQuery{Id: id}
-	return q.Get(r.session)
+	return q.Get(s)
 }
