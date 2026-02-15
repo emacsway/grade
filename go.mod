@@ -4,7 +4,7 @@ go 1.25
 
 require (
 	github.com/hashicorp/go-multierror v1.1.1
-	github.com/krew-solutions/ascetic-ddd-go v0.1.1
+	github.com/krew-solutions/ascetic-ddd-go v0.1.2
 	github.com/stretchr/testify v1.8.4
 )
 
@@ -33,5 +33,3 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	syreclabs.com/go/faker v1.2.3 // indirect
 )
-
-replace github.com/krew-solutions/ascetic-ddd-go => ../ascetic-ddd-go

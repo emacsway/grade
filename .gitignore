@@ -7,6 +7,10 @@
 
 *.crt
 
+# Go workspace (local replace directives)
+go.work
+go.work.sum
+
 # macOS
 .DS_Store
 **/.DS_Store
