@@ -17,7 +17,7 @@ import (
 
 func NewArtifactRepository() *ArtifactRepository {
 	return &ArtifactRepository{
-		eventStore: repository.NewEventStore("Artifact", eventToQuery),
+		eventStore: repository.NewEventStore(nil, "Artifact", eventToQuery),
 	}
 }
 
@@ -45,7 +45,7 @@ func (r *ArtifactRepository) Get(s session.Session, id artifactVal.ArtifactId) (
 		StreamId:           streamId,
 		EventReconstitutor: rowToEvent,
 	}
-	stream, err := q.Stream(s)
+	stream, err := q.Stream(r.eventStore.MakeReadCodecFactory(), s)
 	if err != nil {
 		return nil, err
 	}
@@ -64,6 +64,7 @@ func eventToQuery(iEvent aggregate.PersistentDomainEvent) (q repository.EventSou
 }
 
 func rowToEvent(
+	codec repository.Codec,
 	streamId repository.StreamId,
 	streamPosition uint,
 	eventType string,
@@ -80,11 +81,11 @@ func rowToEvent(
 	switch expectedCase {
 	case c{events.ArtifactProposed{}.EventType(), 1}:
 		rec := events.ArtifactProposedReconstitutor{}
-		err := json.Unmarshal([]byte(payload), &rec)
+		err := codec.Decode(payload, &rec)
 		if err != nil {
 			return nil, err
 		}
-		rec.AggregateId.TenantId = streamId.TenantId()
+		rec.AggregateId.TenantId = streamId.TenantId().(uint)
 		artifactId, err := strconv.ParseUint(streamId.StreamId(), 10, 0)
 		if err != nil {
 			return nil, err

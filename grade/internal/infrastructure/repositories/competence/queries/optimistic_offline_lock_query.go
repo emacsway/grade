@@ -6,7 +6,6 @@ import (
 	"github.com/emacsway/grade/grade/internal/domain/competence/values"
 	memberVal "github.com/emacsway/grade/grade/internal/domain/member/values"
 	tenantVal "github.com/emacsway/grade/grade/internal/domain/tenant/values"
-	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/seedwork/domain/aggregate"
 	"github.com/krew-solutions/ascetic-ddd-go/asceticddd/session"
 )
 
@@ -61,7 +60,7 @@ func (q *OptimisticOfflineLockLockQuery) Evaluate(s session.Session) (session.Re
 		return result, err
 	}
 	if rowsAffected == 0 {
-		return result, aggregate.ErrConcurrency
+		return result, session.ErrConcurrency
 	}
 	return result, err
 }
